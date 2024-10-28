@@ -7,18 +7,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        'custom-green': '#A8D8B9',
-        'custom-pink': "#FFB5A7",
-        "custom-red": '#FFB3B3',
-        "custom-purple": '#E6C3DB',
-        'custom-yellow': "#FFE3AA",
-        'custom-blue': "#B8E3FF",
-        "custom-bg": '#F5F5F5',
+        "custom-green": "#A8D8B9",
+        "custom-pink": "#FFB5A7",
+        "custom-pink-hover": "#ff9e8d",
+        "custom-red": "#FFB3B3",
+        "custom-purple": "#E6C3DB",
+        "custom-yellow": "#FFE3AA",
+        "custom-blue": "#B8E3FF",
+        "custom-bg": "#F5F5F5",
       },
     },
   },
-  plugins: [
-    require('daisyui'),
-  ],
-}
-
+  plugins: [require("daisyui")],
+};
