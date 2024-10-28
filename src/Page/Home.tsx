@@ -1,9 +1,8 @@
 const Home = ():JSX.Element => {
 	return (
-		<>
-			<button>adfadf</button>
-		</>
-	)
-}
+		<div>
+		</div>
+  );
+};
 
 export default Home;
