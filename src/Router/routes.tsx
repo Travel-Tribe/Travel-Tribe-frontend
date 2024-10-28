@@ -23,15 +23,15 @@ const Router = (): JSX.Element => {
 
 				{/* 모집 관련 라우트 */}
 				<Route path="/recruitment" element={<Home />} >
-					<Route path="/write" element={<RecruitForm />} />
-					<Route path="/edit/:id" element={<RecruitForm />} />
-					<Route path="/:id" element={<RecruitPost />} />
+					<Route path="write" element={<RecruitForm />} />
+					<Route path="edit/:id" element={<RecruitForm />} />
+					<Route path=":id" element={<RecruitPost />} />
 				</Route>
 
 				<Route path="/review" element={<Review />} >
-					<Route path="/write" element={<ReviewForm />} />
-					<Route path="/edit/:id" element={<ReviewForm />} />
-					<Route path="/:id" element={<ReviewPost />} />
+					<Route path="write" element={<ReviewForm />} />
+					<Route path="edit/:id" element={<ReviewForm />} />
+					<Route path=":id" element={<ReviewPost />} />
 				</Route>
 
 				<Route path="/signIn" element={<SignIn />} />
