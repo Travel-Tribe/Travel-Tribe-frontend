@@ -31,7 +31,7 @@ const MyRecruitment = (): JSX.Element => {
 
   return (
     <>
-      <div className="border-b border-gray-300 flex justify-between items-end mt-10 pb-1.5">
+      <div className="border-b border-gray-300 flex justify-between items-end mt-10 pb-1">
         <div className="flex items-center">
           <h2 className="text-xl mr-2">여행 모집</h2>
           <span className="text-lg">{travelInfos.length}</span>
