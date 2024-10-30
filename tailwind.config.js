@@ -7,6 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        "custom-gray": "#dbdbdb",
         "custom-green": "#A8D8B9",
         "custom-pink": "#FFB5A7",
         "custom-pink-hover": "#ff9e8d",
