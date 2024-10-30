@@ -44,5 +44,10 @@
   "description": "",
   "main": "eslint.config.js",
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
 }
