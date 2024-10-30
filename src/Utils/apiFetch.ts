@@ -5,7 +5,8 @@ const API_BASE_URL = "https://example.com/api";
 const API_TOKEN = "your_api_token";
 
 const axiosInstance = axios.create({
-  baseURL: API_BASE_URL,
+  // baseURL: API_BASE_URL,
+  baseURL: "",
   headers: {
     "Content-Type": "application/json",
   },
