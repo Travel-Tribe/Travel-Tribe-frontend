@@ -1,8 +1,26 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const Sidebar = (): JSX.Element => {
   const [selected, setSelected] = useState("프로필");
+  const location = useLocation();
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case "/mypage":
+        setSelected("프로필");
+        break;
+      case "/mypage/completedTrips":
+        setSelected("다녀온 여행");
+        break;
+      case "/mypage/travelHistory":
+        setSelected("여행 후기");
+        break;
+      case "/mypage/accountSettings":
+        setSelected("계정 설정");
+        break;
+    }
+  });
 
   const handleSelect = (menu: string) => {
     setSelected(menu);
