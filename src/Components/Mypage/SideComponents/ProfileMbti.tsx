@@ -9,7 +9,7 @@ const ProfileMbti = ({ mbtiData }: { mbtiData: string }): JSX.Element => {
 
   return (
     <div
-      className={`w-16 h-5 bg-custom-gray text-white text-center text-xs rounded-lg flex items-center justify-center
+      className={`py-0.5 px-2 bg-custom-gray text-white text-center text-base rounded-xl flex items-center justify-center
     ${mbti.charAt(0).toLowerCase() === "i" ? "bg-custom-purple" : "bg-custom-red"}`}
     >
       {mbti}
