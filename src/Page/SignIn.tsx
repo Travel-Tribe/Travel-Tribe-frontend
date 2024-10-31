@@ -41,7 +41,7 @@ const SignIn = (): JSX.Element => {
                 placeholder="이메일을 입력하세요"
                 className="input input-bordered w-full"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
               />
             </div>
 
@@ -55,7 +55,7 @@ const SignIn = (): JSX.Element => {
                   placeholder="비밀번호를 입력하세요"
                   className="input input-bordered w-full"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
