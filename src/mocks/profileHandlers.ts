@@ -12,7 +12,16 @@ export const profileHandlers = [
   // 프로필 생성
   http.post("/api/v1/users/:userId/profile", async ({ request, params }) => {
     const userId = params.userId;
-    const response: any = request.json();
+    const response = (await request.json()) as {
+      introduction: string;
+      mbti: string;
+      smoking: string;
+      gender: string;
+      birth: Date;
+      fileAddress: string;
+      countryName: string[];
+      lang: string[];
+    };
     console.log("프로필 생성", response);
 
     UserProfileData[userId] = {
@@ -33,7 +42,16 @@ export const profileHandlers = [
   // 프로필 수정
   http.patch("/api/v1/users/:userId/profile", async ({ request, params }) => {
     const userId = params.userId;
-    const response: any = request.json();
+    const response = (await request.json()) as {
+      introduction: string;
+      mbti: string;
+      smoking: string;
+      gender: string;
+      birth: Date;
+      fileAddress: string;
+      countryName: string[];
+      lang: string[];
+    };
     console.log("프로필 수정", response);
 
     UserProfileData[userId] = {

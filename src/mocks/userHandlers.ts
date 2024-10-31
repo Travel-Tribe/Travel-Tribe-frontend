@@ -4,17 +4,19 @@ import { UserMockData, DuplicateMockData } from "./mockData.js";
 export const userHandlers = [
   // 회원가입
   http.post("/api/v1/users", async ({ request }) => {
-    const newUser: {
+    const newUser = (await request.json()) as {
       username: string;
       password: string;
       email: string;
       nickname: string;
       phone: string;
-    } = await request.json();
+    };
+
     console.log("회원가입", newUser);
 
     UserMockData.push({
       userId: UserMockData.length + 1,
+      profileCheck: false,
       ...newUser,
     });
 
@@ -99,7 +101,7 @@ export const userHandlers = [
   // 다른 사람 정보 불러오기
   http.get("/api/v1/users/:userId", async ({ params }) => {
     console.log("다른 사람 정보 불러오기");
-    const userId = params.userId;
+    const userId = Number(params.userId);
 
     for (const users of UserMockData) {
       if (users.userId === userId) {
@@ -113,7 +115,6 @@ export const userHandlers = [
               nickname: users.nickname,
               phone: users.phone,
               email: users.email,
-              status: users.status,
             },
           },
           { status: 201 },
@@ -138,8 +139,8 @@ export const userHandlers = [
 
   // 이메일 인증
   http.post("api/v1/users/change-email/request", async ({ request }) => {
-    console.log("이메일 인증");
-    const data: { email: string } = request.json();
+    const data = (await request.json()) as { email: string };
+    console.log("이메일 인증", data);
 
     return HttpResponse.json(
       {
@@ -153,11 +154,11 @@ export const userHandlers = [
 
   // 회원 이메일 인증 코드 검증 및 이메일 변경
   http.post("api/v1/users/change-email/verify", async ({ request }) => {
-    console.log("회원 이메일 인증 코드 검증 및 이메일 변경");
-    const data: {
-      email: string;
+    const data = (await request.json()) as {
       code: string;
-    } = request.json();
+      email: string;
+    };
+    console.log("회원 이메일 인증 코드 검증 및 이메일 변경", data);
 
     return HttpResponse.json(
       {
@@ -171,11 +172,11 @@ export const userHandlers = [
 
   // 회원 비밀번호 정보 수정
   http.patch("api/v1/users/password", async ({ request }) => {
-    console.log("회원 비밀번호 정보 수정");
-    const data: {
+    const data = (await request.json()) as {
       password: string;
       newPassword: string;
-    } = request.json();
+    };
+    console.log("회원 비밀번호 정보 수정", data);
 
     return HttpResponse.json(
       {
@@ -188,9 +189,11 @@ export const userHandlers = [
   }),
 
   // 비밀번호 초기화
-  http.patch("api/v1/users/reset-password", async ({ request }) => {
-    console.log("비밀번호 초기화");
-    const data: { email: string } = request.json();
+  http.post("api/v1/users/reset-password", async ({ request }) => {
+    const data = (await request.json()) as {
+      email: string;
+    };
+    console.log("비밀번호 초기화", data);
 
     return HttpResponse.json(
       {
@@ -204,11 +207,12 @@ export const userHandlers = [
 
   // 회원 정보 수정
   http.patch("api/v1/users/Info", async ({ request }) => {
-    console.log("회원 정보 수정");
-    const data: {
+    const data = (await request.json()) as {
       nickname: string;
       phone: string;
-    } = request.json();
+    };
+    console.log("회원 정보 수정", data);
+
     return HttpResponse.json(
       {
         result: "SUCCESS",

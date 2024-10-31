@@ -1,6 +1,6 @@
 export const UserMockData = [
   {
-    userId: "1",
+    userId: 1,
     username: "testUser",
     password: "password123",
     email: "test@example.com",
@@ -11,7 +11,7 @@ export const UserMockData = [
 ];
 
 export const UserProfileData = {
-  1: {
+  "1": {
     id: 1,
     userId: 1,
     introduction: "안녕하세요! 여행을 좋아하는 개발자입니다.",
