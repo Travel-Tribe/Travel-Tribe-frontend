@@ -14,7 +14,7 @@ export const handlers = [
   http.get("/api/v1/users/:userId/profile", async ({ request }) => {
     console.log("Get User");
     return HttpResponse.json(
-      JSON.stringify({
+      {
         introduction: "test",
         mbti: "ISTJ",
         smoking: "X",
@@ -23,7 +23,7 @@ export const handlers = [
         fileAddress: "",
         countryName: ["한국", "일본", "베트남"],
         lang: ["영어"],
-      }),
+      },
       { status: 201 },
     );
   }),
