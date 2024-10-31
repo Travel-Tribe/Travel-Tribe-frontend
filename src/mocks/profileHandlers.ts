@@ -14,6 +14,7 @@ export const profileHandlers = [
         fileAddress: "",
         countryName: ["한국", "일본", "베트남"],
         lang: ["영어"],
+        rating_avg: 4.5,
       }),
       { status: 201 },
     );
