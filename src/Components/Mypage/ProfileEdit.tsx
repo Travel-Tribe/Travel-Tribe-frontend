@@ -1,9 +1,11 @@
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useState, useEffect } from "react";
 import profileImg from "../../assets/profileImg.webp";
 import { useNavigate } from "react-router-dom";
 
 const ProfileEdit = (): JSX.Element => {
-  const userNickName = '닉네임';
+  const userNickName = "닉네임";
+
+  // const 
 
   const [myInfo, setMyInfo] = useState("");
   const [birthdate, setBirthdate] = useState("");
@@ -12,6 +14,7 @@ const ProfileEdit = (): JSX.Element => {
   const [mbti, setMbti] = useState("");
   const [nickname, setNickname] = useState(userNickName);
   const [error, setError] = useState("");
+  const [formValid, setFormValid] = useState(false);
 
   const navigate = useNavigate();
 
@@ -38,6 +41,17 @@ const ProfileEdit = (): JSX.Element => {
   const handleUpdateProfile = () => {
     navigate("/mypage");
   };
+
+  useEffect(() => {
+    setFormValid(
+      nickname.trim() !== "" &&
+        birthdate.trim() !== "" &&
+        gender.trim() !== "" &&
+        smoking.trim() !== "" &&
+        mbti.trim() !== "" &&
+        error === "",
+    );
+  }, [nickname, birthdate, gender, smoking, mbti]);
 
   return (
     <>
@@ -74,7 +88,9 @@ const ProfileEdit = (): JSX.Element => {
                   value={nickname}
                   onChange={handleNicknameChange}
                 />
-                <button className="px-3 py-1 bg-gray-300 text-gray-700 text-sm rounded-md">
+                <button
+                  className={`${nickname === "" ? "btn-disabled bg-gray-300 text-gray-500 cursor-not-allowed" : ""} px-3 py-1 bg-gray-300 text-gray-700 text-sm rounded-md`}
+                >
                   중복 검사
                 </button>
               </div>
@@ -202,8 +218,11 @@ const ProfileEdit = (): JSX.Element => {
       </form>
       {/* 저장 버튼 */}
       <button
-        className="btn w-full mt-8 py-2 bg-custom-green text-white text-xl rounded-md hover:bg-custom-green"
+        className={`w-full mt-8 py-2 text-xl rounded-md ${
+          formValid ? "bg-custom-green text-white hover:bg-custom-green" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+        }`}
         onClick={handleUpdateProfile}
+        disabled={!formValid}
       >
         저장
       </button>

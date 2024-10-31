@@ -10,7 +10,7 @@ const CountryName = ({ countries }: MyCountrys): JSX.Element => {
         {countries.map((country, index) => (
           <div
             key={index}
-            className="w-16 h-5 text-xs rounded-lg bg-custom-pink text-white text-center m-2.5 flex items-center justify-center"
+            className="w-16 h-5 text-sm rounded-lg bg-custom-pink text-white text-center m-2.5 flex items-center justify-center"
           >
             {country}
           </div>
