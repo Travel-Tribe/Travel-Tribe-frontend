@@ -43,7 +43,10 @@ export const userHandlers = [
             },
           },
           {
-            headers: { Authorization: "abc-123" },
+            headers: {
+              authtoken: "abc-123",
+              "Set-Cookie": "refresh=abc-123",
+            },
           },
         );
       }
@@ -54,7 +57,7 @@ export const userHandlers = [
 
   http.post("/logout", async ({ cookies }) => {
     console.log("logout");
-    if (cookies.authToken) return HttpResponse.json({}, { status: 201 });
+    if (cookies.refresh) return HttpResponse.json({}, { status: 201 });
     return HttpResponse.json({}, { status: 401 });
   }),
 ];
