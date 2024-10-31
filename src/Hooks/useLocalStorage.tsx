@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 
 const useLocalStorage = (key: string) => {
   const [storedValue, setStoredValue] = useState<string | null>(
-    JSON.parse(localStorage.getItem(key)) || "",
+    localStorage.getItem(key) === "undefined"
+      ? ""
+      : JSON.stringify(localStorage.getItem(key)),
   );
 
   const setValue = value => {
     const valueToStore = value instanceof Function ? value(storedValue) : value; // 함수가 전달된 경우 처리
+    console.log("setValue", valueToStore);
     setStoredValue(valueToStore); // 상태 업데이트
     window.localStorage.setItem(key, JSON.stringify(valueToStore)); // localStorage 업데이트
   };
@@ -14,8 +17,8 @@ const useLocalStorage = (key: string) => {
   // 데이터가 변경될 때마다 리렌더링 되도록 useEffect 사용
   useEffect(() => {
     const handleStorageChange = () => {
-      const updatedItem = window.localStorage.getItem(key);
-      setStoredValue(updatedItem ? JSON.parse(updatedItem) : "");
+      const updatedItem = window.localStorage.getItem(key) || "";
+      setStoredValue(updatedItem);
     };
 
     window.addEventListener("storage", handleStorageChange);
