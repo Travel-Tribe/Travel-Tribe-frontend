@@ -8,7 +8,7 @@ export const duplicateHandlers = [
     const url = new URL(request.url);
     const type = url.searchParams.get("type");
     const query = url.searchParams.get("query");
-    console.log("duplicate", type, query);
+    console.log("중복 검사", type, query);
 
     if (!DuplicateMockData[type].includes(query)) {
       return HttpResponse.json(false, {
