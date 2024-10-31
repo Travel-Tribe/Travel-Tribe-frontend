@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../Component/Common/Header";
+import Header from "../Components/Common/Header";
 
 const Recruitment = React.memo((): JSX.Element => {
   return (
