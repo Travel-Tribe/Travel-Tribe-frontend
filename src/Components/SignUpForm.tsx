@@ -1,9 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
+import fetchCall from "../Utils/apiFetch";
 
 const schema = z
   .object({
@@ -38,6 +38,12 @@ interface ValidationStatus {
   isChecked: boolean;
   isAvailable: boolean;
   isChecking: boolean;
+}
+
+interface ApiResponse {
+  result: "SUCCESS" | "FAIL";
+  errors: null | string;
+  data: boolean | string;
 }
 
 const SignUp = (): JSX.Element => {
@@ -94,10 +100,11 @@ const SignUp = (): JSX.Element => {
     }));
 
     try {
-      const response = await axios.post("api/v1/users/duplicate", {
-        type,
-        query: value,
-      });
+      const response = await fetchCall<ApiResponse>(
+        "api/v1/users/duplicate",
+        "post",
+        { type, query: value },
+      );
 
       // true면 중복, false면 사용가능
       if (response.data) {
@@ -147,14 +154,19 @@ const SignUp = (): JSX.Element => {
 
     // TODO: 실제 회원가입 API 호출
     try {
-      const response = await axios.post("/api/v1/users", data);
-      const { result, errors } = response.data;
+      const response = await fetchCall<ApiResponse>(
+        "/api/v1/users",
+        "post",
+        data,
+      );
 
-      if (result === "SUCCESS") {
+      if (response.result === "SUCCESS") {
         alert("회원가입이 완료되었습니다.");
         navigate("/signIn"); // 로그인 페이지로 이동
       } else {
-        throw new Error(errors || "회원가입 처리 중 문제가 발생했습니다.");
+        throw new Error(
+          response.errors || "회원가입 처리 중 문제가 발생했습니다.",
+        );
       }
     } catch (error) {
       console.error("회원가입 중 에러 발생:", error);
