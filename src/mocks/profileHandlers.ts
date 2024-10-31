@@ -5,7 +5,7 @@ export const profileHandlers = [
   http.get("/api/v1/users/:userId/profile", async ({ request }) => {
     console.log("내 정보 불러오기");
     return HttpResponse.json(
-      JSON.stringify({
+      {
         introduction: "test",
         mbti: "ISTJ",
         smoking: "X",
@@ -15,7 +15,7 @@ export const profileHandlers = [
         countryName: ["한국", "일본", "베트남"],
         lang: ["영어"],
         rating_avg: 4.5,
-      }),
+      },
       { status: 201 },
     );
   }),
