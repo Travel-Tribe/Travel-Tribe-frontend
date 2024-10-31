@@ -7,6 +7,7 @@ const API_TOKEN = "your_api_token";
 const axiosInstance = axios.create({
   // baseURL: API_BASE_URL,
   baseURL: "",
+  withCredentials: true,
   headers: {
     "Content-Type": "application/json",
   },
@@ -29,7 +30,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   response => {
     // 응답 데이터를 처리하고 반환
-    return response.data;
+    return response;
   },
   error => {
     // 응답 에러 처리
