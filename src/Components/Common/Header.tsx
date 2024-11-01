@@ -17,7 +17,9 @@ const Header = React.memo((): JSX.Element => {
 
   return (
     <div className="w-full h-10 mt-5 mb-7 mx-auto max-w-[1440px] min-w-[540px] px-3 flex justify-between align-center">
-      <h1 className="text-4xl font-bold">여행족</h1>
+      <h1 className="text-4xl font-bold">
+        <Link to={"/"}>여행족</Link>
+      </h1>
       {userId === null || userId === "null" ? (
         <div className="text-16 flex align-center">
           <Link to="/signIn" className="text-black hover:underline">
