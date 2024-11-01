@@ -68,8 +68,8 @@ export const userHandlers = [
 
   // 로그아웃
   http.post("/logout", async ({ cookies }) => {
-    console.log("logout");
-    if (cookies.access) return HttpResponse.json({}, { status: 201 });
+    console.log("logout", cookies);
+    if (cookies.refresh) return HttpResponse.json({}, { status: 201 });
     return HttpResponse.json(
       {
         result: "SUCCESS",
