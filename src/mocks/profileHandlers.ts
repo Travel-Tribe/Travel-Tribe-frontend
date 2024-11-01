@@ -2,10 +2,10 @@ import { http, HttpResponse } from "msw";
 
 export const profileHandlers = [
   // 내 정보 불러오기
-  http.get("/api/v1/users/:userId/profile", async ({ request }) => {
-    console.log("내 정보 불러오기");
+  http.get("/api/v1/users/:userId/profile", async () => {
     return HttpResponse.json(
       {
+        nickname: "테스트닉네임",
         introduction: "test",
         mbti: "ISTJ",
         smoking: "X",

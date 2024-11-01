@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import MyLang from "./SideComponents/MyLang";
 import CountryName from "./SideComponents/CountryName";
@@ -7,33 +8,51 @@ import profileImg from "../../assets/profileImg.webp";
 import GradeIcon from "../../assets/icons/grade_20dp_E8EAED_FILL0_wght400_GRAD0_opsz20.svg";
 import ProfileMbti from "./SideComponents/ProfileMbti";
 
+// fetchCall 함수 생성
+const fetchCall = async (url: string, method: string, data?: any) => {
+  try {
+    const response = await axios({
+      url,
+      method,
+      data,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
 const Profile = (): JSX.Element => {
   const [profileData, setProfileData] = useState({
     introduction: "",
-    nickName: "닉네임",
+    nickname: "",
     mbti: "",
     smoking: "",
     gender: "",
     birth: "",
-    // fileAddress: "",
+    fileAddress: "",
     lang: [] as string[],
     countryName: [] as string[],
-    ratingAvg: 4.5,
+    rating_avg: 0.0,
   });
+
   useEffect(() => {
     const fetchProfileData = async () => {
-      const response = await fetch("/api/v1/users/:userId/profile");
-      const data = await response.json();
-      console.log({...data});
-      setProfileData({
-        ...data,
-        nickName: "닉네임",
-        ratingAvg: 4.5,
-      });
+      try {
+        const data = await fetchCall("/api/v1/users/:userId/profile", "GET");
+        setProfileData({
+          ...data,
+        });
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
     };
     fetchProfileData();
   }, []);
-  console.log(profileData);
 
   const navigate = useNavigate();
 
@@ -57,17 +76,20 @@ const Profile = (): JSX.Element => {
     <>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <img className="w-12 h-12 rounded-full" src={profileImg} />
+          <img
+            className="w-12 h-12 rounded-full"
+            src={profileData.fileAddress === "" ? profileImg : ""}
+          />
           <div className="flex flex-col ml-5 text-base space-y-1">
             <div className="flex items-center">
-              <span className="mr-1 text-black">{profileData.nickName}</span>님
+              <span className="mr-1 text-black">{profileData.nickname}</span>님
             </div>
             <div className="flex items-center space-x-5">
               <span>{age}세</span>
-              <span>{profileData.gender}</span>
+              <span>{profileData.gender === "male" ? "남자" : "여자"}</span>
               <span className="flex items-center">
                 <img src={GradeIcon} />
-                <span className="ml-1">({profileData.ratingAvg}/5.0)</span>
+                <span className="ml-1">({profileData.rating_avg}/5.0)</span>
               </span>
               <span>{profileData.smoking}</span>
             </div>

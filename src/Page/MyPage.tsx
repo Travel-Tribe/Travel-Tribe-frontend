@@ -1,10 +1,11 @@
 import { Outlet } from "react-router-dom";
-
+import Header from "../Components/Common/Header";
 import Sidebar from "../Components/Mypage/Sidebar";
 
 const MyPage = (): JSX.Element => {
   return (
     <>
+      <Header />
       <div className="min-h-screen bg-custom-bg">
         <div className="w-[1160px] mx-auto flex pt-10 pb-10">
           {/* 사이드바 */}
@@ -13,7 +14,7 @@ const MyPage = (): JSX.Element => {
           {/* 메인 섹션 */}
           <div className="w-[860px] ml-2.5 bg-white">
             <div className="w-[600px] my-20 mx-auto">
-            <Outlet />
+              <Outlet />
             </div>
           </div>
         </div>

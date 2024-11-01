@@ -29,6 +29,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
 
   const navigate = useNavigate();
   const ClickChange = () => {
+    console.log("비밀번호 변경완료");
     navigate("/mypage/accountSettings");
   };
 
