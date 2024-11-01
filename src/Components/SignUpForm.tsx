@@ -83,7 +83,7 @@ const SignUp = (): JSX.Element => {
   useEffect(() => {
     setValidationStatus(prev => ({
       ...prev,
-      email: { ...prev.nickname, isChecked: false, isAvailable: false },
+      nickname: { ...prev.nickname, isChecked: false, isAvailable: false },
     }));
   }, [currentNickname]);
 
@@ -101,9 +101,8 @@ const SignUp = (): JSX.Element => {
 
     try {
       const response = await fetchCall<ApiResponse>(
-        "api/v1/users/duplicate",
-        "post",
-        { type, query: value },
+        `/api/v1/users/duplicate?type=${type}&query=${encodeURIComponent(value)}`,
+        "get",
       );
 
       // true면 중복, false면 사용가능
@@ -152,12 +151,21 @@ const SignUp = (): JSX.Element => {
       return;
     }
 
+    // 필요한 필드만 선택하여 새 객체 생성
+    const submitData = {
+      email: data.email,
+      password: data.password,
+      username: data.username,
+      phone: data.phone,
+      nickname: data.nickname,
+    };
+
     // TODO: 실제 회원가입 API 호출
     try {
       const response = await fetchCall<ApiResponse>(
         "/api/v1/users",
         "post",
-        data,
+        submitData,
       );
 
       if (response.result === "SUCCESS") {
