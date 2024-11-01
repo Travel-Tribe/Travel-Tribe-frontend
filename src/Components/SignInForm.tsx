@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import axios from "axios";
+import fetchCall from "../Utils/apiFetch";
 
 const schema = z.object({
   email: z
@@ -19,6 +19,28 @@ const schema = z.object({
 });
 
 type Inputs = z.infer<typeof schema>;
+
+interface LoginResponse {
+  result: "SUCCESS" | "FAIL";
+  errors: null | string;
+  data: {
+    id: number;
+    profileCheck: boolean;
+  };
+}
+
+interface LoginResponseHeaders {
+  headers: {
+    access: string;
+  };
+  data: LoginResponse;
+}
+
+const STORAGE_KEYS = {
+  TOKEN: "TOKEN",
+  USER_ID: "USER_ID",
+  PROFILE_CHECK: "ProfileCheck",
+} as const;
 
 const SignIn = (): JSX.Element => {
   const navigate = useNavigate();
@@ -37,24 +59,32 @@ const SignIn = (): JSX.Element => {
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
-      const response = await axios.post("/login", data);
-
-      // access 토큰을 응답 헤더에서 가져와서 localStorage에 저장
-      const accessToken = response.headers["access"];
-      if (accessToken) {
-        localStorage.setItem("accessToken", accessToken);
-      }
+      const response = await fetchCall<LoginResponseHeaders>("/login", "post", {
+        data: {
+          email: data.email,
+          password: data.password,
+        },
+      });
 
       // 응답 데이터 처리
       const { result, data: responseData } = response.data;
+      const accessToken = response.headers?.["access"];
 
-      if (result === "SUCCESS") {
+      if (result === "SUCCESS" && accessToken) {
         console.log("로그인 성공:", response.data);
 
-        if (responseData.profileCheck) {
+        // LocalStorage에 정보 저장
+        localStorage.setItem(STORAGE_KEYS.TOKEN, accessToken);
+        localStorage.setItem(STORAGE_KEYS.USER_ID, String(responseData.id));
+        localStorage.setItem(
+          STORAGE_KEYS.PROFILE_CHECK,
+          String(responseData.profileCheck),
+        );
+
+        if (responseData?.profileCheck) {
           navigate("/");
         } else {
-          navigate("/api/v1/users/${responseData.id}/profile");
+          navigate("/profile/myProfileEdit");
         }
       } else {
         throw new Error("로그인에 실패했습니다");
@@ -62,19 +92,14 @@ const SignIn = (): JSX.Element => {
     } catch (error) {
       console.error("로그인 중 에러 발생:", error);
 
-      if (axios.isAxiosError(error)) {
-        if (error.response?.status === 401) {
-          setError("root", {
-            message:
-              error.response.data.errors ||
-              "이메일 또는 비밀번호가 올바르지 않습니다",
-          });
-        } else {
-          setError("root", {
-            message: "로그인 중 오류가 발생했습니다",
-          });
-        }
-      }
+      // 에러 응답 처리
+      setError("root", {
+        type: "manual",
+        message:
+          error instanceof Error
+            ? error.message
+            : "이메일 또는 비밀번호가 올바르지 않습니다",
+      });
     }
   };
 

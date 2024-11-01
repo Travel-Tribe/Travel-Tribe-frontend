@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 
 // 추후 변경
 const API_BASE_URL = "https://example.com/api";
-const API_TOKEN = "your_api_token";
+const API_TOKEN = localStorage.getItem("USER_ID");
 
 const axiosInstance = axios.create({
   // baseURL: API_BASE_URL,
@@ -10,6 +10,7 @@ const axiosInstance = axios.create({
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
+    credentials: "include",
   },
 });
 
