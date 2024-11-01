@@ -105,8 +105,9 @@ const SignUp = (): JSX.Element => {
         "post",
       );
 
+      console.log(response);
       // true면 중복, false면 사용가능
-      if (response.data) {
+      if (response.data.data) {
         setError(type, {
           type: "manual",
           message: `이미 사용 중인 ${
@@ -168,7 +169,7 @@ const SignUp = (): JSX.Element => {
         submitData,
       );
 
-      console.log(response);
+      console.log("회원가입", response);
       if (response.data.result === "SUCCESS") {
         alert("회원가입이 완료되었습니다.");
         navigate("/signIn"); // 로그인 페이지로 이동
