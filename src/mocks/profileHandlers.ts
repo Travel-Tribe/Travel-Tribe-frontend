@@ -2,22 +2,6 @@ import { http, HttpResponse } from "msw";
 import { UserProfileData } from "./mockData";
 
 export const profileHandlers = [
-<<<<<<< HEAD
-  // 내 정보 불러오기
-  http.get("/api/v1/users/:userId/profile", async () => {
-    return HttpResponse.json(
-      {
-        nickname: "테스트닉네임",
-        introduction: "test",
-        mbti: "ISTJ",
-        smoking: "X",
-        gender: "male",
-        birth: "2000-01-09",
-        fileAddress: "",
-        countryName: ["한국", "일본", "베트남"],
-        lang: ["영어"],
-        rating_avg: 4.5,
-=======
   // 프로필 정보 불러오기
   http.get("/api/v1/users/:userId/profile", async ({ params }) => {
     console.log("프로필 불러오기");
@@ -50,7 +34,6 @@ export const profileHandlers = [
         result: "SUCCESS",
         errors: null,
         data: null,
->>>>>>> 0a14c0a15bfa4f776f61c13e5a67e3b50500bbb2
       },
       { status: 201 },
     );

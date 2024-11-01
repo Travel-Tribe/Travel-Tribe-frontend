@@ -35,24 +35,33 @@ const Profile = (): JSX.Element => {
     gender: "",
     birth: "",
     fileAddress: "",
-    lang: [] as string[],
-    countryName: [] as string[],
+    langAbilities: [] as string[],
+    visitedCountries: [] as string[],
     rating_avg: 0.0,
   });
+
+  const userId = localStorage.getItem("USER_ID");
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const data = await fetchCall("/api/v1/users/:userId/profile", "GET");
-        setProfileData({
-          ...data,
-        });
+        if (userId) {
+          const data = await fetchCall(
+            `/api/v1/users/${userId}/profile`,
+            "GET",
+          );
+          setProfileData({
+            ...data,
+          });
+        } else {
+          console.error("USER_ID가 로컬 스토리지에 없습니다.");
+        }
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
     };
     fetchProfileData();
-  }, []);
+  }, [userId]);
 
   const navigate = useNavigate();
 
@@ -100,8 +109,8 @@ const Profile = (): JSX.Element => {
 
       <div className="text-sm my-10">{profileData.introduction}</div>
 
-      <MyLang lang={profileData.lang} />
-      <CountryName countries={profileData.countryName} />
+      <MyLang lang={profileData.langAbilities} />
+      <CountryName countries={profileData.visitedCountries} />
 
       <div className="flex">
         <button
