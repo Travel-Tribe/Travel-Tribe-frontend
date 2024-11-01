@@ -126,7 +126,8 @@ const SignIn = (): JSX.Element => {
       </div>
 
       <div className="form-control w-full">
-        <label className="signIn-password">
+        <label htmlFor="signIn-password" className="label">
+
           <span className="label-text">비밀번호</span>
         </label>
         <div className="relative">
