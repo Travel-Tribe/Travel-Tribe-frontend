@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import fetchCall from "../../Utils/apiFetch";
 
 import MyLang from "./SideComponents/MyLang";
 import CountryName from "./SideComponents/CountryName";
@@ -8,26 +8,21 @@ import profileImg from "../../assets/profileImg.webp";
 import GradeIcon from "../../assets/icons/grade_20dp_E8EAED_FILL0_wght400_GRAD0_opsz20.svg";
 import ProfileMbti from "./SideComponents/ProfileMbti";
 
-// fetchCall 함수 생성
-const fetchCall = async (url: string, method: string, data?: any) => {
-  try {
-    const response = await axios({
-      url,
-      method,
-      data,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-};
+interface UserProfile {
+  introduction: string;
+  nickname: string;
+  mbti: string;
+  smoking: string;
+  gender: string;
+  birth: string;
+  fileAddress: string;
+  langAbilities: string[];
+  visitedCountries: string[];
+  rating_avg: number;
+}
 
 const Profile = (): JSX.Element => {
-  const [profileData, setProfileData] = useState({
+  const [profileData, setProfileData] = useState<UserProfile>({
     introduction: "",
     nickname: "",
     mbti: "",
@@ -46,13 +41,12 @@ const Profile = (): JSX.Element => {
     const fetchProfileData = async () => {
       try {
         if (userId) {
-          const data = await fetchCall(
+          const data = await fetchCall<UserProfile>(
             `/api/v1/users/${userId}/profile`,
-            "GET",
+            "get",
           );
-          setProfileData({
-            ...data,
-          });
+          console.log(data);
+          setProfileData(data);
         } else {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
         }
