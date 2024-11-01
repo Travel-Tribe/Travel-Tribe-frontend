@@ -46,6 +46,11 @@ interface ApiResponse {
   data: boolean | string;
 }
 
+// Axios 응답 타입 (필요한 필드만 포함)
+interface AxiosResponse {
+  data: ApiResponse;
+}
+
 const SignUp = (): JSX.Element => {
   // 중복 검사 상태
   const [validationStatus, setValidationStatus] = useState<{
@@ -105,9 +110,9 @@ const SignUp = (): JSX.Element => {
         "post",
       );
 
-      console.log(response);
+      console.log("Response:", response);
       // true면 중복, false면 사용가능
-      if (response.data.data) {
+      if (response.data) {
         setError(type, {
           type: "manual",
           message: `이미 사용 중인 ${
@@ -163,7 +168,7 @@ const SignUp = (): JSX.Element => {
 
     // TODO: 실제 회원가입 API 호출
     try {
-      const response = await fetchCall<ApiResponse>(
+      const response = await fetchCall<AxiosResponse>(
         "/api/v1/users",
         "post",
         submitData,
@@ -175,7 +180,7 @@ const SignUp = (): JSX.Element => {
         navigate("/signIn"); // 로그인 페이지로 이동
       } else {
         throw new Error(
-          response.errors || "회원가입 처리 중 문제가 발생했습니다.",
+          response.data.errors || "회원가입 처리 중 문제가 발생했습니다.",
         );
       }
     } catch (error) {
