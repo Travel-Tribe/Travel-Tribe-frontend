@@ -4,6 +4,8 @@ import { Suspense } from "react";
 import ProfileEdit from "../Components/Mypage/ProfileEdit";
 import MyProfileMain from "../Components/Mypage/MyProfileMain";
 import MyCompletedTrips from '../Components/Mypage/MyCompletedTrips';
+import MyTravelHistory from '../Components/Mypage/MyTravelHistory';
+import MyAccountSettings from '../Components/Mypage/MyAccountSettings';
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -45,6 +47,8 @@ const Router = (): JSX.Element => {
           <Route index element={<MyProfileMain />} />
           <Route path="myProfileEdit" element={<ProfileEdit />} />
           <Route path="completedTrips" element={<MyCompletedTrips />} />
+          <Route path="travelHistory" element={<MyTravelHistory />} />
+          <Route path="accountSettings" element={<MyAccountSettings />} />
         </Route>
       </Routes>
     </Suspense>

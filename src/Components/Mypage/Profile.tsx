@@ -1,4 +1,6 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import fetchCall from "../../Utils/apiFetch";
 
 import MyLang from "./SideComponents/MyLang";
 import CountryName from "./SideComponents/CountryName";
@@ -6,21 +8,59 @@ import profileImg from "../../assets/profileImg.webp";
 import GradeIcon from "../../assets/icons/grade_20dp_E8EAED_FILL0_wght400_GRAD0_opsz20.svg";
 import ProfileMbti from "./SideComponents/ProfileMbti";
 
+interface UserProfile {
+  introduction: string;
+  nickname: string;
+  mbti: string;
+  smoking: string;
+  gender: string;
+  birth: string;
+  fileAddress: string;
+  langAbilities: string[];
+  visitedCountries: string[];
+  rating_avg: number;
+}
+
 const Profile = (): JSX.Element => {
-  const introduction = "저를 소개합니다. 저는 여행을 좋아합니다";
-  const nickName = "닉네임";
-  const birth = "1997-10-26";
-  const gender = "남자";
-  const ratingAvg = 4.5;
-  const smoking = "비흡연";
-  const mbti = "enfp";
-  const lang = ["영어", "일본어", "중국어"];
-  const countryName = ["미국", "일본", "런던"];
+  const [profileData, setProfileData] = useState<UserProfile>({
+    introduction: "",
+    nickname: "",
+    mbti: "",
+    smoking: "",
+    gender: "",
+    birth: "",
+    fileAddress: "",
+    langAbilities: [] as string[],
+    visitedCountries: [] as string[],
+    rating_avg: 0.0,
+  });
+
+  const userId = localStorage.getItem("USER_ID");
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        if (userId) {
+          const data = await fetchCall<UserProfile>(
+            `/api/v1/users/${userId}/profile`,
+            "get",
+          );
+          console.log(data);
+          setProfileData(data);
+        } else {
+          console.error("USER_ID가 로컬 스토리지에 없습니다.");
+        }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+    fetchProfileData();
+  }, [userId]);
 
   const navigate = useNavigate();
 
   const today = new Date();
-  const birthDate = new Date(birth);
+  const birthDate = new Date(profileData.birth);
   let age = today.getFullYear() - birthDate.getFullYear();
 
   if (
@@ -39,29 +79,32 @@ const Profile = (): JSX.Element => {
     <>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <img className="w-12 h-12 rounded-full" src={profileImg} />
-          <div className="flex flex-col ml-5 text-xs space-y-1">
+          <img
+            className="w-12 h-12 rounded-full"
+            src={profileData.fileAddress === "" ? profileImg : ""}
+          />
+          <div className="flex flex-col ml-5 text-base space-y-1">
             <div className="flex items-center">
-              <span className="mr-1 text-black">{nickName}</span>님
+              <span className="mr-1 text-black">{profileData.nickname}</span>님
             </div>
             <div className="flex items-center space-x-5">
               <span>{age}세</span>
-              <span>{gender}</span>
+              <span>{profileData.gender === "male" ? "남자" : "여자"}</span>
               <span className="flex items-center">
                 <img src={GradeIcon} />
-                <span className="ml-1">({ratingAvg}/5.0)</span>
+                <span className="ml-1">({profileData.rating_avg}/5.0)</span>
               </span>
-              <span>{smoking}</span>
+              <span>{profileData.smoking}</span>
             </div>
           </div>
         </div>
-        <ProfileMbti mbtiData={mbti} />
+        <ProfileMbti mbtiData={profileData.mbti} />
       </div>
 
-      <div className="text-sm my-10">{introduction}</div>
+      <div className="text-sm my-10">{profileData.introduction}</div>
 
-      <MyLang lang={lang} />
-      <CountryName countries={countryName} />
+      <MyLang lang={profileData.langAbilities} />
+      <CountryName countries={profileData.visitedCountries} />
 
       <div className="flex">
         <button

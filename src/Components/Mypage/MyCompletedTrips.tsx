@@ -1,6 +1,10 @@
+import { useState } from "react";
+import Rating from "./Rating";
+
 const MyCompletedTrips = (): JSX.Element => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const today = new Date();
+  const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
 
   const travelInfos = [
     {
@@ -44,7 +48,6 @@ const MyCompletedTrips = (): JSX.Element => {
     const travelEndDate = new Date(info.travelEndDate);
     return travelEndDate < today;
   });
-  console.log(completedTrips);
 
   return (
     <>
@@ -74,8 +77,8 @@ const MyCompletedTrips = (): JSX.Element => {
                   </div>
                   <div className="flex items-center m-2.5 space-x-8 justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className="w-[66px] h-[28px] text-white bg-pink-300 rounded-lg text-center flex items-center justify-center">
-                        {info.travelCountry}
+                      <div className=" bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
+                        <span className="truncate">{info.travelCountry}</span>
                       </div>
                       <span className="text-white">
                         참여인원 {info.participantsCount}/{info.maxParticipants}
@@ -85,7 +88,19 @@ const MyCompletedTrips = (): JSX.Element => {
                         {info.travelEndDate}({week[travelEndDay]})
                       </span>
                     </div>
-                    <button className="w-20 p-1 rounded-md bg-custom-red text-white">평점 주기</button>
+                    <button
+                      className="btn btn-sm rounded-md bg-custom-pink text-white hover:bg-custom-pink-hover"
+                      onClick={() => setActiveModalIndex(index)}
+                    >
+                      평점 주기
+                    </button>
+                    {activeModalIndex === index && (
+                      <Rating
+                        isOpen={activeModalIndex === index}
+                        onClose={() => setActiveModalIndex(null)}
+                        participants={info.participantsCount}
+                      />
+                    )}
                   </div>
                 </div>
               </li>

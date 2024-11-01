@@ -9,7 +9,7 @@ const MyLang = ({ lang }: MyLangs): JSX.Element => {
         {lang.map((language, index) => (
           <div
             key={index}
-            className="w-16 h-5 text-xs rounded-lg bg-custom-blue text-white text-center m-2.5 flex items-center justify-center"
+            className="w-16 h-5 text-sm rounded-lg bg-custom-blue text-white text-center m-2.5 flex items-center justify-center"
           >
             {language}
           </div>
