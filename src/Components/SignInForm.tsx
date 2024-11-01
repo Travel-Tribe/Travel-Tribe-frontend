@@ -60,16 +60,14 @@ const SignIn = (): JSX.Element => {
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       const response = await fetchCall<LoginResponseHeaders>("/login", "post", {
-        data: {
-          email: data.email,
-          password: data.password,
-        },
+        email: data.email,
+        password: data.password,
       });
 
       // 응답 데이터 처리
       const { result, data: responseData } = response.data;
       const accessToken = response.headers?.["access"];
-
+      console.log(response);
       if (result === "SUCCESS" && accessToken) {
         console.log("로그인 성공:", response.data);
 

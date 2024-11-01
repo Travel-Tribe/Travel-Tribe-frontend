@@ -102,7 +102,7 @@ const SignUp = (): JSX.Element => {
     try {
       const response = await fetchCall<ApiResponse>(
         `/api/v1/users/duplicate?type=${type}&query=${encodeURIComponent(value)}`,
-        "get",
+        "post",
       );
 
       // true면 중복, false면 사용가능
@@ -168,7 +168,8 @@ const SignUp = (): JSX.Element => {
         submitData,
       );
 
-      if (response.result === "SUCCESS") {
+      console.log(response);
+      if (response.data.result === "SUCCESS") {
         alert("회원가입이 완료되었습니다.");
         navigate("/signIn"); // 로그인 페이지로 이동
       } else {
