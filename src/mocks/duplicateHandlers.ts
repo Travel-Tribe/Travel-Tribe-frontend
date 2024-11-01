@@ -10,13 +10,13 @@ export const duplicateHandlers = [
     const query = url.searchParams.get("query");
     console.log("중복 검사", type, query);
 
-    if (!DuplicateMockData[type].includes(query)) {
-      return HttpResponse.json(false, {
+    if (DuplicateMockData[type].includes(query)) {
+      return HttpResponse.json(true, {
         status: 409,
       });
     }
 
-    return HttpResponse.json(true, {
+    return HttpResponse.json(false, {
       status: 201,
     });
   }),
