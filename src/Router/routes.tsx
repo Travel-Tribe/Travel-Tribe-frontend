@@ -1,11 +1,12 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import React from "react";
 import { Suspense } from "react";
 import ProfileEdit from "../Components/Mypage/ProfileEdit";
 import MyProfileMain from "../Components/Mypage/MyProfileMain";
-import MyCompletedTrips from '../Components/Mypage/MyCompletedTrips';
-import MyTravelHistory from '../Components/Mypage/MyTravelHistory';
-import MyAccountSettings from '../Components/Mypage/MyAccountSettings';
+import MyCompletedTrips from "../Components/Mypage/MyCompletedTrips";
+import MyTravelHistory from "../Components/Mypage/MyTravelHistory";
+import MyAccountSettings from "../Components/Mypage/MyAccountSettings";
+import Header from "../Components/Common/Header";
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -20,8 +21,14 @@ const ReviewPost = React.lazy(() => import("../Page/ReviewPost"));
 const MyPage = React.lazy(() => import("../Page/MyPage"));
 
 const Router = (): JSX.Element => {
+  const location = useLocation();
+  const hideHeaderRoutes = ["/signIn", "/signUp"];
+  console.log(location.pathname);
+
   return (
-    <Suspense fallback={"Loading..."}>
+    <Suspense fallback={""}>
+      {!hideHeaderRoutes.includes(location.pathname) && <Header />}
+
       <Routes>
         <Route path="*" element={<Error />} />
         <Route path="/" element={<Navigate to="/recruitment" replace />} />
