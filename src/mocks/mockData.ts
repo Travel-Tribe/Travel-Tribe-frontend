@@ -6,6 +6,15 @@ export const UserMockData = [
     email: "test@example.com",
     nickname: "tester",
     phone: "123-456-7890",
+    profileCheck: true,
+  },
+  {
+    userId: 2,
+    username: "testUser2",
+    password: "password123",
+    email: "test2@example.com",
+    nickname: "tester2",
+    phone: "123-456-7891",
     profileCheck: false,
   },
 ];
@@ -23,6 +32,19 @@ export const UserProfileData = {
     fileAddress: "",
     langAbilities: ["Korean", "English", "Japanese"],
     visitedCountries: ["Japan", "Canada", "France"],
+  },
+  "2": {
+    id: 2,
+    userId: 2,
+    introduction: "",
+    mbti: "",
+    smoking: "",
+    gender: "",
+    birth: "",
+    ratingAvg: null,
+    fileAddress: "",
+    langAbilities: [],
+    visitedCountries: [],
   },
 };
 

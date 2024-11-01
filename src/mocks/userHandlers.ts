@@ -51,11 +51,11 @@ export const userHandlers = [
             data: {
               id: users.userId,
               profileCheck: users.profileCheck,
+              access: "abc-123",
             },
           },
           {
             headers: {
-              access: "abc-123",
               "Set-Cookie": "refresh=abc-123",
             },
           },

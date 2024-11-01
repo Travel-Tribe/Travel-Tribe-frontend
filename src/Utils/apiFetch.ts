@@ -18,7 +18,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   config => {
     // 요청 헤더에 인증 토큰 추가
-    config.headers.Authorization = `Bearer ${API_TOKEN}`;
+    config.headers.Authorization = `access=${API_TOKEN}`;
     return config;
   },
   error => {
