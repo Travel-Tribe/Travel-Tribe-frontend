@@ -37,7 +37,7 @@ const SelectBox = React.memo(
     return (
       <div className="relative" ref={selectBoxRef}>
         <div
-          className="w-[120px] h-[36px] border border-custom-green rounded-[10px] px-[12px] text-[16px] flex items-center cursor-pointer"
+          className="w-[140px] h-[36px] border border-custom-green rounded-[10px] px-[12px] text-[16px] flex items-center cursor-pointer"
           onClick={toggleDropdown}
         >
           {selectedValue}

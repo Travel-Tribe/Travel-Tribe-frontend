@@ -4,22 +4,39 @@ import useLocalStorage from "../../Hooks/useLocalStorage";
 import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/localKey";
 
+interface ApiResponse {
+  result: "SUCCESS" | "FAIL";
+  errors: null | string;
+  data: boolean | string;
+}
+
+// Axios 응답 타입 (필요한 필드만 포함)
+interface AxiosResponse {
+  data: ApiResponse;
+}
+
 const Header = React.memo((): JSX.Element => {
   const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
-  console.log(token);
+  console.log(token, document.cookie);
   const onClickLogout = async () => {
     try {
-      await fetchCall("/logout", "post");
-      localStorage.removeItem(STORAGE_KEYS.USER_ID);
-      localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
-      setToken(null);
+      const response = await fetchCall<AxiosResponse>("/logout", "post");
+
+      if (response.data.result === "SUCCESS") {
+        // await fetchCall(`/logoutCookie:${document.cookie}`, "post");
+        localStorage.removeItem(STORAGE_KEYS.USER_ID);
+        localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
+        document.cookie =
+          "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        setToken(null);
+      }
     } catch (error) {
       console.error("POST 요청에 실패했습니다:", error);
     }
   };
 
   return (
-    <div className="w-full h-10 mt-5 mb-7 mx-auto max-w-[1440px] min-w-[540px] px-3 flex justify-between align-center">
+    <div className="w-full h-10 mt-[20px] mb-[30px] mx-auto max-w-[1440px] min-w-[540px] px-3 flex justify-between align-center">
       <h1 className="text-4xl font-bold">
         <Link to={"/"}>여행족</Link>
       </h1>

@@ -23,7 +23,6 @@ const ProfileEdit = (): JSX.Element => {
     birth: "",
     fileAddress: "",
   });
-console.log(profileData);
   const [error, setError] = useState("");
   const [formValid, setFormValid] = useState(false);
   const navigate = useNavigate();
