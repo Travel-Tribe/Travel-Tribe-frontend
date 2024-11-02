@@ -27,7 +27,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
   const handleEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmailInput(e.target.value);
     setError("");
-    setSuccess(""); 
+    setSuccess("");
   };
 
   // 인증번호 입력 핸들러
@@ -56,8 +56,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
         setValidationStatus({ isChecking: false, isAvailable: true });
       }
     } catch (error) {
-      console.error("이메일 중복 검사 중 에러 발생:", error);
-      setError("이메일 중복 확인 중 오류가 발생했습니다");
+      setError("이미 사용 중인 이메일입니다");
       setValidationStatus({ isChecking: false, isAvailable: false });
     }
   };
@@ -65,20 +64,20 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
   // 이메일 인증번호 전송
   const sendVerificationCode = async () => {
     if (!validationStatus.isAvailable || isCooldown) return; // 쿨다운 중이면 요청 막기
-  
+
     try {
       const data = { email: emailInput };
       console.log(data);
       const response = await fetchCall(
         `/api/v1/users/change-email/request`,
         "post",
-        data
+        data,
       );
       setVerificationCode(response.data.code);
       setIsCodeSent(true);
       setIsCooldown(true); // 쿨다운 시작
       alert("인증 코드가 전송되었습니다.");
-  
+
       // 1분 후에 다시 인증 코드 전송 가능하게 설정
       setTimeout(() => setIsCooldown(false), 60000); // 60000ms = 1분
     } catch (error) {
