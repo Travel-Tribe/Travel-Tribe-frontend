@@ -16,7 +16,7 @@ const schema = z
       }),
     passwordConfirm: z.string(),
     username: z.string().min(2, { message: "이름은 2자 이상이어야 합니다" }),
-    phone: z.string().regex(/^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/, {
+    phone: z.string().regex(/^01([0|1|6|7|8|9])-([0-9]{3,4})-([0-9]{4})$/, {
       message: "올바른 전화번호 형식이 아닙니다",
     }),
     nickname: z
@@ -294,7 +294,8 @@ const SignUp = (): JSX.Element => {
           id="signUp-phone"
           type="tel"
           autoComplete="tel"
-          placeholder="사용자 전화번호를 입력하세요"
+          placeholder="예시: 010-1234-5678 ('-' 포함하여 입력)"
+          maxLength={13}
           className="input input-bordered w-full"
           {...register("phone")}
         />
