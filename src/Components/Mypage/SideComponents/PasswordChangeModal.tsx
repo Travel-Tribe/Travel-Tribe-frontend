@@ -14,6 +14,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -31,7 +32,8 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
     try {
       if (userId) {
         const response = await fetchCall(`api/v1/users/password`, "patch", {
-          password: confirmPassword,
+          password: currentPassword,
+          newPassword: confirmPassword,
         });
         console.log(response);
       }
@@ -55,6 +57,24 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
           비밀번호 변경
         </h3>
         <form>
+          {/* 기존 비밀번호 입력 */}
+          <div className="relative mb-4">
+            <input
+              type={showCurrentPassword ? "text" : "password"}
+              placeholder="현재 비밀번호"
+              className="w-full border rounded p-2 bg-gray-100"
+              value={currentPassword}
+              onChange={e => setCurrentPassword(e.target.value)}
+            />
+            <button
+              type="button"
+              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+              className="absolute inset-y-0 right-2 text-gray-500"
+            >
+              {showCurrentPassword ? "숨기기" : "보기"}
+            </button>
+          </div>
+
           {/* 새 비밀번호 입력 */}
           <div className="relative mb-2">
             <input
