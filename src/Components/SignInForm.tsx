@@ -26,6 +26,7 @@ interface LoginResponse {
   data: {
     id: number;
     profileCheck: boolean;
+    access: string;
   };
 }
 
@@ -67,7 +68,7 @@ const SignIn = (): JSX.Element => {
       // 응답 데이터 처리
       // header 정보 불러오기 여기를 response 찍어보고 수정하기
       const { result, data: responseData } = response.data;
-      const accessToken = response.data.data.access;
+      const accessToken = responseData.access;
 
       if (result === "SUCCESS" && accessToken) {
         console.log("로그인 성공:", response.data);
@@ -126,7 +127,6 @@ const SignIn = (): JSX.Element => {
 
       <div className="form-control w-full">
         <label htmlFor="signIn-password" className="label">
-
           <span className="label-text">비밀번호</span>
         </label>
         <div className="relative">
