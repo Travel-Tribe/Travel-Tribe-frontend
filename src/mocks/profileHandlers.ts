@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { UserProfileData } from "./mockData";
+import { UserProfileData, UserMockData } from "./mockData";
 
 export const profileHandlers = [
   // 프로필 정보 불러오기
@@ -28,6 +28,15 @@ export const profileHandlers = [
       id: Object.keys(UserProfileData).length + 1,
       ...response,
     };
+
+    const index = UserMockData.findIndex(
+      user => user.userId === Number(userId),
+    );
+
+    // 인덱스가 존재하는 경우에만 값 업데이트하기
+    if (index !== -1) {
+      UserMockData[index].profileCheck = true;
+    }
 
     return HttpResponse.json(
       {

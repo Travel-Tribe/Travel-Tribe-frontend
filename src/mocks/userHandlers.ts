@@ -63,7 +63,7 @@ export const userHandlers = [
       }
     }
 
-    return HttpResponse.json({}, { status: 201 });
+    return HttpResponse.json({}, { status: 401 });
   }),
 
   // 로그아웃
