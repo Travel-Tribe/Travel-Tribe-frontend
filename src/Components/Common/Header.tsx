@@ -21,15 +21,19 @@ const Header = React.memo((): JSX.Element => {
   const onClickLogout = async () => {
     try {
       const response = await fetchCall<AxiosResponse>("/logout", "post");
-
-      if (response.data.result === "SUCCESS") {
-        // await fetchCall(`/logoutCookie:${document.cookie}`, "post");
-        localStorage.removeItem(STORAGE_KEYS.USER_ID);
-        localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
-        document.cookie =
-          "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        setToken(null);
-      }
+      localStorage.removeItem(STORAGE_KEYS.USER_ID);
+      localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
+      document.cookie =
+        "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      setToken(null);
+      // if (response.data.result === "SUCCESS") {
+      //   // await fetchCall(`/logoutCookie:${document.cookie}`, "post");
+      //   localStorage.removeItem(STORAGE_KEYS.USER_ID);
+      //   localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
+      //   document.cookie =
+      //     "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      //   setToken(null);
+      // }
     } catch (error) {
       console.error("POST 요청에 실패했습니다:", error);
     }
