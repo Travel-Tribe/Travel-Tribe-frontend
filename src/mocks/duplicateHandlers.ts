@@ -9,7 +9,7 @@ export const duplicateHandlers = [
     const type = url.searchParams.get("type");
     const query = url.searchParams.get("query");
     console.log("중복 검사", type, query);
-
+    
     if (DuplicateMockData[type].includes(query)) {
       return HttpResponse.json(true, {
         status: 409,

@@ -13,9 +13,9 @@ export const recruitHandlers = [
     console.log("모집 글 상세보기");
     const postId = params.postId;
     return HttpResponse.json(
-      RecruitMockData.find(recruitment => recruitment.id === postId),
+      RecruitMockData.filter(recruitment => recruitment.id === postId),
       { status: 201 },
-    );
+      );
   }),
 
   // 모집 글 삭제
@@ -25,7 +25,7 @@ export const recruitHandlers = [
     return HttpResponse.json(
       RecruitMockData.filter(recruitment => recruitment.id !== postId),
       { status: 201 },
-    );
+      );
   }),
 
   // 모집 글 수정
