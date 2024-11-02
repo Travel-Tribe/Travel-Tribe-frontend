@@ -2,14 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import useLocalStorage from "../../Hooks/useLocalStorage";
 import fetchCall from "../../Utils/apiFetch";
+import { STORAGE_KEYS } from "../../Constants/localKey";
 
 const Header = React.memo((): JSX.Element => {
-  const [userId, setUserId] = useLocalStorage("USER_ID");
-
+  const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
+  console.log(token);
   const onClickLogout = async () => {
     try {
       await fetchCall("/logout", "post");
-      setUserId(null);
+      localStorage.removeItem(STORAGE_KEYS.USER_ID);
+      localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
+      setToken(null);
     } catch (error) {
       console.error("POST 요청에 실패했습니다:", error);
     }
@@ -20,7 +23,7 @@ const Header = React.memo((): JSX.Element => {
       <h1 className="text-4xl font-bold">
         <Link to={"/"}>여행족</Link>
       </h1>
-      {userId === null || userId === "null" ? (
+      {token === "null" || token === null ? (
         <div className="text-16 flex align-center">
           <Link to="/signIn" className="text-black hover:underline">
             로그인
@@ -37,7 +40,7 @@ const Header = React.memo((): JSX.Element => {
           </span>
           <span className="mx-2">/</span>
           <Link to="/mypage" className="text-black hover:underline">
-            회원가입
+            마이페이지
           </Link>
         </div>
       )}

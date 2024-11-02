@@ -23,7 +23,6 @@ const MyPage = React.lazy(() => import("../Page/MyPage"));
 const Router = (): JSX.Element => {
   const location = useLocation();
   const hideHeaderRoutes = ["/signIn", "/signUp"];
-  console.log(location.pathname);
 
   return (
     <Suspense fallback={""}>

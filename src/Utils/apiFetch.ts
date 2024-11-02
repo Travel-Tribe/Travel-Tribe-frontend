@@ -51,10 +51,13 @@ export default async function fetchCall<T>(
     url,
     ...(data && { data }), // data가 있을 경우에만 data 속성 추가
   };
+
+  if (data instanceof FormData) {
+    config.headers = {
+      ...config.headers,
+      "Content-Type": "multipart/form-data",
+    };
+  }
+
   return axiosInstance(config);
 }
-
-// Usage
-// const id = 123;
-// const result = await fetchCall<{ message: string }>(`/posts`, 'post', { itemId: id });
-// console.log(result.message);
