@@ -1,4 +1,4 @@
-import { SetStateAction, useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import profileImg from "../../assets/profileImg.webp";
 import { useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
@@ -28,24 +28,40 @@ const ProfileEdit = (): JSX.Element => {
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("USER_ID");
+  const profileCheck = localStorage.getItem("ProfileCheck") === "true";
+  
+  // 로컬 상태로 자기소개 관리
+  const [introduction, setIntroduction] = useState(profileData.introduction || "");
+  const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
   // 기존 프로필 내용 가져오기
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        if (userId) {
-          const data = await fetchCall<UserProfile>(
-            `/api/v1/users/${userId}/profile`,
-            "get",
-          );
-          const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+        if (!userId) {
+          console.error("USER_ID가 로컬 스토리지에 없습니다.");
+          return;
+        }
 
+        const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+
+        if (profileCheck) {
+          const data = await fetchCall<UserProfile>(`/api/v1/users/${userId}/profile`, "get");
           setProfileData({
             ...data.data,
             nickname: userData.data.data.nickname,
           });
+          setIntroduction(data.data.introduction || ""); // 자기소개 초기값 설정
         } else {
-          console.error("USER_ID가 로컬 스토리지에 없습니다.");
+          setProfileData({
+            introduction: "",
+            nickname: userData.data.data.nickname,
+            mbti: "",
+            smoking: "",
+            gender: "",
+            birth: "",
+            fileAddress: "",
+          });
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -53,7 +69,7 @@ const ProfileEdit = (): JSX.Element => {
     };
 
     fetchProfileData();
-  }, [userId]);
+  }, [userId, profileCheck]);
 
   // 프로필 수정
   const profileUpdate = async () => {
@@ -62,11 +78,12 @@ const ProfileEdit = (): JSX.Element => {
         const data = await fetchCall<UserProfile>(
           `/api/v1/users/${userId}/profile`,
           "patch",
-          profileData,
+          { ...profileData, introduction }
         );
+        
         setProfileData(data);
-        console.log("수정완료");
         console.log(profileData);
+        console.log("수정완료");
       }
     } catch (error) {
       console.error("Error updating profile data:", error);
@@ -74,14 +91,13 @@ const ProfileEdit = (): JSX.Element => {
   };
 
   // 닉네임 유효성 검사 및 업데이트
-  const handleNicknameChange = (event: { target: { value: any } }) => {
+  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setProfileData(prev => ({
+    setProfileData((prev) => ({
       ...prev,
       nickname: value,
     }));
 
-    // 특수 문자 유효성 검사
     const specialCharPattern = /[!@#$%^&*(),.?":{}|<>]/;
     if (specialCharPattern.test(value)) {
       setError("특수문자를 사용할 수 없습니다.");
@@ -92,18 +108,30 @@ const ProfileEdit = (): JSX.Element => {
 
   // 자기소개 업데이트
   const maxChars = 150;
-  const handleMyInfoChange = (event: {
-    target: { value: SetStateAction<any> };
-  }) => {
-    setProfileData(prev => ({
-      ...prev,
-      introduction: event.target.value,
-    }));
+  const handleMyInfoChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = event.target.value;
+    setIntroduction(value); // 로컬 상태에 즉시 반영
+
+    // profileData에 introduction을 지연 업데이트
+    if (timeoutId.current) clearTimeout(timeoutId.current);
+    timeoutId.current = setTimeout(() => {
+      setProfileData((prev) => ({
+        ...prev,
+        introduction: value,
+      }));
+    }, 300); 
   };
 
+  // 컴포넌트가 언마운트될 때 타이머를 정리
+  useEffect(() => {
+    return () => {
+      if (timeoutId.current) clearTimeout(timeoutId.current);
+    };
+  }, []);
+
   // 생년월일 업데이트
-  const handleBirthChange = (event: { target: { value: any } }) => {
-    setProfileData(prev => ({
+  const handleBirthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setProfileData((prev) => ({
       ...prev,
       birth: event.target.value,
     }));
@@ -111,7 +139,7 @@ const ProfileEdit = (): JSX.Element => {
 
   // 성별 업데이트
   const handleGenderChange = (gender: string) => {
-    setProfileData(prev => ({
+    setProfileData((prev) => ({
       ...prev,
       gender: gender,
     }));
@@ -119,15 +147,15 @@ const ProfileEdit = (): JSX.Element => {
 
   // 흡연 여부 업데이트
   const handleSmokingChange = (smoking: string) => {
-    setProfileData(prev => ({
+    setProfileData((prev) => ({
       ...prev,
       smoking: smoking,
     }));
   };
 
   // MBTI 업데이트
-  const handleMbtiChange = (event: { target: { value: any } }) => {
-    setProfileData(prev => ({
+  const handleMbtiChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setProfileData((prev) => ({
       ...prev,
       mbti: event.target.value,
     }));
@@ -136,6 +164,7 @@ const ProfileEdit = (): JSX.Element => {
   // 저장 버튼 클릭 핸들러
   const handleUpdateProfile = async () => {
     await profileUpdate();
+    localStorage.setItem("ProfileCheck", "true");
     navigate("/mypage");
   };
 
@@ -143,11 +172,11 @@ const ProfileEdit = (): JSX.Element => {
   useEffect(() => {
     setFormValid(
       profileData.nickname.trim() !== "" &&
-        profileData.birth.trim() !== "" &&
-        profileData.gender.trim() !== "" &&
-        profileData.smoking.trim() !== "" &&
-        profileData.mbti.trim() !== "" &&
-        error === "",
+      profileData.birth.trim() !== "" &&
+      profileData.gender.trim() !== "" &&
+      profileData.smoking.trim() !== "" &&
+      profileData.mbti.trim() !== "" &&
+      error === ""
     );
   }, [profileData, error]);
 
@@ -209,12 +238,12 @@ const ProfileEdit = (): JSX.Element => {
             className="w-full border border-gray-300 rounded p-2 text-sm resize-none"
             placeholder="여기서 자기소개 수정 가능합니다."
             maxLength={maxChars}
-            value={profileData.introduction}
+            value={introduction} // 로컬 상태 사용
             onChange={handleMyInfoChange}
             rows={4}
           />
           <div className="text-gray-500 text-sm text-right mt-1">
-            {profileData.introduction?.length || 0}/{maxChars} 자
+            {introduction ? introduction.length : 0}/{maxChars} 자
           </div>
         </div>
 
@@ -260,9 +289,7 @@ const ProfileEdit = (): JSX.Element => {
 
         {/* 흡연 여부 변경 */}
         <div className="mt-4 pb-4">
-          <label className="text-gray-700 text-base mb-2 block">
-            흡연 여부
-          </label>
+          <label className="text-gray-700 text-base mb-2 block">흡연 여부</label>
           <div className="flex space-x-4">
             <label className="flex items-center cursor-pointer">
               <input
