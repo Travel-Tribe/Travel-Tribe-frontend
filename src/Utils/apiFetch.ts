@@ -43,7 +43,7 @@ axiosInstance.interceptors.response.use(
 
 export default async function fetchCall<T>(
   url: string,
-  method: "get" | "post" | "put" | "delete",
+  method: "get" | "post" | "put" | "delete" | "patch",
   data?: any,
 ): Promise<T> {
   const config = {
