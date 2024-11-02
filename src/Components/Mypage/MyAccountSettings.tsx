@@ -1,12 +1,13 @@
 import { useState } from "react";
 import EmailChangeModal from "./SideComponents/EmailChangeModal";
 import PasswordChangeModal from "./SideComponents/PasswordChangeModal";
+import DeleteAccountModal from "./SideComponents/DeleteAccountModal";
 
 const MyAccountSettings = (): JSX.Element => {
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
-
-  const password = 'qwer1234';
+  const [isDeleteAccountModalOpen, setIsDeleteAccountModalOpen] =
+    useState(false);
 
   return (
     <>
@@ -42,15 +43,18 @@ const MyAccountSettings = (): JSX.Element => {
             <PasswordChangeModal
               isOpen={isPasswordModalOpen}
               onClose={() => setIsPasswordModalOpen(false)}
-              userPassword={password}
             />
           </div>
         </div>
         <div className="mt-4 text-gray-500 text-sm">
-          <a href="#" className="hover:underline">
+          <a href="#" className="hover:underline" onClick={() => setIsDeleteAccountModalOpen(true)}>
             회원탈퇴 &gt;
           </a>
         </div>
+        <DeleteAccountModal
+          isOpen={isDeleteAccountModalOpen}
+          onClose={() => setIsDeleteAccountModalOpen(false)}
+        />
       </div>
     </>
   );
