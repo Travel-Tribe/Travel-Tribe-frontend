@@ -1,27 +1,20 @@
 import { SetStateAction, useState, useEffect } from "react";
-import axios from "axios";
 import profileImg from "../../assets/profileImg.webp";
 import { useNavigate } from "react-router-dom";
+import fetchCall from "../../Utils/apiFetch";
 
-const fetchCall = async (url: string, method: string, data?: any) => {
-  try {
-    const response = await axios({
-      url,
-      method,
-      data,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-    throw error;
-  }
-};
+interface UserProfile {
+  introduction: string;
+  nickname: string;
+  mbti: string;
+  smoking: string;
+  gender: string;
+  birth: string;
+  fileAddress: string;
+}
 
 const ProfileEdit = (): JSX.Element => {
-  const [profileData, setProfileData] = useState({
+  const [profileData, setProfileData] = useState<UserProfile>({
     introduction: "",
     nickname: "",
     mbti: "",
@@ -29,44 +22,55 @@ const ProfileEdit = (): JSX.Element => {
     gender: "",
     birth: "",
     fileAddress: "",
-    lang: [] as string[],
-    countryName: [] as string[],
-    rating_avg: 0.0,
   });
-
+console.log(profileData);
   const [error, setError] = useState("");
   const [formValid, setFormValid] = useState(false);
   const navigate = useNavigate();
+
+  const userId = localStorage.getItem("USER_ID");
 
   // 기존 프로필 내용 가져오기
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const data = await fetchCall("/api/v1/users/:userId/profile", "GET");
-        setProfileData({
-          ...data,
-        });
+        if (userId) {
+          const data = await fetchCall<UserProfile>(
+            `/api/v1/users/${userId}/profile`,
+            "get",
+          );
+          const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+
+          setProfileData({
+            ...data.data,
+            nickname: userData.data.data.nickname,
+          });
+        } else {
+          console.error("USER_ID가 로컬 스토리지에 없습니다.");
+        }
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
     };
 
     fetchProfileData();
-  }, []);
+  }, [userId]);
 
   // 프로필 수정
   const profileUpdate = async () => {
     try {
-      const data = await fetchCall(
-        "/api/v1/users/${responseData.id}/profile",
-        "patch",
-        profileData,
-      );
-      setProfileData({
-        ...data,
-      });
+      if (userId) {
+        const data = await fetchCall<UserProfile>(
+          `/api/v1/users/${userId}/profile`,
+          "patch",
+          profileData,
+        );
+        setProfileData(data);
+        console.log("수정완료");
+        console.log(profileData);
+      }
     } catch (error) {
-      console.error("Error fetching profile data:", error);
+      console.error("Error updating profile data:", error);
     }
   };
 
@@ -163,7 +167,7 @@ const ProfileEdit = (): JSX.Element => {
             <div className="flex flex-col items-center">
               <img
                 className="w-20 h-20 rounded-full border border-gray-300"
-                src={profileData.fileAddress === "" ? profileImg : ""}
+                src={profileData.fileAddress || profileImg}
                 alt="Profile"
               />
               <label htmlFor="file">
@@ -187,6 +191,7 @@ const ProfileEdit = (): JSX.Element => {
                 />
                 <button
                   className={`${profileData.nickname === "" ? "btn-disabled bg-gray-300 text-gray-500 cursor-not-allowed" : ""} px-3 py-1 bg-gray-300 text-gray-700 text-sm rounded-md`}
+                  disabled={!profileData.nickname}
                 >
                   중복 검사
                 </button>
@@ -210,7 +215,7 @@ const ProfileEdit = (): JSX.Element => {
             rows={4}
           />
           <div className="text-gray-500 text-sm text-right mt-1">
-            {profileData.introduction.length}/{maxChars} 자
+            {profileData.introduction?.length || 0}/{maxChars} 자
           </div>
         </div>
 
@@ -233,9 +238,9 @@ const ProfileEdit = (): JSX.Element => {
               <input
                 type="radio"
                 name="gender"
-                value="male"
-                checked={profileData.gender === "male"}
-                onChange={() => handleGenderChange("male")}
+                value="MALE"
+                checked={profileData.gender === "MALE"}
+                onChange={() => handleGenderChange("MALE")}
                 className="mr-2"
               />
               남자
@@ -244,9 +249,9 @@ const ProfileEdit = (): JSX.Element => {
               <input
                 type="radio"
                 name="gender"
-                value="female"
-                checked={profileData.gender === "female"}
-                onChange={() => handleGenderChange("female")}
+                value="FEMALE"
+                checked={profileData.gender === "FEMALE"}
+                onChange={() => handleGenderChange("FEMALE")}
                 className="mr-2"
               />
               여자
@@ -264,9 +269,9 @@ const ProfileEdit = (): JSX.Element => {
               <input
                 type="radio"
                 name="smoking"
-                value="흡연"
-                checked={profileData.smoking === "흡연"}
-                onChange={() => handleSmokingChange("흡연")}
+                value="YES"
+                checked={profileData.smoking === "YES"}
+                onChange={() => handleSmokingChange("YES")}
                 className="mr-2"
               />
               흡연
@@ -275,9 +280,9 @@ const ProfileEdit = (): JSX.Element => {
               <input
                 type="radio"
                 name="smoking"
-                value="비흡연"
-                checked={profileData.smoking === "비흡연"}
-                onChange={() => handleSmokingChange("비흡연")}
+                value="NO"
+                checked={profileData.smoking === "NO"}
+                onChange={() => handleSmokingChange("NO")}
                 className="mr-2"
               />
               비흡연

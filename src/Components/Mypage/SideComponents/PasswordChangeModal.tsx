@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import fetchCall from "../../../Utils/apiFetch";
 
 interface PasswordChangeModalProps {
   isOpen: boolean;
   onClose: () => void;
-  userPassword: string;
 }
 
 const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
   isOpen,
   onClose,
-  userPassword,
 }) => {
-  const [currentPassword, setCurrentPassword] = useState(userPassword);
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -27,10 +25,25 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
   const isConfirmationMismatch =
     confirmPassword !== "" && newPassword !== confirmPassword;
 
-  const navigate = useNavigate();
-  const ClickChange = () => {
+  const userId = localStorage.getItem("USER_ID");
+
+  const passwordUpdate = async () => {
+    try {
+      if (userId) {
+        const response = await fetchCall(`api/v1/users/password`, "patch", {
+          password: confirmPassword,
+        });
+        console.log(response);
+      }
+    } catch (error) {
+      console.error("Error updating profile data:", error);
+    }
+  };
+
+  const ClickChange = async () => {
     console.log("비밀번호 변경완료");
-    navigate("/mypage/accountSettings");
+    await passwordUpdate();
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -42,25 +55,6 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
           비밀번호 변경
         </h3>
         <form>
-          {/* 현재 비밀번호 입력 */}
-          <div className="relative mb-4">
-            <input
-              type={showCurrentPassword ? "text" : "password"}
-              placeholder="현재 비밀번호"
-              className="w-full border rounded p-2 bg-gray-100"
-              value={currentPassword}
-              onChange={e => setCurrentPassword(e.target.value)}
-              disabled
-            />
-            <button
-              type="button"
-              onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-              className="absolute inset-y-0 right-2 text-gray-500"
-            >
-              {showCurrentPassword ? "숨기기" : "보기"}
-            </button>
-          </div>
-
           {/* 새 비밀번호 입력 */}
           <div className="relative mb-2">
             <input
@@ -78,11 +72,6 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
               {showNewPassword ? "숨기기" : "보기"}
             </button>
           </div>
-          {isSameAsCurrent && (
-            <p className="text-red-500 text-sm mt-1">
-              현재 비밀번호와 동일합니다.
-            </p>
-          )}
           {!meetsCriteria && (
             <p className="text-red-500 text-sm mt-1">
               비밀번호는 특수문자, 영어, 숫자를 포함한 8자 이상이어야 합니다.
@@ -119,7 +108,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
               disabled={
                 !meetsCriteria || isSameAsCurrent || isConfirmationMismatch
               }
-              onClick={onClose}
+              onClick={ClickChange}
             >
               변경하기
             </button>

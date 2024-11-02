@@ -18,7 +18,7 @@ interface UserProfile {
   fileAddress: string;
   langAbilities: string[];
   visitedCountries: string[];
-  rating_avg: number;
+  ratingAvg: null | number;
 }
 
 const Profile = (): JSX.Element => {
@@ -32,7 +32,7 @@ const Profile = (): JSX.Element => {
     fileAddress: "",
     langAbilities: [] as string[],
     visitedCountries: [] as string[],
-    rating_avg: 0.0,
+    ratingAvg: null,
   });
 
   const userId = localStorage.getItem("USER_ID");
@@ -45,8 +45,11 @@ const Profile = (): JSX.Element => {
             `/api/v1/users/${userId}/profile`,
             "get",
           );
-          console.log(data);
-          setProfileData(data);
+          const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+          setProfileData({
+            ...data.data,
+            nickname: userData.data.data.nickname,
+          });
         } else {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
         }
@@ -92,9 +95,13 @@ const Profile = (): JSX.Element => {
               <span>{profileData.gender === "male" ? "남자" : "여자"}</span>
               <span className="flex items-center">
                 <img src={GradeIcon} />
-                <span className="ml-1">({profileData.rating_avg}/5.0)</span>
+                <span className="ml-1">
+                  (
+                  {profileData.ratingAvg === null ? 0.0 : profileData.ratingAvg}
+                  /5.0)
+                </span>
               </span>
-              <span>{profileData.smoking}</span>
+              <span>{profileData.smoking === "NO" ? "비흡연" : "흡연"}</span>
             </div>
           </div>
         </div>
