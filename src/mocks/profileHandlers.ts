@@ -36,6 +36,7 @@ export const profileHandlers = [
     // 인덱스가 존재하는 경우에만 값 업데이트하기
     if (index !== -1) {
       UserMockData[index].profileCheck = true;
+      localStorage.setItem("ProfileCheck", JSON.stringify(true));
     }
 
     return HttpResponse.json(

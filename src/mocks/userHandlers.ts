@@ -141,7 +141,7 @@ export const userHandlers = [
   }),
 
   // 이메일 인증
-  http.post("api/v1/users/change-email/request", async ({ request }) => {
+  http.post("/api/v1/users/change-email/request", async ({ request }) => {
     const data = (await request.json()) as { email: string };
     console.log("이메일 인증", data);
 
@@ -156,7 +156,7 @@ export const userHandlers = [
   }),
 
   // 회원 이메일 인증 코드 검증 및 이메일 변경
-  http.post("api/v1/users/change-email/verify", async ({ request }) => {
+  http.post("/api/v1/users/change-email/verify", async ({ request }) => {
     const data = (await request.json()) as {
       code: string;
       email: string;
@@ -174,7 +174,7 @@ export const userHandlers = [
   }),
 
   // 회원 비밀번호 정보 수정
-  http.patch("api/v1/users/password", async ({ request }) => {
+  http.patch("/api/v1/users/password", async ({ request }) => {
     const data = (await request.json()) as {
       password: string;
       newPassword: string;
@@ -192,7 +192,7 @@ export const userHandlers = [
   }),
 
   // 비밀번호 초기화
-  http.post("api/v1/users/reset-password", async ({ request }) => {
+  http.post("/api/v1/users/reset-password", async ({ request }) => {
     const data = (await request.json()) as {
       email: string;
     };
@@ -209,7 +209,7 @@ export const userHandlers = [
   }),
 
   // 회원 정보 수정
-  http.patch("api/v1/users/Info", async ({ request }) => {
+  http.patch("/api/v1/users/Info", async ({ request }) => {
     const data = (await request.json()) as {
       nickname: string;
       phone: string;
