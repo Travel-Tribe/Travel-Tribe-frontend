@@ -1,4 +1,14 @@
-export const UserMockData = [
+interface User {
+  userId: number;
+  username: string;
+  password: string;
+  email: string;
+  nickname: string;
+  phone: string;
+  profileCheck: boolean;
+}
+
+export const UserMockData: User[] = [
   {
     userId: 1,
     username: "testUser",
@@ -19,7 +29,21 @@ export const UserMockData = [
   },
 ];
 
-export const UserProfileData = {
+interface UserProfile {
+  id: number;
+  userId: number;
+  introduction: string;
+  mbti: string;
+  smoking: string;
+  gender: string;
+  birth: string;
+  ratingAvg: null | number;
+  fileAddress: string;
+  langAbilities: string[];
+  visitedCountries: string[];
+}
+
+export const UserProfileData: { [key: string]: UserProfile } = {
   "1": {
     id: 1,
     userId: 1,
@@ -32,19 +56,6 @@ export const UserProfileData = {
     fileAddress: "",
     langAbilities: ["Korean", "English", "Japanese"],
     visitedCountries: ["Japan", "Canada", "France"],
-  },
-  "2": {
-    id: 2,
-    userId: 2,
-    introduction: "",
-    mbti: "",
-    smoking: "",
-    gender: "",
-    birth: "",
-    ratingAvg: null,
-    fileAddress: "",
-    langAbilities: [],
-    visitedCountries: [],
   },
 };
 
