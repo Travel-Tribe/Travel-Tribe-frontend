@@ -83,22 +83,27 @@ export const userHandlers = [
   // 내 정보 불러오기
   http.get("/api/v1/users", async () => {
     console.log("내 정보 불러오기");
+    const userID = Number(localStorage.getItem("USER_ID"));
 
-    return HttpResponse.json(
-      {
-        result: "SUCCESS",
-        errors: null,
-        data: {
-          id: 1,
-          username: "seokseungmin",
-          nickname: "SEOK",
-          phone: "010-1111-1111",
-          email: "seok@gmail.com",
-          status: "ACTIVE",
-        },
-      },
-      { status: 201 },
-    );
+    for (const users of UserMockData) {
+      if (users.userId == userID) {
+        return HttpResponse.json(
+          {
+            result: "SUCCESS",
+            errors: null,
+            data: {
+              id: users.userId,
+              username: users.username,
+              nickname: users.nickname,
+              phone: users.phone,
+              email: users.email,
+              status: "ACTIVE",
+            },
+          },
+          { status: 201 },
+        );
+      }
+    }
   }),
 
   // 다른 사람 정보 불러오기
