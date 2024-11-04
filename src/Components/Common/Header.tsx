@@ -18,20 +18,21 @@ interface AxiosResponse {
 const Header = React.memo((): JSX.Element => {
   const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
-  console.log(token, document.cookie);
+  console.log("Cookie", document.cookie);
+
   const onClickLogout = async () => {
     try {
       const response = await fetchCall<AxiosResponse>("/logout", "post");
-      console.log(response.data);
+      //const response = await fetchCall(`/logoutCookie:${document.cookie}`, "post");
+
       if (response.data.result === "SUCCESS") {
-        // await fetchCall(`/logoutCookie:${document.cookie}`, "post");
         localStorage.removeItem(STORAGE_KEYS.USER_ID);
         localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
         document.cookie =
           "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         setToken(null);
+        navigate("/recruitment");
       }
-      navigate("/recruitment");
     } catch (error) {
       console.error("POST 요청에 실패했습니다:", error);
     }
