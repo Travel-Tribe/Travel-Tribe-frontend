@@ -56,6 +56,7 @@ export const userHandlers = [
           },
           {
             headers: {
+              access: "acd-123",
               "Set-Cookie": "refresh=abc-123",
             },
           },
