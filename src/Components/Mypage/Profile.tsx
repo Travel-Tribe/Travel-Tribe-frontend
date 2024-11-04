@@ -36,7 +36,7 @@ const Profile = (): JSX.Element => {
   });
   const userId = localStorage.getItem("USER_ID");
   const profileCheck = localStorage.getItem("ProfileCheck");
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,17 +48,14 @@ const Profile = (): JSX.Element => {
     const fetchProfileData = async () => {
       try {
         if (userId) {
-          console.log("data");
           const data = await fetchCall<UserProfile>(
             `/api/v1/users/${userId}/profile`,
             "get",
           );
           // const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
-          // console.log(data);
-          // console.log(userData);
+          console.log("data", data);
           setProfileData({
             ...data.data,
-            // nickname: userData.data.data.nickname,
           });
         } else {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
