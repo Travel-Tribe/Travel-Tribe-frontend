@@ -100,6 +100,7 @@ export interface TravelPlan {
   preferenceType: string;
   deadline: string;
   days: Day[];
+  img?: string;
 }
 
 export const RecruitMockData: TravelPlan[] = [
