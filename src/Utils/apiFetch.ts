@@ -1,10 +1,10 @@
 import axios, { AxiosError } from "axios";
+import { STORAGE_KEYS } from "../Constants/localKey";
 
-// 추후 변경
-const API_TOKEN = localStorage.getItem("USER_ID");
+const API_TOKEN = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.REACT_API_BASE_URL,
+  baseURL: "", // import.meta.env.VITE_API_BASE_URL
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
