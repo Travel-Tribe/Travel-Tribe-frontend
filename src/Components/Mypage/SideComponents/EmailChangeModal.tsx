@@ -12,7 +12,6 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
   onClose,
 }) => {
   const [emailInput, setEmailInput] = useState("");
-  const [verificationCode, setVerificationCode] = useState("");
   const [inputCode, setInputCode] = useState("");
   const [isCodeSent, setIsCodeSent] = useState(false);
   const [isCooldown, setIsCooldown] = useState(false);
@@ -28,12 +27,21 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     setEmailInput(e.target.value);
     setError("");
     setSuccess("");
+
+    // 이메일 유효성 검사
+    const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    if (!emailRegex.test(e.target.value)) {
+      setError("유효하지 않은 이메일 형식입니다.");
+      setValidationStatus({ isChecking: false, isAvailable: false });
+    }
   };
 
   // 인증번호 입력 핸들러
   const handleCodeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputCode(e.target.value);
+    console.log(typeof inputCode);
   };
+
 
   // 이메일 중복 검사
   const handleEmailDuplicateCheck = async () => {
@@ -68,12 +76,11 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     try {
       const data = { email: emailInput };
       console.log(data);
-      const response = await fetchCall(
+      await fetchCall(
         `/api/v1/users/change-email/request`,
         "post",
         data,
       );
-      setVerificationCode(response.data.code);
       setIsCodeSent(true);
       setIsCooldown(true); // 쿨다운 시작
       alert("인증 코드가 전송되었습니다.");
@@ -88,19 +95,15 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
 
   // 이메일 변경
   const handleEmailChange = async () => {
-    if (inputCode === verificationCode) {
       try {
-        const data = { email: emailInput, code: inputCode };
-        await fetchCall(`api/v1/users/change-email/verify`, "post", data);
+        await fetchCall(`/api/v1/users/change-email/verify`, "post", { email: emailInput, code: inputCode });
+        console.log("object");
         alert("이메일이 성공적으로 변경되었습니다.");
         onClose();
       } catch (error) {
         console.error("이메일 변경 중 에러 발생:", error);
         alert("이메일 변경에 실패했습니다.");
       }
-    } else {
-      setError("인증 코드가 올바르지 않습니다.");
-    }
   };
 
   if (!isOpen) return null;

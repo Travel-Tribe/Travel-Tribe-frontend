@@ -65,6 +65,15 @@ export const DuplicateMockData = {
   phone: ["123-456-7890"],
 };
 
+interface EmailCode {
+  email: string;
+  code: string;
+}
+export const EmailChangeMockData = {
+  email: "t@t.com",
+  code: "670127"
+}
+
 interface ItineraryVisit {
   point: string;
   order: number;

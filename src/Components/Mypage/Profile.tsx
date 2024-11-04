@@ -38,10 +38,9 @@ const Profile = (): JSX.Element => {
   const profileCheck = localStorage.getItem("ProfileCheck");
 
   const navigate = useNavigate();
-
+  console.log(profileData);
   useEffect(() => {
     if (profileCheck === "false") {
-      console.log("11111");
       navigate("/mypage/myProfileEdit");
       return;
     }
@@ -54,6 +53,7 @@ const Profile = (): JSX.Element => {
           );
           // const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
           console.log("data", data);
+
           setProfileData({
             ...data.data,
           });
@@ -102,8 +102,8 @@ const Profile = (): JSX.Element => {
                 <img src={GradeIcon} />
                 <span className="ml-1">
                   (
-                  {profileData.ratingAvg === undefined
-                    ? 0.0
+                  {profileData.ratingAvg === undefined || profileData.ratingAvg === null
+                    ? (0).toFixed(1)
                     : profileData.ratingAvg}
                   /5.0)
                 </span>
