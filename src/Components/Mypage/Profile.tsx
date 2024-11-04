@@ -34,21 +34,31 @@ const Profile = (): JSX.Element => {
     visitedCountries: [] as string[],
     ratingAvg: null,
   });
-
   const userId = localStorage.getItem("USER_ID");
+  const profileCheck = localStorage.getItem("ProfileCheck");
+  
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (profileCheck === "false") {
+      console.log("11111");
+      navigate("/mypage/myProfileEdit");
+      return;
+    }
     const fetchProfileData = async () => {
       try {
         if (userId) {
+          console.log("data");
           const data = await fetchCall<UserProfile>(
             `/api/v1/users/${userId}/profile`,
             "get",
           );
-          const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+          // const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+          // console.log(data);
+          // console.log(userData);
           setProfileData({
             ...data.data,
-            nickname: userData.data.data.nickname,
+            // nickname: userData.data.data.nickname,
           });
         } else {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
@@ -58,9 +68,7 @@ const Profile = (): JSX.Element => {
       }
     };
     fetchProfileData();
-  }, [userId]);
-
-  const navigate = useNavigate();
+  }, [userId, profileCheck, navigate]);
 
   const today = new Date();
   const birthDate = new Date(profileData.birth);
@@ -84,7 +92,7 @@ const Profile = (): JSX.Element => {
         <div className="flex items-center">
           <img
             className="w-12 h-12 rounded-full"
-            src={profileData.fileAddress === "" ? profileImg : ""}
+            src={profileData.fileAddress || profileImg}
           />
           <div className="flex flex-col ml-5 text-base space-y-1">
             <div className="flex items-center">
@@ -92,12 +100,14 @@ const Profile = (): JSX.Element => {
             </div>
             <div className="flex items-center space-x-5">
               <span>{age}세</span>
-              <span>{profileData.gender === "male" ? "남자" : "여자"}</span>
+              <span>{profileData.gender === "MALE" ? "남자" : "여자"}</span>
               <span className="flex items-center">
                 <img src={GradeIcon} />
                 <span className="ml-1">
                   (
-                  {profileData.ratingAvg === null ? 0.0 : profileData.ratingAvg}
+                  {profileData.ratingAvg === undefined
+                    ? 0.0
+                    : profileData.ratingAvg}
                   /5.0)
                 </span>
               </span>
