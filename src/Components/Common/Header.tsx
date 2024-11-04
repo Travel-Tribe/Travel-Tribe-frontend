@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useLocalStorage from "../../Hooks/useLocalStorage";
 import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/localKey";
@@ -17,23 +17,21 @@ interface AxiosResponse {
 
 const Header = React.memo((): JSX.Element => {
   const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
-  console.log(token, document.cookie);
+  const navigate = useNavigate();
+
   const onClickLogout = async () => {
     try {
       const response = await fetchCall<AxiosResponse>("/logout", "post");
-      localStorage.removeItem(STORAGE_KEYS.USER_ID);
-      localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
-      document.cookie =
-        "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      setToken(null);
-      // if (response.data.result === "SUCCESS") {
-      //   // await fetchCall(`/logoutCookie:${document.cookie}`, "post");
-      //   localStorage.removeItem(STORAGE_KEYS.USER_ID);
-      //   localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
-      //   document.cookie =
-      //     "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      //   setToken(null);
-      // }
+      // const response = await fetchCall(`/logoutCookie:${document.cookie}`, "post");
+
+      if (response.data.result === "SUCCESS") {
+        localStorage.removeItem(STORAGE_KEYS.USER_ID);
+        localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
+        document.cookie =
+          "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        setToken(null);
+        navigate("/recruitment");
+      }
     } catch (error) {
       console.error("POST 요청에 실패했습니다:", error);
     }

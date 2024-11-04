@@ -36,7 +36,7 @@ const Profile = (): JSX.Element => {
   });
   const userId = localStorage.getItem("USER_ID");
   const profileCheck = localStorage.getItem("ProfileCheck");
-  
+
   const navigate = useNavigate();
   console.log(profileData);
   useEffect(() => {
@@ -51,6 +51,9 @@ const Profile = (): JSX.Element => {
             `/api/v1/users/${userId}/profile`,
             "get",
           );
+          // const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+          console.log("data", data);
+
           setProfileData({
             ...data.data,
           });
