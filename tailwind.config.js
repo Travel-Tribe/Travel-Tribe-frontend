@@ -9,6 +9,7 @@ export default {
       colors: {
         "custom-gray": "#dbdbdb",
         "custom-green": "#A8D8B9",
+        "custom-teal-green": "#006D5B",
         "custom-pink": "#FFB5A7",
         "custom-pink-hover": "#ff9e8d",
         "custom-red": "#FFB3B3",
