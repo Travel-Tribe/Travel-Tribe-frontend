@@ -18,12 +18,11 @@ interface AxiosResponse {
 const Header = React.memo((): JSX.Element => {
   const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
-  console.log("Cookie", document.cookie);
 
   const onClickLogout = async () => {
     try {
       const response = await fetchCall<AxiosResponse>("/logout", "post");
-      //const response = await fetchCall(`/logoutCookie:${document.cookie}`, "post");
+      // const response = await fetchCall(`/logoutCookie:${document.cookie}`, "post");
 
       if (response.data.result === "SUCCESS") {
         localStorage.removeItem(STORAGE_KEYS.USER_ID);
