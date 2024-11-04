@@ -65,9 +65,12 @@ const Profile = (): JSX.Element => {
             `/api/v1/users/${userId}/profile`,
             "get",
           );
-          // setProfileData({
-          //   ...data.data,
-          // });
+          // const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+          console.log("data", data);
+
+          setProfileData({
+            ...data.data,
+          });
         } else {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
         }

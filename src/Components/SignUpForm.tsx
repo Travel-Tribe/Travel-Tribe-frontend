@@ -110,9 +110,9 @@ const SignUp = (): JSX.Element => {
         "post",
       );
 
-      console.log("Response:", response);
+      console.log("Response:", response.data.data);
       // true면 중복, false면 사용가능
-      if (response.data) {
+      if (response.data.data) {
         setError(type, {
           type: "manual",
           message: `이미 사용 중인 ${

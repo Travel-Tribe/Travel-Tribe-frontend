@@ -1,12 +1,10 @@
 import axios, { AxiosError } from "axios";
+import { STORAGE_KEYS } from "../Constants/localKey";
 
-// 추후 변경
-const API_BASE_URL = "https://example.com/api";
-const API_TOKEN = localStorage.getItem("USER_ID");
+const API_TOKEN = localStorage.getItem(STORAGE_KEYS.TOKEN);
 
 const axiosInstance = axios.create({
-  // baseURL: API_BASE_URL,
-  baseURL: "",
+  baseURL: import.meta.env.VITE_API_BASE_URL, //import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
@@ -18,7 +16,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   config => {
     // 요청 헤더에 인증 토큰 추가
-    config.headers.Authorization = `access=${API_TOKEN}`;
+    if (API_TOKEN) config.headers.access = `${API_TOKEN}`;
     return config;
   },
   error => {

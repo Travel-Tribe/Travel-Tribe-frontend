@@ -56,6 +56,7 @@ export const userHandlers = [
           },
           {
             headers: {
+              access: "acd-123",
               "Set-Cookie": "refresh=abc-123",
             },
           },
@@ -69,15 +70,16 @@ export const userHandlers = [
   // 로그아웃
   http.post("/logout", async ({ cookies }) => {
     console.log("logout", cookies);
-    if (cookies.refresh) return HttpResponse.json({}, { status: 201 });
-    return HttpResponse.json(
-      {
-        result: "SUCCESS",
-        errors: null,
-        data: null,
-      },
-      { status: 401 },
-    );
+    if (cookies.refresh)
+      return HttpResponse.json(
+        {
+          result: "SUCCESS",
+          errors: null,
+          data: null,
+        },
+        { status: 201 },
+      );
+    return HttpResponse.json({}, { status: 401 });
   }),
 
   // 내 정보 불러오기
