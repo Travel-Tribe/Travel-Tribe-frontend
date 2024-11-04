@@ -1,12 +1,10 @@
 import axios, { AxiosError } from "axios";
 
 // 추후 변경
-const API_BASE_URL = "https://example.com/api";
 const API_TOKEN = localStorage.getItem("USER_ID");
 
 const axiosInstance = axios.create({
-  // baseURL: API_BASE_URL,
-  baseURL: "",
+  baseURL: import.meta.env.REACT_API_BASE_URL,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
