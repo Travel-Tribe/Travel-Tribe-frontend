@@ -38,27 +38,21 @@ const Profile = (): JSX.Element => {
   const profileCheck = localStorage.getItem("ProfileCheck");
   
   const navigate = useNavigate();
-
+  console.log(profileData);
   useEffect(() => {
     if (profileCheck === "false") {
-      console.log("11111");
       navigate("/mypage/myProfileEdit");
       return;
     }
     const fetchProfileData = async () => {
       try {
         if (userId) {
-          console.log("data");
           const data = await fetchCall<UserProfile>(
             `/api/v1/users/${userId}/profile`,
             "get",
           );
-          // const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
-          // console.log(data);
-          // console.log(userData);
           setProfileData({
             ...data.data,
-            // nickname: userData.data.data.nickname,
           });
         } else {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
@@ -105,8 +99,8 @@ const Profile = (): JSX.Element => {
                 <img src={GradeIcon} />
                 <span className="ml-1">
                   (
-                  {profileData.ratingAvg === undefined
-                    ? 0.0
+                  {profileData.ratingAvg === undefined || profileData.ratingAvg === null
+                    ? (0).toFixed(1)
                     : profileData.ratingAvg}
                   /5.0)
                 </span>
