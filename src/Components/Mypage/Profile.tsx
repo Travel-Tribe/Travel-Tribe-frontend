@@ -22,21 +22,34 @@ interface UserProfile {
 }
 
 const Profile = (): JSX.Element => {
+  // const [profileData, setProfileData] = useState<UserProfile>({
+  //   introduction: "",
+  //   nickname: "",
+  //   mbti: "",
+  //   smoking: "",
+  //   gender: "",
+  //   birth: "",
+  //   fileAddress: "",
+  //   langAbilities: [] as string[],
+  //   visitedCountries: [] as string[],
+  //   ratingAvg: null,
+  // });
+
   const [profileData, setProfileData] = useState<UserProfile>({
-    introduction: "",
     nickname: "",
-    mbti: "",
-    smoking: "",
-    gender: "",
-    birth: "",
-    fileAddress: "",
-    langAbilities: [] as string[],
-    visitedCountries: [] as string[],
+    introduction: "안녕하세요! 여행을 좋아하는 개발자입니다.",
+    mbti: "ISTP",
+    smoking: "NO",
+    gender: "MALE",
+    birth: "1990-01-01",
     ratingAvg: null,
+    fileAddress: "",
+    langAbilities: ["Korean", "English", "Japanese"],
+    visitedCountries: ["Japan", "Canada", "France"],
   });
   const userId = localStorage.getItem("USER_ID");
   const profileCheck = localStorage.getItem("ProfileCheck");
-  
+
   const navigate = useNavigate();
   console.log(profileData);
   useEffect(() => {
@@ -45,15 +58,16 @@ const Profile = (): JSX.Element => {
       return;
     }
     const fetchProfileData = async () => {
+      console.log(profileData);
       try {
         if (userId) {
           const data = await fetchCall<UserProfile>(
             `/api/v1/users/${userId}/profile`,
             "get",
           );
-          setProfileData({
-            ...data.data,
-          });
+          // setProfileData({
+          //   ...data.data,
+          // });
         } else {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
         }
@@ -99,7 +113,8 @@ const Profile = (): JSX.Element => {
                 <img src={GradeIcon} />
                 <span className="ml-1">
                   (
-                  {profileData.ratingAvg === undefined || profileData.ratingAvg === null
+                  {profileData.ratingAvg === undefined ||
+                  profileData.ratingAvg === null
                     ? (0).toFixed(1)
                     : profileData.ratingAvg}
                   /5.0)
