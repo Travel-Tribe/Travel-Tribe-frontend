@@ -3,9 +3,9 @@ import { RecruitMockData, TravelPlan } from "./mockData";
 
 export const recruitHandlers = [
   // 모집 글 목록 불러오기
-  http.get("api/v1/posts", async () => {
+  http.get("/api/v1/posts", async () => {
     console.log("모집 글 목록 불러오기");
-    return HttpResponse.json(RecruitMockData, { status: 201 });
+    return HttpResponse.json({ post: RecruitMockData }, { status: 201 });
   }),
 
   // 모집 글 상세보기
@@ -15,7 +15,7 @@ export const recruitHandlers = [
     return HttpResponse.json(
       RecruitMockData.filter(recruitment => recruitment.id === postId),
       { status: 201 },
-      );
+    );
   }),
 
   // 모집 글 삭제
@@ -25,7 +25,7 @@ export const recruitHandlers = [
     return HttpResponse.json(
       RecruitMockData.filter(recruitment => recruitment.id !== postId),
       { status: 201 },
-      );
+    );
   }),
 
   // 모집 글 수정
