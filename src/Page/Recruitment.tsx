@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from "react";
-import SelectBox from "../Components/Common/SelectBox";
 import SearchBar from "../Components/Recruitment/SearchBar";
 import fetchCall from "../Utils/apiFetch";
 import { TravelPlan } from "../mocks/mockData";
-import { Link } from "react-router-dom";
+import Post from "../Components/Common/Post";
+import SelectBox from "../Components/Common/SelectBox";
+import { COUNTRY_DATA } from "../Constants/COUNTRY_DATA";
 
 const Recruitment = React.memo((): JSX.Element => {
   const [recruitData, setRecruitData] = useState<TravelPlan[]>([]);
   const [selectedTab, setSelectedTab] = useState<"모집" | "후기">("모집");
-  const continents = [
-    "아프리카",
-    "아시아",
-    "유럽",
-    "북아메리카",
-    "남아메리카",
-    "오세아니아",
-  ];
-  const [selectedContinent, setSelectedContinent] = useState<string>(
-    continents[0],
-  );
+  const [selectedContinent, setSelectedContinent] = useState<string>("아시아");
+  const [selectedCountry, setSelectedCountry] = useState<string>("한국");
+  const [selectedCity, setSelectedCity] = useState<string>("");
 
   useEffect(() => {
     const getRecruitData = async () => {
@@ -36,12 +29,26 @@ const Recruitment = React.memo((): JSX.Element => {
     getRecruitData();
   }, []);
 
-  const handleSelect = (continent: string) => {
-    setSelectedContinent(continent);
+  // 검색 시 디바운스 적용
+
+  const handleContinentChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setSelectedContinent(event.target.value);
+    setSelectedCountry(""); // 대륙 변경 시 국가 초기화
+    setSelectedCity(""); // 도시 초기화
+  };
+
+  const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCountry(event.target.value);
+  };
+
+  const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCity(event.target.value);
   };
 
   return (
-    <div className="max-w-[1347px] min-w-[540px] w-full mx-auto px-[20px]">
+    <div className="max-w-[1347px] min-w-[540px] w-full mx-auto px-[20px] gap-[50px]">
       <div className="flex space-x-4 mb-[30px]">
         {/* 모집 탭 */}
         <div
@@ -67,66 +74,33 @@ const Recruitment = React.memo((): JSX.Element => {
           후기
         </div>
       </div>
-      <div className="flex">
+      <div className="flex gap-[30px]">
         <SelectBox
-          options={continents}
+          options={Object.keys(COUNTRY_DATA)}
           selectedValue={selectedContinent}
-          onSelect={handleSelect}
+          onSelect={e => handleContinentChange(e)}
         />
+        {selectedContinent && (
+          <SelectBox
+            options={Object.keys(COUNTRY_DATA[selectedContinent])}
+            selectedValue={selectedCountry}
+            onSelect={e => handleCountryChange(e)}
+          />
+        )}
+        {selectedCountry && (
+          <SelectBox
+            options={COUNTRY_DATA[selectedContinent][selectedCountry]}
+            selectedValue={selectedCity}
+            onSelect={e => handleCityChange(e)}
+          />
+        )}
       </div>
+
       <SearchBar />
-      <div className="flex flex-wrap gap-4">
+
+      <div className="flex flex-wrap gap-[35px]">
         {recruitData.map(plan => (
-          <div className="mb-[20px]">
-            <Link
-              to={`/recruitment/${plan.id}`}
-              key={plan.id}
-              className="w-[300px] h-[290px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
-            >
-              <img
-                src={
-                  "https://placehold.co/300x150/000000/FFFFFF.png"
-                  // plan.days[0].dayDetails[0].fileAddress
-                }
-                alt={plan.title}
-                className="w-[300px] h-[150px] object-cover"
-              />
-              <div className="pl-[25px] max-w-[250px] mb-[20px]">
-                <p className="text-[16px] truncate mb-[10px] mt-[10px]">
-                  {plan.title}
-                </p>
-                <p className="text-[12px] truncate">
-                  여헹 날짜: {plan.travelStartDate} ~ {plan.travelEndDate}
-                </p>
-
-                <p className="text-[12px] truncate">
-                  모집 인원: {plan.maxParticipants}명
-                </p>
-
-                <p className="text-[12px] truncate">여행 지역: {plan.region}</p>
-
-                <p className="text-[12px] truncate">
-                  마감 일자: {plan.deadline}
-                </p>
-              </div>
-
-              <div className="w-full border-t bc-[#DEDEDE]" />
-            </Link>
-            <div className="w-full h-[30px] flex justify-between items-center px-[25px] border rounded-bl-lg rounded-br-lg border-t-0">
-              <Link to={"#"} className="text-[12px]">
-                작성자
-              </Link>
-              <button
-                className={`w-[50px] h-[20px] text-[12px] rounded-[8px] text-white ${
-                  new Date(plan.deadline) < new Date()
-                    ? "bg-custom-green"
-                    : "bg-custom-pink"
-                }`}
-              >
-                {new Date(plan.deadline) < new Date() ? "모집중" : "모집 종료"}
-              </button>
-            </div>
-          </div>
+          <Post key={plan.id} plan={plan} />
         ))}
       </div>
     </div>

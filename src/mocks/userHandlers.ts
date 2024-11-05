@@ -56,7 +56,7 @@ export const userHandlers = [
           },
           {
             headers: {
-              access: "acd-123",
+              access: "abc-123",
               "Set-Cookie": "refresh=abc-123",
             },
           },
@@ -88,7 +88,7 @@ export const userHandlers = [
     const userID = Number(localStorage.getItem("USER_ID"));
 
     for (const users of UserMockData) {
-      if (users.userId == userID) {
+      if (users.userId === userID) {
         return HttpResponse.json(
           {
             result: "SUCCESS",

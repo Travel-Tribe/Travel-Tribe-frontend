@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../../Hooks/useLocalStorage";
 import fetchCall from "../../../Utils/apiFetch";
-import { STORAGE_KEYS } from "../../../Constants/localKey";
+import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
 
 interface DeleteAccountModalProps {
   isOpen: boolean;
