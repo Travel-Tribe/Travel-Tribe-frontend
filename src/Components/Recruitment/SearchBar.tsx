@@ -18,7 +18,7 @@ const SearchBar = React.memo((): JSX.Element => {
       <select
         value={selectedOptions}
         onChange={e => handleSelect(e.target.value)}
-        className="w-[80px] h-full text-[16px] pl-[12px] bg-transparent outline-none cursor-pointer appearance-none"
+        className="w-[80px] h-full text-[16px] pl-[12px] bg-transparent outline-none cursor-pointer"
       >
         {options.map(option => (
           <option key={option} value={option}>
@@ -27,9 +27,7 @@ const SearchBar = React.memo((): JSX.Element => {
         ))}
       </select>
 
-      <div className="relative flex items-center justify-center">
-        <div className="absolute h-[14px] w-[1px] bg-black"></div>
-      </div>
+      <div className="absolute left-[90px] h-[14px] w-[1px] bg-black"></div>
 
       <input
         type="text"
