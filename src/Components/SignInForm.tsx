@@ -69,7 +69,7 @@ const SignIn = (): JSX.Element => {
       // header 정보 불러오기 여기를 response 찍어보고 수정하기
       const { result, data: responseData } = response.data;
       const accessToken = response.headers.access;
-
+      console.log(result, accessToken);
       if (result === "SUCCESS" && accessToken) {
         console.log("로그인 성공:", response.data);
 

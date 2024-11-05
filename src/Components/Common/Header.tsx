@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useLocalStorage from "../../Hooks/useLocalStorage";
 import fetchCall from "../../Utils/apiFetch";
-import { STORAGE_KEYS } from "../../Constants/localKey";
+import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 
 interface ApiResponse {
   result: "SUCCESS" | "FAIL";
@@ -38,7 +38,7 @@ const Header = React.memo((): JSX.Element => {
   };
 
   return (
-    <div className="w-full h-10 mt-[20px] mb-[30px] mx-auto max-w-[1440px] min-w-[540px] px-3 flex justify-between align-center">
+    <div className="w-full h-10 mt-[20px] mb-[30px] mx-auto max-w-[1347px] min-w-[540px] flex justify-between align-center">
       <h1 className="text-4xl font-bold">
         <Link to={"/"}>여행족</Link>
       </h1>
