@@ -52,10 +52,8 @@ const MypageTest = () => {
             />
             <div className="mb-5">
               <h3 className="font-bold mb-2">가능 언어</h3>
-              <div className="flex gap-2">
-                <span className="badge bg-red-100 text-red-500">영어</span>
-                <span className="badge bg-red-100 text-red-500">일본어</span>
-                <span className="badge bg-red-100 text-red-500">중국어</span>
+              <div className="flex gap-2"> 
+                <span className="badge border border-black bg-white">중국어</span>
               </div>
             </div>
             <div className="mb-5">
