@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import profileImg from "../../assets/profileImg.webp";
 import { useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
+import makeAnimated from "react-select/animated";
+import CreatableSelect from "react-select/creatable";
 
 interface UserProfile {
   introduction: string;
@@ -11,19 +13,36 @@ interface UserProfile {
   gender: string;
   birth: string;
   fileAddress: string;
+  visitedCountries: string[];
+  langAbilities: string[];
 }
 
 const ProfileEdit = (): JSX.Element => {
+  // const [profileData, setProfileData] = useState<UserProfile>({
+  //   introduction: "",
+  //   nickname: "",
+  //   mbti: "",
+  //   smoking: "",
+  //   gender: "",
+  //   birth: "",
+  //   fileAddress: "",
+  //   langAbilities: [] as string[],
+  //   visitedCountries: [] as string[],
+  //   ratingAvg: null,
+  // });
+
   const [profileData, setProfileData] = useState<UserProfile>({
-    introduction: "",
     nickname: "",
-    mbti: "",
-    smoking: "",
-    gender: "",
-    birth: "",
+    introduction: "안녕하세요! 여행을 좋아하는 개발자입니다.",
+    mbti: "ISTP",
+    smoking: "NO",
+    gender: "MALE",
+    birth: "1990-01-01",
     fileAddress: "",
+    langAbilities: ["Korean", "English", "Japanese"],
+    visitedCountries: ["Japan", "Canada", "France"],
   });
-  
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [formValid, setFormValid] = useState(false);
@@ -35,6 +54,22 @@ const ProfileEdit = (): JSX.Element => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("USER_ID");
   const profileCheck = localStorage.getItem("ProfileCheck") === "true";
+
+  const animatedComponents = makeAnimated();
+
+  const handleVisitedCountriesChange = (newValue: any) => {
+    setProfileData(prev => ({
+      ...prev,
+      visitedCountries: newValue.map((option: any) => option.value),
+    }));
+  };
+
+  const handleLangAbilitiesChange = (newValue: any) => {
+    setProfileData(prev => ({
+      ...prev,
+      langAbilities: newValue.map((option: any) => option.value),
+    }));
+  };
 
   // 프로필 데이터 불러오기
   useEffect(() => {
@@ -222,7 +257,7 @@ const ProfileEdit = (): JSX.Element => {
 
         {/* 자기소개 */}
         <div className="mt-8 border-b border-gray-300 pb-4">
-          <label className="text-gray-700 text-base mb-2 block">
+          <label className="text-gray-700 text-lg mb-2 block">
             자기소개 글
           </label>
           <textarea
@@ -240,7 +275,7 @@ const ProfileEdit = (): JSX.Element => {
 
         {/* 생년월일 */}
         <div className="mt-8 pb-4">
-          <label className="text-gray-700 text-base mb-2 block">생년월일</label>
+          <label className="text-gray-700 text-lg mb-2 block">생년월일</label>
           <input
             type="date"
             className="w-25 border border-black rounded p-2 text-sm cursor-pointer"
@@ -248,70 +283,71 @@ const ProfileEdit = (): JSX.Element => {
             onChange={handleBirthChange}
           />
         </div>
-
-        {/* 성별 */}
-        <div className="mt-4 pb-4">
-          <label className="text-gray-700 text-base mb-2 block">성별</label>
-          <div className="flex space-x-4">
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="radio"
-                name="gender"
-                value="MALE"
-                checked={profileData.gender === "MALE"}
-                onChange={() => handleGenderChange("MALE")}
-                className="mr-2"
-              />{" "}
-              남자
-            </label>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="radio"
-                name="gender"
-                value="FEMALE"
-                checked={profileData.gender === "FEMALE"}
-                onChange={() => handleGenderChange("FEMALE")}
-                className="mr-2"
-              />{" "}
-              여자
-            </label>
+        <div className="flex space-x-8">
+          {/* 성별 */}
+          <div className="mt-4 pb-4">
+            <label className="text-gray-700 text-lg mb-2 block">성별</label>
+            <div className="flex space-x-4">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="MALE"
+                  checked={profileData.gender === "MALE"}
+                  onChange={() => handleGenderChange("MALE")}
+                  className="mr-2"
+                />{" "}
+                남자
+              </label>
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="gender"
+                  value="FEMALE"
+                  checked={profileData.gender === "FEMALE"}
+                  onChange={() => handleGenderChange("FEMALE")}
+                  className="mr-2"
+                />{" "}
+                여자
+              </label>
+            </div>
           </div>
-        </div>
 
-        {/* 흡연 여부 */}
-        <div className="mt-4 pb-4">
-          <label className="text-gray-700 text-base mb-2 block">
-            흡연 여부
-          </label>
-          <div className="flex space-x-4">
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="radio"
-                name="smoking"
-                value="YES"
-                checked={profileData.smoking === "YES"}
-                onChange={() => handleSmokingChange("YES")}
-                className="mr-2"
-              />{" "}
-              흡연
+          {/* 흡연 여부 */}
+          <div className="mt-4 pb-4">
+            <label className="text-gray-700 text-lg mb-2 block">
+              흡연 여부
             </label>
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="radio"
-                name="smoking"
-                value="NO"
-                checked={profileData.smoking === "NO"}
-                onChange={() => handleSmokingChange("NO")}
-                className="mr-2"
-              />{" "}
-              비흡연
-            </label>
+            <div className="flex space-x-4">
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="smoking"
+                  value="YES"
+                  checked={profileData.smoking === "YES"}
+                  onChange={() => handleSmokingChange("YES")}
+                  className="mr-2"
+                />{" "}
+                흡연
+              </label>
+              <label className="flex items-center cursor-pointer">
+                <input
+                  type="radio"
+                  name="smoking"
+                  value="NO"
+                  checked={profileData.smoking === "NO"}
+                  onChange={() => handleSmokingChange("NO")}
+                  className="mr-2"
+                />{" "}
+                비흡연
+              </label>
+            </div>
           </div>
         </div>
 
         {/* MBTI */}
         <div className="mt-4">
-          <label className="text-gray-700 text-base mb-2 block">MBTI</label>
+          <label className="text-gray-700 text-lg mb-2 block">MBTI</label>
           <select
             className="w-20 border border-gray-300 rounded p-2 text-sm"
             value={profileData.mbti}
@@ -341,6 +377,39 @@ const ProfileEdit = (): JSX.Element => {
               </option>
             ))}
           </select>
+        </div>
+
+        {/* 다녀온 국가 */}
+        <div className="mt-4">
+          <label className="text-gray-700 text-base mb-2 block">
+            다녀온 국가
+          </label>
+          <CreatableSelect
+            isMulti
+            components={animatedComponents}
+            value={profileData.visitedCountries.map(country => ({
+              label: country,
+              value: country,
+            }))}
+            onChange={handleVisitedCountriesChange}
+            placeholder="국가를 입력하세요"
+            className="mb-4"
+          />
+        </div>
+
+        {/* 가능한 언어 */}
+        <div className="mt-4">
+          <label className="text-gray-700 text-base mb-2 block">
+            가능한 언어
+          </label>
+          <CreatableSelect
+            isMulti
+            components={animatedComponents}
+            value={profileData.langAbilities.map(lang => ({ label: lang, value: lang }))}
+            onChange={handleLangAbilitiesChange}
+            placeholder="언어를 입력하세요"
+            className="mb-4"
+          />
         </div>
       </form>
 

@@ -22,30 +22,43 @@ interface UserProfile {
 }
 
 const Profile = (): JSX.Element => {
+  // const [profileData, setProfileData] = useState<UserProfile>({
+  //   introduction: "",
+  //   nickname: "",
+  //   mbti: "",
+  //   smoking: "",
+  //   gender: "",
+  //   birth: "",
+  //   fileAddress: "",
+  //   langAbilities: [] as string[],
+  //   visitedCountries: [] as string[],
+  //   ratingAvg: null,
+  // });
+
   const [profileData, setProfileData] = useState<UserProfile>({
-    introduction: "",
     nickname: "",
-    mbti: "",
-    smoking: "",
-    gender: "",
-    birth: "",
-    fileAddress: "",
-    langAbilities: [] as string[],
-    visitedCountries: [] as string[],
+    introduction: "안녕하세요! 여행을 좋아하는 개발자입니다.",
+    mbti: "ISTP",
+    smoking: "NO",
+    gender: "MALE",
+    birth: "1990-01-01",
     ratingAvg: null,
+    fileAddress: "",
+    langAbilities: ["Korean", "English", "Japanese"],
+    visitedCountries: ["Japan", "Canada", "France"],
   });
   const userId = localStorage.getItem("USER_ID");
   const profileCheck = localStorage.getItem("ProfileCheck");
 
   const navigate = useNavigate();
-
+  console.log(profileData);
   useEffect(() => {
     if (profileCheck === "false") {
-      console.log("11111");
       navigate("/mypage/myProfileEdit");
       return;
     }
     const fetchProfileData = async () => {
+      console.log(profileData);
       try {
         if (userId) {
           const data = await fetchCall<UserProfile>(
@@ -54,6 +67,7 @@ const Profile = (): JSX.Element => {
           );
           // const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
           console.log("data", data);
+
           setProfileData({
             ...data.data,
           });
@@ -102,8 +116,9 @@ const Profile = (): JSX.Element => {
                 <img src={GradeIcon} />
                 <span className="ml-1">
                   (
-                  {profileData.ratingAvg === undefined
-                    ? 0.0
+                  {profileData.ratingAvg === undefined ||
+                  profileData.ratingAvg === null
+                    ? (0).toFixed(1)
                     : profileData.ratingAvg}
                   /5.0)
                 </span>

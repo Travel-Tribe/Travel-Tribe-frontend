@@ -10,6 +10,7 @@ import PrivateRoutes from "../Components/Layout/PrivateRoutes";
 import PublicOnlyRoutes from "../Components/Layout/PublicOnlyRoutes";
 import Layout from "../Components/Layout";
 import { ProfileRequiredRoutes } from "../Components/Layout/ProfileRequiredRoutes";
+import MypageTest from '../Components/Mypage/test/MypageTest';
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -55,6 +56,7 @@ const Router = (): JSX.Element => {
               <Route path="travelHistory" element={<MyTravelHistory />} />
               <Route path="accountSettings" element={<MyAccountSettings />} />
             </Route>
+              <Route path="test" element={<MypageTest />} />
           </Route>
 
           {/* 로그인 필요없는 일반 페이지 */}
