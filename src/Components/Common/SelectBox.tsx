@@ -50,12 +50,12 @@ const SelectBox = React.memo(
         </div>
 
         {isOpen && (
-          <div className="absolute w-[120px] mt-1 border rounded-[10px] shadow-lg overflow-hidden">
+          <div className="absolute w-[140px] border rounded-[10px] shadow-lg overflow-hidden z-50">
             {options.map(option => (
               <div
                 key={option}
                 onClick={() => handleOptionSelect(option)}
-                className="px-[12px] text-[16px] h-[36px] flex items-center cursor-pointer hover:bg-custom-green"
+                className="px-[12px] text-[16px] h-[36px] bg-white flex items-center cursor-pointer hover:bg-custom-green"
               >
                 {option}
               </div>
