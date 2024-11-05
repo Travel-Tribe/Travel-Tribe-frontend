@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
+import useLocalStorage from "../../Hooks/useLocalStorage";
+import { STORAGE_KEYS } from "../../Constants/localKey";
 
 import MyLang from "./SideComponents/MyLang";
 import CountryName from "./SideComponents/CountryName";
@@ -47,8 +49,9 @@ const Profile = (): JSX.Element => {
     langAbilities: ["Korean", "English", "Japanese"],
     visitedCountries: ["Japan", "Canada", "France"],
   });
-  const userId = localStorage.getItem("USER_ID");
-  const profileCheck = localStorage.getItem("ProfileCheck");
+
+  const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+  const profileCheck = localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK);
 
   const navigate = useNavigate();
   console.log(profileData);
@@ -65,7 +68,8 @@ const Profile = (): JSX.Element => {
             `/api/v1/users/${userId}/profile`,
             "get",
           );
-          // const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+          const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+          console.log(userData);
           console.log("data", data);
 
           setProfileData({

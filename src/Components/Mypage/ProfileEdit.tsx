@@ -18,30 +18,29 @@ interface UserProfile {
 }
 
 const ProfileEdit = (): JSX.Element => {
-  // const [profileData, setProfileData] = useState<UserProfile>({
-  //   introduction: "",
-  //   nickname: "",
-  //   mbti: "",
-  //   smoking: "",
-  //   gender: "",
-  //   birth: "",
-  //   fileAddress: "",
-  //   langAbilities: [] as string[],
-  //   visitedCountries: [] as string[],
-  //   ratingAvg: null,
-  // });
-
   const [profileData, setProfileData] = useState<UserProfile>({
+    introduction: "",
     nickname: "",
-    introduction: "안녕하세요! 여행을 좋아하는 개발자입니다.",
-    mbti: "ISTP",
-    smoking: "NO",
-    gender: "MALE",
-    birth: "1990-01-01",
+    mbti: "",
+    smoking: "",
+    gender: "",
+    birth: "",
     fileAddress: "",
-    langAbilities: ["Korean", "English", "Japanese"],
-    visitedCountries: ["Japan", "Canada", "France"],
+    langAbilities: [] as string[],
+    visitedCountries: [] as string[],
   });
+
+  // const [profileData, setProfileData] = useState<UserProfile>({
+  //   nickname: "",
+  //   introduction: "안녕하세요! 여행을 좋아하는 개발자입니다.",
+  //   mbti: "ISTP",
+  //   smoking: "NO",
+  //   gender: "MALE",
+  //   birth: "1990-01-01",
+  //   fileAddress: "",
+  //   langAbilities: ["Korean", "English", "Japanese"],
+  //   visitedCountries: ["Japan", "Canada", "France"],
+  // });
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");

@@ -69,7 +69,7 @@ interface EmailCode {
   email: string;
   code: string;
 }
-export const EmailChangeMockData = {
+export const EmailChangeMockData: EmailCode = {
   email: "t@t.com",
   code: "670127"
 }
