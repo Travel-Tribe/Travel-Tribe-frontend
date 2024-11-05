@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { STORAGE_KEYS } from "../Constants/localKey";
+import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 
 const API_TOKEN = localStorage.getItem(STORAGE_KEYS.TOKEN);
 
