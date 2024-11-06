@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   RecruitmentHeader,
   TripHostProfile,
@@ -16,6 +16,8 @@ interface postResponse {
 }
 
 const RecruitPost = (): JSX.Element => {
+  const navigate = useNavigate();
+
   const { id: postId } = useParams<{ id: string }>();
   console.log(postId);
 
@@ -46,6 +48,18 @@ const RecruitPost = (): JSX.Element => {
       </div>
     );
   }
+
+  const handleEdit = () => {
+    navigate(`/recruitment/edit/:${postId}`);
+  };
+
+  const handleGoToList = () => {
+    navigate("/recruitment");
+  };
+
+  const handleJoin = () => {
+    navigate("");
+  };
 
   if (error) {
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -90,6 +104,28 @@ const RecruitPost = (): JSX.Element => {
         {/* Right Column - 1/2 width */}
         <div className="w-full">
           <TripItinerary travelPlan={travelPlan} />
+        </div>
+      </div>
+      <div className="flex justify-between mt-3">
+        <button
+          className="btn btn-sm text-slate-50 btn-warning"
+          onClick={handleEdit}
+        >
+          수정하기
+        </button>
+        <div>
+          <button
+            className="btn btn-sm text-slate-50  btn-error"
+            onClick={handleGoToList}
+          >
+            목록으로
+          </button>
+          <button
+            className="btn btn-sm text-slate-50  btn-success ml-3"
+            onClick={handleJoin}
+          >
+            참여 신청하기
+          </button>
         </div>
       </div>
     </div>
