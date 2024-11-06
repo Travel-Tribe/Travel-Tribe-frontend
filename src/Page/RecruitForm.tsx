@@ -1,13 +1,35 @@
+import { useState } from "react";
 import { COUNTRY_DATA } from "../Constants/COUNTRY_DATA";
 
 const RecruitForm = (): JSX.Element => {
+  const [destinations, setDestinations] = useState(
+    Array.from({ length: 4 }, () => [
+      { location: "", description: "", image: null },
+    ]),
+  );
+
+  const handleAddDestination = dayIndex => {
+    const updatedDestinations = [...destinations];
+    updatedDestinations[dayIndex] = [
+      ...updatedDestinations[dayIndex],
+      { location: "", description: "", image: null },
+    ];
+    setDestinations(updatedDestinations);
+  };
+
+  const handleInputChange = (dayIndex, destIndex, field, value) => {
+    const updatedDestinations = [...destinations];
+    updatedDestinations[dayIndex][destIndex][field] = value;
+    setDestinations(updatedDestinations);
+  };
+
   return (
     <div className="flex overflow-hidden h-[100vh]">
       <div className="w-[50%]">
         {/* 전체 컨테이너 */}
         <div
           className="w-[90%] min-w-[512px] mt-[30px] mx-auto overflow-y-scroll"
-          style={{ height: "calc(100% - 100px)" }}
+          style={{ height: "calc(100% - 150px)" }}
         >
           {/* 기본 정보 */}
           <div className="mb-[30px]">
@@ -20,14 +42,14 @@ const RecruitForm = (): JSX.Element => {
               <input
                 type="text"
                 placeholder="제목을 입력해주세요."
-                className="w-[400px] h-[24px] px-2 truncate border border-gray-300 rounded-sm"
+                className="w-[400px] h-[32px] px-2 truncate border border-gray-300 rounded-sm"
               />
             </div>
 
             {/* 모집인원 */}
             <div className="flex items-center mb-2">
               <p className="text-[18px] mr-2">모집인원:</p>
-              <select className="select select-sm  w-[60px] text-[16px] border border-gray-300 rounded-sm px-2">
+              <select className="select select-sm focus:outline-custom-green w-[60px] text-[16px] border border-gray-300 rounded-sm px-2">
                 {[...Array(10)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>
                     {i + 1}
@@ -39,15 +61,15 @@ const RecruitForm = (): JSX.Element => {
             {/* 여행 시작 날짜 */}
             <div className="flex items-center mb-2">
               <p className="text-[18px] mr-2">여행 시작 날짜:</p>
-              <select className="select select-sm  w-[80px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2">
+              <select className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2">
                 <option value="2024">2024</option>
               </select>
               년
-              <select className="select select-sm  w-[60px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2">
+              <select className="select select-sm focus:outline-custom-green w-[60px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2">
                 <option value="12">12</option>
               </select>
               월
-              <select className="select select-sm w-[60px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2">
+              <select className="select select-sm focus:outline-custom-green w-[60px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2">
                 <option value="25">25</option>
               </select>
               일
@@ -56,15 +78,15 @@ const RecruitForm = (): JSX.Element => {
             {/* 여행 종료 날짜 */}
             <div className="flex items-center mb-2">
               <p className="text-[18px] mr-2">여행 종료 날짜:</p>
-              <select className="select select-sm  w-[80px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2">
+              <select className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2">
                 <option value="2024">2024</option>
               </select>
               년
-              <select className="select select-sm  w-[60px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2">
+              <select className="select select-sm focus:outline-custom-green w-[60px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2">
                 <option value="12">12</option>
               </select>
               월
-              <select className="select select-sm w-[60px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2">
+              <select className="select select-sm focus:outline-custom-green w-[60px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2">
                 <option value="25">25</option>
               </select>
               일
@@ -73,14 +95,14 @@ const RecruitForm = (): JSX.Element => {
             {/* 여행지 선택 */}
             <div className="flex items-center mb-2">
               <p className="text-[18px] mr-2">여행지:</p>
-              <select className="select select-sm w-[120px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2">
+              <select className="select select-sm focus:outline-custom-green w-[120px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2">
                 {Object.keys(COUNTRY_DATA).map(continent => (
                   <option key={continent} value={continent}>
                     {continent}
                   </option>
                 ))}
               </select>
-              <select className="select select-sm w-[120px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2">
+              <select className="select select-sm focus:outline-custom-green w-[120px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2">
                 {Object.keys(COUNTRY_DATA["아시아"]).map(country => (
                   <option key={country} value={country}>
                     {country}
@@ -98,7 +120,7 @@ const RecruitForm = (): JSX.Element => {
             {/* 나이 */}
             <div className="flex items-center mb-2">
               <p className="text-[18px] mr-2">나이:</p>
-              <select className="select select-sm  w-[60px] text-[16px] border border-gray-300 rounded-sm px-2">
+              <select className="select select-sm w-[60px] text-[16px] border border-gray-300 rounded-sm px-2 mr-[5px]">
                 {[...Array(99)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>
                     {i + 1}
@@ -106,7 +128,7 @@ const RecruitForm = (): JSX.Element => {
                 ))}
               </select>
               ~
-              <select className="select select-sm  w-[60px] text-[16px] border border-gray-300 rounded-sm px-2">
+              <select className="select select-sm w-[60px] text-[16px] border border-gray-300 rounded-sm px-2 ml-[5px]">
                 {[...Array(99)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>
                     {i + 1}
@@ -134,6 +156,7 @@ const RecruitForm = (): JSX.Element => {
               </select>
             </div>
           </div>
+
           {/* 참여 기초 예상 비용 */}
           <div className="mb-[30px]">
             <h2 className="text-[24px] font-bold">예상 비용</h2>
@@ -164,7 +187,83 @@ const RecruitForm = (): JSX.Element => {
               <p className="text-[18px] mr-2">비용: 계산 금액</p>
             </ul>
           </div>
+
           {/* 여행 일정 */}
+          <div>
+            <h2 className="text-[24px] font-bold">여행 일정</h2>
+            <div className="w-full h-[1px] bg-black my-2"></div>
+
+            {destinations.map((dayDestinations, dayIndex) => (
+              <div key={dayIndex} className="w-[500px] relative mb-[30px]">
+                <p className="text-[18px]">{`2024-12-${25 + dayIndex} (DAY-${dayIndex + 1})`}</p>
+                <button
+                  className="btn btn-sm !h-[32px] bg-custom-green text-white absolute top-0 right-0"
+                  onClick={() => handleAddDestination(dayIndex)}
+                >
+                  추가하기
+                </button>
+                <div className="w-[400px] border">
+                  {dayDestinations.map((destination, destIndex) => (
+                    <div key={destIndex}>
+                      <div className="flex items-center ml-[15px] mb-[10px] mt-[10px]">
+                        <p className="text-[16px] w-[70px]">여행지: </p>
+                        <input
+                          type="text"
+                          placeholder="여행지를 입력해주세요."
+                          className="w-[300px] h-[18px] text-[12px] px-2 truncate border border-gray-300"
+                          value={destination.location}
+                          onChange={e =>
+                            handleInputChange(
+                              dayIndex,
+                              destIndex,
+                              "location",
+                              e.target.value,
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="flex ml-[15px] mb-[10px]">
+                        <p className="text-[16px] w-[70px]">설명: </p>
+                        <textarea
+                          placeholder="설명을 입력해주세요."
+                          className="w-[300px] h-[100px] px-2 text-[12px] truncate border border-gray-300"
+                          value={destination.description}
+                          onChange={e =>
+                            handleInputChange(
+                              dayIndex,
+                              destIndex,
+                              "description",
+                              e.target.value,
+                            )
+                          }
+                        />
+                      </div>
+                      <div className="flex items-center ml-[15px] mb-[30px]">
+                        <p className="text-[16px] w-[70px]">이미지:</p>
+                        <div className="relative">
+                          <input
+                            type="file"
+                            className="opacity-0 absolute inset-0 w-full h-full z-10 cursor-pointer"
+                            onChange={e =>
+                              handleInputChange(
+                                dayIndex,
+                                destIndex,
+                                "image",
+                                e.target.files[0],
+                              )
+                            }
+                          />
+                          <div className="w-[300px] h-[24px] leading-[24px] text-[12px] bg-white border border-gray-300 rounded-md text-gray-700 text-center">
+                            파일을 선택하세요
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
         {/* 전체 컨테이너 끝 */}
       </div>
