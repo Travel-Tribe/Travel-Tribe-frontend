@@ -1,15 +1,25 @@
-import { Link, Outlet } from "react-router-dom";
-import { useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import SearchBar from "../Common/SearchBar";
 import { COUNTRY_DATA } from "../../Constants/COUNTRY_DATA";
 import SelectBox from "../Common/SelectBox";
+import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import { MBTI } from "../../Constants/MBTI";
 
 const HomeLayout = () => {
   const [selectedTab, setSelectedTab] = useState<"모집" | "후기">("모집");
   const [selectedContinent, setSelectedContinent] = useState<string>("아시아");
   const [selectedCountry, setSelectedCountry] = useState<string>("한국");
   const [selectedCity, setSelectedCity] = useState<string>("");
+  const [mbti, setMbti] = useState<string>("");
   // 검색 시 디바운스 적용
+  const location = useLocation();
+
+  useEffect(() => {
+    const urlList = location.pathname.split("/");
+    if (urlList.includes("recruitment")) setSelectedTab("모집");
+    else setSelectedTab("후기");
+  }, [location]);
 
   const handleContinentChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -25,6 +35,10 @@ const HomeLayout = () => {
 
   const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCity(event.target.value);
+  };
+
+  const handleMbti = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setMbti(event.target.value);
   };
 
   return (
@@ -74,8 +88,23 @@ const HomeLayout = () => {
             onSelect={e => handleCityChange(e)}
           />
         )}
+        <SelectBox
+          options={MBTI}
+          selectedValue={mbti}
+          onSelect={e => handleMbti(e)}
+        />
       </div>
-      <SearchBar />
+      <div className="flex justify-between items-center">
+        <SearchBar />
+        {localStorage.getItem(STORAGE_KEYS.TOKEN) && (
+          <Link
+            to={`${location.pathname}/write`}
+            className="btn btn-sm !h-[32px] bg-custom-green text-white"
+          >
+            {selectedTab} 글 작성
+          </Link>
+        )}
+      </div>
       <Outlet />
     </div>
   );

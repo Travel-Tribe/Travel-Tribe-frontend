@@ -23,7 +23,7 @@ const Header = React.memo((): JSX.Element => {
     try {
       const response = await fetchCall<AxiosResponse>("/logout", "post");
       // const response = await fetchCall(`/logoutCookie:${document.cookie}`, "post");
-
+      console.log("logout", response);
       if (response.data.result === "SUCCESS") {
         localStorage.removeItem(STORAGE_KEYS.USER_ID);
         localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);

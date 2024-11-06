@@ -10,7 +10,7 @@ const SelectBox = React.memo(
   ({ options, onSelect, selectedValue }: SelectBoxProps): JSX.Element => {
     return (
       <select
-        className="select w-[140px] h-[36px] text-[16px] select-bordered border-custom-green focus:outline-none focus:ring-2 focus:ring-custom-green"
+        className="select select-sm w-[140px] text-[16px] select-bordered border-custom-green focus:outline-none focus:ring-2 focus:ring-custom-green"
         onChange={onSelect}
         value={selectedValue}
       >
@@ -18,7 +18,7 @@ const SelectBox = React.memo(
           <option
             key={option}
             value={option}
-            className="px-[12px] text-[16px] h-[36px] bg-white flex items-center cursor-pointer hover:bg-custom-green"
+            className="px-[12px] text-[16px] h-[30px] bg-white flex items-center cursor-pointer hover:bg-custom-green"
           >
             {option}
           </option>
