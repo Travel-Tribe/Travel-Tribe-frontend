@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../../Hooks/useLocalStorage";
 import fetchCall from "../../../Utils/apiFetch";
-import { STORAGE_KEYS } from "../../../Constants/localKey";
+import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
 import profileImg from "../../../assets/profileImg.webp";
 
 interface ApiResponse {
@@ -112,7 +112,9 @@ const MypageTest = () => {
           </ul>
           <ul className="border-t border-black py-2.5 flex justify-center space-x-5">
             <li className="text-sm">계정 설정</li>
-            <li className="text-sm cursor-pointer" onClick={onClickLogout}>로그아웃</li>
+            <li className="text-sm cursor-pointer" onClick={onClickLogout}>
+              로그아웃
+            </li>
           </ul>
           {/* <a href="#" className="block">
             내 프로필

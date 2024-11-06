@@ -71,8 +71,8 @@ interface EmailCode {
 }
 export const EmailChangeMockData = {
   email: "t@t.com",
-  code: "670127"
-}
+  code: "670127",
+};
 
 interface ItineraryVisit {
   point: string;

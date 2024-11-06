@@ -88,11 +88,13 @@ const HomeLayout = () => {
             onSelect={e => handleCityChange(e)}
           />
         )}
-        <SelectBox
-          options={MBTI}
-          selectedValue={mbti}
-          onSelect={e => handleMbti(e)}
-        />
+        {selectedTab === "모집" && (
+          <SelectBox
+            options={[...MBTI]}
+            selectedValue={mbti}
+            onSelect={e => handleMbti(e)}
+          />
+        )}
       </div>
       <div className="flex justify-between items-center">
         <SearchBar />
