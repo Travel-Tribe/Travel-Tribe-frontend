@@ -10,7 +10,7 @@ import PrivateRoutes from "../Components/Layout/PrivateRoutes";
 import PublicOnlyRoutes from "../Components/Layout/PublicOnlyRoutes";
 import Layout from "../Components/Layout";
 import { ProfileRequiredRoutes } from "../Components/Layout/ProfileRequiredRoutes";
-import MypageTest from '../Components/Mypage/test/MypageTest';
+import MyProfile from '../Components/Mypage/MyProfile';
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -50,13 +50,13 @@ const Router = (): JSX.Element => {
 
             {/* 프로필 불필요 라우트 */}
             <Route path="/mypage" element={<MyPage />}>
-              <Route index element={<MyProfileMain />} />
+              <Route index element={<MyProfile />} />
               <Route path="myProfileEdit" element={<ProfileEdit />} />
               <Route path="completedTrips" element={<MyCompletedTrips />} />
               <Route path="travelHistory" element={<MyTravelHistory />} />
               <Route path="accountSettings" element={<MyAccountSettings />} />
             </Route>
-              <Route path="test" element={<MypageTest />} />
+              {/* <Route path="test" element={<MyProfile />} /> */}
           </Route>
 
           {/* 로그인 필요없는 일반 페이지 */}

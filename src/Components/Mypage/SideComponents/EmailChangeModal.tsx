@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import useLocalStorage from "../../../Hooks/useLocalStorage";
 import fetchCall from "../../../Utils/apiFetch";
 
 interface EmailChangeModalProps {
@@ -29,7 +28,8 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     setSuccess("");
 
     // 이메일 유효성 검사
-    const emailRegex = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    const emailRegex =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     if (!emailRegex.test(e.target.value)) {
       setError("유효하지 않은 이메일 형식입니다.");
       setValidationStatus({ isChecking: false, isAvailable: false });
@@ -39,9 +39,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
   // 인증번호 입력 핸들러
   const handleCodeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputCode(e.target.value);
-    console.log(typeof inputCode);
   };
-
 
   // 이메일 중복 검사
   const handleEmailDuplicateCheck = async () => {
@@ -51,8 +49,10 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     setSuccess("");
     try {
       const response = await fetchCall(
-        `/api/v1/users/duplicate?type=email&query=${encodeURIComponent(emailInput)}`,
-        "post",
+        `/api/v1/users/duplicate?type=email&query=${encodeURIComponent(
+          emailInput
+        )}`,
+        "post"
       );
       const isDuplicate = response.data;
 
@@ -71,22 +71,16 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
 
   // 이메일 인증번호 전송
   const sendVerificationCode = async () => {
-    if (!validationStatus.isAvailable || isCooldown) return; // 쿨다운 중이면 요청 막기
+    if (!validationStatus.isAvailable || isCooldown) return;
 
     try {
       const data = { email: emailInput };
-      console.log(data);
-      await fetchCall(
-        `/api/v1/users/change-email/request`,
-        "post",
-        data,
-      );
+      await fetchCall(`/api/v1/users/change-email/request`, "post", data);
       setIsCodeSent(true);
-      setIsCooldown(true); // 쿨다운 시작
+      setIsCooldown(true);
       alert("인증 코드가 전송되었습니다.");
 
-      // 1분 후에 다시 인증 코드 전송 가능하게 설정
-      setTimeout(() => setIsCooldown(false), 60000); // 60000ms = 1분
+      setTimeout(() => setIsCooldown(false), 60000);
     } catch (error) {
       console.error("인증 코드 전송 중 에러 발생:", error);
       alert("인증 코드 전송에 실패했습니다.");
@@ -95,30 +89,29 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
 
   // 이메일 변경
   const handleEmailChange = async () => {
-      try {
-        await fetchCall(`/api/v1/users/change-email/verify`, "post", { email: emailInput, code: inputCode });
-        console.log("object");
-        alert("이메일이 성공적으로 변경되었습니다.");
-        onClose();
-      } catch (error) {
-        console.error("이메일 변경 중 에러 발생:", error);
-        alert("이메일 변경에 실패했습니다.");
-      }
+    try {
+      await fetchCall(`/api/v1/users/change-email/verify`, "post", {
+        email: emailInput,
+        code: inputCode,
+      });
+      alert("이메일이 성공적으로 변경되었습니다.");
+      onClose();
+    } catch (error) {
+      console.error("이메일 변경 중 에러 발생:", error);
+      alert("이메일 변경에 실패했습니다.");
+    }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-[504px]">
-        <h3 className="text-center text-base mb-5 text-gray-500">
-          이메일 변경
-        </h3>
+        <h3 className="text-center text-base mb-5 text-gray-500">이메일 변경</h3>
         <p className="text-center text-sm text-gray-600 mb-4">
           이메일을 수정하기 위해 인증 절차가 필요합니다.
         </p>
 
-        {/* 이메일 입력 및 중복 검사 */}
         <div className="flex items-center border rounded p-2 mb-4">
           <input
             type="email"
@@ -138,7 +131,6 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
         {error && <p className="text-red-500 text-xs mb-4">{error}</p>}
         {success && <p className="text-green-500 text-xs mb-4">{success}</p>}
 
-        {/* 인증 코드 전송 버튼 */}
         <button
           className="text-sm bg-gray-200 px-2 py-1 rounded w-full mb-4"
           onClick={sendVerificationCode}
@@ -147,7 +139,6 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
           인증 코드 전송
         </button>
 
-        {/* 인증 코드 입력 */}
         <input
           type="text"
           placeholder="인증번호 입력"
@@ -157,7 +148,6 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
           disabled={!isCodeSent}
         />
 
-        {/* 변경 및 취소 버튼 */}
         <div className="flex justify-center gap-4">
           <button
             className={`px-4 py-2 rounded ${

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
 import useLocalStorage from "../../Hooks/useLocalStorage";
-import { STORAGE_KEYS } from "../../Constants/localKey";
+import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 
 import MyLang from "./SideComponents/MyLang";
 import CountryName from "./SideComponents/CountryName";
@@ -24,31 +24,31 @@ interface UserProfile {
 }
 
 const Profile = (): JSX.Element => {
-  // const [profileData, setProfileData] = useState<UserProfile>({
-  //   introduction: "",
-  //   nickname: "",
-  //   mbti: "",
-  //   smoking: "",
-  //   gender: "",
-  //   birth: "",
-  //   fileAddress: "",
-  //   langAbilities: [] as string[],
-  //   visitedCountries: [] as string[],
-  //   ratingAvg: null,
-  // });
-
   const [profileData, setProfileData] = useState<UserProfile>({
+    introduction: "",
     nickname: "",
-    introduction: "안녕하세요! 여행을 좋아하는 개발자입니다.",
-    mbti: "ISTP",
-    smoking: "NO",
-    gender: "MALE",
-    birth: "1990-01-01",
-    ratingAvg: null,
+    mbti: "",
+    smoking: "",
+    gender: "",
+    birth: "",
     fileAddress: "",
-    langAbilities: ["Korean", "English", "Japanese"],
-    visitedCountries: ["Japan", "Canada", "France"],
+    langAbilities: [] as string[],
+    visitedCountries: [] as string[],
+    ratingAvg: null,
   });
+
+  // const [profileData, setProfileData] = useState<UserProfile>({
+  //   nickname: "",
+  //   introduction: "안녕하세요! 여행을 좋아하는 개발자입니다.",
+  //   mbti: "ISTP",
+  //   smoking: "NO",
+  //   gender: "MALE",
+  //   birth: "1990-01-01",
+  //   ratingAvg: null,
+  //   fileAddress: "",
+  //   langAbilities: ["Korean", "English", "Japanese"],
+  //   visitedCountries: ["Japan", "Canada", "France"],
+  // });
 
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const profileCheck = localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK);
@@ -61,7 +61,6 @@ const Profile = (): JSX.Element => {
       return;
     }
     const fetchProfileData = async () => {
-      console.log(profileData);
       try {
         if (userId) {
           const data = await fetchCall<UserProfile>(

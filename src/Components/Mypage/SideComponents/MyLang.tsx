@@ -10,7 +10,7 @@ const MyLang = ({ lang = []}: MyLangs): JSX.Element => {
           {lang.map((language, index) => (
             <div
               key={index}
-              className="h-5 badge text-sm rounded-lg border border-black bg-white text-center m-2.5 flex items-center justify-center"
+              className="h-6 badge text-sm rounded-lg border border-black bg-white text-center m-2.5 flex items-center justify-center"
             >
               {language}
             </div>
