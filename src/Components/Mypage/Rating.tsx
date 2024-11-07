@@ -31,7 +31,7 @@ const Rating: React.FC<RatingModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white w-[440px] h-[536px] rounded-lg p-6 shadow-lg overflow-y-auto">
+      <div className="bg-white w-[540px] h-[536px] rounded-lg p-6 shadow-lg overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold">평점 주기</h2>
           <button className="text-gray-500" onClick={onClose}>

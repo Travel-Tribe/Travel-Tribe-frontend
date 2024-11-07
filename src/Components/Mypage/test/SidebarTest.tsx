@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useLocalStorage from "../../../Hooks/useLocalStorage";
 import fetchCall from "../../../Utils/apiFetch";
-import { STORAGE_KEYS } from "../../../Constants/localKey";
+import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
 import profileImg from "../../../assets/profileImg.webp";
 
 interface ApiResponse {

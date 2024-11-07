@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         "custom-gray": "#dbdbdb",
-        "custom-green": "#A8D8B9",
+        "custom-green": "#ABD8B9",
         "custom-teal-green": "#006D5B",
         "custom-pink": "#FFB5A7",
         "custom-pink-hover": "#ff9e8d",
@@ -16,7 +16,7 @@ export default {
         "custom-purple": "#E6C3DB",
         "custom-yellow": "#FFE3AA",
         "custom-blue": "#B8E3FF",
-        "custom-bg": "#F5F5F5",
+        "custom-bg": "#f9fbfc",
       },
     },
   },

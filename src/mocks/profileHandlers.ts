@@ -59,8 +59,8 @@ export const profileHandlers = [
       gender: string;
       birth: Date;
       fileAddress: string;
-      countryName: string[];
-      lang: string[];
+      visitedCountries: string[];
+      langAbilities: string[];
     };
     console.log("프로필 수정", response);
 

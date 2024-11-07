@@ -1,47 +1,46 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import profileImg from "../../assets/profileImg.webp";
 import { useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
+import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 
 interface UserProfile {
   introduction: string;
-  nickname: string;
   mbti: string;
+  nickname: string;
   smoking: string;
   gender: string;
   birth: string;
   fileAddress: string;
   visitedCountries: string[];
   langAbilities: string[];
+  phone: string;
+}
+
+interface User {
+  nickname: string;
+  phone: string;
 }
 
 const ProfileEdit = (): JSX.Element => {
-  // const [profileData, setProfileData] = useState<UserProfile>({
-  //   introduction: "",
-  //   nickname: "",
-  //   mbti: "",
-  //   smoking: "",
-  //   gender: "",
-  //   birth: "",
-  //   fileAddress: "",
-  //   langAbilities: [] as string[],
-  //   visitedCountries: [] as string[],
-  //   ratingAvg: null,
-  // });
-
   const [profileData, setProfileData] = useState<UserProfile>({
+    introduction: "",
     nickname: "",
-    introduction: "안녕하세요! 여행을 좋아하는 개발자입니다.",
-    mbti: "ISTP",
-    smoking: "NO",
-    gender: "MALE",
-    birth: "1990-01-01",
+    mbti: "",
+    smoking: "",
+    gender: "",
+    birth: "",
     fileAddress: "",
-    langAbilities: ["Korean", "English", "Japanese"],
-    visitedCountries: ["Japan", "Canada", "France"],
+    langAbilities: [] as string[],
+    visitedCountries: [] as string[],
+    phone: "",
   });
+
+  const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+  const profileCheck =
+    localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) === "true";
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -52,8 +51,6 @@ const ProfileEdit = (): JSX.Element => {
   });
 
   const navigate = useNavigate();
-  const userId = localStorage.getItem("USER_ID");
-  const profileCheck = localStorage.getItem("ProfileCheck") === "true";
 
   const animatedComponents = makeAnimated();
 
@@ -80,20 +77,24 @@ const ProfileEdit = (): JSX.Element => {
       }
       try {
         const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
+        console.log(userData.data.data);
 
         if (profileCheck) {
           const data = await fetchCall<UserProfile>(
             `/api/v1/users/${userId}/profile`,
             "get",
           );
+
           setProfileData({
             ...data.data,
             nickname: userData.data.data.nickname,
+            phone: userData.data.data.phone,
           });
         } else {
           setProfileData({
             ...profileData,
             nickname: userData.data.data.nickname,
+            phone: userData.data.data.phone,
           });
         }
       } catch (error) {
@@ -111,9 +112,18 @@ const ProfileEdit = (): JSX.Element => {
         const updatedData = await fetchCall<UserProfile>(
           `/api/v1/users/${userId}/profile`,
           "patch",
-          { ...profileData, introduction: profileData.introduction },
+          { ...profileData },
         );
+        const response = await fetchCall<User>(`/api/v1/users/info`, "patch", {
+          nickname: profileData.nickname,
+          phone: profileData.phone,
+        });
         setProfileData(updatedData);
+        console.log("Updated profile data:", {
+          ...profileData,
+          nickname: profileData.nickname,
+          phone: profileData.phone,
+        });
       }
     } catch (error) {
       console.error("Error updating profile data:", error);
@@ -154,8 +164,11 @@ const ProfileEdit = (): JSX.Element => {
         `/api/v1/users/duplicate?type=nickname&query=${encodeURIComponent(profileData.nickname)}`,
         "post",
       );
-      console.log(response);
-      if (!response.data) {
+      console.log(response.data.data);
+      if (!response.data.data) {
+        setSuccess("사용 가능한 닉네임입니다");
+        setValidationStatus({ isChecking: false, isAvailable: true });
+      } else {
         setSuccess("사용 가능한 닉네임입니다");
         setValidationStatus({ isChecking: false, isAvailable: true });
       }
@@ -187,6 +200,7 @@ const ProfileEdit = (): JSX.Element => {
   const handleUpdateProfile = async () => {
     await profileUpdate();
     localStorage.setItem("ProfileCheck", "true");
+    // alert("변경완료");
     navigate("/mypage");
   };
 
@@ -203,7 +217,7 @@ const ProfileEdit = (): JSX.Element => {
   }, [profileData, error]);
 
   return (
-    <>
+    <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
         <h2 className="text-3xl">프로필 수정</h2>
       </div>
@@ -405,7 +419,10 @@ const ProfileEdit = (): JSX.Element => {
           <CreatableSelect
             isMulti
             components={animatedComponents}
-            value={profileData.langAbilities.map(lang => ({ label: lang, value: lang }))}
+            value={profileData.langAbilities.map(lang => ({
+              label: lang,
+              value: lang,
+            }))}
             onChange={handleLangAbilitiesChange}
             placeholder="언어를 입력하세요"
             className="mb-4"
@@ -420,7 +437,7 @@ const ProfileEdit = (): JSX.Element => {
       >
         저장
       </button>
-    </>
+    </main>
   );
 };
 

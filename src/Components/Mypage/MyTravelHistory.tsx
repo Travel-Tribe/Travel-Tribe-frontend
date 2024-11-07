@@ -31,7 +31,8 @@ const MyTravelHistory = (): JSX.Element => {
       travelEndDate: "2024-12-20",
       travelCountry: "이탈리아",
       title: "이탈리아 로마투어 같이 가실 분?",
-    }, {
+    },
+    {
       travelStartDate: "2024-12-15",
       travelEndDate: "2024-12-20",
       travelCountry: "이탈리아",
@@ -40,7 +41,7 @@ const MyTravelHistory = (): JSX.Element => {
   ];
   console.log(travelInfos.length);
   return (
-    <>
+    <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
         <div className="flex items-center">
           <h2 className="text-3xl mr-2">여행 후기</h2>
@@ -49,7 +50,9 @@ const MyTravelHistory = (): JSX.Element => {
       </div>
       <ul
         className={`mt-5 space-y-6 ${
-          travelInfos.length > 5 ? "w-[620px] max-h-[550px] overflow-y-auto" : ""
+          travelInfos.length > 5
+            ? "w-[680px] max-h-[550px] overflow-y-auto"
+            : ""
         }`}
       >
         {travelInfos.map((info, index) => {
@@ -58,7 +61,7 @@ const MyTravelHistory = (): JSX.Element => {
 
           return (
             <li key={index} className="list-none">
-              <div className="w-[600px] h-[86px] bg-custom-green rounded-lg">
+              <div className="w-[660px] h-[86px] bg-custom-green rounded-lg">
                 <div className="flex justify-between">
                   <h3 className="text-white text-xl mt-2.5 ml-2.5">
                     {info.title}
@@ -78,7 +81,7 @@ const MyTravelHistory = (): JSX.Element => {
           );
         })}
       </ul>
-    </>
+    </main>
   );
 };
 
