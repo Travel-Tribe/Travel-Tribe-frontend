@@ -74,7 +74,7 @@ const Sidebar = (): JSX.Element => {
       }
     }
   };
-  loadProfileData();
+  
 
   useEffect(() => {
     loadProfileData();

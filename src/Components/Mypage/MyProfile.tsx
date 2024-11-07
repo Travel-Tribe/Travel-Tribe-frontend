@@ -7,7 +7,6 @@ import MyRecruitment from "./MyRecruitment";
 import MyTravelJoin from "./MyTravelJoin";
 import profileImg from "../../assets/profileImg.webp";
 
-
 interface UserProfile {
   introduction: string;
   nickname: string;
@@ -21,34 +20,6 @@ interface UserProfile {
   ratingAvg: null | number;
 }
 
-const fetchUserProfile = async (
-  userId: string,
-): Promise<UserProfile | null> => {
-  try {
-    const response = await fetchCall<UserProfile>(
-      `/api/v1/users/${userId}/profile`,
-      "get",
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching user profile data:", error);
-    return null;
-  }
-};
-
-const fetchUserData = async (): Promise<{ nickname: string } | null> => {
-  try {
-    const response = await fetchCall<{ nickname: string }>(
-      `/api/v1/users`,
-      "get",
-    );
-    return response.data.data;
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-    return null;
-  }
-};
-
 const MyProfile = (): JSX.Element => {
   const [profileData, setProfileData] = useState<UserProfile>({
     introduction: "",
@@ -58,10 +29,29 @@ const MyProfile = (): JSX.Element => {
     gender: "",
     birth: "",
     fileAddress: "",
-    langAbilities: [] as string[],
-    visitedCountries: [] as string[],
+    langAbilities: [],
+    visitedCountries: [],
     ratingAvg: null,
   });
+
+  const mbtiColors: { [key: string]: string } = {
+    ISTJ: "bg-istj",
+    ISFJ: "bg-isfj",
+    INFJ: "bg-infj",
+    INTJ: "bg-intj",
+    ISTP: "bg-istp",
+    ISFP: "bg-isfp",
+    INFP: "bg-infp",
+    INTP: "bg-intp",
+    ESTP: "bg-estp",
+    ESFP: "bg-esfp",
+    ENFP: "bg-enfp",
+    ENTP: "bg-entp",
+    ESTJ: "bg-estj",
+    ESFJ: "bg-esfj",
+    ENFJ: "bg-enfj",
+    ENTJ: "bg-entj",
+  };
 
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const profileCheck = localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK);
@@ -73,23 +63,34 @@ const MyProfile = (): JSX.Element => {
       return;
     }
 
-    const profile = await fetchUserProfile(userId);
-    const userData = await fetchUserData();
-    if (profile && userData) {
-      setProfileData({
-        ...profile,
-        nickname: userData.nickname,
-      });
+    try {
+      const profile = await fetchCall<UserProfile>(
+        `/api/v1/users/${userId}/profile`,
+        "get",
+      );
+      const userData = await fetchCall<{ nickname: string }>(
+        `/api/v1/users`,
+        "get",
+      );
+
+      if (profile && userData) {
+        setProfileData({
+          ...profile.data,
+          nickname: userData.data.data.nickname,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching user profile data:", error);
     }
   };
 
   useEffect(() => {
     if (profileCheck === "false") {
       navigate("/mypage/myProfileEdit");
-      return;
+    } else {
+      fetchProfileData();
     }
-    fetchProfileData();
-  }, [userId, profileCheck, navigate]);
+  }, [profileCheck, navigate, userId]);
 
   const calculateAge = (birthDateString: string): number => {
     const today = new Date();
@@ -107,10 +108,6 @@ const MyProfile = (): JSX.Element => {
 
   const age = calculateAge(profileData.birth);
 
-  const clickProfileEdit = () => {
-    navigate("/mypage/myProfileEdit");
-  };
-  console.log(profileData);
   return (
     <main className="ml-[60px] py-5">
       {/* Profile Card */}
@@ -138,7 +135,13 @@ const MyProfile = (): JSX.Element => {
               </div>
             </div>
           </div>
-          <div className="py-0.5 px-2 bg-custom-gray text-white text-center text-base rounded-xl flex items-center justify-center">
+          <div
+            className={`py-0.5 px-2 text-center text-base rounded-xl flex items-center justify-center text-white ${
+              profileData.mbti && mbtiColors[profileData.mbti]
+                ? mbtiColors[profileData.mbti]
+                : "bg-custom-gray"
+            }`}
+          >
             {profileData.mbti}
           </div>
         </div>
@@ -180,7 +183,7 @@ const MyProfile = (): JSX.Element => {
         </div>
         <button
           className="w-full btn border border-custom-teal-green text-custom-teal-green bg-white hover:text-white hover:bg-custom-teal-green hover:border-none"
-          onClick={clickProfileEdit}
+          onClick={() => navigate("/mypage/myProfileEdit")}
         >
           프로필 수정
         </button>
