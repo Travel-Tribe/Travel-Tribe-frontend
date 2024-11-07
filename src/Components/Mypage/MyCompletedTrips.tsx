@@ -50,10 +50,10 @@ const MyCompletedTrips = (): JSX.Element => {
   });
 
   return (
-    <>
+    <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
         <div className="flex items-center">
-          <h2 className="text-3xl mr-2">다녀온 여행</h2>
+          <h2 className="text-3xl mr-2">다녀온 여행들</h2>
           <span className="text-lg">{completedTrips.length}</span>
         </div>
       </div>
@@ -69,7 +69,7 @@ const MyCompletedTrips = (): JSX.Element => {
 
             return (
               <li key={index} className="list-none">
-                <div className="w-[580px] h-[86px] bg-custom-green rounded-lg">
+                <div className="w-[660px] h-[86px] bg-custom-green rounded-lg">
                   <div className="flex justify-between">
                     <h3 className="text-white text-xl mt-2.5 ml-2.5">
                       {info.title}
@@ -89,7 +89,7 @@ const MyCompletedTrips = (): JSX.Element => {
                       </span>
                     </div>
                     <button
-                      className="btn btn-sm rounded-md bg-custom-pink text-white hover:bg-custom-pink-hover"
+                      className="btn btn-sm rounded-md"
                       onClick={() => setActiveModalIndex(index)}
                     >
                       평점 주기
@@ -108,7 +108,7 @@ const MyCompletedTrips = (): JSX.Element => {
           })}
         </ul>
       </div>
-    </>
+    </main>
   );
 };
 

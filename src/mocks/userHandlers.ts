@@ -1,5 +1,9 @@
 import { http, HttpResponse } from "msw";
-import { UserMockData, DuplicateMockData, EmailChangeMockData } from "./mockData.js";
+import {
+  UserMockData,
+  DuplicateMockData,
+  EmailChangeMockData,
+} from "./mockData.js";
 
 export const userHandlers = [
   // 회원가입
@@ -169,7 +173,10 @@ export const userHandlers = [
       email: string;
     };
     console.log(data.email);
-    if(EmailChangeMockData.email === data.email && EmailChangeMockData.code === data.code){
+    if (
+      EmailChangeMockData.email === data.email &&
+      EmailChangeMockData.code === data.code
+    ) {
       console.log("회원 이메일 인증 코드 검증 및 이메일 변경", data);
     }
 
@@ -219,12 +226,18 @@ export const userHandlers = [
   }),
 
   // 회원 정보 수정
-  http.patch("/api/v1/users/Info", async ({ request }) => {
+  http.patch("/api/v1/users/info", async ({ request }) => {
+    console.log(request);
     const data = (await request.json()) as {
       nickname: string;
       phone: string;
     };
     console.log("회원 정보 수정", data);
+
+    UserMockData[userId] = {
+      ...UserMockData[userId], // 기존의 모든 데이터 유지
+      ...data,
+    };
 
     return HttpResponse.json(
       {

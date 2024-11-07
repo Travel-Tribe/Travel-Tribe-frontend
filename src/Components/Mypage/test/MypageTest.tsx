@@ -1,8 +1,36 @@
 import SidebarTest from "./SidebarTest";
 import MyRecruitTest from "./MyRecruitTest";
 import profileImg from "../../../assets/profileImg.webp";
+import MyTravelJoinTest from "./MyTravelJoinTest";
+
+interface UserProfile {
+  introduction: string;
+  nickname: string;
+  mbti: string;
+  smoking: string;
+  gender: string;
+  birth: string;
+  fileAddress: string;
+  langAbilities: string[];
+  visitedCountries: string[];
+  ratingAvg: null | number;
+}
+
 
 const MypageTest = () => {
+  // const [profileData, setProfileData] = useState<UserProfile>({
+  //   introduction: "",
+  //   nickname: "",
+  //   mbti: "",
+  //   smoking: "",
+  //   gender: "",
+  //   birth: "",
+  //   fileAddress: "",
+  //   langAbilities: [] as string[],
+  //   visitedCountries: [] as string[],
+  //   ratingAvg: null,
+  // });
+
   return (
     <div className="min-h-screen bg-custom-bg">
       <div className="flex max-w-[1240px] mx-auto px-5">
@@ -53,19 +81,18 @@ const MypageTest = () => {
             <div className="mb-5">
               <h3 className="font-bold mb-2">가능 언어</h3>
               <div className="flex gap-2">
-                <span className="badge bg-red-100 text-red-500">영어</span>
-                <span className="badge bg-red-100 text-red-500">일본어</span>
-                <span className="badge bg-red-100 text-red-500">중국어</span>
+                <span className="badge border border-black bg-white h-6 text-center">
+                  중국어
+                </span>
               </div>
             </div>
             <div className="mb-5">
               <h3 className="font-bold mb-2">다녀온 국가</h3>
               <div className="flex gap-2">
-                <span className="badge bg-purple-100 text-purple-500">
+                <span className="badge border border-black bg-white h-6 text-center">
                   일본
                 </span>
-                <span className="badge bg-blue-100 text-blue-500">스페인</span>
-                <span className="badge bg-orange-100 text-orange-500">
+                <span className="badge border border-black bg-white h-6 text-center">
                   이집트
                 </span>
               </div>
@@ -75,8 +102,10 @@ const MypageTest = () => {
             </button>
           </section>
 
-          {/* 여행 후기 */}
+          {/* 여행 모집 */}
           <MyRecruitTest />
+          {/* 여행 신청 */}
+          <MyTravelJoinTest />
         </main>
       </div>
     </div>

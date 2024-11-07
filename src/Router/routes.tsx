@@ -51,13 +51,13 @@ const Router = (): JSX.Element => {
 
             {/* 프로필 불필요 라우트 */}
             <Route path="/mypage" element={<MyPage />}>
-              <Route index element={<MyProfileMain />} />
+              <Route index element={<MyProfile />} />
               <Route path="myProfileEdit" element={<ProfileEdit />} />
               <Route path="completedTrips" element={<MyCompletedTrips />} />
               <Route path="travelHistory" element={<MyTravelHistory />} />
               <Route path="accountSettings" element={<MyAccountSettings />} />
             </Route>
-            <Route path="test" element={<MypageTest />} />
+              {/* <Route path="test" element={<MyProfile />} /> */}
           </Route>
 
           {/* 로그인 필요없는 일반 페이지 */}
