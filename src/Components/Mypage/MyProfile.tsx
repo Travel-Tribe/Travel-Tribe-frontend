@@ -22,7 +22,7 @@ interface UserProfile {
   ratingAvg: null | number;
 }
 
-const MyProfile = () => {
+const MyProfile = (): JSX.Element => {
   const [profileData, setProfileData] = useState<UserProfile>({
     introduction: "",
     nickname: "",
@@ -39,9 +39,9 @@ const MyProfile = () => {
   // const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const userId = localStorage.getItem("USER_ID");
   const profileCheck = localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK);
-console.log(profileCheck);
+
   const navigate = useNavigate();
-  console.log(profileData);
+
   useEffect(() => {
     if (profileCheck === "false") {
       navigate("/mypage/myProfileEdit");
@@ -74,16 +74,19 @@ console.log(profileCheck);
 
   const today = new Date();
   const birthDate = new Date(profileData.birth);
-  let age = today.getFullYear() - birthDate.getFullYear();
+  const age =
+    today.getFullYear() - birthDate.getFullYear() - 1 === -1
+      ? 0
+      : today.getFullYear() - birthDate.getFullYear() - 1;
 
-  if (
-    !(
-      today.getMonth() > birthDate.getMonth() ||
-      (today.getMonth() === birthDate.getMonth() &&
-        today.getDate() >= birthDate.getDate())
-    )
-  )
-    age -= 1;
+  // if (
+  //   !(
+  //     today.getMonth() > birthDate.getMonth() ||
+  //     (today.getMonth() === birthDate.getMonth() &&
+  //       today.getDate() >= birthDate.getDate())
+  //   )
+  // )
+  //   age -= 1;
 
   const clickProfileEdit = () => {
     navigate("/mypage/myProfileEdit");
