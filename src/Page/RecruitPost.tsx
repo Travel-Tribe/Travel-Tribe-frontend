@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   RecruitmentHeader,
   TripHostProfile,
@@ -11,8 +11,15 @@ import { useQuery } from "react-query";
 import { TravelPlan } from "../mocks/mockData";
 import fetchCall from "../Utils/apiFetch";
 
+interface postResponse {
+  data: TravelPlan[];
+}
+
 const RecruitPost = (): JSX.Element => {
-  const { postId = "" } = useParams<{ postId: string }>();
+  const navigate = useNavigate();
+
+  const { id: postId } = useParams<{ id: string }>();
+  console.log(postId);
 
   const {
     data: travelPlan,
@@ -21,12 +28,13 @@ const RecruitPost = (): JSX.Element => {
   } = useQuery<TravelPlan>({
     queryKey: ["travelPlan", postId],
     queryFn: async () => {
-      const response = await fetchCall<TravelPlan[]>(
+      const response = await fetchCall<postResponse>(
         `/api/v1/posts/${postId}`,
         "get",
       );
-      if (response && response.length > 0) {
-        return response[0];
+      console.log("Response:", response.data);
+      if (response.data && response.data.length > 0) {
+        return response.data[0];
       }
       throw new Error("모집글을 찾을 수 없습니다.");
     },
@@ -40,6 +48,18 @@ const RecruitPost = (): JSX.Element => {
       </div>
     );
   }
+
+  const handleEdit = () => {
+    navigate(`/recruitment/edit/:${postId}`);
+  };
+
+  const handleGoToList = () => {
+    navigate("/recruitment");
+  };
+
+  const handleJoin = () => {
+    navigate("");
+  };
 
   if (error) {
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -66,53 +86,46 @@ const RecruitPost = (): JSX.Element => {
         {/* Left Column - 1/2 width */}
         <div className="w-full space-y-6">
           {/* Recruitment Header Card */}
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <RecruitmentHeader />
-            </div>
-          </div>
+          <RecruitmentHeader travelPlan={travelPlan} />
 
           {/* Host Profile Card */}
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">호스트 프로필</h2>
-              <TripHostProfile />
-            </div>
-          </div>
+          <TripHostProfile travelPlan={travelPlan} />
 
           {/* Trip Details Card */}
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">여행 정보</h2>
-              <TripDetails />
-            </div>
-          </div>
+          <TripDetails travelPlan={travelPlan} />
 
           {/* Trip Rules Card */}
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">참여 조건</h2>
-              <TripRules />
-            </div>
-          </div>
+          <TripRules travelPlan={travelPlan} />
 
           {/* Trip Cost Card */}
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">예상 비용</h2>
-              <TripCost />
-            </div>
-          </div>
+          <TripCost travelPlan={travelPlan} />
         </div>
 
         {/* Right Column - 1/2 width */}
         <div className="w-full">
-          <div className="card bg-base-100 shadow-xl sticky top-4">
-            <div className="card-body">
-              <h2 className="card-title">여행 일정</h2>
-              <TripItinerary />
-            </div>
-          </div>
+          <TripItinerary travelPlan={travelPlan} />
+        </div>
+      </div>
+      <div className="flex justify-between mt-3">
+        <button
+          className="btn btn-sm text-slate-50 btn-warning"
+          onClick={handleEdit}
+        >
+          수정하기
+        </button>
+        <div>
+          <button
+            className="btn btn-sm text-slate-50  btn-error"
+            onClick={handleGoToList}
+          >
+            목록으로
+          </button>
+          <button
+            className="btn btn-sm text-slate-50  btn-success ml-3"
+            onClick={handleJoin}
+          >
+            참여 신청하기
+          </button>
         </div>
       </div>
     </div>
