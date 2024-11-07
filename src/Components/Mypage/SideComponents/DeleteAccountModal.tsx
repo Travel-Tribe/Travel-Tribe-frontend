@@ -20,7 +20,6 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   const clickDeleteAccount = async () => {
     try {
       await fetchCall(`/api/v1/users`, "delete");
-      console.log("회원탈퇴 완료");
       navigate("/");
       setToken(null);
     } catch (error) {
@@ -30,8 +29,14 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
 
   if (!isOpen) return null;
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" onClick={onClose}>
-      <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white p-6 rounded-lg shadow-lg w-80"
+        onClick={e => e.stopPropagation()}
+      >
         <h3 className="text-center text-lg font-semibold mb-4">
           정말로 탈퇴하시겠습니까?
         </h3>
