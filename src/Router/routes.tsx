@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import React from "react";
 import { Suspense } from "react";
 import ProfileEdit from "../Components/Mypage/ProfileEdit";
-import MyProfileMain from "../Components/Mypage/MyProfileMain";
 import MyCompletedTrips from "../Components/Mypage/MyCompletedTrips";
 import MyTravelHistory from "../Components/Mypage/MyTravelHistory";
 import MyAccountSettings from "../Components/Mypage/MyAccountSettings";
