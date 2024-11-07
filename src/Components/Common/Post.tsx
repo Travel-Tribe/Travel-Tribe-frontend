@@ -45,15 +45,15 @@ const Post = React.memo(({ plan }: PostProps): JSX.Element => {
         <Link to={"#"} className="text-[12px]">
           작성자
         </Link>
-        <button
+        <div
           className={`w-[50px] h-[20px] text-[12px] rounded-[8px] text-white ${
             new Date(plan.deadline) < new Date()
               ? "bg-custom-green"
               : "bg-custom-pink"
-          }`}
+          } text-center`}
         >
           {new Date(plan.deadline) < new Date() ? "모집중" : "모집 종료"}
-        </button>
+        </div>
       </div>
     </div>
   );
