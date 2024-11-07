@@ -1,53 +1,92 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import fetchCall from "../../Utils/apiFetch";
+import useLocalStorage from "../../Hooks/useLocalStorage";
+import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import Rating from "./Rating";
+
+interface TravelPlan {
+  id: string;
+  title: string;
+  travelStartDate: string;
+  travelEndDate: string;
+  maxParticipants: number;
+  travelCountry: string;
+  deadline: string;
+}
 
 const MyCompletedTrips = (): JSX.Element => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const today = new Date();
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
+  const navigate = useNavigate();
 
-  const travelInfos = [
-    {
-      travelStartDate: "2024-10-23",
-      travelEndDate: "2024-10-29",
-      maxParticipants: 6,
-      travelCountry: "프랑스",
-      deadline: "2024-9-28",
-      title: "도쿄 3박4일 가실 mz들~~",
-      participantsCount: 6,
-    },
-    {
-      travelStartDate: "2024-10-23",
-      travelEndDate: "2024-10-29",
-      maxParticipants: 6,
-      travelCountry: "프랑스",
-      deadline: "2024-9-28",
-      title: "도쿄 3박4일 가실 mz들~~",
-      participantsCount: 6,
-    },
-    {
-      travelStartDate: "2024-10-23",
-      travelEndDate: "2024-10-29",
-      maxParticipants: 6,
-      travelCountry: "프랑스",
-      deadline: "2024-9-28",
-      title: "도쿄 3박4일 가실 mz들~~",
-      participantsCount: 6,
-    },
-    {
-      travelStartDate: "2024-9-15",
-      travelEndDate: "2024-9-20",
-      maxParticipants: 10,
-      travelCountry: "이탈리아",
-      deadline: "2024-7-01",
-      title: "이탈리아 로마투어 같이 가실 분?",
-      participantsCount: 10,
-    },
-  ];
+  const [travelInfos, setTravelInfos] = useState<TravelPlan>({
+    id: "",
+    title: "",
+    travelStartDate: "",
+    travelEndDate: "",
+    maxParticipants: 0,
+    travelCountry: "",
+    deadline: "",
+  });
+  // const travelInfos = [
+  //   {
+  //     travelStartDate: "2024-10-23",
+  //     travelEndDate: "2024-10-29",
+  //     maxParticipants: 6,
+  //     travelCountry: "프랑스",
+  //     deadline: "2024-9-28",
+  //     title: "도쿄 3박4일 가실 mz들~~",
+  //     participantsCount: 6,
+  //   },
+  //   {
+  //     travelStartDate: "2024-10-23",
+  //     travelEndDate: "2024-10-29",
+  //     maxParticipants: 6,
+  //     travelCountry: "프랑스",
+  //     deadline: "2024-9-28",
+  //     title: "도쿄 3박4일 가실 mz들~~",
+  //     participantsCount: 6,
+  //   },
+  //   {
+  //     travelStartDate: "2024-10-23",
+  //     travelEndDate: "2024-10-29",
+  //     maxParticipants: 6,
+  //     travelCountry: "프랑스",
+  //     deadline: "2024-9-28",
+  //     title: "도쿄 3박4일 가실 mz들~~",
+  //     participantsCount: 6,
+  //   },
+  //   {
+  //     travelStartDate: "2024-9-15",
+  //     travelEndDate: "2024-9-20",
+  //     maxParticipants: 10,
+  //     travelCountry: "이탈리아",
+  //     deadline: "2024-7-01",
+  //     title: "이탈리아 로마투어 같이 가실 분?",
+  //     participantsCount: 10,
+  //   },
+  // ];
   const completedTrips = travelInfos.filter(info => {
     const travelEndDate = new Date(info.travelEndDate);
     return travelEndDate < today;
   });
+
+  const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+
+  useEffect(() => {
+    const fetchCompletedTrips = async () => {
+      try {
+        const response = await fetchCall<TravelPlan>(`/api/v1/posts`, "get");
+        console.log("recruit", response);
+        setTravelInfos(...response);
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+    fetchCompletedTrips();
+  }, []);
 
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
