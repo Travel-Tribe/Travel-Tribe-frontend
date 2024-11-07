@@ -112,7 +112,9 @@ const MypageTest = () => {
           </ul>
           <ul className="border-t border-black py-2.5 flex justify-center space-x-5">
             <li className="text-sm">계정 설정</li>
-            <li className="text-sm cursor-pointer" onClick={onClickLogout}>로그아웃</li>
+            <li className="text-sm cursor-pointer" onClick={onClickLogout}>
+              로그아웃
+            </li>
           </ul>
           {/* <a href="#" className="block">
             내 프로필
