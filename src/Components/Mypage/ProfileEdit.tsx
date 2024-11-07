@@ -164,10 +164,10 @@ const ProfileEdit = (): JSX.Element => {
         `/api/v1/users/duplicate?type=nickname&query=${encodeURIComponent(profileData.nickname)}`,
         "post",
       );
-      console.log(response.data.data);
-      if (!response.data.data) {
-        setSuccess("사용 가능한 닉네임입니다");
-        setValidationStatus({ isChecking: false, isAvailable: true });
+      console.log(response.data);
+      if (response.data) {
+        setError("이미 사용 중인 닉네임입니다");
+        setValidationStatus({ isChecking: false, isAvailable: false });
       } else {
         setSuccess("사용 가능한 닉네임입니다");
         setValidationStatus({ isChecking: false, isAvailable: true });
