@@ -26,11 +26,8 @@ const MyAccountSettings = (): JSX.Element => {
             >
               변경
             </button>
-            <EmailChangeModal
-              isOpen={isEmailModalOpen}
-              onClose={() => setIsEmailModalOpen(false)}
-            />
           </div>
+
           <hr className="my-2 border-t border-gray-300" />
           <div className="flex justify-between items-center">
             <span>비밀번호 변경</span>
@@ -40,10 +37,6 @@ const MyAccountSettings = (): JSX.Element => {
             >
               변경
             </button>
-            <PasswordChangeModal
-              isOpen={isPasswordModalOpen}
-              onClose={() => setIsPasswordModalOpen(false)}
-            />
           </div>
         </div>
         <div className="text-gray-500 text-sm p-4">
@@ -55,11 +48,19 @@ const MyAccountSettings = (): JSX.Element => {
             회원탈퇴 &gt;
           </a>
         </div>
-        <DeleteAccountModal
-          isOpen={isDeleteAccountModalOpen}
-          onClose={() => setIsDeleteAccountModalOpen(false)}
-        />
       </div>
+      <EmailChangeModal
+        isOpen={isEmailModalOpen}
+        onClose={() => setIsEmailModalOpen(false)}
+      />
+      <PasswordChangeModal
+        isOpen={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+      />
+      <DeleteAccountModal
+        isOpen={isDeleteAccountModalOpen}
+        onClose={() => setIsDeleteAccountModalOpen(false)}
+      />
     </main>
   );
 };

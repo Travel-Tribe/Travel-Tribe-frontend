@@ -2141,4 +2141,118 @@ export const RecruitMockData: TravelPlan[] = [
       },
     ],
   },
+  {
+    id: "19",
+    title: "이스탄불 문화 체험 여행",
+    travelStartDate: "2024-12-10",
+    travelEndDate: "2024-12-20",
+    maxParticipants: 10,
+    travelCountry: "TR",
+    continent: "ASIA",
+    region: "이스탄불",
+    accommodationFee: 700,
+    airplaneFee: 500,
+    otherFee: 300,
+    limitMaxAge: 60,
+    limitMinAge: 20,
+    limitSex: "모두",
+    limitSmoke: "불가",
+    preferenceType: "문화",
+    deadline: "2024-11-30",
+    days: [
+      {
+        dayDetails: [
+          {
+            title: "아야 소피아 투어",
+            description: "고대 건축물과 문화 유산 탐방",
+            fileAddress: "img13.jpg",
+          },
+          {
+            title: "그랜드 바자 쇼핑",
+            description: "이스탄불 전통 시장 쇼핑 투어",
+            fileAddress: "img14.jpg",
+          },
+        ],
+        itineraryVisits: [
+          { point: "아야 소피아", order: 1 },
+          { point: "그랜드 바자", order: 2 },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "보스포루스 크루즈",
+            description: "보스포루스 해협 크루즈 여행",
+            fileAddress: "img15.jpg",
+          },
+          {
+            title: "터키 전통 음식 체험",
+            description: "로컬 음식 체험 및 요리 클래스",
+            fileAddress: "img16.jpg",
+          },
+        ],
+        itineraryVisits: [
+          { point: "보스포루스 해협", order: 1 },
+          { point: "로컬 음식점", order: 2 },
+        ],
+      },
+    ],
+  },
+  {
+    id: "20",
+    title: "오스트리아 음악 여행",
+    travelStartDate: "2025-01-05",
+    travelEndDate: "2025-01-15",
+    maxParticipants: 8,
+    travelCountry: "AT",
+    continent: "EUROPE",
+    region: "빈",
+    accommodationFee: 1000,
+    airplaneFee: 700,
+    otherFee: 200,
+    limitMaxAge: 70,
+    limitMinAge: 18,
+    limitSex: "모두",
+    limitSmoke: "불가",
+    preferenceType: "음악",
+    deadline: "2024-12-20",
+    days: [
+      {
+        dayDetails: [
+          {
+            title: "빈 필하모닉 공연 관람",
+            description: "세계적인 오케스트라 공연 관람",
+            fileAddress: "img17.jpg",
+          },
+          {
+            title: "슈테판 대성당 탐방",
+            description: "유서 깊은 대성당 탐방",
+            fileAddress: "img18.jpg",
+          },
+        ],
+        itineraryVisits: [
+          { point: "빈 필하모닉", order: 1 },
+          { point: "슈테판 대성당", order: 2 },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "모차르트 생가 방문",
+            description: "모차르트의 생가 및 기념관 탐방",
+            fileAddress: "img19.jpg",
+          },
+          {
+            title: "도나우 강 크루즈",
+            description: "도나우 강을 따라 즐기는 크루즈 여행",
+            fileAddress: "img20.jpg",
+          },
+        ],
+        itineraryVisits: [
+          { point: "모차르트 생가", order: 1 },
+          { point: "도나우 강", order: 2 },
+        ],
+      },
+    ],
+  },
 ];

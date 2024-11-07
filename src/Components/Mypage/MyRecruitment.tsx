@@ -25,10 +25,18 @@ const MyRecruitment = (): JSX.Element => {
       try {
         if (userId) {
           const response = await fetchCall<TravelPlan[]>(
-            `/api/v1/posts/${userId}`,
+            `/api/v1/posts`,
             "get",
           );
-          setRecruitDataList(response.data);
+          const today = new Date();
+
+          // travelEndDate가 현재보다 미래인 여행 계획만 필터링합니다.
+          const filteredPlans = response.data.post.filter((plan) => {
+            const travelStartDate = new Date(plan.travelStartDate);
+            return travelStartDate >= today;
+          });
+
+          setRecruitDataList(filteredPlans);
         } else {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
         }
@@ -45,57 +53,57 @@ const MyRecruitment = (): JSX.Element => {
 
   return (
     <>
-      <div className="border-b border-gray-300 flex justify-between items-end mt-10 pb-1">
-        <div className="flex items-center">
-          <h2 className="text-2xl font-bold mr-2">여행 모집</h2>
-          <span className="text-lg">{recruitDataList.length}</span>
+      <section>
+        <div className="border-b border-gray-300 flex justify-between items-end mt-10 pb-1">
+          <div className="flex items-center">
+            <h2 className="text-2xl font-bold mr-2">여행 모집</h2>
+            <span className="text-lg">{recruitDataList.length}</span>
+          </div>
+          <button
+            className="btn btn-sm w-[100px] !h-[32px] bg-custom-teal-green  rounded-lg mr-5 hover:bg-custom-teal-green text-white"
+            onClick={clickRecruitForm}
+          >
+            모집글 작성
+          </button>
         </div>
-        <button
-          className="btn btn-sm w-[100px] !h-[32px] bg-custom-green text-white rounded-lg mr-5 hover:bg-custom-green"
-          onClick={clickRecruitForm}
-        >
-          모집글 작성
-        </button>
-      </div>
-      <ul className="mt-5 space-y-6">
-        {recruitDataList.map(plan => {
-          const today: any = new Date();
-          const deadlineDate: any = new Date(plan.deadline);
-          const remainingDays = Math.ceil(
-            (deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
-          );
+        <ul className="mt-5 space-y-6">
+          {recruitDataList.map(plan => {
+            const today: any = new Date();
+            const deadlineDate: any = new Date(plan.deadline);
+            const remainingDays = Math.ceil(
+              (deadlineDate.getTime() - today.getTime()) /
+                (1000 * 60 * 60 * 24),
+            );
 
-          const startDayOfWeek = week[new Date(plan.travelStartDate).getDay()];
-          const endDayOfWeek = week[new Date(plan.travelEndDate).getDay()];
+            const startDayOfWeek =
+              week[new Date(plan.travelStartDate).getDay()];
+            const endDayOfWeek = week[new Date(plan.travelEndDate).getDay()];
 
-          return (
-            <li key={plan.id} className="list-none">
-              <div className="w-[600px] h-[86px] bg-custom-green rounded-lg">
-                <div className="flex justify-between">
-                  <h3 className="text-white text-xl mt-2.5 ml-2.5">
-                    {plan.title}
-                  </h3>
-                  <span className="text-white text-base mt-2.5 mr-2.5">
-                    마감 {remainingDays}일 전
-                  </span>
-                </div>
-                <div className="flex items-center m-2.5 space-x-8">
-                  <div className=" bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
-                    <span className="truncate">{plan.travelCountry}</span>
+            return (
+              <li key={plan.id} className="list-none">
+                <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">
+                  <div className="flex justify-between">
+                    <h3 className=" text-xl mt-2.5 ml-2.5">{plan.title}</h3>
+                    <span className=" text-base mt-2.5 mr-2.5">
+                      마감 {remainingDays}일 전
+                    </span>
                   </div>
-                  <span className="text-white">
-                    참여인원 0/{plan.maxParticipants}
-                  </span>
-                  <span className="text-white">
-                    {plan.travelStartDate}({startDayOfWeek}) ~{" "}
-                    {plan.travelEndDate}({endDayOfWeek})
-                  </span>
+                  <div className="flex items-center m-2.5 space-x-8">
+                    <div className=" bg-custom-red  max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
+                      <span className="truncate">{plan.travelCountry}</span>
+                    </div>
+                    <span className="">참여인원 0/{plan.maxParticipants}</span>
+                    <span className="">
+                      {plan.travelStartDate}({startDayOfWeek}) ~{" "}
+                      {plan.travelEndDate}({endDayOfWeek})
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
     </>
   );
 };

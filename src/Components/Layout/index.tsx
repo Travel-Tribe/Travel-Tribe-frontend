@@ -7,7 +7,8 @@ const Layout = () => {
 
   return (
     <>
-      {!hideHeaderRoutes.includes(location.pathname) && !location.pathname.startsWith("/mypage") && <Header />}
+      {!hideHeaderRoutes.includes(location.pathname) &&
+        !location.pathname.startsWith("/mypage") && <Header />}
       <Outlet />
     </>
   );

@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import React from "react";
 import { Suspense } from "react";
+import MyProfile from '../Components/Mypage/MyProfile';
 import ProfileEdit from "../Components/Mypage/ProfileEdit";
 import MyCompletedTrips from "../Components/Mypage/MyCompletedTrips";
 import MyTravelHistory from "../Components/Mypage/MyTravelHistory";
@@ -9,7 +10,6 @@ import PrivateRoutes from "../Components/Layout/PrivateRoutes";
 import PublicOnlyRoutes from "../Components/Layout/PublicOnlyRoutes";
 import Layout from "../Components/Layout";
 import { ProfileRequiredRoutes } from "../Components/Layout/ProfileRequiredRoutes";
-import MypageTest from "../Components/Mypage/test/MypageTest";
 import HomeLayout from "../Components/Layout/HomeLayout";
 
 const Error = React.lazy(() => import("../Page/Error"));
@@ -56,7 +56,6 @@ const Router = (): JSX.Element => {
               <Route path="travelHistory" element={<MyTravelHistory />} />
               <Route path="accountSettings" element={<MyAccountSettings />} />
             </Route>
-              {/* <Route path="test" element={<MyProfile />} /> */}
           </Route>
 
           {/* 로그인 필요없는 일반 페이지 */}

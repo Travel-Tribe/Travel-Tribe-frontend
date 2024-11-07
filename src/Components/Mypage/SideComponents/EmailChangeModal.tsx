@@ -50,9 +50,9 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     try {
       const response = await fetchCall(
         `/api/v1/users/duplicate?type=email&query=${encodeURIComponent(
-          emailInput
+          emailInput,
         )}`,
-        "post"
+        "post",
       );
       const isDuplicate = response.data;
 
@@ -105,9 +105,14 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-[504px]">
-        <h3 className="text-center text-base mb-5 text-gray-500">이메일 변경</h3>
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      onClick={onClose}
+    >
+      <div className="bg-white p-8 rounded-lg shadow-lg w-[504px]  z-50">
+        <h3 className="text-center text-base mb-5 text-gray-500">
+          이메일 변경
+        </h3>
         <p className="text-center text-sm text-gray-600 mb-4">
           이메일을 수정하기 위해 인증 절차가 필요합니다.
         </p>
