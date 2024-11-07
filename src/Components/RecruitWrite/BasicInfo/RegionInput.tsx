@@ -1,51 +1,31 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { useTravelData } from "../../../Hooks/useTravelData";
+import MultipleValueTextInput from "../../Common/MultipleValueTextInput";
 
 const RegionInput = React.memo((): JSX.Element => {
   const { updateTravelData } = useTravelData();
-  const [cities, setCities] = useState<string[]>([""]);
 
-  const handleCityChange = useCallback(
-    (index: number, newCity: string) => {
-      const newCities = [...cities];
-      newCities[index] = newCity;
-      setCities(newCities);
-      updateTravelData("region", newCities.join(" "));
-    },
-    [cities, updateTravelData],
-  );
-
-  const handleAddCity = () => {
-    setCities([...cities, ""]);
+  const handleOnItemAdded = (newItem: string, resultItems: string[]) => {
+    updateTravelData("region", resultItems.join(" "));
   };
 
-  const handleRemoveCity = (index: number) => {
-    const newCities = cities.filter((_, i) => i !== index);
-    setCities(newCities);
-    updateTravelData("region", newCities.join(","));
+  const handleOnItemDeleted = (deletedItem: string, resultItems: string[]) => {
+    updateTravelData("region", resultItems.join(","));
   };
 
   return (
     <div className="flex items-center mb-2">
       <p className="text-[18px] mr-2">도시:</p>
-      {cities.map((city, index) => (
-        <div key={index} className="flex items-center mr-2">
-          <input
-            type="text"
-            className="input input-sm w-[100px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
-            placeholder="City"
-            value={city}
-            onChange={e => handleCityChange(index, e.target.value)}
-          />
-          <button
-            className="flex items-center justify-center text-[16px] w-[20px] h-[20px] mh-auto"
-            onClick={() => handleRemoveCity(index)}
-          >
-            Del
-          </button>
-        </div>
-      ))}
-      <button onClick={handleAddCity}>Add</button>
+      <MultipleValueTextInput
+        className="w-[350px]"
+        onItemAdded={(item, allItems) => {
+          handleOnItemAdded(item, allItems);
+        }}
+        onItemDeleted={(item, allItems) => handleOnItemDeleted(item, allItems)}
+        label="Items"
+        name="item-input"
+        placeholder="enter키를 통해 연속입력이 가능합니다."
+      />
     </div>
   );
 });
