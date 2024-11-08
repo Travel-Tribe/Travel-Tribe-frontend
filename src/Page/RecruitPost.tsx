@@ -101,7 +101,7 @@ const RecruitPost = (): JSX.Element => {
         </div>
       </div>
       <div className="flex justify-between mt-3">
-        <EditBtn postId={postId} userId={travelPlan?.id} />
+        <EditBtn postId={postId} userId={travelPlan?.userId} />
         <div>
           <button
             className="btn btn-sm text-slate-50  btn-error"
