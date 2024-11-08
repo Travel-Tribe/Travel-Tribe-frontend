@@ -10,7 +10,6 @@ import PrivateRoutes from "../Components/Layout/PrivateRoutes";
 import PublicOnlyRoutes from "../Components/Layout/PublicOnlyRoutes";
 import Layout from "../Components/Layout";
 import { ProfileRequiredRoutes } from "../Components/Layout/ProfileRequiredRoutes";
-import MypageTest from "../Components/Mypage/test/MypageTest";
 import HomeLayout from "../Components/Layout/HomeLayout";
 
 const Error = React.lazy(() => import("../Page/Error"));
@@ -18,7 +17,7 @@ const SignIn = React.lazy(() => import("../Page/SignIn"));
 const SignUp = React.lazy(() => import("../Page/SignUp"));
 const Find = React.lazy(() => import("../Page/Find"));
 const Recruitment = React.lazy(() => import("../Page/Recruitment"));
-const RecruitForm = React.lazy(() => import("../Page/RecruitForm"));
+const RecruitWrite = React.lazy(() => import("../Page/RecruitWrite"));
 const RecruitPost = React.lazy(() => import("../Page/RecruitPost"));
 const Review = React.lazy(() => import("../Page/Review"));
 const ReviewForm = React.lazy(() => import("../Page/ReviewForm"));
@@ -43,21 +42,20 @@ const Router = (): JSX.Element => {
             {/* 프로필 필수 라우트 */}
             <Route element={<ProfileRequiredRoutes />}>
               {/* 글쓰기 관련 */}
-              <Route path="/recruitment/write" element={<RecruitForm />} />
-              <Route path="/recruitment/edit/:id" element={<RecruitForm />} />
+              <Route path="/recruitment/write" element={<RecruitWrite />} />
+              <Route path="/recruitment/edit/:id" element={<RecruitWrite />} />
               <Route path="/review/write" element={<ReviewForm />} />
               <Route path="/review/edit/:id" element={<ReviewForm />} />
             </Route>
 
             {/* 프로필 불필요 라우트 */}
             <Route path="/mypage" element={<MyPage />}>
-              <Route index element={<MyProfile />} />
+              <Route index element={<MyProfileMain />} />
               <Route path="myProfileEdit" element={<ProfileEdit />} />
               <Route path="completedTrips" element={<MyCompletedTrips />} />
               <Route path="travelHistory" element={<MyTravelHistory />} />
               <Route path="accountSettings" element={<MyAccountSettings />} />
             </Route>
-              {/* <Route path="test" element={<MyProfile />} /> */}
           </Route>
 
           {/* 로그인 필요없는 일반 페이지 */}
