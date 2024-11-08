@@ -5,13 +5,16 @@ import { COUNTRY_DATA } from "../../Constants/COUNTRY_DATA";
 import SelectBox from "../Common/SelectBox";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { MBTI } from "../../Constants/MBTI";
+import { mappingCountry } from "../../Utils/mappingCountry";
+import { mappingContinent } from "../../Utils/mappingContinent";
 
 const HomeLayout = () => {
   const [selectedTab, setSelectedTab] = useState<"모집" | "후기">("모집");
   const [selectedContinent, setSelectedContinent] = useState<string>("아시아");
-  const [selectedCountry, setSelectedCountry] = useState<string>("한국");
-  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState<string>("대한민국");
+  const [city, setCity] = useState<string>("");
   const [mbti, setMbti] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
   // 검색 시 디바운스 적용
   const location = useLocation();
 
@@ -24,17 +27,18 @@ const HomeLayout = () => {
   const handleContinentChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
+    const continentCode = mappingContinent[event.target.value]; // filter by continent code
     setSelectedContinent(event.target.value);
     setSelectedCountry(""); // 대륙 변경 시 국가 초기화
-    setSelectedCity(""); // 도시 초기화
   };
 
   const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const countryCode = mappingCountry(event.target.value, "ko"); // filter by country code
     setSelectedCountry(event.target.value);
   };
 
-  const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCity(event.target.value);
+  const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCity(event.target.value);
   };
 
   const handleMbti = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -74,20 +78,18 @@ const HomeLayout = () => {
           selectedValue={selectedContinent}
           onSelect={e => handleContinentChange(e)}
         />
-        {selectedContinent && (
-          <SelectBox
-            options={Object.keys(COUNTRY_DATA[selectedContinent])}
-            selectedValue={selectedCountry}
-            onSelect={e => handleCountryChange(e)}
-          />
-        )}
-        {selectedCountry && (
-          <SelectBox
-            options={COUNTRY_DATA[selectedContinent][selectedCountry]}
-            selectedValue={selectedCity}
-            onSelect={e => handleCityChange(e)}
-          />
-        )}
+        <SelectBox
+          options={COUNTRY_DATA[selectedContinent]}
+          selectedValue={selectedCountry}
+          onSelect={e => handleCountryChange(e)}
+        />
+        <input
+          className="input w-[140px] h-[30px] select-bordered border-custom-green"
+          type="text"
+          onChange={handleCityChange}
+          value={city}
+          placeholder="도시 입력"
+        />
         {selectedTab === "모집" && (
           <SelectBox
             options={[...MBTI]}
@@ -97,7 +99,7 @@ const HomeLayout = () => {
         )}
       </div>
       <div className="flex justify-between items-center">
-        <SearchBar />
+        <SearchBar value={search} setValue={setSearch} />
         {localStorage.getItem(STORAGE_KEYS.TOKEN) && (
           <Link
             to={`${location.pathname}/write`}

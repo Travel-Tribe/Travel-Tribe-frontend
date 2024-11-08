@@ -13,7 +13,7 @@ export const recruitHandlers = [
     console.log("모집 글 상세보기");
     const postId = params.postId;
     return HttpResponse.json(
-      RecruitMockData.filter(recruitment => recruitment.id === postId),
+      RecruitMockData.filter(recruitment => recruitment.postId === postId),
       { status: 201 },
     );
   }),
@@ -23,7 +23,7 @@ export const recruitHandlers = [
     console.log("모집 글 삭제");
     const postId = params.postId;
     return HttpResponse.json(
-      RecruitMockData.filter(recruitment => recruitment.id !== postId),
+      RecruitMockData.filter(recruitment => recruitment.postId !== postId),
       { status: 201 },
     );
   }),

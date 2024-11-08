@@ -10,15 +10,12 @@ const Post = React.memo(({ plan }: PostProps): JSX.Element => {
   return (
     <div className="mb-[20px]">
       <Link
-        to={`/recruitment/${plan.id}`}
-        key={plan.id}
+        to={`/recruitment/${plan.userId}`}
+        key={plan.userId}
         className="w-[300px] h-[290px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
       >
         <img
-          src={
-            "https://placehold.co/300x150/000000/FFFFFF.png"
-            // plan.days[0].dayDetails[0].fileAddress
-          }
+          src={plan.days[0].dayDetails[0].fileAddress}
           alt={plan.title}
           className="w-[300px] h-[150px] object-cover"
         />
@@ -46,13 +43,13 @@ const Post = React.memo(({ plan }: PostProps): JSX.Element => {
           작성자
         </Link>
         <div
-          className={`w-[50px] h-[20px] text-[12px] rounded-[8px] text-white ${
-            new Date(plan.deadline) < new Date()
+          className={`px-[3px] h-[20px] text-[12px] rounded-[8px] text-white ${
+            new Date(plan.deadline) > new Date()
               ? "bg-custom-green"
               : "bg-custom-pink"
           } text-center`}
         >
-          {new Date(plan.deadline) < new Date() ? "모집중" : "모집 종료"}
+          {new Date(plan.deadline) > new Date() ? "모집중" : "모집 종료"}
         </div>
       </div>
     </div>

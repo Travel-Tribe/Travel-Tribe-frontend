@@ -15,7 +15,7 @@ const getDaysInMonth = (year: number, month: number) => {
   return days;
 };
 
-const TravelDatesSelect = React.memo(() => {
+const TravelDateSelect = React.memo(() => {
   const { travelData, updateTravelData } = useTravelData();
   const currentYear = new Date().getFullYear();
   const nextYear = currentYear + 1;
@@ -154,4 +154,4 @@ const TravelDatesSelect = React.memo(() => {
   );
 });
 
-export default TravelDatesSelect;
+export default TravelDateSelect;

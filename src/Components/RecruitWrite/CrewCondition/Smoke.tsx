@@ -23,7 +23,8 @@ const Smoke = React.memo((): JSX.Element => {
         value={isSmoke}
       >
         <option value="UNRELATED">무관</option>
-        <option value="NO">비흡현자</option>
+        <option value="SMOKE">흡연자</option>
+        <option value="NO_SMOKE">비흡현자</option>
       </select>
     </div>
   );
