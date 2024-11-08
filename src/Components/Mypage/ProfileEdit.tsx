@@ -5,6 +5,8 @@ import fetchCall from "../../Utils/apiFetch";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import SelectBox from "../Common/SelectBox";
+import { MBTI } from "../../Constants/MBTI";
 
 interface UserProfile {
   introduction: string;
@@ -362,35 +364,11 @@ const ProfileEdit = (): JSX.Element => {
         {/* MBTI */}
         <div className="mt-4">
           <label className="text-gray-700 text-lg mb-2 block">MBTI</label>
-          <select
-            className="w-20 border border-gray-300 rounded p-2 text-sm"
-            value={profileData.mbti}
-            onChange={handleMbtiChange}
-          >
-            <option value="">선택</option>
-            {[
-              "ISTJ",
-              "ISFJ",
-              "INFJ",
-              "INTJ",
-              "ISTP",
-              "ISFP",
-              "INFP",
-              "INTP",
-              "ESTP",
-              "ESFP",
-              "ENFP",
-              "ENTP",
-              "ESTJ",
-              "ESFJ",
-              "ENFJ",
-              "ENTJ",
-            ].map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
+          <SelectBox
+            options={[...MBTI]}
+            selectedValue={profileData.mbti}
+            onSelect={handleMbtiChange}
+          />
         </div>
 
         {/* 다녀온 국가 */}
