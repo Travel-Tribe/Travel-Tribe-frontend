@@ -25,7 +25,7 @@ const Recruitment = React.memo((): JSX.Element => {
   return (
     <div className="flex flex-wrap gap-[35px]">
       {recruitData.map(plan => (
-        <Post key={plan.id} plan={plan} />
+        <Post key={plan.userId} plan={plan} />
       ))}
     </div>
   );

@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import React from "react";
 import { Suspense } from "react";
-import MyProfile from '../Components/Mypage/MyProfile';
+import MyProfile from "../Components/Mypage/MyProfile";
 import ProfileEdit from "../Components/Mypage/ProfileEdit";
 import MyCompletedTrips from "../Components/Mypage/MyCompletedTrips";
 import MyTravelHistory from "../Components/Mypage/MyTravelHistory";
@@ -50,7 +50,7 @@ const Router = (): JSX.Element => {
 
             {/* 프로필 불필요 라우트 */}
             <Route path="/mypage" element={<MyPage />}>
-              <Route index element={<MyProfileMain />} />
+              <Route index element={<MyProfile />} />
               <Route path="myProfileEdit" element={<ProfileEdit />} />
               <Route path="completedTrips" element={<MyCompletedTrips />} />
               <Route path="travelHistory" element={<MyTravelHistory />} />

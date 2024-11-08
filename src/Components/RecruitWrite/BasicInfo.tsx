@@ -1,7 +1,7 @@
 import React from "react";
 import TitleInput from "./BasicInfo/TitleInput";
 import ParticipantsInput from "./BasicInfo/ParticipantsInput";
-import TravelDatesSelect from "./BasicInfo/TravelDatesSelect";
+import TravelDateSelect from "./BasicInfo/TravelDateSelect";
 import DestinationSelect from "./BasicInfo/DestinationSelect";
 import RegionInput from "./BasicInfo/RegionInput";
 
@@ -12,7 +12,7 @@ const BasicInfo = React.memo(() => {
       <div className="w-full h-[1px] bg-black my-2"></div>
       <TitleInput />
       <ParticipantsInput />
-      <TravelDatesSelect />
+      <TravelDateSelect />
       <DestinationSelect />
       <RegionInput />
     </div>
