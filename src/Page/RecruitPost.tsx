@@ -10,6 +10,8 @@ import {
 import { useQuery } from "react-query";
 import { TravelPlan } from "../mocks/mockData";
 import fetchCall from "../Utils/apiFetch";
+import EditBtn from "../Components/RecruitPost/EditBtn";
+import JoinBtn from "../Components/RecruitPost/JoinBtn";
 
 interface postResponse {
   data: TravelPlan[];
@@ -19,7 +21,7 @@ const RecruitPost = (): JSX.Element => {
   const navigate = useNavigate();
 
   const { id: postId } = useParams<{ id: string }>();
-  console.log(postId);
+  console.log("POST_ID:", postId);
 
   const {
     data: travelPlan,
@@ -49,16 +51,8 @@ const RecruitPost = (): JSX.Element => {
     );
   }
 
-  const handleEdit = () => {
-    navigate(`/recruitment/edit/:${postId}`);
-  };
-
   const handleGoToList = () => {
     navigate("/recruitment");
-  };
-
-  const handleJoin = () => {
-    navigate("");
   };
 
   if (error) {
@@ -81,7 +75,7 @@ const RecruitPost = (): JSX.Element => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 pb-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left Column - 1/2 width */}
         <div className="w-full space-y-6">
@@ -107,12 +101,7 @@ const RecruitPost = (): JSX.Element => {
         </div>
       </div>
       <div className="flex justify-between mt-3">
-        <button
-          className="btn btn-sm text-slate-50 btn-warning"
-          onClick={handleEdit}
-        >
-          수정하기
-        </button>
+        <EditBtn postId={postId} userId={travelPlan?.id} />
         <div>
           <button
             className="btn btn-sm text-slate-50  btn-error"
@@ -120,12 +109,7 @@ const RecruitPost = (): JSX.Element => {
           >
             목록으로
           </button>
-          <button
-            className="btn btn-sm text-slate-50  btn-success ml-3"
-            onClick={handleJoin}
-          >
-            참여 신청하기
-          </button>
+          <JoinBtn postId={postId} />
         </div>
       </div>
     </div>
