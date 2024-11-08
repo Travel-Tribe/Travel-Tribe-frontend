@@ -60,11 +60,6 @@ const MyProfile = (): JSX.Element => {
   const navigate = useNavigate();
 
   const fetchProfileData = async () => {
-    if (!userId) {
-      console.error("USER_ID가 로컬 스토리지에 없습니다.");
-      return;
-    }
-
     try {
       const profile = await fetchCall<UserProfile>(
         `/api/v1/users/${userId}/profile`,

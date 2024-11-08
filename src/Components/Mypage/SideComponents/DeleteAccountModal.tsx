@@ -13,7 +13,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  // const accesstok = localStorage.getItem()
+  
   const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
 
