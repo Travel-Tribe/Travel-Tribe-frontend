@@ -3,7 +3,7 @@ import Header from "../Common/Header";
 
 const Layout = () => {
   const location = useLocation();
-  const hideHeaderRoutes = ["/signIn", "/signUp"];
+  const hideHeaderRoutes = ["/signIn", "/signUp", "/recruitment/write"];
 
   return (
     <>
