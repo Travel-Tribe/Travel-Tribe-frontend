@@ -263,3 +263,82 @@ export const RecruitMockData: TravelPlan[] = [
     ],
   },
 ];
+
+export interface Review {
+  postId: string;
+  reviewId: string;
+  continent: string;
+  country: string;
+  region: string;
+  title: string;
+  contents: string;
+  fileAddress: string;
+}
+
+export const reviewData: Review[] = [
+  {
+    postId: "1",
+    reviewId: "1",
+    continent: "ASIA",
+    country: "KR",
+    region: "강릉",
+    title: "1박 2일 뚜벅이 강릉 여행 후기",
+    contents:
+      "강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.",
+    fileAddress: "/images/gangneung1.jpg",
+  },
+  {
+    postId: "2",
+    reviewId: "2",
+    continent: "EUROPE",
+    country: "FR",
+    region: "파리",
+    title: "낭만적인 파리 여행기",
+    contents:
+      "에펠탑과 루브르 박물관을 방문했습니다. 파리는 정말 아름다운 도시입니다.",
+    fileAddress: "/images/gangneung1.jpg",
+  },
+  {
+    postId: "3",
+    reviewId: "3",
+    continent: "NORTH AMERICA",
+    country: "US",
+    region: "뉴욕",
+    title: "뉴욕에서의 하루",
+    contents: "타임스퀘어, 센트럴 파크를 방문하며 뉴욕의 매력을 느꼈습니다.",
+    fileAddress: "/images/gangneung1.jpg",
+  },
+  {
+    postId: "4",
+    reviewId: "4",
+    continent: "OCEANIA",
+    country: "AU",
+    region: "시드니",
+    title: "호주의 자연과 도시를 만나다",
+    contents:
+      "오페라 하우스와 시드니 항구를 둘러보며 호주의 매력을 느꼈습니다.",
+    fileAddress: "/images/gangneung1.jpg",
+  },
+  {
+    postId: "5",
+    reviewId: "5",
+    continent: "AFRICA",
+    country: "EG",
+    region: "카이로",
+    title: "피라미드의 신비를 찾아서",
+    contents:
+      "카이로에서 피라미드를 방문하며 고대 이집트의 역사에 감탄했습니다.",
+    fileAddress: "/images/gangneung1.jpg",
+  },
+  {
+    postId: "6",
+    reviewId: "6",
+    continent: "SOUTH AMERICA",
+    country: "BR",
+    region: "리우데자네이루",
+    title: "삼바의 열정을 느끼다",
+    contents:
+      "리우데자네이루의 해변과 삼바 카니발을 경험하며 남미의 열정을 체험했습니다.",
+    fileAddress: "/images/gangneung1.jpg",
+  },
+];
