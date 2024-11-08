@@ -1,12 +1,12 @@
 interface MyLangs {
   lang?: string[];
 }
-const MyLang = ({ lang = []}: MyLangs): JSX.Element => {
+const MyLang = ({ lang = [] }: MyLangs): JSX.Element => {
   return (
     <div className="mb-8">
       <h4 className="text-lg font-bold">가능 언어</h4>
       {lang.length > 0 && (
-        <div className="flex mt-2">
+        <div className="flex">
           {lang.map((language, index) => (
             <div
               key={index}

@@ -6,6 +6,8 @@ import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import MyRecruitment from "./MyRecruitment";
 import MyTravelJoin from "./MyTravelJoin";
 import profileImg from "../../assets/profileImg.webp";
+import CountryName from "./SideComponents/CountryName";
+import MyLang from "./SideComponents/MyLang";
 
 interface UserProfile {
   introduction: string;
@@ -58,11 +60,6 @@ const MyProfile = (): JSX.Element => {
   const navigate = useNavigate();
 
   const fetchProfileData = async () => {
-    if (!userId) {
-      console.error("USER_ID가 로컬 스토리지에 없습니다.");
-      return;
-    }
-
     try {
       const profile = await fetchCall<UserProfile>(
         `/api/v1/users/${userId}/profile`,
@@ -151,36 +148,8 @@ const MyProfile = (): JSX.Element => {
           value={profileData.introduction}
           readOnly
         />
-        <div className="mb-5">
-          <h3 className="font-bold mb-2">가능 언어</h3>
-          {profileData.langAbilities.length > 0 && (
-            <div className="flex mt-2 gap-2">
-              {profileData.langAbilities.map((language, index) => (
-                <div
-                  key={index}
-                  className="h-6 badge text-sm rounded-lg border border-black bg-white text-center m-2.5 flex items-center justify-center"
-                >
-                  {language}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="mb-5">
-          <h3 className="font-bold mb-2">다녀온 국가</h3>
-          {profileData.visitedCountries.length > 0 && (
-            <div className="flex mt-2 gap-2">
-              {profileData.visitedCountries.map((country, index) => (
-                <div
-                  key={index}
-                  className="h-6 badge text-sm rounded-lg border border-black bg-white text-center m-2.5 flex items-center justify-center"
-                >
-                  {country}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <MyLang lang={profileData.langAbilities} />
+        <CountryName countries={profileData.visitedCountries} />
         <button
           className="w-full btn border border-custom-teal-green text-custom-teal-green bg-white hover:text-white hover:bg-custom-teal-green hover:border-none"
           onClick={() => navigate("/mypage/myProfileEdit")}

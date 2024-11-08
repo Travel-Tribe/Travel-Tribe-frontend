@@ -172,13 +172,7 @@ export const userHandlers = [
       code: string;
       email: string;
     };
-    console.log(data.email);
-    if (
-      EmailChangeMockData.email === data.email &&
-      EmailChangeMockData.code === data.code
-    ) {
-      console.log("회원 이메일 인증 코드 검증 및 이메일 변경", data);
-    }
+    console.log("인증코드 검증 및 이메일 변경", data);
 
     return HttpResponse.json(
       {

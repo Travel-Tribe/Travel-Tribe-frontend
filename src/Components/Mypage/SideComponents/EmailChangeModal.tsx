@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import fetchCall from "../../../Utils/apiFetch";
 
 interface EmailChangeModalProps {
@@ -20,6 +20,20 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     isChecking: false,
     isAvailable: false,
   });
+
+  const resetFields = () => {
+    setEmailInput("");
+    setInputCode("");
+    setIsCodeSent(false);
+    setIsCooldown(false);
+    setError("");
+    setSuccess("");
+    setValidationStatus({ isChecking: false, isAvailable: false });
+  };
+
+  useEffect(() => {
+    if (!isOpen) resetFields();
+  }, [isOpen]);
 
   // 이메일 입력 핸들러
   const handleEmailInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,7 +123,10 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
       onClick={onClose}
     >
-      <div className="bg-white p-8 rounded-lg shadow-lg w-[504px]  z-50">
+      <div
+        className="bg-white p-8 rounded-lg shadow-lg w-[504px] z-50"
+        onClick={e => e.stopPropagation()}
+      >
         <h3 className="text-center text-base mb-5 text-gray-500">
           이메일 변경
         </h3>
