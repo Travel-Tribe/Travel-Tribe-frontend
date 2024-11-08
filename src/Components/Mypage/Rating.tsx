@@ -30,8 +30,12 @@ const Rating: React.FC<RatingModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white w-[540px] h-[536px] rounded-lg p-6 shadow-lg overflow-y-auto">
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50"
+        onClick={onClose}
+      ></div>
+      <div className="bg-white w-[540px] h-[536px] rounded-lg p-6 shadow-lg overflow-y-auto z-50">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-semibold">평점 주기</h2>
           <button className="text-gray-500" onClick={onClose}>
@@ -43,7 +47,7 @@ const Rating: React.FC<RatingModalProps> = ({
             <div key={index} className="flex items-center justify-between">
               <div className="flex items-center justify-center">
                 <img className="w-12 h-12 rounded-full" src={profileImg} />
-                <span className="ml-2.5 w-[200px] truncate">닉네임</span>
+                <span className="ml-5 w-[200px] truncate">닉네임</span>
               </div>
               <div className="flex items-center">
                 <span className="text-gray-700 mr-2.5">평점</span>

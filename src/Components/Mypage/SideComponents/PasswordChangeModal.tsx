@@ -51,7 +51,10 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      onClick={onClose}
+    >
       <div className="bg-white p-8 rounded-lg shadow-lg w-[504px]">
         <h3 className="text-center text-base mb-5 text-gray-500">
           비밀번호 변경

@@ -11,132 +11,133 @@ interface ApiResponse {
   data: boolean | string;
 }
 
-// Axios 응답 타입 (필요한 필드만 포함)
-interface AxiosResponse {
-  data: ApiResponse;
-}
+const fetchSideUserProfile = async (userId: string) => {
+  try {
+    const response = await fetchCall<{ fileAddress: string }>(
+      `/api/v1/users/${userId}/profile`,
+      "get",
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user profile data:", error);
+    return null;
+  }
+};
+
+const fetchSideUserData = async () => {
+  try {
+    const response = await fetchCall<{ nickname: string }>(
+      `/api/v1/users`,
+      "get",
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return null;
+  }
+};
 
 const Sidebar = (): JSX.Element => {
+  const [sidebarProfileData, setSidebarProfileData] = useState({
+    nickname: "",
+    fileAddress: "",
+  });
+  const userId = localStorage.getItem(STORAGE_KEYS.USER_ID) || "";
   const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
-  console.log(token, document.cookie);
+  const [selected, setSelected] = useState("내 프로필");
+  const location = useLocation();
+
   const onClickLogout = async () => {
     try {
-      await fetchCall<AxiosResponse>("/logout", "post");
+      await fetchCall("/logout", "post");
       localStorage.removeItem(STORAGE_KEYS.USER_ID);
       localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
       document.cookie =
         "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       setToken(null);
-      // if (response.data.result === "SUCCESS") {
-      //   // await fetchCall(`/logoutCookie:${document.cookie}`, "post");
-      //   localStorage.removeItem(STORAGE_KEYS.USER_ID);
-      //   localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
-      //   document.cookie =
-      //     "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      //   setToken(null);
-      // }
       navigate("/");
     } catch (error) {
       console.error("POST 요청에 실패했습니다:", error);
     }
   };
 
-  const [selected, setSelected] = useState("내 프로필");
-  const location = useLocation();
+  const loadProfileData = async () => {
+    if (userId) {
+      const profile = await fetchSideUserProfile(userId);
+      const userData = await fetchSideUserData();
+      if (profile && userData) {
+        setSidebarProfileData({
+          fileAddress: profile.fileAddress,
+          nickname: userData.nickname,
+        });
+      }
+    }
+  };
+  
 
   useEffect(() => {
-    switch (location.pathname) {
-      case "/mypage":
-        setSelected("내 프로필");
-        break;
-      case "/mypage/completedTrips":
-        setSelected("다녀온 여행들");
-        break;
-      case "/mypage/travelHistory":
-        setSelected("내 후기 글");
-        break;
-      case "/mypage/accountSettings":
-        setSelected("계정 설정");
-        break;
-    }
-  });
-  console.log(selected);
+    loadProfileData();
+  }, [userId]);
 
-  const handleSelect = (menu: string) => {
-    setSelected(menu);
-  };
+  useEffect(() => {
+    const pathMap: { [key: string]: string } = {
+      "/mypage": "내 프로필",
+      "/mypage/completedTrips": "다녀온 여행들",
+      "/mypage/travelHistory": "내 후기 글",
+      "/mypage/accountSettings": "계정 설정",
+    };
+    setSelected(pathMap[location.pathname] || "내 프로필");
+  }, [location.pathname]);
 
   return (
-    <>
-      {/* Sidebar */}
-      <aside className="w-[400px] h-screen p-5 bg-white drop-shadow-lg">
-        <h1 className="text-4xl font-bold">
-          <Link to={"/"}>여행족</Link>
-        </h1>
-        <div className="flex flex-col items-center my-10">
-          <img className="w-[112px] h-[112px] rounded-full" src={profileImg} />
-          <span className="w-[320px] h-8 mt-3 font-bold text-2xl overflow-y-hidden text-center">
-            닉네임
-          </span>
-        </div>
-        <nav className="font-semibold space-y-8 pt-4">
-          <ul className="list-none space-y-8">
-            <li className="py-1">
+    <aside className="w-[400px] h-screen p-5 bg-white drop-shadow-lg">
+      <h1 className="text-4xl font-bold">
+        <Link to="/">여행족</Link>
+      </h1>
+      <div className="flex flex-col items-center my-10">
+        <img
+          className="w-[112px] h-[112px] rounded-full"
+          src={sidebarProfileData.fileAddress || profileImg}
+        />
+        <span className="w-[320px] h-8 mt-3 font-bold text-2xl overflow-y-hidden text-center">
+          {sidebarProfileData.nickname || "닉네임"}
+        </span>
+      </div>
+      <nav className="font-semibold space-y-8 pt-4">
+        <ul className="list-none space-y-8">
+          {["내 프로필", "내 후기 글", "다녀온 여행들"].map(menu => (
+            <li key={menu}>
               <Link
-                to="/mypage"
-                className={`text-xl font-normal ${selected === "내 프로필" ? "border-b border-black py-1 font-bold text-black" : "text-gray-500"}`}
-                onClick={() => handleSelect("내 프로필")}
+                to={`/mypage/${
+                  menu === "내 프로필"
+                    ? ""
+                    : menu === "내 후기 글"
+                      ? "travelHistory"
+                      : "completedTrips"
+                }`}
+                className={`text-xl font-normal ${
+                  selected === menu
+                    ? "border-b border-black py-1 font-bold text-black"
+                    : "text-gray-500"
+                }`}
+                onClick={() => setSelected(menu)}
               >
-                내 프로필
+                {menu}
               </Link>
             </li>
-            <li className="text-xl font-normal">
-              <Link
-                to="/mypage/travelHistory"
-                className={`text-xl font-normal ${selected === "내 후기 글" ? "border-b border-black py-1 font-bold text-black" : "text-gray-500"}`}
-                onClick={() => handleSelect("내 후기 글")}
-              >
-                내 후기 글
-              </Link>
-            </li>
-            <li className="text-xl font-normal">
-              <Link
-                to="/mypage/completedTrips"
-                className={`text-xl font-normal ${selected === "다녀온 여행들" ? "border-b border-black py-1 font-bold text-black" : "text-gray-500"}`}
-                onClick={() => handleSelect("다녀온 여행들")}
-              >
-                다녀온 여행들
-              </Link>
-            </li>
-          </ul>
-
-          <ul className="border-t border-black py-2.5 flex justify-center space-x-5">
-            <li className="text-sm">
-              <Link to="/mypage/accountSettings">계정 설정</Link>
-            </li>
-            <li className="text-sm cursor-pointer" onClick={onClickLogout}>
-              로그아웃
-            </li>
-          </ul>
-          {/* <a href="#" className="block">
-            내 프로필
-          </a>
-          <a href="#" className="block">
-            내 후기 글
-          </a>
-          <a href="#" className="block">
-            다녀온 여행들
-          </a>
-          <a href="#" className="block">
-            계정 설정
-          </a>
-          <a href="#" className="block text-red-500" onClick={onClickLogout}>
+          ))}
+        </ul>
+        <ul className="border-t border-black py-2.5 flex justify-center space-x-5">
+          <li className="text-sm">
+            <Link to="/mypage/accountSettings">계정 설정</Link>
+          </li>
+          <li className="text-sm cursor-pointer" onClick={onClickLogout}>
             로그아웃
-          </a> */}
-        </nav>
-      </aside>
-    </>
+          </li>
+        </ul>
+      </nav>
+    </aside>
   );
 };
 

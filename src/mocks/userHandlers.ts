@@ -227,25 +227,43 @@ export const userHandlers = [
 
   // 회원 정보 수정
   http.patch("/api/v1/users/info", async ({ request }) => {
-    console.log(request);
+    const userId = Number(localStorage.getItem("USER_ID"));
+    console.log("유저 닉네임 변경", userId);
+
     const data = (await request.json()) as {
       nickname: string;
       phone: string;
     };
     console.log("회원 정보 수정", data);
 
-    UserMockData[userId] = {
-      ...UserMockData[userId], // 기존의 모든 데이터 유지
-      ...data,
-    };
+    // userId에 해당하는 인덱스 찾기
+    const userIndex = UserMockData.findIndex(user => user.userId === userId);
 
-    return HttpResponse.json(
-      {
-        result: "SUCCESS",
-        errors: null,
-        data: null,
-      },
-      { status: 200 },
-    );
+    if (userIndex !== -1) {
+      // 해당 인덱스의 데이터 업데이트
+      UserMockData[userIndex] = {
+        ...UserMockData[userIndex], // 기존 데이터 유지
+        ...data, // 수정할 데이터 덮어쓰기
+      };
+
+      return HttpResponse.json(
+        {
+          result: "SUCCESS",
+          errors: null,
+          data: null,
+        },
+        { status: 200 },
+      );
+    } else {
+      console.error("해당 userId를 가진 사용자가 없습니다.");
+      return HttpResponse.json(
+        {
+          result: "FAILURE",
+          errors: "User not found",
+          data: null,
+        },
+        { status: 404 },
+      );
+    }
   }),
 ];
