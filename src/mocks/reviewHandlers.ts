@@ -33,8 +33,23 @@ export const reviewHandlers = [
   }),
 
   // 후기 수정
-  http.put("api/v1/posts/:postId/reviews/:reviewId", async ({ params }) => {
-    const postId = params.postId;
-    const reviewId = params.reviewId;
-  }),
+  http.put(
+    "api/v1/posts/:postId/reviews/:reviewId",
+    async ({ request, params }) => {
+      const postId = params.postId;
+      const reviewId = params.reviewId;
+      const response = (await request.json()) as Review;
+
+      reviewData[reviewId] = { ...response };
+
+      return HttpResponse.json(
+        {
+          result: "SUCCESS",
+          errors: null,
+          data: null,
+        },
+        { status: 201 },
+      );
+    },
+  ),
 ];
