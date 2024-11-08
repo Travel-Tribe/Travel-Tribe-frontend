@@ -14,7 +14,18 @@ export const reviewHandlers = [
   }),
   // 후기 목록 조회
   http.get("api/v1/reviews", async () => {
-    return HttpResponse.json({ reviews: reviewData }, { status: 201 });
+    const responseData = reviewData.map(review => ({
+      postId: review.postId,
+      reviewId: review.reviewId,
+      continent: review.continent,
+      country: review.country,
+      region: review.region,
+      title: review.title,
+      contents: review.contents,
+      fileAddress: review.files[0]?.fileAddress || null, // 첫 번째 파일 주소 또는 null
+    }));
+
+    return HttpResponse.json({ reviews: responseData }, { status: 201 });
   }),
 
   // 후기 글 등록

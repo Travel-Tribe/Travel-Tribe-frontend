@@ -420,6 +420,10 @@ export interface Review {
   region: string;
   title: string;
   contents: string;
+  files: File[];
+}
+
+interface File {
   fileAddress: string;
 }
 
@@ -433,7 +437,10 @@ export const reviewData: Review[] = [
     title: "1박 2일 뚜벅이 강릉 여행 후기",
     contents:
       "강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.",
-    fileAddress: "/images/gangneung1.jpg",
+    files: [
+      { fileAddress: "/images/gangneung1.jpg" },
+      { fileAddress: "/images/gangneung2.jpg" },
+    ],
   },
   {
     postId: "2",
@@ -444,7 +451,10 @@ export const reviewData: Review[] = [
     title: "낭만적인 파리 여행기",
     contents:
       "에펠탑과 루브르 박물관을 방문했습니다. 파리는 정말 아름다운 도시입니다.",
-    fileAddress: "/images/gangneung1.jpg",
+    files: [
+      { fileAddress: "/images/paris1.jpg" },
+      { fileAddress: "/images/paris2.jpg" },
+    ],
   },
   {
     postId: "3",
@@ -454,7 +464,10 @@ export const reviewData: Review[] = [
     region: "뉴욕",
     title: "뉴욕에서의 하루",
     contents: "타임스퀘어, 센트럴 파크를 방문하며 뉴욕의 매력을 느꼈습니다.",
-    fileAddress: "/images/gangneung1.jpg",
+    files: [
+      { fileAddress: "/images/nyc1.jpg" },
+      { fileAddress: "/images/nyc2.jpg" },
+    ],
   },
   {
     postId: "4",
@@ -465,7 +478,10 @@ export const reviewData: Review[] = [
     title: "호주의 자연과 도시를 만나다",
     contents:
       "오페라 하우스와 시드니 항구를 둘러보며 호주의 매력을 느꼈습니다.",
-    fileAddress: "/images/gangneung1.jpg",
+    files: [
+      { fileAddress: "/images/sydney1.jpg" },
+      { fileAddress: "/images/sydney2.jpg" },
+    ],
   },
   {
     postId: "5",
@@ -476,7 +492,10 @@ export const reviewData: Review[] = [
     title: "피라미드의 신비를 찾아서",
     contents:
       "카이로에서 피라미드를 방문하며 고대 이집트의 역사에 감탄했습니다.",
-    fileAddress: "/images/gangneung1.jpg",
+    files: [
+      { fileAddress: "/images/cairo1.jpg" },
+      { fileAddress: "/images/cairo2.jpg" },
+    ],
   },
   {
     postId: "6",
@@ -487,6 +506,9 @@ export const reviewData: Review[] = [
     title: "삼바의 열정을 느끼다",
     contents:
       "리우데자네이루의 해변과 삼바 카니발을 경험하며 남미의 열정을 체험했습니다.",
-    fileAddress: "/images/gangneung1.jpg",
+    files: [
+      { fileAddress: "/images/rio1.jpg" },
+      { fileAddress: "/images/rio2.jpg" },
+    ],
   },
 ];
