@@ -1,43 +1,49 @@
 import React, { useState } from "react";
 
-const SearchBar = React.memo((): JSX.Element => {
-  const options = ["제목", "내용"];
-  const [selectedOptions, setSelectedOptions] = useState(options[0]);
-  const [searchTerm, setSearchTerm] = useState(""); // 검색어 상태 추가
+interface SearchProps {
+  value: string;
+  setValue: (value: string) => void;
+}
 
-  const handleSelect = (value: string) => {
-    setSelectedOptions(value);
-  };
+const SearchBar = React.memo(
+  ({ value, setValue }: SearchProps): JSX.Element => {
+    const options = ["제목", "내용"];
+    const [selectedOptions, setSelectedOptions] = useState(options[0]);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
+    const handleSelect = (value: string) => {
+      setSelectedOptions(value);
+    };
 
-  return (
-    <div className="w-[480px] h-[36px] mt-[30px] mb-[30px] border border-black rounded-[10px] flex items-center relative z-0">
-      <select
-        value={selectedOptions}
-        onChange={e => handleSelect(e.target.value)}
-        className="w-[80px] h-full text-[16px] pl-[12px] bg-transparent outline-none cursor-pointer"
-      >
-        {options.map(option => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setValue(event.target.value);
+    };
 
-      <div className="absolute left-[90px] h-[14px] w-[1px] bg-black"></div>
+    return (
+      <div className="w-[480px] h-[36px] mt-[30px] mb-[30px] border border-black rounded-[10px] flex items-center relative z-0">
+        <select
+          value={selectedOptions}
+          onChange={e => handleSelect(e.target.value)}
+          className="w-[80px] h-full text-[16px] pl-[12px] bg-transparent outline-none cursor-pointer"
+        >
+          {options.map(option => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
 
-      <input
-        type="text"
-        placeholder="검색어를 입력하세요"
-        value={searchTerm}
-        onChange={handleInputChange}
-        className="flex-grow text-[16px] pl-[12px] outline-none placeholder-gray-500"
-      />
-    </div>
-  );
-});
+        <div className="absolute left-[90px] h-[14px] w-[1px] bg-black"></div>
+
+        <input
+          type="text"
+          placeholder="검색어를 입력하세요"
+          value={value}
+          onChange={handleInputChange}
+          className="flex-grow text-[16px] pl-[12px] outline-none placeholder-gray-500"
+        />
+      </div>
+    );
+  },
+);
 
 export default SearchBar;
