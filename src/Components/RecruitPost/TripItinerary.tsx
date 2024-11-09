@@ -1,12 +1,51 @@
 import { TravelPlan } from "../../mocks/mockData";
 import Schedule from "../../assets/icons/schedule.svg";
+import DayMap from "./DayMap";
 
 interface TripItineraryProps {
   travelPlan?: TravelPlan;
 }
 
+const DayScheduleCard = ({
+  detail,
+  index,
+}: {
+  detail: { title: string; description: string; fileAddress: string };
+  index: number;
+}) => (
+  <div className="card bg-base-100 shadow-lg mb-6">
+    <div className="card-body">
+      <div className="flex items-center gap-2">
+        <div className="badge badge-primary">Stop {index + 1}</div>
+        <h3 className="card-title">{detail.title}</h3>
+      </div>
+      <figure className="my-4">
+        <img
+          src={detail.fileAddress}
+          alt={detail.title}
+          className="rounded-xl w-full h-60 object-cover"
+        />
+      </figure>
+      <p className="text-base-content/70">{detail.description}</p>
+    </div>
+  </div>
+);
+
+const DayHeader = ({ dayIndex, date }: { dayIndex: number; date: string }) => (
+  <div className="sticky top-0 bg-base-100 py-3 z-20 border-b mb-4">
+    <div className="flex justify-between items-center">
+      <div className="flex items-center gap-2">
+        <span className="text-lg font-bold text-primary">
+          Day {dayIndex + 1}
+        </span>
+      </div>
+      <span className="text-base-content/70">{date}</span>
+    </div>
+  </div>
+);
+
 export default function TripItinerary({ travelPlan }: TripItineraryProps) {
-  const getDateByDay = (startDate: string | undefined, dayIndex: number) => {
+  const formatDate = (startDate: string | undefined, dayIndex: number) => {
     if (!startDate) return "";
 
     const date = new Date(startDate);
@@ -15,58 +54,52 @@ export default function TripItinerary({ travelPlan }: TripItineraryProps) {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
-
-    // 요일 구하기
     const weekday = date.toLocaleDateString("ko-KR", { weekday: "short" });
 
     return `${year}-${month}-${day}(${weekday})`;
   };
 
+  if (!travelPlan) {
+    return (
+      <div className="card bg-base-100 h-[1100px] flex items-center justify-center">
+        <p className="text-base-content/70">여행 일정이 없습니다.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="card bg-base-100 border h-[1100px] overflow-y-auto">
-      <div className="card-body">
-        <div>
-          <div className="flex items-center mb-4">
-            <img src={Schedule} alt="schedule icon" />
-            <h2 className="card-title ml-2">여행 일정</h2>
+    <div className="card bg-base-100 border h-[1100px]">
+      <div className="card-body p-0">
+        {/* Header */}
+        <div className="border-b p-4">
+          <div className="flex items-center gap-2">
+            <img src={Schedule} alt="schedule icon" className="w-6 h-6" />
+            <h2 className="card-title">여행 일정</h2>
           </div>
+        </div>
 
-          {travelPlan?.days.map((day, dayIndex) => (
+        {/* Content */}
+        <div className="overflow-y-auto h-[calc(1100px-4rem)] px-4">
+          {travelPlan.days.map((day, dayIndex) => (
             <div key={dayIndex} className="mb-8 last:mb-0">
-              <div className="sticky top-0 bg-white py-2 z-10 border-b">
-                <div className="flex justify-between">
-                  <span className="font-semibold">Day{dayIndex + 1}</span>
-                  <span>
-                    {getDateByDay(travelPlan?.travelStartDate, dayIndex)}
-                  </span>
-                </div>
-              </div>
+              <DayHeader
+                dayIndex={dayIndex}
+                date={formatDate(travelPlan.travelStartDate, dayIndex)}
+              />
 
-              <div className="w-100 h-60 rounded-xl bg-gray-200 flex items-center justify-center mt-2">
-                <div>
-                  {day.itineraryVisits.map((visit, index) => (
-                    <span key={index}>
-                      {visit.point}
-                      {index < day.itineraryVisits.length - 1 ? " → " : ""}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {day.dayDetails.map((detail, index) => (
-                <div key={index} className="my-4">
-                  <p className="font-medium">{detail.title}</p>
-                  <div className="w-100 h-60 rounded-xl bg-gray-200 flex items-center justify-center mt-2">
-                    <img
-                      src={detail.fileAddress}
-                      alt={detail.title}
-                      className="w-full h-full object-cover rounded-xl"
+              {day.itineraryVisits?.length > 0 && (
+                <div className="card bg-base-100 shadow my-6">
+                  <div className="card-body p-0 rounded-xl overflow-hidden">
+                    <DayMap
+                      visits={day.itineraryVisits}
+                      dayDetails={day.dayDetails}
                     />
                   </div>
-                  <p className="mt-4 mb-8 text-gray-600 text-sm">
-                    {detail.description}
-                  </p>
                 </div>
+              )}
+
+              {day.dayDetails.map((detail, index) => (
+                <DayScheduleCard key={index} detail={detail} index={index} />
               ))}
             </div>
           ))}

@@ -10,10 +10,10 @@ import { mappingContinent } from "../../Utils/mappingContinent";
 
 const HomeLayout = () => {
   const [selectedTab, setSelectedTab] = useState<"모집" | "후기">("모집");
-  const [selectedContinent, setSelectedContinent] = useState<string>("아시아");
-  const [selectedCountry, setSelectedCountry] = useState<string>("대한민국");
+  const [selectedContinent, setSelectedContinent] = useState<string>("선택");
+  const [selectedCountry, setSelectedCountry] = useState<string>("선택");
   const [city, setCity] = useState<string>("");
-  const [mbti, setMbti] = useState<string>("");
+  const [mbti, setMbti] = useState<string>("선택");
   const [search, setSearch] = useState<string>("");
   // 검색 시 디바운스 적용
   const location = useLocation();

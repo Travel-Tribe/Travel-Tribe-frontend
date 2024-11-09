@@ -3,6 +3,7 @@ import BasicInfo from "./BasicInfo";
 import { useTravelData } from "../../Hooks/useTravelData";
 import CrewCondition from "./CrewCondition";
 import ExpectMoney from "./ExpectMoney";
+import TravelPlan from "./TravelPlan";
 
 const RecruitForm = React.memo((): JSX.Element => {
   const { travelData } = useTravelData();
@@ -20,6 +21,7 @@ const RecruitForm = React.memo((): JSX.Element => {
       {/* 예상 금액 */}
       <ExpectMoney />
       {/* 여행 일정 */}
+      <TravelPlan />
     </div>
   );
 });

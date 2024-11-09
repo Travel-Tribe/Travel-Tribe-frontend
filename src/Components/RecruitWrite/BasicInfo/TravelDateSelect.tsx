@@ -24,12 +24,12 @@ const TravelDateSelect = React.memo(() => {
     year: number;
     month: number;
     day: number;
-  }>({ year: currentYear, month: 1, day: 1 });
+  }>({ year: 0, month: 0, day: 0 });
   const [selectedEndDate, setSelectedEndDate] = useState<{
     year: number;
     month: number;
     day: number;
-  }>({ year: currentYear, month: 1, day: 1 });
+  }>({ year: 0, month: 0, day: 0 });
 
   const [daysInMonth, setDaysInMonth] = useState<
     { day: number; dayOfWeek: string }[]
@@ -69,7 +69,7 @@ const TravelDateSelect = React.memo(() => {
         });
       } else {
         setSelectedEndDate({
-          ...selectedStartDate,
+          ...selectedEndDate,
           [key]: value,
         });
       }
@@ -92,15 +92,17 @@ const TravelDateSelect = React.memo(() => {
           value={selectedStartDate.year}
           onChange={handleDateChange("year", "start")}
         >
+          <option value={0}>선택</option>
           <option value={currentYear}>{currentYear}</option>
           <option value={nextYear}>{nextYear}</option>
         </select>
         년
         <select
-          className="select select-sm focus:outline-custom-green w-[60px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
           value={selectedStartDate.month}
           onChange={handleDateChange("month", "start")}
         >
+          <option value={0}>선택</option>
           {[...Array(12).keys()].map(month => (
             <option key={month + 1} value={month + 1}>
               {month + 1}
@@ -113,6 +115,7 @@ const TravelDateSelect = React.memo(() => {
           value={selectedStartDate.day}
           onChange={handleDateChange("day", "start")}
         >
+          <option value={0}>선택</option>
           {getDayOptions}
         </select>
         일
@@ -125,15 +128,17 @@ const TravelDateSelect = React.memo(() => {
           value={selectedEndDate.year}
           onChange={handleDateChange("year", "end")}
         >
+          <option value={0}>선택</option>
           <option value={currentYear}>{currentYear}</option>
           <option value={nextYear}>{nextYear}</option>
         </select>
         년
         <select
-          className="select select-sm focus:outline-custom-green w-[60px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
           value={selectedEndDate.month}
           onChange={handleDateChange("month", "end")}
         >
+          <option value={0}>선택</option>
           {[...Array(12).keys()].map(month => (
             <option key={month + 1} value={month + 1}>
               {month + 1}
@@ -146,6 +151,7 @@ const TravelDateSelect = React.memo(() => {
           value={selectedEndDate.day}
           onChange={handleDateChange("day", "end")}
         >
+          <option value={0}>선택</option>
           {getDayOptions}
         </select>
         일
