@@ -2,7 +2,7 @@ import { useTravelData } from "../../Hooks/useTravelData";
 import React, { useState } from "react";
 
 const SpecificLocationSearch: React.FC = () => {
-  const { travelData } = useTravelData();
+  const { travelData, updateTravelData } = useTravelData();
   const [location, setLocation] = useState("");
   const [placeName, setPlaceName] = useState("");
   const [options, setOptions] = useState<
@@ -50,6 +50,18 @@ const SpecificLocationSearch: React.FC = () => {
 
   const handleOptionSelect = (lat: number, lng: number) => {
     setSelectedCoordinates({ lat, lng });
+    updateTravelData("days", [
+      {
+        ...travelData.days[0],
+        itineraryVisits: [
+          {
+            latitude: lat,
+            longitude: lng,
+            orderNumber: 1,
+          },
+        ],
+      },
+    ]);
   };
 
   return (

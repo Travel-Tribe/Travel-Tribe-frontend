@@ -4,7 +4,7 @@ import SpecificLocationSearch from "./SpecificLocationSearch";
 import { getDiffDate } from "../../Utils/getDiffDate";
 
 const TravelPlan = React.memo((): JSX.Element => {
-  const { travelData } = useTravelData();
+  const { travelData, updateTravelData } = useTravelData();
   const [destinations, setDestinations] = useState(
     Array.from(
       {
@@ -13,7 +13,7 @@ const TravelPlan = React.memo((): JSX.Element => {
           travelData.travelEndDate,
         ),
       },
-      () => [{ location: "", description: "", image: null }],
+      () => [{ title: "", description: "", image: null }],
     ),
   );
 
@@ -21,21 +21,20 @@ const TravelPlan = React.memo((): JSX.Element => {
     setDestinations(
       Array.from(
         {
-          length: getDiffDate(
-            travelData.travelStartDate,
-            travelData.travelEndDate,
-          ),
+          length:
+            getDiffDate(travelData.travelStartDate, travelData.travelEndDate) +
+            1,
         },
-        () => [{ location: "", description: "", image: null }],
+        () => [{ title: "", description: "", image: null }],
       ),
     );
-  }, [travelData]);
+  }, [travelData.travelEndDate, travelData.travelStartDate]);
 
   const handleAddDestination = (dayIndex: number) => {
     const updatedDestinations = [...destinations];
     updatedDestinations[dayIndex] = [
       ...updatedDestinations[dayIndex],
-      { location: "", description: "", image: null },
+      { title: "", description: "", image: null },
     ];
     setDestinations(updatedDestinations);
   };
@@ -49,6 +48,12 @@ const TravelPlan = React.memo((): JSX.Element => {
     const updatedDestinations = [...destinations];
     updatedDestinations[dayIndex][destIndex][field] = value;
     setDestinations(updatedDestinations);
+    updateTravelData("days", [
+      {
+        ...travelData.days[0],
+        dayDetails: updatedDestinations,
+      },
+    ]);
   };
 
   return (
@@ -58,9 +63,9 @@ const TravelPlan = React.memo((): JSX.Element => {
 
       <SpecificLocationSearch />
 
-      {destinations.map((dayDestinations, dayIndex) => (
+      {destinations.map((day, dayIndex) => (
         <div key={dayIndex} className="w-[500px] relative mb-[30px]">
-          <p className="text-[18px]">{`2024-12-${25 + dayIndex} (DAY-${dayIndex + 1})`}</p>
+          <p className="text-[18px]">{`${travelData.travelStartDate.split("-")[0]}-${travelData.travelStartDate.split("-")[1]}-${Number(travelData.travelStartDate.split("-")[2]) + dayIndex} (DAY-${dayIndex + 1})`}</p>
           <button
             className="btn btn-sm !h-[32px] bg-custom-green text-white absolute top-0 right-0"
             onClick={() => handleAddDestination(dayIndex)}
@@ -68,7 +73,7 @@ const TravelPlan = React.memo((): JSX.Element => {
             추가하기
           </button>
           <div className="w-[400px] border">
-            {dayDestinations.map((destination, destIndex) => (
+            {day.map((destination, destIndex) => (
               <div key={destIndex}>
                 <div className="flex items-center ml-[15px] mb-[10px] mt-[10px]">
                   <p className="text-[16px] w-[70px]">여행지: </p>
@@ -76,12 +81,12 @@ const TravelPlan = React.memo((): JSX.Element => {
                     type="text"
                     placeholder="여행지를 입력해주세요."
                     className="w-[300px] h-[18px] text-[12px] px-2 truncate border border-gray-300"
-                    value={destination.location}
+                    value={destination.title}
                     onChange={e =>
                       handleInputChange(
                         dayIndex,
                         destIndex,
-                        "location",
+                        "title",
                         e.target.value,
                       )
                     }
@@ -119,6 +124,7 @@ const TravelPlan = React.memo((): JSX.Element => {
                       }
                     />
                     <div className="w-[300px] h-[24px] leading-[24px] text-[12px] bg-white border border-gray-300 rounded-md text-gray-700 text-center">
+                      {/* {destination.image.name || "파일을 선택하세요"} */}
                       파일을 선택하세요
                     </div>
                   </div>
