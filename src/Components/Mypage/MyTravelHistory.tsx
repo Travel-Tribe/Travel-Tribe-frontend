@@ -1,5 +1,7 @@
 import { FC, useState, useEffect } from "react";
 import fetchCall from "../../Utils/apiFetch";
+import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+
 
 interface TravelInfo {
   postId: string;
@@ -17,27 +19,48 @@ interface TravelInfo {
 const MyTravelHistory: FC = () => {
   const [travelInfos, setTravelInfos] = useState<TravelInfo[]>([]);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
+  const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
-  const fetchReviewInfos = async () => {
+  const fetchReviewInfos = async (
+    title?: string,
+    content?: string,
+    continent?: string,
+    country?: string,
+  ) => {
     try {
+      const params = new URLSearchParams();
+      if (title) params.append("title", title);
+      if (content) params.append("content", content);
+      if (continent) params.append("continent", continent);
+      if (country) params.append("country", country);
+      if (userId) params.append("userId", userId);
+
+      // 쿼리 파라미터를 포함한 URL로 fetchCall 요청
       const reviewResponse = await fetchCall<{ reviews: TravelInfo[] }>(
-        `/api/v1/reviews`,
+        `/api/v1/reviews?${params.toString()}`,
         "get",
       );
+      
       const reviews = reviewResponse.data.reviews;
 
       const travelInfosWithDates = await Promise.all(
-        reviews.map(async (review: { postId: string; }) => {
+        reviews.map(async (review: { postId: string }) => {
           const travelResponse = await fetchCall<{
             travelStartDate: string;
             travelEndDate: string;
           }>(`/api/v1/posts/${review.postId}`, "get");
 
-          const travelData = Array.isArray(travelResponse.data) ? travelResponse.data[0] : travelResponse.data;
+          const travelData = Array.isArray(travelResponse.data)
+            ? travelResponse.data[0]
+            : travelResponse.data;
           return travelData
-            ? { ...review, travelStartDate: travelData.travelStartDate, travelEndDate: travelData.travelEndDate }
+            ? {
+                ...review,
+                travelStartDate: travelData.travelStartDate,
+                travelEndDate: travelData.travelEndDate,
+              }
             : review;
-        })
+        }),
       );
 
       setTravelInfos(travelInfosWithDates);
@@ -56,10 +79,16 @@ const MyTravelHistory: FC = () => {
         <h2 className="text-3xl">여행 후기</h2>
         <span className="text-lg">{travelInfos.length}</span>
       </header>
-      <ul className={`mt-10 space-y-6 ${travelInfos.length > 5 ? "w-[680px] h-[660px] overflow-y-auto" : ""}`}>
-        {travelInfos.map((info) => {
-          const startDay = info.travelStartDate ? week[new Date(info.travelStartDate).getDay()] : "";
-          const endDay = info.travelEndDate ? week[new Date(info.travelEndDate).getDay()] : "";
+      <ul
+        className={`mt-10 space-y-6 ${travelInfos.length > 5 ? "w-[680px] h-[660px] overflow-y-auto" : ""}`}
+      >
+        {travelInfos.map(info => {
+          const startDay = info.travelStartDate
+            ? week[new Date(info.travelStartDate).getDay()]
+            : "";
+          const endDay = info.travelEndDate
+            ? week[new Date(info.travelEndDate).getDay()]
+            : "";
 
           return (
             <li key={info.reviewId} className="list-none">
@@ -71,7 +100,8 @@ const MyTravelHistory: FC = () => {
                       <span className="truncate">{info.country}</span>
                     </div>
                     <span>
-                      {info.travelStartDate}({startDay}) ~ {info.travelEndDate}({endDay})
+                      {info.travelStartDate}({startDay}) ~ {info.travelEndDate}(
+                      {endDay})
                     </span>
                   </div>
                 </div>

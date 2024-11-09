@@ -13,7 +13,15 @@ export const reviewHandlers = [
     );
   }),
   // 후기 목록 조회
-  http.get("/api/v1/reviews", async () => {
+  http.get("/api/v1/reviews", async ({ request }) => {
+    const url = new URL(request.url);
+    const title = url.searchParams.get("title");
+    const content = url.searchParams.get("content");
+    const continent = url.searchParams.get("continent");
+    const country = url.searchParams.get("country");
+    const userId = url.searchParams.get("userId");
+
+    console.log("url", url);
     const responseData = ReviewData.map(review => ({
       postId: review.postId,
       reviewId: review.reviewId,
