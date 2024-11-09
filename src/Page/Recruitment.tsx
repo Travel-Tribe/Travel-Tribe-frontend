@@ -9,12 +9,12 @@ const Recruitment = React.memo((): JSX.Element => {
   useEffect(() => {
     const getRecruitData = async () => {
       try {
-        const data: { data: { post: TravelPlan[] } } = await fetchCall(
+        const data: { data: { content: TravelPlan[] } } = await fetchCall(
           "/api/v1/posts",
           "get",
         );
 
-        setRecruitData(data.data.post);
+        setRecruitData(data.data.content);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
