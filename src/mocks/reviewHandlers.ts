@@ -1,20 +1,20 @@
 import { http, HttpResponse } from "msw";
-import { reviewData, Review } from "./mockData";
+import { ReviewData, Review } from "./mockData";
 
 export const reviewHandlers = [
   // 후기 조회
-  http.get("api/v1/posts/:postId/reviews/:reviewId", async ({ params }) => {
+  http.get("/api/v1/posts/:postId/reviews/:reviewId", async ({ params }) => {
     const postId = params.postId;
     const reviewId = params.reviewId;
     console.log("후기 글 불러오기");
     return HttpResponse.json(
-      reviewData.find(review => review.reviewId === reviewId),
+      ReviewData.find(review => review.reviewId === reviewId),
       { status: 201 },
     );
   }),
   // 후기 목록 조회
-  http.get("api/v1/reviews", async () => {
-    const responseData = reviewData.map(review => ({
+  http.get("/api/v1/reviews", async () => {
+    const responseData = ReviewData.map(review => ({
       postId: review.postId,
       reviewId: review.reviewId,
       continent: review.continent,
@@ -24,16 +24,16 @@ export const reviewHandlers = [
       contents: review.contents,
       fileAddress: review.files[0]?.fileAddress || null, // 첫 번째 파일 주소 또는 null
     }));
-
-    return HttpResponse.json({ reviews: responseData }, { status: 201 });
+    console.log("responseData", responseData);
+    return HttpResponse.json({ reviews: ReviewData }, { status: 201 });
   }),
 
   // 후기 글 등록
-  http.post("api/v1/posts/{postId}/reviews", async ({ request }) => {
+  http.post("/api/v1/posts/{postId}/reviews", async ({ request }) => {
     console.log("후기 글 등록", request.json());
     const newReview = (await request.json()) as Review;
 
-    reviewData.push(newReview);
+    ReviewData.push(newReview);
 
     return HttpResponse.json(
       {
@@ -45,13 +45,13 @@ export const reviewHandlers = [
 
   // 후기 수정
   http.put(
-    "api/v1/posts/:postId/reviews/:reviewId",
+    "/api/v1/posts/:postId/reviews/:reviewId",
     async ({ request, params }) => {
       const postId = params.postId;
       const reviewId = params.reviewId;
       const response = (await request.json()) as Review;
 
-      reviewData[reviewId] = { ...response };
+      ReviewData[reviewId] = { ...response };
 
       return HttpResponse.json(
         {

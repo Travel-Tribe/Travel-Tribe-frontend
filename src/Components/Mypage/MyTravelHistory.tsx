@@ -1,85 +1,77 @@
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
+import fetchCall from "../../Utils/apiFetch";
 
 interface TravelInfo {
-  travelStartDate: string;
-  travelEndDate: string;
-  travelCountry: string;
+  postId: string;
+  reviewId: string;
+  continent: string;
+  country: string;
+  region: string;
   title: string;
+  contents: string;
+  fileAddress: string | null;
+  travelStartDate?: string;
+  travelEndDate?: string;
 }
 
-const MyTravelHistory: FC = (): JSX.Element => {
+const MyTravelHistory: FC = () => {
+  const [travelInfos, setTravelInfos] = useState<TravelInfo[]>([]);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
 
-  const travelInfos: TravelInfo[] = [
-    {
-      travelStartDate: "2024-10-23",
-      travelEndDate: "2024-10-30",
-      travelCountry: "프랑스",
-      title: "도쿄 3박4일 가실 mz들~~",
-    },
-    {
-      travelStartDate: "2024-12-15",
-      travelEndDate: "2024-12-20",
-      travelCountry: "이탈리아",
-      title: "이탈리아 로마투어 같이 가실 분?",
-    },
-    {
-      travelStartDate: "2024-12-15",
-      travelEndDate: "2024-12-20",
-      travelCountry: "이탈리아",
-      title: "이탈리아 로마투어 같이 가실 분?",
-    },
-    {
-      travelStartDate: "2024-12-15",
-      travelEndDate: "2024-12-20",
-      travelCountry: "이탈리아",
-      title: "이탈리아 로마투어 같이 가실 분?",
-    },
-    {
-      travelStartDate: "2024-12-15",
-      travelEndDate: "2024-12-20",
-      travelCountry: "이탈리아",
-      title: "이탈리아 로마투어 같이 가실 분?",
-    },
-    {
-      travelStartDate: "2024-12-15",
-      travelEndDate: "2024-12-20",
-      travelCountry: "이탈리아",
-      title: "이탈리아 로마투어 같이 가실 분?",
-    },
-  ];
+  const fetchReviewInfos = async () => {
+    try {
+      const reviewResponse = await fetchCall<{ reviews: TravelInfo[] }>(
+        `/api/v1/reviews`,
+        "get",
+      );
+      const reviews = reviewResponse.data.reviews;
+
+      const travelInfosWithDates = await Promise.all(
+        reviews.map(async (review: { postId: string; }) => {
+          const travelResponse = await fetchCall<{
+            travelStartDate: string;
+            travelEndDate: string;
+          }>(`/api/v1/posts/${review.postId}`, "get");
+
+          const travelData = Array.isArray(travelResponse.data) ? travelResponse.data[0] : travelResponse.data;
+          return travelData
+            ? { ...review, travelStartDate: travelData.travelStartDate, travelEndDate: travelData.travelEndDate }
+            : review;
+        })
+      );
+
+      setTravelInfos(travelInfosWithDates);
+    } catch (error) {
+      console.error("Error fetching user review data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchReviewInfos();
+  }, []);
 
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
-      <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
-        <div className="flex items-center">
-          <h2 className="text-3xl mr-2">여행 후기</h2>
-          <span className="text-lg">{travelInfos.length}</span>
-        </div>
-      </div>
-      <ul
-        className={`mt-10 space-y-6 ${
-          travelInfos.length > 5 ? "w-[680px] h-[660px] overflow-y-auto" : ""
-        }`}
-      >
-        {travelInfos.map((info, index) => {
-          const travelStartDay = new Date(info.travelStartDate).getDay();
-          const travelEndDay = new Date(info.travelEndDate).getDay();
+      <header className="border-b border-gray-300 flex items-center mt-10 pb-1 space-x-2.5">
+        <h2 className="text-3xl">여행 후기</h2>
+        <span className="text-lg">{travelInfos.length}</span>
+      </header>
+      <ul className={`mt-10 space-y-6 ${travelInfos.length > 5 ? "w-[680px] h-[660px] overflow-y-auto" : ""}`}>
+        {travelInfos.map((info) => {
+          const startDay = info.travelStartDate ? week[new Date(info.travelStartDate).getDay()] : "";
+          const endDay = info.travelEndDate ? week[new Date(info.travelEndDate).getDay()] : "";
 
           return (
-            <li key={index} className="list-none">
+            <li key={info.reviewId} className="list-none">
               <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">
-                <div className="flex justify-between">
-                  <h3 className="text-xl mt-2.5 ml-2.5">{info.title}</h3>
-                </div>
+                <h3 className="text-xl pt-2.5 pl-2.5">{info.title}</h3>
                 <div className="flex items-center m-2.5 space-x-8 justify-between">
                   <div className="flex items-center space-x-4">
                     <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
-                      <span className="truncate">{info.travelCountry}</span>
+                      <span className="truncate">{info.country}</span>
                     </div>
                     <span>
-                      {info.travelStartDate}({week[travelStartDay]}) ~{" "}
-                      {info.travelEndDate}({week[travelEndDay]})
+                      {info.travelStartDate}({startDay}) ~ {info.travelEndDate}({endDay})
                     </span>
                   </div>
                 </div>

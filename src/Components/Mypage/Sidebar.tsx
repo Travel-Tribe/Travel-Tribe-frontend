@@ -5,12 +5,6 @@ import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import profileImg from "../../assets/profileImg.webp";
 
-interface ApiResponse {
-  result: "SUCCESS" | "FAIL";
-  errors: null | string;
-  data: boolean | string;
-}
-
 const fetchSideUserProfile = async (userId: string) => {
   try {
     const response = await fetchCall<{ fileAddress: string }>(

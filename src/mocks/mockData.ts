@@ -427,7 +427,7 @@ interface File {
   fileAddress: string;
 }
 
-export const reviewData: Review[] = [
+export const ReviewData: Review[] = [
   {
     postId: "1",
     reviewId: "1",
