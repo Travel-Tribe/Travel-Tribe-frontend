@@ -9,7 +9,9 @@ export default function TripCost({ travelPlan }: TripCostProps) {
   const totalCost = (travelPlan: TravelPlan | undefined) => {
     if (!travelPlan) return 0;
     return (
-      travelPlan.accommodationFee + travelPlan.airplaneFee + travelPlan.ectFee
+      travelPlan.accommodationFee +
+      travelPlan.airplaneFee +
+      travelPlan.transportationFee
     );
   };
 
@@ -38,7 +40,7 @@ export default function TripCost({ travelPlan }: TripCostProps) {
               <div className="flex flex-col">
                 <span className="text-sm text-gray-500">기타비용</span>
                 <span className="text-sm">
-                  {travelPlan?.ectFee.toLocaleString()}원
+                  {travelPlan?.transportationFee.toLocaleString()}원
                 </span>
               </div>
             </div>

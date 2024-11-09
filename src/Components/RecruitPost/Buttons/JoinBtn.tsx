@@ -1,8 +1,9 @@
 import { useState } from "react";
-import fetchCall from "../../Utils/apiFetch";
+import fetchCall from "../../../Utils/apiFetch";
+import { useNavigate } from "react-router-dom";
 
 interface JoinBtnProps {
-  postId: string | undefined;
+  postId: number | undefined;
 }
 
 export interface PaymentReadyRequest {
@@ -31,12 +32,34 @@ export interface PaymentReadyResponse {
 
 export default function JoinBtn({ postId }: JoinBtnProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const checkUserProfile = () => {
+    const token = localStorage.getItem("TOKEN");
+    const userProfile = localStorage.getItem("ProfileCheck") === "true";
+
+    if (!token) {
+      alert("로그인이 필요한 서비스입니다.");
+      navigate("/signIn");
+      return false;
+    }
+
+    if (!userProfile) {
+      alert("프로필 작성이 필요합니다.");
+      navigate("/mypage/myProfileEdit");
+      return false;
+    }
+
+    return true;
+  };
 
   const handleJoin = async () => {
     if (!postId) {
       alert("게시글 정보를 찾을 수 없습니다.");
       return;
     }
+
+    if (!checkUserProfile()) return;
 
     setIsLoading(true);
     try {
@@ -55,7 +78,7 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
       }
 
       // 2. 결제 준비 요청
-      const numericPostId = parseInt(postId, 10);
+      const numericPostId = parseInt(postId.toString(), 10);
       const paymentReadyRequest: PaymentReadyRequest = {
         postId: numericPostId,
         participationId: participationData.data.id,
