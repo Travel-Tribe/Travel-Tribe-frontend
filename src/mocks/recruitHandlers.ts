@@ -11,7 +11,12 @@ export const recruitHandlers = [
   // 모집 글 상세보기
   http.get("/api/v1/posts/:postId", async ({ params }) => {
     console.log("모집 글 상세보기");
-    const postId = params.postId;
+    const postIdParam = Array.isArray(params.postId)
+      ? params.postId[0]
+      : params.postId;
+
+    const postId = parseInt(postIdParam);
+
     return HttpResponse.json(
       RecruitMockData.filter(recruitment => recruitment.postId === postId),
       { status: 201 },
@@ -21,11 +26,21 @@ export const recruitHandlers = [
   // 모집 글 삭제
   http.delete("/api/v1/posts/:postId", async ({ params }) => {
     console.log("모집 글 삭제");
-    const postId = params.postId;
-    return HttpResponse.json(
-      RecruitMockData.filter(recruitment => recruitment.postId !== postId),
-      { status: 201 },
+    const postId = parseInt(params.postId as string);
+
+    // 삭제할 게시글이 존재하는지 확인
+    const postExists = RecruitMockData.some(
+      recruitment => recruitment.postId === postId,
     );
+
+    if (!postExists) {
+      return new HttpResponse(null, { status: 404 }); // Not Found
+    }
+
+    // 게시글 삭제 (필터링)
+    RecruitMockData.filter(recruitment => recruitment.postId !== postId);
+
+    return new HttpResponse(null, { status: 204 }); // No Content
   }),
 
   // 모집 글 수정

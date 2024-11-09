@@ -5,7 +5,7 @@ interface UserProfile {
   nickname: string;
   gender: string;
   ratingAvg: number | null;
-  tripCount: string;
+  count: string;
 }
 
 interface TripHostProfileProps {
@@ -13,7 +13,7 @@ interface TripHostProfileProps {
 }
 
 export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
-  const userId = travelPlan?.id;
+  const userId = travelPlan?.userId;
   const {
     data: userData,
     isLoading,
@@ -38,7 +38,7 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
         nickname: "SEOK",
         ratingAvg: null,
         gender: "MALE",
-        tripCount: "12",
+        count: "12",
       };
     },
     // enabled: Boolean(travelPlan?.userId),
@@ -70,7 +70,7 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
                 평점 {userData?.ratingAvg ?? 0}
               </span>
               <span className="ml-3 text-sm text-center">
-                여행 {userData?.tripCount}회
+                여행 {userData?.count}회
               </span>
             </div>
           </div>
