@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
 interface ButtonProps {
-  postId?: string;
-  userId?: string;
+  postId?: number;
+  userId?: number;
 }
 
 export default function EditBtn({ postId, userId }: ButtonProps) {
@@ -15,7 +15,7 @@ export default function EditBtn({ postId, userId }: ButtonProps) {
     navigate(`/recruitment/edit/:${postId}`);
   };
 
-  if (currentUserId !== userId) {
+  if (currentUserId?.toString !== userId?.toString) {
     return (
       <button className="btn btn-sm btn-ghost pointer-events-none opacity-0 cursor-default"></button>
     );

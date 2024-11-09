@@ -74,11 +74,10 @@ const Sidebar = (): JSX.Element => {
       }
     }
   };
-  
 
   useEffect(() => {
     loadProfileData();
-  }, [userId]);
+  }, [userId, location.pathname]);
 
   useEffect(() => {
     const pathMap: { [key: string]: string } = {

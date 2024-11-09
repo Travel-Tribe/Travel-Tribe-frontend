@@ -10,8 +10,8 @@ import {
 import { useQuery } from "react-query";
 import { TravelPlan } from "../mocks/mockData";
 import fetchCall from "../Utils/apiFetch";
-import EditBtn from "../Components/RecruitPost/EditBtn";
-import JoinBtn from "../Components/RecruitPost/JoinBtn";
+import EditBtn from "../Components/RecruitPost/Buttons/EditBtn";
+import JoinBtn from "../Components/RecruitPost/Buttons/JoinBtn";
 
 interface postResponse {
   data: TravelPlan[];
@@ -20,7 +20,8 @@ interface postResponse {
 const RecruitPost = (): JSX.Element => {
   const navigate = useNavigate();
 
-  const { id: postId } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
+  const postId = parseInt(id ?? "0");
   console.log("POST_ID:", postId);
 
   const {
@@ -101,7 +102,7 @@ const RecruitPost = (): JSX.Element => {
         </div>
       </div>
       <div className="flex justify-between mt-3">
-        <EditBtn postId={postId} userId={travelPlan?.id} />
+        <EditBtn postId={postId} userId={travelPlan?.userId} />
         <div>
           <button
             className="btn btn-sm text-slate-50  btn-error"

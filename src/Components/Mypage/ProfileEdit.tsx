@@ -73,10 +73,6 @@ const ProfileEdit = (): JSX.Element => {
   // 프로필 데이터 불러오기
   useEffect(() => {
     const fetchProfileData = async () => {
-      if (!userId) {
-        console.error("USER_ID가 로컬 스토리지에 없습니다.");
-        return;
-      }
       try {
         const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
         console.log(userData.data.data);
