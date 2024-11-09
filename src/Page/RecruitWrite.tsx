@@ -1,3 +1,4 @@
+import Preview from "../Components/RecruitWrite/Preview";
 import RecruitForm from "../Components/RecruitWrite/RecruitForm";
 import { TravelDataProvider } from "../Context/TravelDataProvider";
 
@@ -5,14 +6,12 @@ const RecruitWrite = (): JSX.Element => {
   return (
     <div className="flex overflow-hidden h-[100vh]">
       <TravelDataProvider>
-        <div className="w-[50%]">
-          {/* 전체 컨테이너 */}
+        <div className="w-[50%] min-w-[600px] max-w-[50%]">
           <RecruitForm />
-          {/* 전체 컨테이너 끝 */}
         </div>
 
         <div className="bg-[#DEDEDE] w-[50%] min-w-[512px] overflow-y-scroll hidden lg:block">
-          {/* 오른쪽 콘텐츠 */}
+          <Preview />
         </div>
 
         <div

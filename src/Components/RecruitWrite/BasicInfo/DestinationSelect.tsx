@@ -2,29 +2,22 @@ import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { COUNTRY_DATA } from "../../../Constants/COUNTRY_DATA";
 import { useTravelData } from "../../../Hooks/useTravelData";
 import { mappingContinent } from "../../../Utils/mappingContinent";
+import { mappingCountry } from "../../../Utils/mappingCountry";
 
 const DestinationSelect = React.memo(() => {
   const { updateTravelData } = useTravelData();
 
-  const [continent, setContinent] = useState<string>("아시아");
-  const [country, setCountry] = useState<string>("한국");
-
-  useEffect(() => {
-    updateTravelData("continent", mappingContinent[continent]);
-    updateTravelData("travelCountry", country);
-  }, []);
+  const [continent, setContinent] = useState<string>("선택");
+  const [country, setCountry] = useState<string>("선택");
 
   const availableCountries = useMemo(() => {
-    return Object.keys(COUNTRY_DATA[continent]);
+    if (continent !== "선택") return COUNTRY_DATA[continent];
   }, [continent]);
 
   const handleContinentChange = useCallback(
     (selectedContinent: string) => {
       setContinent(selectedContinent);
-      const firstCountry = Object.keys(COUNTRY_DATA[selectedContinent])[0];
-      setCountry(firstCountry);
       updateTravelData("continent", mappingContinent[selectedContinent]);
-      updateTravelData("travelCountry", firstCountry);
     },
     [updateTravelData],
   );
@@ -32,7 +25,7 @@ const DestinationSelect = React.memo(() => {
   const handleCountryChange = useCallback(
     (selectedCountry: string) => {
       setCountry(selectedCountry);
-      updateTravelData("travelCountry", selectedCountry);
+      updateTravelData("travelCountry", mappingCountry(selectedCountry, "ko"));
     },
     [updateTravelData],
   );
@@ -45,6 +38,7 @@ const DestinationSelect = React.memo(() => {
         value={continent}
         onChange={e => handleContinentChange(e.target.value)}
       >
+        <option value="선택">선택</option>
         {Object.keys(COUNTRY_DATA).map(continentOption => (
           <option key={continentOption} value={continentOption}>
             {continentOption}
@@ -57,7 +51,8 @@ const DestinationSelect = React.memo(() => {
         value={country}
         onChange={e => handleCountryChange(e.target.value)}
       >
-        {availableCountries.map(countryOption => (
+        <option value="선택">선택</option>
+        {availableCountries?.map(countryOption => (
           <option key={countryOption} value={countryOption}>
             {countryOption}
           </option>

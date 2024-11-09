@@ -14,7 +14,8 @@ const SelectBox = React.memo(
         onChange={onSelect}
         value={selectedValue}
       >
-        {options.map(option => (
+        <option value="선택">선택</option>
+        {options?.map(option => (
           <option
             key={option}
             value={option}
