@@ -30,7 +30,8 @@ const MyCompletedTrips = (): JSX.Element => {
           `/api/v1/posts`,
           "get",
         );
-        setTravelInfos(response.data.post);
+        console.log(response);
+        setTravelInfos(response.data.content);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
