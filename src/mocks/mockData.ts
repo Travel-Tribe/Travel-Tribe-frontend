@@ -29,6 +29,15 @@ export const UserMockData: User[] = [
     phone: "123-456-7891",
     profileCheck: false,
   },
+  {
+    userId: 3,
+    username: "testUser3",
+    password: "password123",
+    email: "test3@example.com",
+    nickname: "tester3",
+    phone: "123-456-7892",
+    profileCheck: true,
+  },
 ];
 
 interface UserProfile {
@@ -58,6 +67,19 @@ export const UserProfileData: { [key: string]: UserProfile } = {
     fileAddress: "",
     langAbilities: ["Korean", "English", "Japanese"],
     visitedCountries: ["Japan", "Canada", "France"],
+  },
+  "3": {
+    id: 2,
+    userId: 3,
+    introduction: "여행과 사진을 좋아하는 모험가입니다.",
+    mbti: "ENFP",
+    smoking: "YES",
+    gender: "FEMALE",
+    birth: "1995-05-15",
+    ratingAvg: 4.5,
+    fileAddress: "",
+    langAbilities: ["Korean", "Spanish"],
+    visitedCountries: ["Spain", "Brazil", "Italy"],
   },
 };
 
@@ -530,19 +552,10 @@ export const ParticipationsData: participations[] = [
   {
     participationId: 2,
     postId: 2,
-    userId: "2",
-    ParticipationStatus: "PENDING",
-    DepositStatus: "DEPOSIT_PENDING",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: null,
-  },
-  {
-    participationId: 3,
-    postId: 3,
     userId: "3",
-    ParticipationStatus: "CANCELLED",
-    DepositStatus: "DEPOSIT_REFUNDED",
-    RatingStatus: "RATED",
-    depositReturnDate: new Date("2023-12-15"),
+    ParticipationStatus: "TRAVEL_FINISHED",
+    DepositStatus: "DEPOSIT_PAID",
+    RatingStatus: "NOT_RATED",
+    depositReturnDate: new Date("2023-04-14"),
   },
 ];
