@@ -11,10 +11,10 @@ const Age = React.memo((): JSX.Element => {
     e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     if (type === "min") {
-      updateTravelData("limitMinAge", e.target.value);
+      updateTravelData("limitMinAge", Number(e.target.value));
       setMinAge(e.target.value);
     } else {
-      updateTravelData("limitMaxAge", e.target.value);
+      updateTravelData("limitMaxAge", Number(e.target.value));
       setMaxAge(e.target.value);
     }
   };

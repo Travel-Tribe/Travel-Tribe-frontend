@@ -1,11 +1,16 @@
 import Location from "../../assets/icons/location.svg";
 import { TravelPlan } from "../../mocks/mockData";
+import { mappingCountry } from "../../Utils/mappingCountry";
 
 interface TravelDetailsProps {
   travelPlan?: TravelPlan;
 }
 
 export default function TripDetails({ travelPlan }: TravelDetailsProps) {
+  const travelCountry = travelPlan?.travelCountry
+    ? mappingCountry(travelPlan?.travelCountry, "en")
+    : travelPlan?.travelCountry;
+
   return (
     <div className="card bg-base-100 border">
       <div className="card-body">
@@ -19,7 +24,7 @@ export default function TripDetails({ travelPlan }: TravelDetailsProps) {
               <div className="flex flex-col mt-2">
                 <span className="text-sm text-gray-500">여행 지역</span>
                 <span className="text-sm">
-                  {travelPlan?.travelCountry} - {travelPlan?.region}
+                  {travelCountry} - {travelPlan?.region}
                 </span>
               </div>
               <div className="flex flex-col mt-2">

@@ -16,9 +16,9 @@ const ParticipantsInput = React.memo(() => {
         value={travelData.maxParticipants}
         onChange={handleChange}
       >
-        {[...Array(10)].map((_, i) => (
-          <option key={i + 1} value={i + 1}>
-            {i + 1}
+        {[...Array(11)].map((_, i) => (
+          <option key={i} value={i}>
+            {i}
           </option>
         ))}
       </select>
