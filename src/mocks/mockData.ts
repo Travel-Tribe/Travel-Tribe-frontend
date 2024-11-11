@@ -38,6 +38,24 @@ export const UserMockData: User[] = [
     phone: "123-456-7892",
     profileCheck: true,
   },
+  {
+    userId: 4,
+    username: "testUser4",
+    password: "password123",
+    email: "test4@example.com",
+    nickname: "tester4",
+    phone: "123-456-7893",
+    profileCheck: true,
+  },
+  {
+    userId: 5,
+    username: "testUser5",
+    password: "password123",
+    email: "test5@example.com",
+    nickname: "tester5",
+    phone: "123-456-7894",
+    profileCheck: true,
+  },
 ];
 
 interface UserProfile {
@@ -80,6 +98,32 @@ export const UserProfileData: { [key: string]: UserProfile } = {
     fileAddress: "",
     langAbilities: ["Korean", "Spanish"],
     visitedCountries: ["Spain", "Brazil", "Italy"],
+  },
+  "4": {
+    id: 3,
+    userId: 4,
+    introduction: "안녕하세요! 사진 찍는 여행가입니다.",
+    mbti: "ENFP",
+    smoking: "YES",
+    gender: "FEMALE",
+    birth: "1995-06-20",
+    ratingAvg: 4.8,
+    fileAddress: "",
+    langAbilities: ["Korean", "French"],
+    visitedCountries: ["Italy", "Spain", "Australia"],
+  },
+  "5": {
+    id: 4,
+    userId: 5,
+    introduction: "안녕하세요! 다양한 문화를 경험하는 것을 좋아합니다.",
+    mbti: "INTJ",
+    smoking: "NO",
+    gender: "MALE",
+    birth: "1988-11-12",
+    ratingAvg: 4.5,
+    fileAddress: "",
+    langAbilities: ["Korean", "German", "Spanish"],
+    visitedCountries: ["Germany", "Mexico", "Thailand"],
   },
 };
 
@@ -286,7 +330,7 @@ export const RecruitMockData: TravelPlan[] = [
     title: "도쿄 미식 여행",
     travelStartDate: "2023-04-01",
     travelEndDate: "2023-04-03",
-    maxParticipants: 6,
+    maxParticipants: 3,
     travelCountry: "JP",
     continent: "ASIA",
     region: "도쿄",
@@ -529,7 +573,7 @@ export const ReviewData: Review[] = [
   },
 ];
 
-export interface participations {
+export interface Participations {
   participationId: number;
   postId: number;
   userId: string;
@@ -539,7 +583,7 @@ export interface participations {
   depositReturnDate: Date | null;
 }
 
-export const ParticipationsData: participations[] = [
+export const ParticipationsData: Participations[] = [
   {
     participationId: 1,
     postId: 1,
@@ -552,6 +596,33 @@ export const ParticipationsData: participations[] = [
   {
     participationId: 2,
     postId: 2,
+    userId: "3",
+    ParticipationStatus: "TRAVEL_FINISHED",
+    DepositStatus: "DEPOSIT_PAID",
+    RatingStatus: "NOT_RATED",
+    depositReturnDate: new Date("2023-04-14"),
+  },
+  {
+    participationId: 3,
+    postId: 2,
+    userId: "4",
+    ParticipationStatus: "TRAVEL_FINISHED",
+    DepositStatus: "DEPOSIT_PAID",
+    RatingStatus: "NOT_RATED",
+    depositReturnDate: new Date("2023-04-14"),
+  },
+  {
+    participationId: 4,
+    postId: 2,
+    userId: "5",
+    ParticipationStatus: "TRAVEL_FINISHED",
+    DepositStatus: "DEPOSIT_PAID",
+    RatingStatus: "NOT_RATED",
+    depositReturnDate: new Date("2023-04-14"),
+  },
+  {
+    participationId: 5,
+    postId: 1,
     userId: "3",
     ParticipationStatus: "TRAVEL_FINISHED",
     DepositStatus: "DEPOSIT_PAID",
