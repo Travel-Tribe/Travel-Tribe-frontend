@@ -21,17 +21,27 @@ export const reviewHandlers = [
     const country = url.searchParams.get("country");
     const userId = url.searchParams.get("userId");
 
-    console.log("url", url);
-    const responseData = ReviewData.map(review => ({
-      postId: review.postId,
-      reviewId: review.reviewId,
-      continent: review.continent,
-      country: review.country,
-      region: review.region,
-      title: review.title,
-      contents: review.contents,
-      fileAddress: review.files[0]?.fileAddress || null, // 첫 번째 파일 주소 또는 null
-    }));
+    const responseData = ReviewData
+      .filter(review => {
+        return (
+          (title ? review.title.includes(title) : true) &&
+          (content ? review.contents.includes(content) : true) &&
+          (continent ? review.continent === continent : true) &&
+          (country ? review.country === country : true) &&
+          (userId ? review.userId === userId : true)
+        );
+      })
+      .map(review => ({
+        userId: review.userId,
+        postId: review.postId,
+        reviewId: review.reviewId,
+        continent: review.continent,
+        country: review.country,
+        region: review.region,
+        title: review.title,
+        contents: review.contents,
+        fileAddress: review.files[0]?.fileAddress || null,
+      }));
     console.log("responseData", responseData);
     return HttpResponse.json({ reviews: ReviewData }, { status: 201 });
   }),

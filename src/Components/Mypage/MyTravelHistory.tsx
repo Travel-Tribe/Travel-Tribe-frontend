@@ -2,7 +2,6 @@ import { FC, useState, useEffect } from "react";
 import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 
-
 interface TravelInfo {
   postId: string;
   reviewId: string;
@@ -14,6 +13,19 @@ interface TravelInfo {
   fileAddress: string | null;
   travelStartDate?: string;
   travelEndDate?: string;
+}
+
+interface ReviewResponse {
+  data: {
+    reviews: TravelInfo[];
+  };
+}
+
+interface TravelDatesResponse {
+  data: Array<{
+    travelStartDate: string;
+    travelEndDate: string;
+  }>;
 }
 
 const MyTravelHistory: FC = () => {
@@ -36,33 +48,28 @@ const MyTravelHistory: FC = () => {
       if (userId) params.append("userId", userId);
 
       // 쿼리 파라미터를 포함한 URL로 fetchCall 요청
-      const reviewResponse = await fetchCall<{ reviews: TravelInfo[] }>(
+      const reviewResponse = await fetchCall<ReviewResponse>(
         `/api/v1/reviews?${params.toString()}`,
         "get",
       );
-      
       const reviews = reviewResponse.data.reviews;
 
       const travelInfosWithDates = await Promise.all(
-        reviews.map(async (review: { postId: string }) => {
-          const travelResponse = await fetchCall<{
-            travelStartDate: string;
-            travelEndDate: string;
-          }>(`/api/v1/posts/${review.postId}`, "get");
+        reviews.map(async review => {
+          const travelResponse = await fetchCall<TravelDatesResponse>(
+            `/api/v1/posts/${review.postId}`,
+            "get",
+          );
 
-          const travelData = Array.isArray(travelResponse.data)
-            ? travelResponse.data[0]
-            : travelResponse.data;
-          return travelData
-            ? {
-                ...review,
-                travelStartDate: travelData.travelStartDate,
-                travelEndDate: travelData.travelEndDate,
-              }
-            : review;
+          const travelData = travelResponse.data[0];
+          console.log(travelData);
+          return {
+            ...review,
+            travelStartDate: travelData?.travelStartDate,
+            travelEndDate: travelData?.travelEndDate,
+          };
         }),
       );
-
       setTravelInfos(travelInfosWithDates);
     } catch (error) {
       console.error("Error fetching user review data:", error);
