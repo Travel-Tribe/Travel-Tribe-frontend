@@ -106,9 +106,8 @@ export interface TravelPlan {
   continent: string;
   region: string;
   accommodationFee: number;
-  transportationFee: number;
   airplaneFee: number;
-  foodFee: number;
+  otherExpenses: number;
   limitMaxAge: number;
   limitMinAge: number;
   limitSex: string;
@@ -129,9 +128,8 @@ export const RecruitMockData: TravelPlan[] = [
     continent: "ASIA",
     region: "도쿄",
     accommodationFee: 500000,
-    transportationFee: 100000,
+    otherExpenses: 100000,
     airplaneFee: 400000,
-    foodFee: 200000,
     limitMaxAge: 60,
     limitMinAge: 20,
     limitSex: "UNRELATED",
@@ -268,10 +266,9 @@ export const RecruitMockData: TravelPlan[] = [
     travelCountry: "JP",
     continent: "ASIA",
     region: "도쿄",
-    accommodationFee: 500000,
-    transportationFee: 100000,
+    otherExpenses: 500000,
     airplaneFee: 400000,
-    foodFee: 200000,
+    accommodationFee: 200000,
     limitMaxAge: 60,
     limitMinAge: 20,
     limitSex: "UNRELATED",
