@@ -67,10 +67,11 @@ export const recruitHandlers = [
 
   // 모집 글 등록
   http.post("/api/v1/posts", async ({ request }) => {
-    console.log("모집 글 등록", request.json());
     const newData = (await request.json()) as TravelPlan;
 
     RecruitMockData.push(newData);
+    console.log("모집 글 등록", newData);
+    console.log(RecruitMockData);
 
     return HttpResponse.json(
       {

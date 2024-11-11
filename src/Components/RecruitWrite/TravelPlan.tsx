@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useTravelData } from "../../Hooks/useTravelData";
-import SpecificLocationSearch from "./SpecificLocationSearch";
 import { getDiffDate } from "../../Utils/getDiffDate";
+import SpecificLocationSearch from "./SpecificLocationSearch";
 
 const TravelPlan = React.memo((): JSX.Element => {
   const { travelData, updateTravelData } = useTravelData();
@@ -17,6 +17,18 @@ const TravelPlan = React.memo((): JSX.Element => {
     ),
   );
 
+  const [geometry, setGeometry] = useState(
+    Array.from(
+      {
+        length: getDiffDate(
+          travelData.travelStartDate,
+          travelData.travelEndDate,
+        ),
+      },
+      () => [{ latitude: 0, longitude: 0, orderNumber: 1 }],
+    ),
+  );
+
   useEffect(() => {
     setDestinations(
       Array.from(
@@ -28,6 +40,16 @@ const TravelPlan = React.memo((): JSX.Element => {
         () => [{ title: "", description: "", image: null }],
       ),
     );
+    setGeometry(
+      Array.from(
+        {
+          length:
+            getDiffDate(travelData.travelStartDate, travelData.travelEndDate) +
+            1,
+        },
+        () => [{ latitude: 0, longitude: 0, orderNumber: 1 }],
+      ),
+    );
   }, [travelData.travelEndDate, travelData.travelStartDate]);
 
   const handleAddDestination = (dayIndex: number) => {
@@ -36,7 +58,19 @@ const TravelPlan = React.memo((): JSX.Element => {
       ...updatedDestinations[dayIndex],
       { title: "", description: "", image: null },
     ];
+
+    const updatedGeometry = [...geometry];
+    updatedGeometry[dayIndex] = [
+      ...updatedGeometry[dayIndex],
+      {
+        latitude: 0,
+        longitude: 0,
+        orderNumber: updatedGeometry[dayIndex].length + 1,
+      },
+    ];
+
     setDestinations(updatedDestinations);
+    setGeometry(updatedGeometry);
   };
 
   const handleInputChange = (
@@ -45,23 +79,33 @@ const TravelPlan = React.memo((): JSX.Element => {
     field: string | null,
     value: any,
   ) => {
-    const updatedDestinations = [...destinations];
-    updatedDestinations[dayIndex][destIndex][field] = value;
-    setDestinations(updatedDestinations);
-    updateTravelData("days", [
-      {
-        ...travelData.days[0],
-        dayDetails: updatedDestinations,
-      },
-    ]);
+    if (!field) {
+      const updatedGeometry = [...geometry];
+      updatedGeometry[dayIndex][destIndex] = value;
+      setGeometry(updatedGeometry);
+      updateTravelData("days", [
+        {
+          ...travelData.days[0],
+          itineraryVisits: updatedGeometry,
+        },
+      ]);
+    } else {
+      const updatedDestinations = [...destinations];
+      updatedDestinations[dayIndex][destIndex][field] = value;
+      setDestinations(updatedDestinations);
+      updateTravelData("days", [
+        {
+          ...travelData.days[0],
+          dayDetails: updatedDestinations,
+        },
+      ]);
+    }
   };
 
   return (
     <div>
       <h2 className="text-[24px] font-bold">여행 일정</h2>
       <div className="w-full h-[1px] bg-black my-2"></div>
-
-      <SpecificLocationSearch />
 
       {destinations.map((day, dayIndex) => (
         <div key={dayIndex} className="w-[500px] relative mb-[30px]">
@@ -77,7 +121,13 @@ const TravelPlan = React.memo((): JSX.Element => {
               <div key={destIndex}>
                 <div className="flex items-center ml-[15px] mb-[10px] mt-[10px]">
                   <p className="text-[16px] w-[70px]">여행지: </p>
-                  <input
+                  <SpecificLocationSearch
+                    placeName={destination.title}
+                    dayIndex={dayIndex}
+                    destIndex={destIndex}
+                    onPlaceSelected={handleInputChange}
+                  />
+                  {/* <input
                     type="text"
                     placeholder="여행지를 입력해주세요."
                     className="w-[300px] h-[18px] text-[12px] px-2 truncate border border-gray-300"
@@ -90,7 +140,7 @@ const TravelPlan = React.memo((): JSX.Element => {
                         e.target.value,
                       )
                     }
-                  />
+                  /> */}
                 </div>
                 <div className="flex ml-[15px] mb-[10px]">
                   <p className="text-[16px] w-[70px]">설명: </p>
@@ -119,7 +169,7 @@ const TravelPlan = React.memo((): JSX.Element => {
                           dayIndex,
                           destIndex,
                           "image",
-                          e.target.files[0],
+                          URL.createObjectURL(e.target.files[0]),
                         )
                       }
                     />
