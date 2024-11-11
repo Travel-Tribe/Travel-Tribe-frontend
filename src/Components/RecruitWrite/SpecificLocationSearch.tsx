@@ -58,6 +58,7 @@ const SpecificLocationSearch: React.FC<SpecificLocationSearchProps> =
         if (!isLoaded || !placeName) return;
 
         const centerCoordinates = await getCoordinatesFromLocation();
+        console.log(centerCoordinates);
         if (!centerCoordinates) return;
 
         const map = new window.google.maps.Map(document.createElement("div"));

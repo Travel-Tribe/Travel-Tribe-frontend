@@ -8,6 +8,12 @@ import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import SelectBox from "../Common/SelectBox";
 import { MBTI } from "../../Constants/MBTI";
 
+
+
+interface UserProfileData {
+  data: UserProfile;
+}
+
 interface UserProfile {
   introduction: string;
   mbti: string;
@@ -56,29 +62,36 @@ const ProfileEdit = (): JSX.Element => {
 
   const animatedComponents = makeAnimated();
 
-  const handleVisitedCountriesChange = (newValue: any) => {
-    setProfileData(prev => ({
-      ...prev,
-      visitedCountries: newValue.map((option: any) => option.value),
-    }));
+  const handleVisitedCountriesChange = (newValue: unknown) => {
+    if (Array.isArray(newValue)) {
+      setProfileData(prev => ({
+        ...prev,
+        visitedCountries: newValue.map(
+          option => (option as { value: string }).value,
+        ),
+      }));
+    }
   };
 
-  const handleLangAbilitiesChange = (newValue: any) => {
-    setProfileData(prev => ({
-      ...prev,
-      langAbilities: newValue.map((option: any) => option.value),
-    }));
+  const handleLangAbilitiesChange = (newValue: unknown) => {
+    if (Array.isArray(newValue)) {
+      setProfileData(prev => ({
+        ...prev,
+        langAbilities: newValue.map(
+          option => (option as { value: string }).value,
+        ),
+      }));
+    }
   };
 
   // 프로필 데이터 불러오기
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const userData = await fetchCall<UserProfile>(`/api/v1/users`, "get");
-        console.log(userData.data.data);
+        const userData = await fetchCall<UserProfileData>(`/api/v1/users`, "get");
 
         if (profileCheck) {
-          const data = await fetchCall<UserProfile>(
+          const data = await fetchCall<UserProfileData>(
             `/api/v1/users/${userId}/profile`,
             "get",
           );

@@ -1,3 +1,5 @@
+import { number, string } from "zod";
+
 interface User {
   userId: number;
   username: string;
@@ -106,9 +108,8 @@ export interface TravelPlan {
   continent: string;
   region: string;
   accommodationFee: number;
-  transportationFee: number;
   airplaneFee: number;
-  foodFee: number;
+  otherExpenses: number;
   limitMaxAge: number;
   limitMinAge: number;
   limitSex: string;
@@ -129,9 +130,8 @@ export const RecruitMockData: TravelPlan[] = [
     continent: "ASIA",
     region: "도쿄",
     accommodationFee: 500000,
-    transportationFee: 100000,
+    otherExpenses: 100000,
     airplaneFee: 400000,
-    foodFee: 200000,
     limitMaxAge: 60,
     limitMinAge: 20,
     limitSex: "UNRELATED",
@@ -268,10 +268,9 @@ export const RecruitMockData: TravelPlan[] = [
     travelCountry: "JP",
     continent: "ASIA",
     region: "도쿄",
-    accommodationFee: 500000,
-    transportationFee: 100000,
+    otherExpenses: 500000,
     airplaneFee: 400000,
-    foodFee: 200000,
+    accommodationFee: 200000,
     limitMaxAge: 60,
     limitMinAge: 20,
     limitSex: "UNRELATED",
@@ -401,6 +400,7 @@ export const RecruitMockData: TravelPlan[] = [
 ];
 
 export interface Review {
+  userId: string;
   postId: string;
   reviewId: string;
   continent: string;
@@ -429,6 +429,7 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/gangneung1.jpg" },
       { fileAddress: "/images/gangneung2.jpg" },
     ],
+    userId: "",
   },
   {
     postId: "2",
@@ -443,6 +444,7 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/paris1.jpg" },
       { fileAddress: "/images/paris2.jpg" },
     ],
+    userId: "",
   },
   {
     postId: "3",
@@ -456,6 +458,7 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/nyc1.jpg" },
       { fileAddress: "/images/nyc2.jpg" },
     ],
+    userId: "",
   },
   {
     postId: "4",
@@ -470,6 +473,7 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/sydney1.jpg" },
       { fileAddress: "/images/sydney2.jpg" },
     ],
+    userId: "",
   },
   {
     postId: "5",
@@ -484,6 +488,7 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/cairo1.jpg" },
       { fileAddress: "/images/cairo2.jpg" },
     ],
+    userId: "",
   },
   {
     postId: "6",
@@ -498,5 +503,46 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/rio1.jpg" },
       { fileAddress: "/images/rio2.jpg" },
     ],
+    userId: "",
+  },
+];
+
+export interface participations {
+  participationId: number;
+  postId: number;
+  userId: string;
+  ParticipationStatus: string;
+  DepositStatus: string;
+  RatingStatus: string;
+  depositReturnDate: Date | null;
+}
+
+export const ParticipationsData: participations[] = [
+  {
+    participationId: 1,
+    postId: 1,
+    userId: "1",
+    ParticipationStatus: "JOIN",
+    DepositStatus: "DEPOSIT_PAID",
+    RatingStatus: "NOT_RATED",
+    depositReturnDate: null,
+  },
+  {
+    participationId: 2,
+    postId: 2,
+    userId: "2",
+    ParticipationStatus: "PENDING",
+    DepositStatus: "DEPOSIT_PENDING",
+    RatingStatus: "NOT_RATED",
+    depositReturnDate: null,
+  },
+  {
+    participationId: 3,
+    postId: 3,
+    userId: "3",
+    ParticipationStatus: "CANCELLED",
+    DepositStatus: "DEPOSIT_REFUNDED",
+    RatingStatus: "RATED",
+    depositReturnDate: new Date("2023-12-15"),
   },
 ];

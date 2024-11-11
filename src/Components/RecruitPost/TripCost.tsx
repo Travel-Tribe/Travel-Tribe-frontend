@@ -11,7 +11,7 @@ export default function TripCost({ travelPlan }: TripCostProps) {
     return (
       travelPlan.accommodationFee +
       travelPlan.airplaneFee +
-      travelPlan.transportationFee
+      travelPlan.otherExpenses
     );
   };
 
@@ -40,7 +40,7 @@ export default function TripCost({ travelPlan }: TripCostProps) {
               <div className="flex flex-col">
                 <span className="text-sm text-gray-500">기타비용</span>
                 <span className="text-sm">
-                  {travelPlan?.transportationFee.toLocaleString()}원
+                  {travelPlan?.otherExpenses.toLocaleString()}원
                 </span>
               </div>
             </div>

@@ -13,17 +13,35 @@ export const reviewHandlers = [
     );
   }),
   // 후기 목록 조회
-  http.get("/api/v1/reviews", async () => {
-    const responseData = ReviewData.map(review => ({
-      postId: review.postId,
-      reviewId: review.reviewId,
-      continent: review.continent,
-      country: review.country,
-      region: review.region,
-      title: review.title,
-      contents: review.contents,
-      fileAddress: review.files[0]?.fileAddress || null, // 첫 번째 파일 주소 또는 null
-    }));
+  http.get("/api/v1/reviews", async ({ request }) => {
+    const url = new URL(request.url);
+    const title = url.searchParams.get("title");
+    const content = url.searchParams.get("content");
+    const continent = url.searchParams.get("continent");
+    const country = url.searchParams.get("country");
+    const userId = url.searchParams.get("userId");
+
+    const responseData = ReviewData
+      .filter(review => {
+        return (
+          (title ? review.title.includes(title) : true) &&
+          (content ? review.contents.includes(content) : true) &&
+          (continent ? review.continent === continent : true) &&
+          (country ? review.country === country : true) &&
+          (userId ? review.userId === userId : true)
+        );
+      })
+      .map(review => ({
+        userId: review.userId,
+        postId: review.postId,
+        reviewId: review.reviewId,
+        continent: review.continent,
+        country: review.country,
+        region: review.region,
+        title: review.title,
+        contents: review.contents,
+        fileAddress: review.files[0]?.fileAddress || null,
+      }));
     console.log("responseData", responseData);
     return HttpResponse.json({ reviews: ReviewData }, { status: 201 });
   }),
