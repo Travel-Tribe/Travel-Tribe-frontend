@@ -1,15 +1,25 @@
 import { useState, useEffect } from "react";
 import fetchCall from "../../Utils/apiFetch";
 import Rating from "./Rating";
+import { Participations, ParticipationsData } from "../../mocks/mockData";
+import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 
 interface TravelPlan {
-  id: string;
+  postId: string;
   title: string;
   travelStartDate: string;
   travelEndDate: string;
   maxParticipants: number;
   travelCountry: string;
   deadline: string;
+  participation: Participations[];
+}
+
+interface participantion {
+  participationId: number;
+  postId: number;
+  userId: string;
+  ParticipationStatus: string;
 }
 
 const MyCompletedTrips = (): JSX.Element => {
@@ -22,20 +32,40 @@ const MyCompletedTrips = (): JSX.Element => {
     const travelEndDate = new Date(info.travelEndDate);
     return travelEndDate < today;
   });
+  const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+
+  // 참여 데이터에서 현재 userId와 동일한 데이터의 postId들을 배열로 가져오기
+  // const userPostIds = ParticipationsData.filter(
+  //   participation => participation.userId === userId,
+  // ).map(participation => participation.postId);
+  // console.log(userPostIds);
+  const fetchCompletedTrips = async () => {
+    try {
+      const response = await fetchCall<{ post: TravelPlan[] }>(
+        `/api/v1/posts`,
+        "get",
+      );
+      console.log(response.data.content);
+      setTravelInfos(response.data.content);
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
+
+  const fetchParticipation = async (postId: string) => {
+    console.log(postId);
+    try {
+      const response = await fetchCall<participantion[]>(
+        `/api/v1/posts/${postId}/participations`,
+        "get",
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchCompletedTrips = async () => {
-      try {
-        const response = await fetchCall<{ post: TravelPlan[] }>(
-          `/api/v1/posts`,
-          "get",
-        );
-        console.log(response);
-        setTravelInfos(response.data.content);
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-      }
-    };
     fetchCompletedTrips();
   }, []);
 
@@ -60,10 +90,13 @@ const MyCompletedTrips = (): JSX.Element => {
             const travelEndDay = new Date(info.travelEndDate).getDay();
 
             return (
-              <li key={info.id} className="list-none">
+              <li key={info.postId} className="list-none">
                 <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">
                   <div className="flex justify-between">
-                    <h3 className="text-xl mt-2.5 ml-2.5">{info.title}</h3>
+                    <h3 className="text-xl mt-2.5 ml-2.5">
+                      {info.title}
+                      {info.postId}
+                    </h3>
                   </div>
                   <div className="flex items-center m-2.5 space-x-8 justify-between">
                     <div className="flex items-center space-x-4">
@@ -80,7 +113,10 @@ const MyCompletedTrips = (): JSX.Element => {
                     </div>
                     <button
                       className="btn btn-sm rounded-md"
-                      onClick={() => setActiveModalIndex(index)}
+                      onClick={() => {
+                        setActiveModalIndex(index);
+                        fetchParticipation(info.postId);
+                      }}
                     >
                       평점 주기
                     </button>
