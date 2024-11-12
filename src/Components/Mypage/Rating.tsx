@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
+import fetchCall from "../../Utils/apiFetch";
 import profileImg from "../../assets/profileImg.webp";
 
 interface RatingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  participants: number;
+  participants: string[];
+}
+
+interface UserProfile {
+  nickname: string;
+  fileAddress: string;
 }
 
 const Rating: React.FC<RatingModalProps> = ({
@@ -13,13 +19,55 @@ const Rating: React.FC<RatingModalProps> = ({
   participants,
 }): JSX.Element | null => {
   const [ratings, setRatings] = useState<number[]>([]);
+  const [userProfiles, setUserProfiles] = useState<{
+    [key: string]: UserProfile;
+  }>({});
+
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const profile = await fetchCall<{ fileAddress: "" }>(
+        `/api/v1/users/${userId}/profile`,
+        "get",
+      );
+      const userData = await fetchCall<{ nickname: string }>(
+        `/api/v1/users/${userId}`,
+        "get",
+      );
+      return {
+        nickname: userData.data.data.nickname,
+        fileAddress: profile.data.fileAddress || profileImg,
+      };
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+      return { nickname: "Unknown", fileAddress: profileImg };
+    }
+  };
+
+  // 각 userId에 대해 닉네임과 fileAddress를 가져와 userProfiles 상태 업데이트
+  const fetchUserProfiles = async () => {
+    const profiles = await Promise.all(
+      participants.map(async userId => {
+        const profile = await fetchUserProfile(userId);
+        return { userId, profile };
+      }),
+    );
+
+    const profileMap = profiles.reduce(
+      (acc, { userId, profile }) => {
+        acc[userId] = profile;
+        return acc;
+      },
+      {} as { [key: string]: UserProfile },
+    );
+    setUserProfiles(profileMap);
+  };
 
   useEffect(() => {
-    // participants 수에 맞게 ratings 배열 초기화
-    setRatings(Array(participants).fill(0.0));
+    setRatings(Array(participants.length).fill(0.0));
+    fetchUserProfiles();
   }, [participants]);
 
-  console.log(participants);
+  console.log(userProfiles);
 
   const handleRatingChange = (index: number, value: number) => {
     const newRatings = [...ratings];
@@ -43,28 +91,42 @@ const Rating: React.FC<RatingModalProps> = ({
           </button>
         </div>
         <div className="space-y-4">
-          {ratings.map((rating, index) => (
-            <div key={index} className="flex items-center justify-between">
-              <div className="flex items-center justify-center">
-                <img className="w-12 h-12 rounded-full" src={profileImg} />
-                <span className="ml-5 w-[200px] truncate">닉네임</span>
+          {ratings.map((rating, index) => {
+            const userId = participants[index];
+            const profile = userProfiles[userId] || {
+              nickname: "Unknown",
+              fileAddress: profileImg,
+            };
+
+            return (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center justify-center">
+                  <img
+                    className="w-12 h-12 rounded-full"
+                    src={profile.fileAddress}
+                    alt="User profile"
+                  />
+                  <span className="ml-5 w-[200px] truncate">
+                    {profile.nickname}
+                  </span>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-gray-700 mr-2.5">평점</span>
+                  <input
+                    type="number"
+                    value={rating}
+                    min={0}
+                    max={5}
+                    step={0.5}
+                    onChange={e =>
+                      handleRatingChange(index, parseFloat(e.target.value))
+                    }
+                    className="w-16 border border-gray-300 rounded p-1 text-center"
+                  />
+                </div>
               </div>
-              <div className="flex items-center">
-                <span className="text-gray-700 mr-2.5">평점</span>
-                <input
-                  type="number"
-                  value={rating}
-                  min={0}
-                  max={5}
-                  step={0.5}
-                  onChange={e =>
-                    handleRatingChange(index, parseFloat(e.target.value))
-                  }
-                  className="w-16 border border-gray-300 rounded p-1 text-center"
-                />
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <button
           className="mt-6 btn border border-custom-green bg-white w-full hover:bg-custom-green hover:text-white"
