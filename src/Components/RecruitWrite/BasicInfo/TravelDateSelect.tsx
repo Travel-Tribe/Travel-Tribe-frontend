@@ -10,8 +10,11 @@ const TravelDateSelect = React.memo(() => {
     state => state.postData.travelEndDate,
   );
   const deadline = useRecruitPostStore(state => state.postData.deadline);
+  const startYear = travelStartDate.split("-")[0];
   const currentYear = new Date().getFullYear();
-  const nextYear = currentYear + 1;
+  const years = Array.from({
+    length: Math.abs(Number(currentYear) - Number(startYear) + 2),
+  }).map((_, i) => i + Number(startYear));
 
   const getDaysInMonth = useCallback((year: number, month: number) => {
     const days = [];
@@ -44,8 +47,13 @@ const TravelDateSelect = React.memo(() => {
             )
           }
         >
-          <option value={currentYear}>{currentYear}</option>
-          <option value={nextYear}>{nextYear}</option>
+          {years.map(year => {
+            return (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            );
+          })}
         </select>
         년
         <select
@@ -95,9 +103,13 @@ const TravelDateSelect = React.memo(() => {
             )
           }
         >
-          <option value={0}>선택</option>
-          <option value={currentYear}>{currentYear}</option>
-          <option value={nextYear}>{nextYear}</option>
+          {years.map(year => {
+            return (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            );
+          })}
         </select>
         년
         <select
@@ -147,9 +159,13 @@ const TravelDateSelect = React.memo(() => {
             )
           }
         >
-          <option value={0}>선택</option>
-          <option value={currentYear}>{currentYear}</option>
-          <option value={nextYear}>{nextYear}</option>
+          {years.map(year => {
+            return (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            );
+          })}
         </select>
         년
         <select

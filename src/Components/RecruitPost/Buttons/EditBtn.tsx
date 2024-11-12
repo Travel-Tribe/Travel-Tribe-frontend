@@ -1,17 +1,21 @@
 import { useNavigate } from "react-router-dom";
+import { TravelPlan } from "../../../mocks/mockData";
+import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
+import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 interface ButtonProps {
   postId?: number;
   userId?: number;
+  travelPlan: TravelPlan;
 }
 
-export default function EditBtn({ postId, userId }: ButtonProps) {
+export default function EditBtn({ postId, userId, travelPlan }: ButtonProps) {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem("USER_ID");
-  // console.log("작성자ID:", userId);
-  // console.log("현재 사용자:", currentUserId);
+  const currentUserId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+  const { setTravelData } = useRecruitPostStore();
 
   const handleEdit = () => {
+    setTravelData(travelPlan);
     navigate(`/recruitment/edit/:${postId}`);
   };
 

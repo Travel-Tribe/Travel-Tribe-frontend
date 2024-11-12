@@ -1,15 +1,35 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
 import { useRecruitPostStore } from "../../store/recruitPostStore";
 
 const Btns = React.memo((): JSX.Element => {
   const navigate = useNavigate();
-  const { postData } = useRecruitPostStore();
+  const { id } = useParams();
+  const { postData, clearTravelData } = useRecruitPostStore();
+  const formData = new FormData();
+
+  Object.entries(postData).forEach(([key, value]) => {
+    if (key !== "userId" && key !== "postId") {
+      if (typeof value === "object") {
+        // 배열이나 객체는 JSON 문자열로 변환
+        formData.append(key, JSON.stringify(value));
+      } else {
+        // 그 외 값은 문자열로 변환
+        formData.append(key, String(value));
+      }
+    }
+  });
 
   const onClickPostData = async () => {
     try {
-      const data = await fetchCall("/api/v1/posts", "post", postData);
+      let data;
+      if (id) {
+        data = await fetchCall(`/api/v1/posts/${id}`, "put", formData);
+      } else {
+        data = await fetchCall("/api/v1/posts", "post", formData);
+      }
+
       if (data.status === 201) {
         navigate("/recruitment");
       }
@@ -27,9 +47,16 @@ const Btns = React.memo((): JSX.Element => {
     >
       <div className="invisible ml-[10px]"></div>
       <div className="mr-[10px]">
+        <button
+          className="btn w-[130px] h-[35px] bg-custom-blue text-white mr-[30px]"
+          onClick={clearTravelData}
+        >
+          글 초기화
+        </button>
         <Link
           to={"/recruitment"}
           className="btn w-[130px] h-[35px] bg-custom-pink text-white mr-[30px]"
+          onClick={clearTravelData}
         >
           취소하기
         </Link>
