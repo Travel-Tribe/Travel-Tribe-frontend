@@ -1,19 +1,28 @@
 import React from "react";
-import { useTravelData } from "../../Hooks/useTravelData";
-import { TripCost, TripDetails, TripRules } from "../RecruitPost";
+import {
+  TripCost,
+  TripDetails,
+  // TripItinerary,
+  TripRules,
+} from "../RecruitPost";
+import { useRecruitPostStore } from "../../store/recruitPostStore";
 
 const Preview = React.memo((): JSX.Element => {
-  const { travelData } = useTravelData();
+  const { postData } = useRecruitPostStore();
+
   return (
     <div className="px-[10px] pt-[10px]">
       <div className="mb-[10px]">
-        <TripDetails travelPlan={travelData} />
+        <TripDetails travelPlan={postData} />
       </div>
       <div className="mb-[10px]">
-        {/* <TripCost travelPlan={travelData} /> */}
+        <TripCost travelPlan={postData} />
       </div>
       <div className="mb-[10px]">
-        <TripRules travelPlan={travelData} />
+        <TripRules travelPlan={postData} />
+      </div>
+      <div className="mb-[10px]">
+        {/* <TripItinerary travelPlan={postData} /> */}
       </div>
     </div>
   );

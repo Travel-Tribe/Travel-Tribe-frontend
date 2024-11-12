@@ -1,11 +1,11 @@
 import React from "react";
 import AccommodationFee from "./ExpectMoney/AccommodationFee";
 import AirplaneFee from "./ExpectMoney/AirplaneFee";
-import EctFee from "./ExpectMoney/EctFee";
-import { useTravelData } from "../../Hooks/useTravelData";
+import { useRecruitPostStore } from "../../store/recruitPostStore";
+import OtherExpenses from "./ExpectMoney/OtherExpenses";
 
 const ExpectMoney = React.memo((): JSX.Element => {
-  const { travelData } = useTravelData();
+  const { postData } = useRecruitPostStore();
 
   return (
     <div className="mb-[30px]">
@@ -14,13 +14,13 @@ const ExpectMoney = React.memo((): JSX.Element => {
       <ul className="list-disc pl-4">
         <AccommodationFee />
         <AirplaneFee />
-        <EctFee />
+        <OtherExpenses />
       </ul>
       <p className="text-[18px] mr-2">
-        비용:{" "}
-        {travelData.accommodationFee +
-          travelData.airplaneFee +
-          travelData.ectFee}
+        비용:
+        {postData.accommodationFee +
+          postData.airplaneFee +
+          postData.otherExpenses}
       </p>
     </div>
   );

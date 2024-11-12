@@ -1,87 +1,34 @@
-import { useEffect, useState, useMemo } from "react";
-import React from "react";
-import { useTravelData } from "../../../Hooks/useTravelData";
-
-const getDaysInMonth = (year: number, month: number) => {
-  const days = [];
-  const date = new Date(year, month, 0);
-  const totalDays = date.getDate();
-  for (let day = 1; day <= totalDays; day++) {
-    const dayOfWeek = new Date(year, month - 1, day).toLocaleString("ko-KR", {
-      weekday: "short",
-    });
-    days.push({ day, dayOfWeek });
-  }
-  return days;
-};
+import React, { useCallback } from "react";
+import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const TravelDateSelect = React.memo(() => {
-  const { travelData, updateTravelData } = useTravelData();
+  const updateTravelData = useRecruitPostStore(state => state.updateTravelData);
+  const travelStartDate = useRecruitPostStore(
+    state => state.postData.travelStartDate,
+  );
+  const travelEndDate = useRecruitPostStore(
+    state => state.postData.travelEndDate,
+  );
+  const deadline = useRecruitPostStore(state => state.postData.deadline);
   const currentYear = new Date().getFullYear();
   const nextYear = currentYear + 1;
 
-  const [selectedStartDate, setSelectedStartDate] = useState<{
-    year: number;
-    month: number;
-    day: number;
-  }>({ year: 0, month: 0, day: 0 });
-  const [selectedEndDate, setSelectedEndDate] = useState<{
-    year: number;
-    month: number;
-    day: number;
-  }>({ year: 0, month: 0, day: 0 });
-
-  const [daysInMonth, setDaysInMonth] = useState<
-    { day: number; dayOfWeek: string }[]
-  >([]);
-
-  useEffect(() => {
-    if (travelData.travelStartDate) {
-      const year = parseInt(travelData.travelStartDate.slice(0, 4), 10);
-      const month = parseInt(travelData.travelStartDate.slice(5, 7), 10);
-      setDaysInMonth(getDaysInMonth(year, month));
+  const getDaysInMonth = useCallback((year: number, month: number) => {
+    const days = [];
+    const date = new Date(year, month, 0);
+    const totalDays = date.getDate();
+    for (let day = 1; day <= totalDays; day++) {
+      const dayOfWeek = new Date(year, month - 1, day).toLocaleString("ko-KR", {
+        weekday: "short",
+      });
+      days.push({ day, dayOfWeek });
     }
-  }, [travelData.travelStartDate]);
-
-  const handleDateChange =
-    (key: "year" | "month" | "day", type: "start" | "end") =>
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
-      const value = e.target.value;
-      const [year, month, day] =
-        type === "start"
-          ? travelData.travelStartDate.split("-")
-          : travelData.travelEndDate.split("-");
-
-      const updatedDate =
-        type === "start"
-          ? `${key === "year" ? value : year}-${key === "month" ? value.padStart(2, "0") : month}-${key === "day" ? value.padStart(2, "0") : day}`
-          : `${key === "year" ? value : year}-${key === "month" ? value.padStart(2, "0") : month}-${key === "day" ? value.padStart(2, "0") : day}`;
-
-      updateTravelData(
-        type === "start" ? "travelStartDate" : "travelEndDate",
-        updatedDate,
-      );
-
-      if (type === "start") {
-        setSelectedStartDate({
-          ...selectedStartDate,
-          [key]: value,
-        });
-      } else {
-        setSelectedEndDate({
-          ...selectedEndDate,
-          [key]: value,
-        });
-      }
-    };
-
-  const getDayOptions = useMemo(() => {
-    return daysInMonth.map(day => (
+    return days.map(day => (
       <option key={day.day} value={day.day}>
         {day.day} ({day.dayOfWeek})
       </option>
     ));
-  }, [daysInMonth]);
+  }, []);
 
   return (
     <div>
@@ -89,20 +36,28 @@ const TravelDateSelect = React.memo(() => {
         <p className="text-[18px] mr-2">여행 시작 날짜:</p>
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
-          value={selectedStartDate.year}
-          onChange={handleDateChange("year", "start")}
+          value={travelStartDate.split("-")[0]}
+          onChange={e =>
+            updateTravelData(
+              "travelStartDate",
+              `${e.target.value}-${travelStartDate.split("-")[1]}-${travelStartDate.split("-")[2]}`,
+            )
+          }
         >
-          <option value={0}>선택</option>
           <option value={currentYear}>{currentYear}</option>
           <option value={nextYear}>{nextYear}</option>
         </select>
         년
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
-          value={selectedStartDate.month}
-          onChange={handleDateChange("month", "start")}
+          value={travelStartDate.split("-")[1]}
+          onChange={e =>
+            updateTravelData(
+              "travelStartDate",
+              `${travelStartDate.split("-")[0]}-${e.target.value}-${travelStartDate.split("-")[2]}`,
+            )
+          }
         >
-          <option value={0}>선택</option>
           {[...Array(12).keys()].map(month => (
             <option key={month + 1} value={month + 1}>
               {month + 1}
@@ -112,11 +67,18 @@ const TravelDateSelect = React.memo(() => {
         월
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
-          value={selectedStartDate.day}
-          onChange={handleDateChange("day", "start")}
+          value={travelStartDate.split("-")[2]}
+          onChange={e =>
+            updateTravelData(
+              "travelStartDate",
+              `${travelStartDate.split("-")[0]}-${travelStartDate.split("-")[1]}-${e.target.value}`,
+            )
+          }
         >
-          <option value={0}>선택</option>
-          {getDayOptions}
+          {getDaysInMonth(
+            Number(travelStartDate.split("-")[0]),
+            Number(travelStartDate.split("-")[1]),
+          )}
         </select>
         일
       </div>
@@ -125,8 +87,13 @@ const TravelDateSelect = React.memo(() => {
         <p className="text-[18px] mr-2">여행 종료 날짜:</p>
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
-          value={selectedEndDate.year}
-          onChange={handleDateChange("year", "end")}
+          value={travelEndDate.split("-")[0]}
+          onChange={e =>
+            updateTravelData(
+              "travelEndDate",
+              `${e.target.value}-${travelEndDate.split("-")[1]}-${travelEndDate.split("-")[2]}`,
+            )
+          }
         >
           <option value={0}>선택</option>
           <option value={currentYear}>{currentYear}</option>
@@ -135,10 +102,14 @@ const TravelDateSelect = React.memo(() => {
         년
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
-          value={selectedEndDate.month}
-          onChange={handleDateChange("month", "end")}
+          value={travelEndDate.split("-")[1]}
+          onChange={e =>
+            updateTravelData(
+              "travelEndDate",
+              `${travelEndDate.split("-")[0]}-${e.target.value}-${travelEndDate.split("-")[2]}`,
+            )
+          }
         >
-          <option value={0}>선택</option>
           {[...Array(12).keys()].map(month => (
             <option key={month + 1} value={month + 1}>
               {month + 1}
@@ -148,11 +119,70 @@ const TravelDateSelect = React.memo(() => {
         월
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
-          value={selectedEndDate.day}
-          onChange={handleDateChange("day", "end")}
+          value={travelEndDate.split("-")[2]}
+          onChange={e =>
+            updateTravelData(
+              "travelEndDate",
+              `${travelEndDate.split("-")[0]}-${travelEndDate.split("-")[1]}-${e.target.value}`,
+            )
+          }
+        >
+          {getDaysInMonth(
+            Number(travelEndDate.split("-")[0]),
+            Number(travelEndDate.split("-")[1]),
+          )}
+        </select>
+        일
+      </div>
+
+      <div className="flex items-center mb-2">
+        <p className="text-[18px] mr-2">모집 마감 날짜:</p>
+        <select
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
+          value={deadline.split("-")[0]}
+          onChange={e =>
+            updateTravelData(
+              "deadline",
+              `${e.target.value}-${deadline.split("-")[1]}-${deadline.split("-")[2]}`,
+            )
+          }
         >
           <option value={0}>선택</option>
-          {getDayOptions}
+          <option value={currentYear}>{currentYear}</option>
+          <option value={nextYear}>{nextYear}</option>
+        </select>
+        년
+        <select
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
+          value={deadline.split("-")[1]}
+          onChange={e =>
+            updateTravelData(
+              "deadline",
+              `${deadline.split("-")[0]}-${e.target.value}-${deadline.split("-")[2]}`,
+            )
+          }
+        >
+          {[...Array(12).keys()].map(month => (
+            <option key={month + 1} value={month + 1}>
+              {month + 1}
+            </option>
+          ))}
+        </select>
+        월
+        <select
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
+          value={deadline.split("-")[2]}
+          onChange={e =>
+            updateTravelData(
+              "deadline",
+              `${deadline.split("-")[0]}-${deadline.split("-")[1]}-${e.target.value}`,
+            )
+          }
+        >
+          {getDaysInMonth(
+            Number(deadline.split("-")[0]),
+            Number(deadline.split("-")[1]),
+          )}
         </select>
         일
       </div>

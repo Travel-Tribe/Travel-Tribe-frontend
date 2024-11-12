@@ -1,12 +1,9 @@
 import React from "react";
-import { useTravelData } from "../../../Hooks/useTravelData";
+import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const TitleInput = React.memo(() => {
-  const { travelData, updateTravelData } = useTravelData();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateTravelData("title", e.target.value);
-  };
+  const updateTravelData = useRecruitPostStore(state => state.updateTravelData);
+  const title = useRecruitPostStore(state => state.postData.title);
 
   return (
     <div className="flex items-center mb-2">
@@ -15,8 +12,8 @@ const TitleInput = React.memo(() => {
         type="text"
         placeholder="제목을 입력해주세요."
         className="w-[400px] h-[32px] px-2 truncate border border-gray-300 rounded-sm"
-        value={travelData.title}
-        onChange={handleChange}
+        value={title}
+        onChange={e => updateTravelData("title", e.target.value)}
       />
     </div>
   );
