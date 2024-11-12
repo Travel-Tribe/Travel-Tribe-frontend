@@ -189,8 +189,8 @@ export const RecruitMockData: TravelPlan[] = [
     postId: 1,
     userId: 1,
     title: "도쿄 미식 여행",
-    travelStartDate: "2023-04-01",
-    travelEndDate: "2023-04-03",
+    travelStartDate: "2023-4-1",
+    travelEndDate: "2023-4-3",
     maxParticipants: 6,
     travelCountry: "JP",
     continent: "ASIA",
@@ -202,7 +202,7 @@ export const RecruitMockData: TravelPlan[] = [
     limitMinAge: 20,
     limitSex: "UNRELATED",
     limitSmoke: "NO",
-    deadline: "2023-03-25",
+    deadline: "2023-3-25",
     days: [
       {
         dayDetails: [
@@ -328,8 +328,8 @@ export const RecruitMockData: TravelPlan[] = [
     postId: 2,
     userId: 2,
     title: "도쿄 미식 여행",
-    travelStartDate: "2023-04-01",
-    travelEndDate: "2023-04-03",
+    travelStartDate: "2023-4-1",
+    travelEndDate: "2023-4-3",
     maxParticipants: 3,
     travelCountry: "JP",
     continent: "ASIA",
@@ -341,7 +341,7 @@ export const RecruitMockData: TravelPlan[] = [
     limitMinAge: 20,
     limitSex: "UNRELATED",
     limitSmoke: "NO",
-    deadline: "2023-03-25",
+    deadline: "2023-3-25",
     days: [
       {
         dayDetails: [

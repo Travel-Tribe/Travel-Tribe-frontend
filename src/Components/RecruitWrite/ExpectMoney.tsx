@@ -18,9 +18,12 @@ const ExpectMoney = React.memo((): JSX.Element => {
       </ul>
       <p className="text-[18px] mr-2">
         비용:
-        {postData.accommodationFee +
+        {(
+          postData.accommodationFee +
           postData.airplaneFee +
-          postData.otherExpenses}
+          postData.otherExpenses
+        ).toLocaleString()}
+        만원
       </p>
     </div>
   );

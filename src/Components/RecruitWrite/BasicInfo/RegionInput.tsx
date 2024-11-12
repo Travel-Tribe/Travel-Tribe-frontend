@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CreatableSelect from "react-select/creatable";
 import { MultiValue } from "react-select";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
@@ -10,7 +10,11 @@ interface CityOption {
 
 const RegionInput = React.memo((): JSX.Element => {
   const [cities, setCities] = useState<string[]>([]);
-  const { updateTravelData } = useRecruitPostStore();
+  const { updateTravelData, postData } = useRecruitPostStore();
+
+  useEffect(() => {
+    if (postData.region) setCities(postData.region.split(" "));
+  }, []);
 
   const handleOnItemAdded = (newValue: MultiValue<CityOption>) => {
     if (!newValue) return;

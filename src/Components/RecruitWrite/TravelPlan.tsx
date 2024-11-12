@@ -21,7 +21,11 @@ const TravelPlan = React.memo((): JSX.Element => {
     }));
 
     setDays(newDays);
-  }, [postData.travelStartDate, postData.travelEndDate]);
+
+    if (postData.days[0]) {
+      setDays(postData.days);
+    }
+  }, []);
 
   const handleAddDaySchedule = useCallback(
     (dayIndex: number) => {

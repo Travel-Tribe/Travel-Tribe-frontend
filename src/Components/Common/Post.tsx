@@ -10,7 +10,7 @@ const Post = React.memo(({ plan }: PostProps): JSX.Element => {
   return (
     <div className="mb-[20px]">
       <Link
-        to={`/recruitment/${plan.userId}`}
+        to={`/recruitment/${plan.postId}`}
         key={plan.userId}
         className="w-[300px] h-[290px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
       >
