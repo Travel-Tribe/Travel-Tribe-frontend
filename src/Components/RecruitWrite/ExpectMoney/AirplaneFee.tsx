@@ -1,21 +1,18 @@
 import React from "react";
-import { useTravelData } from "../../../Hooks/useTravelData";
+import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const AirplaneFee = React.memo((): JSX.Element => {
-  const { travelData, updateTravelData } = useTravelData();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateTravelData("airplaneFee", Number(e.target.value));
-  };
+  const updateTravelData = useRecruitPostStore(state => state.updateTravelData);
+  const airplaneFee = useRecruitPostStore(state => state.postData.airplaneFee);
 
   return (
     <li className="mb-[10px]">
       <p className="text-[18px] mr-2">항공비:</p>
       <input
         type="text"
-        value={travelData.airplaneFee}
+        value={airplaneFee}
         className="border border-gray-300 rounded-sm w-[100px] px-2 text-[16px]"
-        onChange={handleChange}
+        onChange={e => updateTravelData("airplaneFee", Number(e.target.value))}
       />
     </li>
   );
