@@ -98,8 +98,8 @@ interface Day {
 
 // 여행 계획 정보
 export interface TravelPlan {
-  postId: number;
-  userId: number;
+  postId?: number;
+  userId?: number;
   title: string;
   travelStartDate: string; // "YYYY-MM-DD"
   travelEndDate: string; // "YYYY-MM-DD"

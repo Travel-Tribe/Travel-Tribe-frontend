@@ -1,12 +1,19 @@
 import React, { useState } from "react";
-import { useTravelData } from "../../../Hooks/useTravelData";
 import CreatableSelect from "react-select/creatable";
+import { MultiValue } from "react-select";
+import { useRecruitPostStore } from "../../../store/recruitPostStore";
+
+interface CityOption {
+  label: string;
+  value: string;
+}
 
 const RegionInput = React.memo((): JSX.Element => {
   const [cities, setCities] = useState<string[]>([]);
-  const { updateTravelData } = useTravelData();
+  const { updateTravelData } = useRecruitPostStore();
 
-  const handleOnItemAdded = (newValue: any) => {
+  const handleOnItemAdded = (newValue: MultiValue<CityOption>) => {
+    if (!newValue) return;
     const newCity = newValue.map(item => item.value);
     setCities(newCity);
     updateTravelData("region", newCity.join(" "));

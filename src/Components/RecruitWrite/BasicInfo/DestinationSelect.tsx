@@ -1,12 +1,11 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { COUNTRY_DATA } from "../../../Constants/COUNTRY_DATA";
-import { useTravelData } from "../../../Hooks/useTravelData";
 import { mappingContinent } from "../../../Utils/mappingContinent";
 import { mappingCountry } from "../../../Utils/mappingCountry";
+import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const DestinationSelect = React.memo(() => {
-  const { updateTravelData } = useTravelData();
-
+  const updateTravelData = useRecruitPostStore(state => state.updateTravelData);
   const [continent, setContinent] = useState<string>("선택");
   const [country, setCountry] = useState<string>("선택");
 

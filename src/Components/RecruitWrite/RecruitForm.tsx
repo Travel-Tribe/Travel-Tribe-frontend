@@ -3,11 +3,8 @@ import BasicInfo from "./BasicInfo";
 import CrewCondition from "./CrewCondition";
 import ExpectMoney from "./ExpectMoney";
 import TravelPlan from "./TravelPlan";
-import { useTravelData } from "../../Hooks/useTravelData";
 
 const RecruitForm = React.memo((): JSX.Element => {
-  const { travelData } = useTravelData();
-  console.log(travelData);
   return (
     <div
       className="w-[90%] min-w-[512px] mt-[30px] mx-auto overflow-y-scroll"
