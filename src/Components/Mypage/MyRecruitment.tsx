@@ -13,6 +13,12 @@ interface TravelPlan {
   deadline: string;
 }
 
+interface TravelPlanResponse {
+  data: {
+    post: TravelPlan[];
+  };
+}
+
 const MyRecruitment = (): JSX.Element => {
   const navigate = useNavigate();
   const week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -24,19 +30,21 @@ const MyRecruitment = (): JSX.Element => {
     const fetchMyRecruitData = async () => {
       try {
         if (userId) {
-          const response = await fetchCall<TravelPlan[]>(
+          const response = await fetchCall<TravelPlanResponse>(
             `/api/v1/posts`,
             "get",
           );
           const today = new Date();
 
           // travelEndDate가 현재보다 미래인 여행 계획만 필터링합니다.
-          const filteredPlans = response.data.post.filter((plan) => {
-            const travelStartDate = new Date(plan.travelStartDate);
-            return travelStartDate >= today;
-          });
-
-          setRecruitDataList(filteredPlans);
+          if (response.data?.post) {
+            const filteredPlans = response.data.post.filter(plan => {
+              const travelStartDate = new Date(plan.travelStartDate);
+              return travelStartDate >= today;
+            });
+            setRecruitDataList(filteredPlans);
+            console.log(filteredPlans);
+          }
         } else {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
         }
