@@ -1,10 +1,6 @@
-import {
-  GoogleMap,
-  Polyline,
-  useLoadScript,
-  Libraries,
-} from "@react-google-maps/api";
-import { useCallback, useState, useEffect, useRef } from "react";
+import { GoogleMap, Polyline, InfoWindow } from "@react-google-maps/api";
+import { useState, useEffect, useRef } from "react";
+import { useGoogleMaps } from "../../../Hooks/useGoogleMaps";
 
 interface ItineraryVisit {
   latitude: number;
@@ -26,8 +22,8 @@ const containerStyle = {
 };
 
 const defaultCenter = {
-  lat: 35.6762, // 도쿄 중심
-  lng: 139.6503,
+  lat: 37.5665, // 서울 중심
+  lng: 126.978,
 };
 
 const mapOptions = {
@@ -37,34 +33,6 @@ const mapOptions = {
   mapTypeId: "roadmap",
   gestureHandling: "cooperative",
   mapId: import.meta.env.VITE_GOOGLE_MAPS_ID_WITH_LABELOFF,
-};
-
-// 필요한 라이브러리만 로드
-const libraries: Libraries = ["marker", "geometry"] as const;
-
-// MarkerPool 클래스 정의
-const MarkerPool = {
-  pool: [] as google.maps.marker.AdvancedMarkerElement[],
-
-  acquire(position: google.maps.LatLngLiteral, content: HTMLElement) {
-    let marker: google.maps.marker.AdvancedMarkerElement;
-    if (this.pool.length > 0) {
-      marker = this.pool.pop()!;
-      marker.position = position;
-      marker.content = content;
-    } else {
-      marker = new google.maps.marker.AdvancedMarkerElement({
-        position,
-        content,
-      });
-    }
-    return marker;
-  },
-
-  release(marker: google.maps.marker.AdvancedMarkerElement) {
-    marker.map = null;
-    this.pool.push(marker);
-  },
 };
 
 // 마커 콘텐츠 생성 함수
@@ -83,71 +51,48 @@ const DayMap = ({ visits, dayDetails }: DayMapProps) => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
 
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? "",
-    preventGoogleFontsLoading: true,
-    libraries,
-  });
+  const { isLoaded, loadError } = useGoogleMaps();
 
   const pathCoordinates = visits.map(point => ({
     lat: point.latitude,
     lng: point.longitude,
   }));
 
-  // 마커 업데이트 함수
-  const updateMarkers = useCallback(() => {
-    if (!map) return;
+  // 마커 생성 및 관리
+  useEffect(() => {
+    if (!map || !visits.length) return;
 
     // 기존 마커 해제
     markersRef.current.forEach(marker => {
-      MarkerPool.release(marker);
+      marker.map = null;
     });
     markersRef.current = [];
 
     // 새 마커 생성
     visits.forEach((point, index) => {
-      const content = createMarkerElement(point.orderNumber, () =>
-        setSelectedIndex(index),
-      );
+      const marker = new google.maps.marker.AdvancedMarkerElement({
+        position: { lat: point.latitude, lng: point.longitude },
+        content: createMarkerElement(point.orderNumber, () =>
+          setSelectedIndex(index),
+        ),
+        map: map,
+      });
 
-      const marker = MarkerPool.acquire(
-        { lat: point.latitude, lng: point.longitude },
-        content,
-      );
-
-      marker.map = map;
       markersRef.current.push(marker);
     });
-  }, [map, visits]);
 
-  // 지도 로드 핸들러
-  const onMapLoad = useCallback((map: google.maps.Map) => {
-    setMap(map);
-  }, []);
+    const bounds = new window.google.maps.LatLngBounds();
+    visits.forEach(point => {
+      bounds.extend({ lat: point.latitude, lng: point.longitude });
+    });
+    map.fitBounds(bounds);
 
-  // 마커 업데이트 effect
-  useEffect(() => {
-    updateMarkers();
-  }, [updateMarkers]);
-
-  // cleanup effect
-  useEffect(() => {
+    // cleanup
     return () => {
       markersRef.current.forEach(marker => {
-        MarkerPool.release(marker);
+        marker.map = null;
       });
     };
-  }, []);
-
-  // 지도 로드 후 방문 지점들이 모두 보이도록 bounds 설정
-  useEffect(() => {
-    if (map && visits.length > 0) {
-      const bounds = new window.google.maps.LatLngBounds();
-      visits.forEach(point => {
-        bounds.extend({ lat: point.latitude, lng: point.longitude });
-      });
-      map.fitBounds(bounds);
-    }
   }, [map, visits]);
 
   // 로딩 및 에러 상태 처리
@@ -165,29 +110,13 @@ const DayMap = ({ visits, dayDetails }: DayMapProps) => {
     );
   }
 
-  if (!visits || visits.length === 0) {
-    return (
-      <div className="card bg-base-100 shadow-xl w-full h-60 flex items-center justify-center">
-        <div className="text-base-content/60">방문 장소가 없습니다</div>
-      </div>
-    );
-  }
-
-  if (!isLoaded) {
-    return (
-      <div className="card bg-base-100 shadow-xl w-full h-60 flex items-center justify-center">
-        <div className="text-base-content/60">지도를 불러오는 중...</div>
-      </div>
-    );
-  }
-
   return (
     <div>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={defaultCenter}
         zoom={13}
-        onLoad={onMapLoad}
+        onLoad={setMap}
         options={mapOptions}
       >
         {/* 방문 지점을 잇는 선 */}
@@ -204,24 +133,27 @@ const DayMap = ({ visits, dayDetails }: DayMapProps) => {
 
         {/* 선택된 장소 정보 표시 */}
         {selectedIndex !== null && (
-          <div className="absolute bottom-4 left-4 card bg-base-100 shadow-xl">
-            <div className="card-body p-4">
-              <h3 className="card-title text-sm">
-                {dayDetails[selectedIndex]?.title}
+          <InfoWindow
+            position={{
+              lat: visits[selectedIndex].latitude,
+              lng: visits[selectedIndex].longitude,
+            }}
+            onCloseClick={() => setSelectedIndex(null)}
+            options={{
+              pixelOffset: new google.maps.Size(0, -35),
+              disableAutoPan: true,
+              maxWidth: 200,
+            }}
+          >
+            <div className="p-2">
+              <h3 className="font-bold text-sm mb-1">
+                {dayDetails[selectedIndex].title}
               </h3>
-              <p className="text-xs">
-                {dayDetails[selectedIndex]?.description}
+              <p className="text-xs text-gray-600">
+                {dayDetails[selectedIndex].description}
               </p>
-              <div className="card-actions justify-end mt-2">
-                <button
-                  className="btn btn-xs btn-ghost"
-                  onClick={() => setSelectedIndex(null)}
-                >
-                  닫기
-                </button>
-              </div>
             </div>
-          </div>
+          </InfoWindow>
         )}
       </GoogleMap>
     </div>

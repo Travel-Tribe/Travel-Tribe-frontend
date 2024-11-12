@@ -1,6 +1,7 @@
 import Location from "../../assets/icons/location.svg";
 import { TravelPlan } from "../../mocks/mockData";
 import { mappingCountry } from "../../Utils/mappingCountry";
+import CountryMap from "./TripMap/CountryMap";
 
 interface TravelDetailsProps {
   travelPlan?: TravelPlan;
@@ -8,8 +9,9 @@ interface TravelDetailsProps {
 
 export default function TripDetails({ travelPlan }: TravelDetailsProps) {
   const travelCountry = travelPlan?.travelCountry
-    ? mappingCountry(travelPlan?.travelCountry, "en")
-    : travelPlan?.travelCountry;
+    ? mappingCountry(travelPlan?.travelCountry, "en") ||
+      travelPlan?.travelCountry
+    : "";
 
   return (
     <div className="card bg-base-100 border">
@@ -34,8 +36,8 @@ export default function TripDetails({ travelPlan }: TravelDetailsProps) {
                 </span>
               </div>
             </div>
-            <div className="w-60 h-40 rounded-xl bg-gray-200 flex items-center justify-center">
-              국가지도
+            <div className="w-60 h-40 rounded-xl overflow-hidden">
+              {travelCountry && <CountryMap country={travelCountry} />}
             </div>
           </div>
         </div>
