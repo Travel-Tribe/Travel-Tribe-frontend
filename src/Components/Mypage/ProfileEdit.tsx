@@ -7,45 +7,19 @@ import CreatableSelect from "react-select/creatable";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import SelectBox from "../Common/SelectBox";
 import { MBTI } from "../../Constants/MBTI";
+import { useProfileStore } from "../../store/profileStore";
 
-
-
-interface UserProfileData {
-  data: UserProfile;
-}
-
-interface UserProfile {
-  introduction: string;
-  mbti: string;
-  nickname: string;
-  smoking: string;
-  gender: string;
-  birth: string;
-  fileAddress: string;
-  visitedCountries: string[];
-  langAbilities: string[];
-  phone: string;
-}
-
-interface User {
-  nickname: string;
-  phone: string;
+interface UserDataResponse {
+  data: {
+    data: {
+      nickname: string;
+      phone: string;
+    };
+  };
 }
 
 const ProfileEdit = (): JSX.Element => {
-  const [profileData, setProfileData] = useState<UserProfile>({
-    introduction: "",
-    nickname: "",
-    mbti: "",
-    smoking: "",
-    gender: "",
-    birth: "",
-    fileAddress: "",
-    langAbilities: [] as string[],
-    visitedCountries: [] as string[],
-    phone: "",
-  });
-
+  const { profileData, setProfileData, updateProfileField } = useProfileStore();
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const profileCheck =
     localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) === "true";
@@ -59,28 +33,25 @@ const ProfileEdit = (): JSX.Element => {
   });
 
   const navigate = useNavigate();
-
   const animatedComponents = makeAnimated();
 
   const handleVisitedCountriesChange = (newValue: unknown) => {
     if (Array.isArray(newValue)) {
-      setProfileData(prev => ({
-        ...prev,
+      setProfileData({
         visitedCountries: newValue.map(
           option => (option as { value: string }).value,
         ),
-      }));
+      });
     }
   };
 
   const handleLangAbilitiesChange = (newValue: unknown) => {
     if (Array.isArray(newValue)) {
-      setProfileData(prev => ({
-        ...prev,
+      setProfileData({
         langAbilities: newValue.map(
           option => (option as { value: string }).value,
         ),
-      }));
+      });
     }
   };
 
@@ -88,14 +59,16 @@ const ProfileEdit = (): JSX.Element => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const userData = await fetchCall<UserProfileData>(`/api/v1/users`, "get");
+        const userData = await fetchCall<UserDataResponse>(
+          `/api/v1/users`,
+          "get",
+        );
 
         if (profileCheck) {
-          const data = await fetchCall<UserProfileData>(
+          const data = await fetchCall<UserDataResponse>(
             `/api/v1/users/${userId}/profile`,
             "get",
           );
-
           setProfileData({
             ...data.data,
             nickname: userData.data.data.nickname,
@@ -119,23 +92,14 @@ const ProfileEdit = (): JSX.Element => {
   // 프로필 업데이트
   const profileUpdate = async () => {
     try {
-      if (userId) {
-        const updatedData = await fetchCall<UserProfile>(
-          `/api/v1/users/${userId}/profile`,
-          "patch",
-          { ...profileData },
-        );
-        const response = await fetchCall<User>(`/api/v1/users/info`, "patch", {
-          nickname: profileData.nickname,
-          phone: profileData.phone,
-        });
-        setProfileData(updatedData);
-        console.log("Updated profile data:", {
-          ...profileData,
-          nickname: profileData.nickname,
-          phone: profileData.phone,
-        });
-      }
+      // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
+      await fetchCall(`/api/v1/users/${userId}/profile`, "patch", {
+        ...profileData,
+      });
+      await fetchCall(`/api/v1/users/info`, "patch", {
+        nickname: profileData.nickname,
+        phone: profileData.phone,
+      });
     } catch (error) {
       console.error("Error updating profile data:", error);
     }
@@ -146,20 +110,19 @@ const ProfileEdit = (): JSX.Element => {
     const file = event.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setProfileData(prev => ({ ...prev, fileAddress: imageUrl }));
+      updateProfileField("fileAddress", imageUrl);
     }
   };
 
   // 닉네임 유효성 검사 및 중복 체크
   const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setProfileData(prev => ({ ...prev, nickname: value }));
-
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
-      setError("특수문자를 사용할 수 없습니다.");
-    } else {
-      setError("");
-    }
+    updateProfileField("nickname", value);
+    setError(
+      /[!@#$%^&*(),.?":{}|<>]/.test(value)
+        ? "특수문자를 사용할 수 없습니다."
+        : "",
+    );
   };
 
   const handleNicknameDuplicate = async (
@@ -171,11 +134,11 @@ const ProfileEdit = (): JSX.Element => {
     setSuccess("");
 
     try {
-      const response = await fetchCall(
+      const response = await fetchCall<{data: boolean}>(
         `/api/v1/users/duplicate?type=nickname&query=${encodeURIComponent(profileData.nickname)}`,
         "post",
       );
-      console.log(response.data);
+
       if (response.data) {
         setError("이미 사용 중인 닉네임입니다");
         setValidationStatus({ isChecking: false, isAvailable: false });
@@ -194,19 +157,18 @@ const ProfileEdit = (): JSX.Element => {
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const value = event.target.value;
-    setProfileData(prev => ({ ...prev, introduction: value }));
+    updateProfileField("introduction", value);
   };
 
   // 생년월일, 성별, 흡연 여부, MBTI 업데이트
   const handleBirthChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setProfileData(prev => ({ ...prev, birth: event.target.value }));
+    updateProfileField("birth", event.target.value);
   const handleGenderChange = (gender: string) =>
-    setProfileData(prev => ({ ...prev, gender }));
+    updateProfileField("gender", gender);
   const handleSmokingChange = (smoking: string) =>
-    setProfileData(prev => ({ ...prev, smoking }));
+    updateProfileField("smoking", smoking);
   const handleMbtiChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
-    setProfileData(prev => ({ ...prev, mbti: event.target.value }));
-
+    updateProfileField("mbti", event.target.value);
   // 프로필 저장
   const handleUpdateProfile = async () => {
     await profileUpdate();

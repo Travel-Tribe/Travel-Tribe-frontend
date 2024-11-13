@@ -27,28 +27,25 @@ const MyCompletedTrips = (): JSX.Element => {
   const today = new Date();
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
   const [travelInfos, setTravelInfos] = useState<TravelPlan[]>([]);
-
+  const [participationUserId, setParticipationUserId] = useState<
+    string[]
+  >([]);
+console.log(participationUserId);
   const completedTrips = travelInfos.filter((info: TravelPlan) => {
     const travelEndDate = new Date(info.travelEndDate);
     return travelEndDate < today;
   });
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
-  // 참여 데이터에서 현재 userId와 동일한 데이터의 postId들을 배열로 가져오기
-  // const userPostIds = ParticipationsData.filter(
-  //   participation => participation.userId === userId,
-  // ).map(participation => participation.postId);
-  // console.log(userPostIds);
   const fetchCompletedTrips = async () => {
     try {
       const response = await fetchCall<{ post: TravelPlan[] }>(
         `/api/v1/posts`,
         "get",
       );
-      console.log(response.data.content);
       setTravelInfos(response.data.content);
     } catch (error) {
-      console.error("Error fetching profile data:", error);
+      console.error("Error fetching participation data:", error);
     }
   };
 
@@ -59,7 +56,10 @@ const MyCompletedTrips = (): JSX.Element => {
         `/api/v1/posts/${postId}/participations`,
         "get",
       );
-      console.log(response.data);
+      const userIds = response.data.map(
+        (participation: { userId: string }) => participation.userId,
+      );
+      setParticipationUserId(userIds);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
@@ -126,7 +126,7 @@ const MyCompletedTrips = (): JSX.Element => {
                   <Rating
                     isOpen={activeModalIndex === index}
                     onClose={() => setActiveModalIndex(null)}
-                    participants={info.maxParticipants}
+                    participants={participationUserId}
                   />
                 )}
               </li>
