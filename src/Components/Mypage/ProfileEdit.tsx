@@ -110,7 +110,7 @@ const ProfileEdit = (): JSX.Element => {
     const file = event.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      updateProfileField("fileAddress", imageUrl);
+     updateProfileField("fileAddress", imageUrl);
     }
   };
 
