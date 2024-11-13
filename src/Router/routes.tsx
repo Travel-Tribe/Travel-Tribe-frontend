@@ -10,7 +10,7 @@ import PrivateRoutes from "../Components/Layout/PrivateRoutes";
 import PublicOnlyRoutes from "../Components/Layout/PublicOnlyRoutes";
 import Layout from "../Components/Layout";
 import { ProfileRequiredRoutes } from "../Components/Layout/ProfileRequiredRoutes";
-// import HomeLayout from "../Components/Layout/HomeLayout";
+import HomeLayout from "../Components/Layout/HomeLayout";
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -59,13 +59,13 @@ const Router = (): JSX.Element => {
           </Route>
 
           {/* 로그인 필요없는 일반 페이지 */}
-          {/* <Route element={<HomeLayout />}> */}
-          {/* </Route> */}
+          <Route element={<HomeLayout />}>
+            <Route path="/review" element={<Review />} />
+            <Route path="/recruitment" element={<Recruitment />} />
+          </Route>
 
           <Route path="/" element={<Navigate to="/recruitment" replace />} />
-          <Route path="/recruitment" element={<Recruitment />} />
           <Route path="/recruitment/:id" element={<RecruitPost />} />
-          <Route path="/review" element={<Review />} />
           <Route path="/review/:id" element={<ReviewPost />} />
           <Route path="*" element={<Error />} />
         </Route>
