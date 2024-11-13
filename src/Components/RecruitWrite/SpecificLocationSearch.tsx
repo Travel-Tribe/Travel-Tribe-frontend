@@ -141,7 +141,7 @@ const SpecificLocationSearch = React.memo(
 
         {options.length > 0 && (
           <select
-            className="w-[400px] truncate text-[12px]"
+            className="w-[300px] truncate text-[12px]"
             onChange={e => handleOptionSelect(e.target.selectedIndex - 1)}
           >
             <option>Select a place</option>

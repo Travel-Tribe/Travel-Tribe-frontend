@@ -2,7 +2,7 @@ import React from "react";
 import {
   TripCost,
   TripDetails,
-  // TripItinerary,
+  TripItinerary,
   TripRules,
 } from "../RecruitPost";
 import { useRecruitPostStore } from "../../store/recruitPostStore";
@@ -22,7 +22,7 @@ const Preview = React.memo((): JSX.Element => {
         <TripRules travelPlan={postData} />
       </div>
       <div className="mb-[10px]">
-        {/* <TripItinerary travelPlan={postData} /> */}
+        <TripItinerary travelPlan={postData} />
       </div>
     </div>
   );

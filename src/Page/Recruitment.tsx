@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import fetchCall from "../Utils/apiFetch";
 import { TravelPlan } from "../mocks/mockData";
 import Post from "../Components/Common/Post";
+import { useRecruitPostStore } from "../store/recruitPostStore";
 
 const Recruitment = React.memo((): JSX.Element => {
   const [recruitData, setRecruitData] = useState<TravelPlan[]>([]);
-
+  const { clearTravelData } = useRecruitPostStore();
   useEffect(() => {
     const getRecruitData = async () => {
       try {
@@ -20,12 +21,13 @@ const Recruitment = React.memo((): JSX.Element => {
       }
     };
     getRecruitData();
+    clearTravelData();
   }, []);
 
   return (
     <div className="flex flex-wrap gap-[35px]">
       {recruitData.map(plan => (
-        <Post key={plan.userId} plan={plan} />
+        <Post key={plan.postId} plan={plan} />
       ))}
     </div>
   );

@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { TravelPlan } from "../mocks/mockData";
+import { RecruitMockData, TravelPlan } from "../mocks/mockData";
+import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 
 interface RecruitPostType {
   postData: TravelPlan;
@@ -8,14 +9,17 @@ interface RecruitPostType {
     value: number | string | unknown[] | void,
   ) => void;
   setTravelData: (data: TravelPlan) => void;
+  clearTravelData: () => void;
 }
 
 export const useRecruitPostStore = create<RecruitPostType>(set => ({
   postData: {
+    userId: Number(localStorage.getItem(STORAGE_KEYS.USER_ID)),
+    postId: RecruitMockData.length + 1,
     title: "",
-    travelStartDate: `${new Date().getFullYear()}-01-01`,
-    travelEndDate: `${new Date().getFullYear()}-01-01`,
-    deadline: `${new Date().getFullYear()}-01-01`,
+    travelStartDate: `${new Date().getFullYear()}-1-1`,
+    travelEndDate: `${new Date().getFullYear()}-1-1`,
+    deadline: `${new Date().getFullYear()}-1-1`,
     maxParticipants: 1,
     travelCountry: "",
     continent: "",
@@ -37,4 +41,27 @@ export const useRecruitPostStore = create<RecruitPostType>(set => ({
       },
     })),
   setTravelData: data => set({ postData: data }),
+  clearTravelData: () =>
+    set({
+      postData: {
+        userId: Number(localStorage.getItem(STORAGE_KEYS.USER_ID)),
+        postId: RecruitMockData.length + 1,
+        title: "",
+        travelStartDate: `${new Date().getFullYear()}-1-1`,
+        travelEndDate: `${new Date().getFullYear()}-1-1`,
+        deadline: `${new Date().getFullYear()}-1-1`,
+        maxParticipants: 1,
+        travelCountry: "",
+        continent: "",
+        region: "",
+        accommodationFee: 0,
+        otherExpenses: 0,
+        airplaneFee: 0,
+        limitMaxAge: 1,
+        limitMinAge: 1,
+        limitSex: "UNRELATED",
+        limitSmoke: "UNRELATED",
+        days: [],
+      },
+    }),
 }));
