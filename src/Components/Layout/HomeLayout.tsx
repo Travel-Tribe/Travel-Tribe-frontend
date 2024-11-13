@@ -45,6 +45,14 @@ const HomeLayout = () => {
     setMbti(event.target.value);
   };
 
+  const handleClickReset = () => {
+    setSelectedContinent("선택");
+    setSelectedCountry("선택");
+    setCity("");
+    setMbti("선택");
+    setSearch("");
+  };
+
   return (
     <div className="max-w-[1347px] min-w-[540px] w-full mx-auto px-[20px] gap-[50px]">
       <div className="flex space-x-4 mb-[30px]">
@@ -97,6 +105,13 @@ const HomeLayout = () => {
             onSelect={e => handleMbti(e)}
           />
         )}
+
+        <button
+          className="btn btn-sm !h-[32px] bg-custom-green text-white"
+          onClick={handleClickReset}
+        >
+          초기화
+        </button>
       </div>
       <div className="flex justify-between items-center">
         <SearchBar value={search} setValue={setSearch} />
