@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import fetchCall from "../../Utils/apiFetch";
 import Rating from "./Rating";
-import { Participations, ParticipationsData } from "../../mocks/mockData";
+import { Participations } from "../../mocks/mockData";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 
 interface TravelPlan {
