@@ -53,7 +53,6 @@ const MyTravelHistory: FC = () => {
         "get",
       );
       const reviews = reviewResponse.data.reviews;
-
       const travelInfosWithDates = await Promise.all(
         reviews.map(async review => {
           const travelResponse = await fetchCall<TravelDatesResponse>(
