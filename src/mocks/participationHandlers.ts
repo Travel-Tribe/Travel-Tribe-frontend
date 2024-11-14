@@ -12,7 +12,6 @@ export const participationHandlers = [
       participationId: participation.participationId,
       postId: participation.postId,
       userId: participation.userId,
-      ParticipationStatus: participation.ParticipationStatus,
     }));
 
     return HttpResponse.json(response, { status: 200 });

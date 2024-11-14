@@ -20,7 +20,7 @@ export const reviewHandlers = [
     const continent = url.searchParams.get("continent");
     const country = url.searchParams.get("country");
     const userId = url.searchParams.get("userId");
-
+    console.log(userId);
     const responseData = ReviewData
       .filter(review => {
         return (
@@ -43,7 +43,7 @@ export const reviewHandlers = [
         fileAddress: review.files[0]?.fileAddress || null,
       }));
     console.log("responseData", responseData);
-    return HttpResponse.json({ reviews: ReviewData }, { status: 201 });
+    return HttpResponse.json({ reviews: responseData }, { status: 201 });
   }),
 
   // 후기 글 등록

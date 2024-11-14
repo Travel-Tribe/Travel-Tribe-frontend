@@ -495,7 +495,7 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/gangneung1.jpg" },
       { fileAddress: "/images/gangneung2.jpg" },
     ],
-    userId: "",
+    userId: "1",
   },
   {
     postId: "2",
@@ -510,7 +510,7 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/paris1.jpg" },
       { fileAddress: "/images/paris2.jpg" },
     ],
-    userId: "",
+    userId: "1",
   },
   {
     postId: "3",
@@ -524,7 +524,7 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/nyc1.jpg" },
       { fileAddress: "/images/nyc2.jpg" },
     ],
-    userId: "",
+    userId: "3",
   },
   {
     postId: "4",
