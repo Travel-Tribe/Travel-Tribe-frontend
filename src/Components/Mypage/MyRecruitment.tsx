@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
+import { mappingCountry } from "../../Utils/mappingCountry";
 
 interface TravelPlan {
   id: string;
@@ -15,7 +16,7 @@ interface TravelPlan {
 
 interface TravelPlanResponse {
   data: {
-    post: TravelPlan[];
+    content: TravelPlan;
   };
 }
 
@@ -36,14 +37,13 @@ const MyRecruitment = (): JSX.Element => {
           );
           const today = new Date();
 
-          // travelEndDate가 현재보다 미래인 여행 계획만 필터링합니다.
-          if (response.data?.post) {
-            const filteredPlans = response.data.post.filter(plan => {
+          // travelStartDate가 현재보다 미래인 여행 계획만 필터링합니다.
+          if (response.data?.content) {
+            const filteredPlans = response.data.content.filter(plan => {
               const travelStartDate = new Date(plan.travelStartDate);
               return travelStartDate >= today;
             });
             setRecruitDataList(filteredPlans);
-            console.log(filteredPlans);
           }
         } else {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
@@ -54,7 +54,7 @@ const MyRecruitment = (): JSX.Element => {
     };
     fetchMyRecruitData();
   }, [userId]);
-
+  // console.log(mappingCountry());
   const clickRecruitForm = () => {
     navigate("/recruitment/write");
   };
@@ -86,6 +86,9 @@ const MyRecruitment = (): JSX.Element => {
             const startDayOfWeek =
               week[new Date(plan.travelStartDate).getDay()];
             const endDayOfWeek = week[new Date(plan.travelEndDate).getDay()];
+            // 매핑된 국가 이름을 travelCountry에 할당
+            const travelCountry =
+              mappingCountry(plan.travelCountry, "en") || plan.travelCountry;
 
             return (
               <li key={plan.id} className="list-none">
@@ -98,7 +101,7 @@ const MyRecruitment = (): JSX.Element => {
                   </div>
                   <div className="flex items-center m-2.5 space-x-8">
                     <div className=" bg-custom-red  max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
-                      <span className="truncate">{plan.travelCountry}</span>
+                      <span className="truncate">{travelCountry}</span>
                     </div>
                     <span className="">참여인원 0/{plan.maxParticipants}</span>
                     <span className="">
