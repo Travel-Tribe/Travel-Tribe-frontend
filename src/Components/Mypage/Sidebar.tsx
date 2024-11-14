@@ -84,7 +84,7 @@ const Sidebar = (): JSX.Element => {
   }, [location.pathname]);
 
   return (
-    <aside className="w-[400px] h-screen p-5 bg-white drop-shadow-lg">
+    <aside className="w-[400px] h-screen sticky top-0 p-5 bg-white drop-shadow-lg">
       <h1 className="text-4xl font-bold">
         <Link to="/">여행족</Link>
       </h1>
