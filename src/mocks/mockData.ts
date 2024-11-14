@@ -777,4 +777,13 @@ export const ParticipationsData: Participations[] = [
     RatingStatus: "NOT_RATED",
     depositReturnDate: null,
   },
+  {
+    participationId: 7,
+    postId: 3,
+    userId: "4",
+    ParticipationStatus: "TRAVEL_FINISHED",
+    DepositStatus: "DEPOSIT_PAID",
+    RatingStatus: "NOT_RATED",
+    depositReturnDate: null,
+  },
 ];
