@@ -14,6 +14,7 @@ interface TravelPlan {
   continent: string;
   deadline: string;
   participantsCount: number;
+  userId: string;
 }
 
 interface TravelPlanResponse {
@@ -45,12 +46,13 @@ const MyRecruitment = (): JSX.Element => {
           );
           const today = new Date();
 
-          // travelStartDate가 현재보다 미래인 여행 계획만 필터링합니다.
-
-          const filteredPlans = response.data.content.filter((plan: { travelStartDate: string | number | Date; }) => {
-            const travelStartDate = new Date(plan.travelStartDate);
-            return travelStartDate >= today;
-          });
+          // travelStartDate가 현재보다 미래이고, userId가 동일한 여행 계획만 필터링합니다.
+          const filteredPlans = response.data.content.filter(
+            (plan: TravelPlan) => {
+              const travelStartDate = new Date(plan.travelStartDate);
+              return travelStartDate >= today && plan.userId == userId;
+            },
+          );
 
           const plansWithParticipants = await Promise.all(
             filteredPlans.map(async (plan: { postId: any }) => {
@@ -74,9 +76,20 @@ const MyRecruitment = (): JSX.Element => {
     };
     fetchMyRecruitData();
   }, [userId]);
-  
 
-  
+  const fetchDeleteParticipation = async (postId: string) => {
+    try {
+      await fetchCall(`api/v1/posts/${postId}/participations`, "delete");
+      setRecruitDataList(prev => prev.filter(plan => plan.postId !== postId)); // Update state to remove the deleted item
+      console.log(`Participation for postId ${postId} deleted successfully.`);
+    } catch (error) {
+      console.error(
+        `Error deleting participation for postId ${postId}:`,
+        error,
+      );
+    }
+  };
+
   const clickRecruitForm = () => {
     navigate("/recruitment/write");
   };
@@ -114,45 +127,51 @@ const MyRecruitment = (): JSX.Element => {
 
             return (
               <li key={plan.postId} className="list-none">
-                <Link to={`/recruitment/${plan.postId}`}>
-                  <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">
-                    <div className="flex justify-between">
-                      <h3 className=" text-xl mt-2.5 ml-2.5">{plan.title}</h3>
-                      <span className=" text-base mt-2.5 mr-2.5">
-                        마감 {remainingDays}일 전
+                <div
+                  className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg cursor-pointer"
+                  onClick={() => navigate(`/recruitment/${plan.postId}`)}
+                >
+                  <div className="flex justify-between">
+                    <h3 className="text-xl mt-2.5 ml-2.5">{plan.title}</h3>
+                    <span className="text-base mt-2.5 mr-2.5">
+                      마감 {remainingDays}일 전
+                    </span>
+                  </div>
+                  <div className="flex justify-between ">
+                    <div className="flex items-center m-2.5 space-x-8">
+                      <div className="bg-custom-red max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
+                        <span className="truncate">{travelCountry}</span>
+                      </div>
+                      <span>
+                        참여인원 {plan.participantsCount}/{plan.maxParticipants}
+                      </span>
+                      <span>
+                        {plan.travelStartDate}({startDayOfWeek}) ~{" "}
+                        {plan.travelEndDate}({endDayOfWeek})
                       </span>
                     </div>
-                    <div className="flex justify-between ">
-                      <div className="flex items-center m-2.5 space-x-8">
-                        <div className=" bg-custom-red  max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
-                          <span className="truncate">{travelCountry}</span>
+                    <div className="flex space-x-2.5 items-center m-2.5">
+                      {plan.participantsCount !== plan.maxParticipants ? (
+                        <div className="bg-white text-green-500 w-[60px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
+                          모집중
                         </div>
-                        <span className="">
-                          참여인원 {plan.participantsCount}/{plan.maxParticipants}
-                        </span>
-                        <span className="">
-                          {plan.travelStartDate}({startDayOfWeek}) ~{" "}
-                          {plan.travelEndDate}({endDayOfWeek})
-                        </span>
-                      </div>
-                      <div className="flex space-x-2.5 items-center m-2.5">
-                        {plan.participantsCount !== plan.maxParticipants ? (
-                          <div className="bg-white text-green-500  w-[60px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                            모집중
-                          </div>
-                        ) : (
-                          // <div className="bg-white border border-red-500 text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                          <div className="bg-white text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                            모집 완료
-                          </div>
-                        )}
-                        <button className="btn btn-xs bg-red-500 text-white rounded-md text-center hover:bg-custom-pink-hover">
-                          취소하기
-                        </button>
-                      </div>
+                      ) : (
+                        <div className="bg-white text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
+                          모집 완료
+                        </div>
+                      )}
+                      <button
+                        className="btn btn-xs bg-red-500 text-white rounded-md text-center hover:bg-custom-pink-hover z-10"
+                        onClick={e => {
+                          e.stopPropagation();
+                          fetchDeleteParticipation(plan.postId);
+                        }}
+                      >
+                        취소하기
+                      </button>
                     </div>
                   </div>
-                </Link>
+                </div>
               </li>
             );
           })}
