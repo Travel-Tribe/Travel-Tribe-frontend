@@ -1,73 +1,48 @@
 import React, { useState, useEffect } from "react";
 import fetchCall from "../../Utils/apiFetch";
+import { useProfileStore } from "../../store/profileStore";
 import profileImg from "../../assets/profileImg.webp";
 
 interface RatingModalProps {
   isOpen: boolean;
   onClose: () => void;
   participants: string[];
-}
-
-interface UserProfile {
-  nickname: string;
-  fileAddress: string;
+  postId: string;
 }
 
 const Rating: React.FC<RatingModalProps> = ({
   isOpen,
   onClose,
   participants,
+  postId,
 }): JSX.Element | null => {
   const [ratings, setRatings] = useState<number[]>([]);
-  const [userProfiles, setUserProfiles] = useState<{
-    [key: string]: UserProfile;
-  }>({});
+  const { userProfiles, fetchParticipantsProfiles } = useProfileStore();
 
-  const fetchUserProfile = async (userId: string) => {
+  const handleRatingSubmit = async () => {
     try {
-      const profile = await fetchCall<{ fileAddress: "" }>(
-        `/api/v1/users/${userId}/profile`,
-        "get",
+      // 각 userId와 평점을 서버로 전송
+      await Promise.all(
+        participants.map((userId, index) => {
+          const rating = ratings[index];
+          return fetchCall(`api/v1/posts/${postId}/rating`, "post", {
+            receiverUserId: userId,
+            score: rating,
+          });
+        }),
       );
-      const userData = await fetchCall<{ nickname: string }>(
-        `/api/v1/users/${userId}`,
-        "get",
-      );
-      return {
-        nickname: userData.data.data.nickname,
-        fileAddress: profile.data.fileAddress || profileImg,
-      };
+      console.log("평점이 서버에 전송되었습니다:", ratings);
+      alert("평점이 저장되었습니다.");
+      onClose();
     } catch (error) {
-      console.error("Error fetching profile data:", error);
-      return { nickname: "Unknown", fileAddress: profileImg };
+      console.error("Error submitting ratings:", error);
     }
-  };
-
-  // 각 userId에 대해 닉네임과 fileAddress를 가져와 userProfiles 상태 업데이트
-  const fetchUserProfiles = async () => {
-    const profiles = await Promise.all(
-      participants.map(async userId => {
-        const profile = await fetchUserProfile(userId);
-        return { userId, profile };
-      }),
-    );
-
-    const profileMap = profiles.reduce(
-      (acc, { userId, profile }) => {
-        acc[userId] = profile;
-        return acc;
-      },
-      {} as { [key: string]: UserProfile },
-    );
-    setUserProfiles(profileMap);
   };
 
   useEffect(() => {
     setRatings(Array(participants.length).fill(0.0));
-    fetchUserProfiles();
+    fetchParticipantsProfiles(participants);
   }, [participants]);
-
-  console.log(userProfiles);
 
   const handleRatingChange = (index: number, value: number) => {
     const newRatings = [...ratings];
@@ -97,13 +72,13 @@ const Rating: React.FC<RatingModalProps> = ({
               nickname: "Unknown",
               fileAddress: profileImg,
             };
-
+            const profileImage = profile.fileAddress || profileImg;
             return (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center justify-center">
                   <img
                     className="w-12 h-12 rounded-full"
-                    src={profile.fileAddress}
+                    src={profileImage}
                     alt="User profile"
                   />
                   <span className="ml-5 w-[200px] truncate">
@@ -134,6 +109,7 @@ const Rating: React.FC<RatingModalProps> = ({
             console.log("평점이 저장되었습니다:", ratings);
             alert("평점이 저장되었습니다.");
             onClose();
+            handleRatingSubmit();
           }}
         >
           평점 주기

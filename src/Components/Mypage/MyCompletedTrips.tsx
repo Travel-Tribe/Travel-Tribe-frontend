@@ -19,7 +19,6 @@ interface participantion {
   participationId: number;
   postId: number;
   userId: string;
-  ParticipationStatus: string;
 }
 
 const MyCompletedTrips = (): JSX.Element => {
@@ -27,10 +26,8 @@ const MyCompletedTrips = (): JSX.Element => {
   const today = new Date();
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
   const [travelInfos, setTravelInfos] = useState<TravelPlan[]>([]);
-  const [participationUserId, setParticipationUserId] = useState<
-    string[]
-  >([]);
-console.log(participationUserId);
+  const [participationUserId, setParticipationUserId] = useState<string[]>([]);
+
   const completedTrips = travelInfos.filter((info: TravelPlan) => {
     const travelEndDate = new Date(info.travelEndDate);
     return travelEndDate < today;
@@ -59,6 +56,7 @@ console.log(participationUserId);
       const userIds = response.data.map(
         (participation: { userId: string }) => participation.userId,
       );
+      console.log(userIds);
       setParticipationUserId(userIds);
     } catch (error) {
       console.error("Error fetching profile data:", error);
@@ -93,10 +91,7 @@ console.log(participationUserId);
               <li key={info.postId} className="list-none">
                 <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">
                   <div className="flex justify-between">
-                    <h3 className="text-xl mt-2.5 ml-2.5">
-                      {info.title}
-                      {info.postId}
-                    </h3>
+                    <h3 className="text-xl mt-2.5 ml-2.5">{info.title}</h3>
                   </div>
                   <div className="flex items-center m-2.5 space-x-8 justify-between">
                     <div className="flex items-center space-x-4">
@@ -127,6 +122,7 @@ console.log(participationUserId);
                     isOpen={activeModalIndex === index}
                     onClose={() => setActiveModalIndex(null)}
                     participants={participationUserId}
+                    postId={info.postId}
                   />
                 )}
               </li>
