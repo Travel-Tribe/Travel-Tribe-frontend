@@ -31,11 +31,6 @@ const MyCompletedTrips = (): JSX.Element => {
     [],
   );
   const [participationUserId, setParticipationUserId] = useState<string[]>([]);
-
-  // const completedTrips = travelInfos.filter((info: TravelPlan) => {
-  //   const travelEndDate = new Date(info.travelEndDate);
-  //   return travelEndDate < today;
-  // });
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
   const fetchCompletedTrips = async () => {
@@ -83,7 +78,6 @@ const MyCompletedTrips = (): JSX.Element => {
       } else {
         return false;
       }
-      setParticipationUserId(userIds);
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
