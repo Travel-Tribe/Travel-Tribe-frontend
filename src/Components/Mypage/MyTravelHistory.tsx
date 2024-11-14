@@ -1,6 +1,7 @@
 import { FC, useState, useEffect } from "react";
 import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import { mappingCountry } from "../../Utils/mappingCountry";
 
 interface TravelInfo {
   postId: string;
@@ -96,6 +97,9 @@ const MyTravelHistory: FC = () => {
             ? week[new Date(info.travelEndDate).getDay()]
             : "";
 
+          const travelCountry =
+            mappingCountry(info.country, "en") || info.country;
+
           return (
             <li key={info.reviewId} className="list-none">
               <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">
@@ -103,7 +107,7 @@ const MyTravelHistory: FC = () => {
                 <div className="flex items-center m-2.5 space-x-8 justify-between">
                   <div className="flex items-center space-x-4">
                     <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
-                      <span className="truncate">{info.country}</span>
+                      <span className="truncate">{travelCountry}</span>
                     </div>
                     <span>
                       {info.travelStartDate}({startDay}) ~ {info.travelEndDate}(

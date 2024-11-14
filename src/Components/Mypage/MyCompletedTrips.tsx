@@ -3,6 +3,7 @@ import fetchCall from "../../Utils/apiFetch";
 import Rating from "./Rating";
 import { Participations } from "../../mocks/mockData";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import { mappingCountry } from "../../Utils/mappingCountry";
 
 interface TravelPlan {
   postId: string;
@@ -111,6 +112,8 @@ const MyCompletedTrips = (): JSX.Element => {
           {filteredTravelInfos.map((info, index) => {
             const travelStartDay = new Date(info.travelStartDate).getDay();
             const travelEndDay = new Date(info.travelEndDate).getDay();
+            const travelCountry =
+            mappingCountry(info.travelCountry, "en") || info.travelCountry;
 
             return (
               <li key={info.postId} className="list-none">
@@ -121,7 +124,7 @@ const MyCompletedTrips = (): JSX.Element => {
                   <div className="flex items-center m-2.5 space-x-8 justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
-                        <span className="truncate">{info.travelCountry}</span>
+                        <span className="truncate">{travelCountry}</span>
                       </div>
                       <span className="">
                         참여인원 {info.maxParticipants}/{info.maxParticipants}
