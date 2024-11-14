@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import { useProfileStore } from "../../store/profileStore";
 
 import MyRecruitment from "./MyRecruitment";
 import MyTravelJoin from "./MyTravelJoin";
@@ -9,33 +9,8 @@ import profileImg from "../../assets/profileImg.webp";
 import CountryName from "./SideComponents/CountryName";
 import MyLang from "./SideComponents/MyLang";
 
-interface UserProfile {
-  introduction: string;
-  nickname: string;
-  mbti: string;
-  smoking: string;
-  gender: string;
-  birth: string;
-  fileAddress: string;
-  langAbilities: string[];
-  visitedCountries: string[];
-  ratingAvg: null | number;
-}
-
 const MyProfile = (): JSX.Element => {
-  const [profileData, setProfileData] = useState<UserProfile>({
-    introduction: "",
-    nickname: "",
-    mbti: "",
-    smoking: "",
-    gender: "",
-    birth: "",
-    fileAddress: "",
-    langAbilities: [],
-    visitedCountries: [],
-    ratingAvg: null,
-  });
-
+  const { profileData, fetchProfileData } = useProfileStore();
   const mbtiColors: { [key: string]: string } = {
     ISTJ: "bg-istj",
     ISFJ: "bg-isfj",
@@ -59,33 +34,11 @@ const MyProfile = (): JSX.Element => {
   const profileCheck = localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK);
   const navigate = useNavigate();
 
-  const fetchProfileData = async () => {
-    try {
-      const profile = await fetchCall<UserProfile>(
-        `/api/v1/users/${userId}/profile`,
-        "get",
-      );
-      const userData = await fetchCall<{ nickname: string }>(
-        `/api/v1/users`,
-        "get",
-      );
-
-      if (profile && userData) {
-        setProfileData({
-          ...profile.data,
-          nickname: userData.data.data.nickname,
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching user profile data:", error);
-    }
-  };
-
   useEffect(() => {
     if (profileCheck === "false") {
       navigate("/mypage/myProfileEdit");
-    } else {
-      fetchProfileData();
+    } else if(userId) {
+      fetchProfileData(userId);
     }
   }, [profileCheck, navigate, userId]);
 
