@@ -6,18 +6,18 @@ import {
   TripRules,
   TripCost,
   TripItinerary,
-} from "../Components/RecruitPost";
+} from "../Components/RecruitDetail";
 import { useQuery } from "react-query";
 import { TravelPlan } from "../mocks/mockData";
 import fetchCall from "../Utils/apiFetch";
-import EditBtn from "../Components/RecruitPost/Buttons/EditBtn";
-import JoinBtn from "../Components/RecruitPost/Buttons/JoinBtn";
+import EditBtn from "../Components/RecruitDetail/Buttons/EditBtn";
+import JoinBtn from "../Components/RecruitDetail/Buttons/JoinBtn";
 
 interface postResponse {
   data: TravelPlan[];
 }
 
-const RecruitPost = (): JSX.Element => {
+const RecruitDetail = (): JSX.Element => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
@@ -121,4 +121,4 @@ const RecruitPost = (): JSX.Element => {
   );
 };
 
-export default RecruitPost;
+export default RecruitDetail;

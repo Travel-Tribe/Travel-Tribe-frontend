@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import fetchCall from "../Utils/apiFetch";
 import { TravelPlan } from "../mocks/mockData";
-import Post from "../Components/Common/Post";
 import { useRecruitPostStore } from "../store/recruitPostStore";
 import { mappingContinent } from "../Utils/mappingContinent";
 import { mappingCountry } from "../Utils/mappingCountry";
 import { useQuery } from "react-query";
 import debounce from "lodash.debounce";
+import { RecruitmentPost } from "../Components/Post";
 
 interface RecruitmentProps {
   selectedContinent: string;
@@ -104,7 +104,7 @@ const Recruitment = React.memo(
                 ref={isLastElement ? lastElementRef : null}
                 key={plan.postId}
               >
-                <Post plan={plan} />
+                <RecruitmentPost plan={plan} />
               </div>
             );
           })}

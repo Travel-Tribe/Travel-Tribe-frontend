@@ -3,15 +3,18 @@ import { ReviewData, Review } from "./mockData";
 
 export const reviewHandlers = [
   // 후기 조회
-  http.get("/api/v1/posts/:postId/reviews/:reviewId", async ({ params }) => {
-    const postId = params.postId;
-    const reviewId = params.reviewId;
-    console.log("후기 글 불러오기");
-    return HttpResponse.json(
-      ReviewData.find(review => review.reviewId === reviewId),
-      { status: 201 },
-    );
-  }),
+  http.get(
+    "/api/v1/posts/:postId/reviews/:reviewId/view",
+    async ({ params }) => {
+      const postId = params.postId;
+      const reviewId = params.reviewId;
+      console.log("후기 글 불러오기");
+      return HttpResponse.json(
+        ReviewData.find(review => review.reviewId === reviewId),
+        { status: 201 },
+      );
+    },
+  ),
   // 후기 목록 조회
   http.get("/api/v1/reviews", async ({ request }) => {
     const url = new URL(request.url);
@@ -21,27 +24,25 @@ export const reviewHandlers = [
     const country = url.searchParams.get("country");
     const userId = url.searchParams.get("userId");
 
-    const responseData = ReviewData
-      .filter(review => {
-        return (
-          (title ? review.title.includes(title) : true) &&
-          (content ? review.contents.includes(content) : true) &&
-          (continent ? review.continent === continent : true) &&
-          (country ? review.country === country : true) &&
-          (userId ? review.userId === userId : true)
-        );
-      })
-      .map(review => ({
-        userId: review.userId,
-        postId: review.postId,
-        reviewId: review.reviewId,
-        continent: review.continent,
-        country: review.country,
-        region: review.region,
-        title: review.title,
-        contents: review.contents,
-        fileAddress: review.files[0]?.fileAddress || null,
-      }));
+    const responseData = ReviewData.filter(review => {
+      return (
+        (title ? review.title.includes(title) : true) &&
+        (content ? review.contents.includes(content) : true) &&
+        (continent ? review.continent === continent : true) &&
+        (country ? review.country === country : true) &&
+        (userId ? review.userId === userId : true)
+      );
+    }).map(review => ({
+      userId: review.userId,
+      postId: review.postId,
+      reviewId: review.reviewId,
+      continent: review.continent,
+      country: review.country,
+      region: review.region,
+      title: review.title,
+      contents: review.contents,
+      fileAddress: review.files[0]?.fileAddress || null,
+    }));
     console.log("responseData", responseData);
     return HttpResponse.json({ reviews: ReviewData }, { status: 201 });
   }),
