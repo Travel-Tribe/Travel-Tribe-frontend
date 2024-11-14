@@ -149,7 +149,7 @@ const DayMap = ({ visits, dayDetails }: DayMapProps) => {
               <h3 className="font-bold text-sm mb-1">
                 {dayDetails[selectedIndex].title}
               </h3>
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-gray-600 whitespace-pre-line">
                 {dayDetails[selectedIndex].description}
               </p>
             </div>

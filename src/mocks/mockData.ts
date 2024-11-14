@@ -1577,8 +1577,8 @@ export const RecruitMockData: TravelPlan[] = [
   },
 ];
 
-export interface Review {
-  userId: string;
+export interface ReviewTypes {
+  userId: number;
   postId: string;
   reviewId: string;
   continent: string;
@@ -1587,13 +1587,17 @@ export interface Review {
   title: string;
   contents: string;
   files: File[];
+  nickname: string;
+  travelStartDate: string;
+  travelEndDate: string;
+  createDate: string;
 }
 
 interface File {
   fileAddress: string;
 }
 
-export const ReviewData: Review[] = [
+export const ReviewData: ReviewTypes[] = [
   {
     postId: "1",
     reviewId: "1",
@@ -1601,13 +1605,22 @@ export const ReviewData: Review[] = [
     country: "KR",
     region: "강릉",
     title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents:
-      "강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.",
+    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
     files: [
       { fileAddress: "/images/gangneung1.jpg" },
       { fileAddress: "/images/gangneung2.jpg" },
     ],
-    userId: "",
+    userId: 1,
+    nickname: "tester1",
+    travelStartDate: "2022-1-1",
+    travelEndDate: "2022-1-3",
+    createDate: "2022-1-4",
   },
   {
     postId: "2",
@@ -1622,7 +1635,11 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/paris1.jpg" },
       { fileAddress: "/images/paris2.jpg" },
     ],
-    userId: "",
+    userId: 2,
+    nickname: "tester2",
+    travelStartDate: "2022-12-10",
+    travelEndDate: "2022-12-18",
+    createDate: "2022-12-21",
   },
   {
     postId: "3",
@@ -1636,7 +1653,11 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/nyc1.jpg" },
       { fileAddress: "/images/nyc2.jpg" },
     ],
-    userId: "",
+    userId: 3,
+    nickname: "tester3",
+    travelStartDate: "2023-10-15",
+    travelEndDate: "2023-10-30",
+    createDate: "2023-11-10",
   },
   {
     postId: "4",
@@ -1651,7 +1672,11 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/sydney1.jpg" },
       { fileAddress: "/images/sydney2.jpg" },
     ],
-    userId: "",
+    userId: 4,
+    nickname: "tester4",
+    travelStartDate: "2024-5-1",
+    travelEndDate: "2024-5-10",
+    createDate: "2024-5-15",
   },
   {
     postId: "5",
@@ -1666,22 +1691,11 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/cairo1.jpg" },
       { fileAddress: "/images/cairo2.jpg" },
     ],
-    userId: "",
-  },
-  {
-    postId: "6",
-    reviewId: "6",
-    continent: "SOUTH AMERICA",
-    country: "BR",
-    region: "리우데자네이루",
-    title: "삼바의 열정을 느끼다",
-    contents:
-      "리우데자네이루의 해변과 삼바 카니발을 경험하며 남미의 열정을 체험했습니다.",
-    files: [
-      { fileAddress: "/images/rio1.jpg" },
-      { fileAddress: "/images/rio2.jpg" },
-    ],
-    userId: "",
+    userId: 5,
+    nickname: "tester5",
+    travelStartDate: "2024-08-3",
+    travelEndDate: "2024-08-10",
+    createDate: "2024-08-12",
   },
 ];
 

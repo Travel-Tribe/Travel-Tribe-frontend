@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import fetchCall from "../Utils/apiFetch";
-import { TravelPlan } from "../mocks/mockData";
-import Post from "../Components/Common/Post";
+import { ReviewTypes, TravelPlan } from "../mocks/mockData";
 import { mappingContinent } from "../Utils/mappingContinent";
 import { mappingCountry } from "../Utils/mappingCountry";
 import { useQuery } from "react-query";
 import debounce from "lodash.debounce";
+import { ReviewPost } from "../Components/Post";
 
 interface ReviewProps {
   selectedContinent: string;
@@ -36,8 +36,11 @@ const Review = React.memo(
     };
 
     const fetchRecruitData = async () => {
-      const response = await fetchCall(`/api/v1/reviews`, "get");
-      return response.data.content<TravelPlan[]>;
+      const response = await fetchCall(
+        `/api/v1/reviews?${getFilterParams()}`,
+        "get",
+      );
+      return response.data.reviews<TravelPlan[]>;
     };
 
     const debouncedFetchRecruitData = debounce(fetchRecruitData, 500);
@@ -88,15 +91,15 @@ const Review = React.memo(
     return (
       <div className="flex flex-wrap gap-[35px]">
         {reviewData &&
-          reviewData.map((plan: TravelPlan, index: number) => {
+          reviewData.map((review: ReviewTypes, index: number) => {
             // 마지막 요소에 ref를 연결하여 Intersection Observer를 활성화
             const isLastElement = index === reviewData.length - 1;
             return (
               <div
                 ref={isLastElement ? lastElementRef : null}
-                key={plan.postId}
+                key={review.postId}
               >
-                <Post plan={plan} />
+                <ReviewPost review={review} />
               </div>
             );
           })}

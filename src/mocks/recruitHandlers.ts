@@ -12,7 +12,7 @@ export const recruitHandlers = [
         pageSize: 8, // 예: 8
         totalElements: RecruitMockData.length, // 예: 1
         totalPages: Math.ceil(RecruitMockData.length / 8), // 예: 1
-        last: false, // 예: true
+        last: Math.ceil(RecruitMockData.length / 8) === Number(params.num), // 예: true
       },
       { status: 201 },
     );
