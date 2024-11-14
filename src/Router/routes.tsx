@@ -60,8 +60,8 @@ const Router = (): JSX.Element => {
 
           {/* 로그인 필요없는 일반 페이지 */}
           <Route element={<HomeLayout />}>
-            <Route path="/recruitment" element={<Recruitment />} />
             <Route path="/review" element={<Review />} />
+            <Route path="/recruitment" element={<Recruitment />} />
           </Route>
 
           <Route path="/" element={<Navigate to="/recruitment" replace />} />

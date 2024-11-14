@@ -1,12 +1,14 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SearchBar from "../Common/SearchBar";
-import { COUNTRY_DATA } from "../../Constants/COUNTRY_DATA";
 import SelectBox from "../Common/SelectBox";
+import { COUNTRY_DATA } from "../../Constants/COUNTRY_DATA";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { MBTI } from "../../Constants/MBTI";
 import { mappingCountry } from "../../Utils/mappingCountry";
 import { mappingContinent } from "../../Utils/mappingContinent";
+import Recruitment from "../../Page/Recruitment";
+import Review from "../../Page/Review";
 
 const HomeLayout = () => {
   const [selectedTab, setSelectedTab] = useState<"모집" | "후기">("모집");
@@ -20,8 +22,7 @@ const HomeLayout = () => {
 
   useEffect(() => {
     const urlList = location.pathname.split("/");
-    if (urlList.includes("recruitment")) setSelectedTab("모집");
-    else setSelectedTab("후기");
+    setSelectedTab(urlList.includes("recruitment") ? "모집" : "후기");
   }, [location]);
 
   const handleContinentChange = (
@@ -43,6 +44,14 @@ const HomeLayout = () => {
 
   const handleMbti = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setMbti(event.target.value);
+  };
+
+  const handleClickReset = () => {
+    setSelectedContinent("선택");
+    setSelectedCountry("선택");
+    setCity("");
+    setMbti("선택");
+    setSearch("");
   };
 
   return (
@@ -97,6 +106,13 @@ const HomeLayout = () => {
             onSelect={e => handleMbti(e)}
           />
         )}
+
+        <button
+          className="btn btn-sm !h-[32px] bg-custom-green text-white"
+          onClick={handleClickReset}
+        >
+          초기화
+        </button>
       </div>
       <div className="flex justify-between items-center">
         <SearchBar value={search} setValue={setSearch} />
@@ -109,7 +125,22 @@ const HomeLayout = () => {
           </Link>
         )}
       </div>
-      <Outlet />
+      {location.pathname === "/recruitment" ? (
+        <Recruitment
+          selectedContinent={selectedContinent}
+          selectedCountry={selectedCountry}
+          city={city}
+          search={search}
+          mbti={mbti}
+        />
+      ) : (
+        <Review
+          selectedContinent={selectedContinent}
+          selectedCountry={selectedCountry}
+          city={city}
+          search={search}
+        />
+      )}
     </div>
   );
 };

@@ -3,9 +3,19 @@ import { RecruitMockData, TravelPlan } from "./mockData";
 
 export const recruitHandlers = [
   // 모집 글 목록 불러오기
-  http.get("/api/v1/posts", async () => {
+  http.get("/api/v1/posts?page=:num", async ({ params }) => {
     console.log("모집 글 목록 불러오기");
-    return HttpResponse.json({ content: RecruitMockData }, { status: 201 });
+    return HttpResponse.json(
+      {
+        content: RecruitMockData,
+        pageNumber: params.num, // 예: 0
+        pageSize: 8, // 예: 8
+        totalElements: RecruitMockData.length, // 예: 1
+        totalPages: Math.ceil(RecruitMockData.length / 8), // 예: 1
+        last: false, // 예: true
+      },
+      { status: 201 },
+    );
   }),
 
   // 모집 글 상세보기
