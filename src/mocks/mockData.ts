@@ -1,5 +1,3 @@
-import { number, string } from "zod";
-
 interface User {
   userId: number;
   username: string;
@@ -630,3 +628,41 @@ export const ParticipationsData: Participations[] = [
     depositReturnDate: new Date("2023-04-14"),
   },
 ];
+
+// 결제 데이터 인터페이스
+export interface Payment {
+  depositId: string;
+  postId: number;
+  participationId: number;
+  userId: string;
+  amount: number;
+}
+
+export const PaymentsData: Payment[] = [
+  {
+    depositId: "T1234567890",
+    postId: 1,
+    participationId: 1,
+    userId: "1",
+    amount: 10000,
+  },
+  {
+    depositId: "T1234567891",
+    postId: 2,
+    participationId: 2,
+    userId: "3",
+    amount: 10000,
+  },
+  {
+    depositId: "T1234567892",
+    postId: 2,
+    participationId: 3,
+    userId: "4",
+    amount: 10000,
+  },
+];
+
+export const kakaoPayReadyResponse = {
+  depositId: "T1234567893",
+  next_redirect_pc_url: "https://payment-demo.kakaopay.com/online",
+};
