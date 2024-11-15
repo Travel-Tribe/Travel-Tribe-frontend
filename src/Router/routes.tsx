@@ -44,7 +44,10 @@ const Router = (): JSX.Element => {
               {/* 글쓰기 관련 */}
               <Route path="/recruitment/write" element={<RecruitWrite />} />
               <Route path="/recruitment/edit/:id" element={<RecruitWrite />} />
-              <Route path="/review/write" element={<ReviewForm />} />
+              <Route
+                path="/recruitment/:postId/review/write"
+                element={<ReviewForm />}
+              />
               <Route path="/review/edit/:id" element={<ReviewForm />} />
             </Route>
 

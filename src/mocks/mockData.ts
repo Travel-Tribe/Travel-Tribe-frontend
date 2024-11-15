@@ -1,5 +1,3 @@
-import { number, string } from "zod";
-
 interface User {
   userId: number;
   username: string;
@@ -619,6 +617,7 @@ export interface ReviewTypes {
   travelStartDate: string;
   travelEndDate: string;
   createDate: string;
+  participants: string;
 }
 
 interface File {
@@ -632,6 +631,7 @@ export const ReviewData: ReviewTypes[] = [
     continent: "ASIA",
     country: "KR",
     region: "강릉",
+    participants: "4",
     title: "1박 2일 뚜벅이 강릉 여행 후기",
     contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
       강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
