@@ -37,7 +37,7 @@ const DayScheduleCard = ({
 );
 
 export default function TripItinerary({ travelPlan }: TripItineraryProps) {
-  const formatDate = (startDate: string | undefined, dayIndex: number) => {
+  const formatDate = (startDate: string, dayIndex: number) => {
     if (!startDate) return "";
 
     const date = new Date(startDate);

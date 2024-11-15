@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { kakaoPayReadyResponse, PaymentsData } from "./mockData";
+import { PaymentsData } from "./mockData";
 
 // 결제 준비 핸들러
 export const paymentHandlers = [
@@ -15,27 +15,27 @@ export const paymentHandlers = [
 
     console.log("Payment ready request data:", requestData);
 
-    // 새로운 결제 데이터 생성
-    const newPayment = {
-      depositId: kakaoPayReadyResponse.depositId,
-      postId: requestData.postId,
-      participationId: requestData.participationId,
-      userId: "test-user-id", // 테스트용
-      amount: 10000,
-      depositStatus: "UNPAID",
-    };
+    // // 새로운 결제 데이터 생성
+    // const newPayment = {
+    //   depositId: kakaoPayReadyResponse.depositId,
+    //   postId: requestData.postId,
+    //   participationId: requestData.participationId,
+    //   userId: "test-user-id", // 테스트용
+    //   amount: 10000,
+    //   depositStatus: "UNPAID",
+    // };
 
-    // 결제 데이터 저장
-    PaymentsData.push(newPayment);
+    // // 결제 데이터 저장
+    // PaymentsData.push(newPayment);
 
     // API 응답
     const response = {
       postId: requestData.postId,
       participationId: requestData.participationId,
-      depositId: kakaoPayReadyResponse.depositId,
+      depositId: 12345,
       amount: 10000,
       userId: "test-user-id",
-      nextRedirectPcUrl: kakaoPayReadyResponse.next_redirect_pc_url,
+      nextRedirectPcUrl: "https://mockup-kakaopay.com/ready",
     };
 
     return HttpResponse.json(response, { status: 200 });
@@ -59,33 +59,33 @@ export const paymentHandlers = [
         { status: 400 },
       );
     }
-    const payment = PaymentsData.find(
-      p => p.depositId === String(requestData.depositId),
-    );
+    // const payment = PaymentsData.find(
+    //   p => p.depositId === String(requestData.depositId),
+    // );
 
-    if (!payment) {
-      return new HttpResponse(
-        JSON.stringify({
-          status: "FAIL",
-          errorMessage: "결제 정보를 찾을 수 없습니다.",
-        }),
-        { status: 404 },
-      );
-    }
+    // if (!payment) {
+    //   return new HttpResponse(
+    //     JSON.stringify({
+    //       status: "FAIL",
+    //       errorMessage: "결제 정보를 찾을 수 없습니다.",
+    //     }),
+    //     { status: 404 },
+    //   );
+    // }
 
-    // 성공 응답
-    const response = {
-      data: {
-        postId: payment.postId,
-        participationId: payment.participationId,
-        depositId: payment.depositId,
-        amount: payment.amount,
-        paymentMethod: "KAKAOPAY",
-        status: "SUCCESS",
-      },
-    };
+    // // 성공 응답
+    // const response = {
+    //   data: {
+    //     postId: payment.postId,
+    //     participationId: payment.participationId,
+    //     depositId: payment.depositId,
+    //     amount: payment.amount,
+    //     paymentMethod: "KAKAOPAY",
+    //     status: "SUCCESS",
+    //   },
+    // };
 
-    return HttpResponse.json(response, { status: 200 });
+    return HttpResponse.json({ status: 200 });
   }),
 
   // 결제 실패 핸들러
