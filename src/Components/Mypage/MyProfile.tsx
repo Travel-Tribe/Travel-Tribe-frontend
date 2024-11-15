@@ -37,14 +37,17 @@ const MyProfile = (): JSX.Element => {
   useEffect(() => {
     if (profileCheck === "false") {
       navigate("/mypage/myProfileEdit");
-    } else if(userId) {
+    } else if (userId) {
       fetchProfileData(userId);
     }
   }, [profileCheck, navigate, userId]);
 
   const calculateAge = (birthDateString: string): number => {
     const today = new Date();
-    const birthDate = new Date(birthDateString);
+    const birthDate = new Date(String(birthDateString));
+    if (isNaN(birthDate.getTime())) {
+      throw new Error("Invalid date format"); // 유효하지 않은 날짜 형식 처리
+    }
     let age = today.getFullYear() - birthDate.getFullYear();
     if (
       today.getMonth() < birthDate.getMonth() ||
