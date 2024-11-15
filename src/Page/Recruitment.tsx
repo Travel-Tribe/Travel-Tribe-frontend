@@ -23,12 +23,18 @@ const Recruitment = React.memo((): JSX.Element => {
     getRecruitData();
     clearTravelData();
   }, []);
-
+  console.log(recruitData)
   return (
     <div className="flex flex-wrap gap-[35px]">
-      {recruitData.map(plan => (
-        <Post key={plan.postId} plan={plan} />
-      ))}
+      {recruitData &&
+        recruitData?.map((plan: TravelPlan, index: number) => {
+          const isLastElement = index === recruitData.length - 1;
+          return (
+            <div ref={isLastElement ? lastElementRef : null} key={plan.postId}>
+              <RecruitmentPost plan={plan} />
+            </div>
+          );
+        })}
     </div>
   );
 });

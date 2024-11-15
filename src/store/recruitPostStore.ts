@@ -14,8 +14,8 @@ interface RecruitPostType {
 
 export const useRecruitPostStore = create<RecruitPostType>(set => ({
   postData: {
-    userId: Number(localStorage.getItem(STORAGE_KEYS.USER_ID)),
-    postId: RecruitMockData.length + 1,
+    // userId: Number(localStorage.getItem(STORAGE_KEYS.USER_ID)),
+    // postId: RecruitMockData.length + 1,
     title: "",
     travelStartDate: `${new Date().getFullYear()}-1-1`,
     travelEndDate: `${new Date().getFullYear()}-1-1`,
