@@ -110,7 +110,7 @@ const ProfileEdit = (): JSX.Element => {
     const file = event.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-     updateProfileField("fileAddress", imageUrl);
+      updateProfileField("fileAddress", imageUrl);
     }
   };
 
@@ -134,7 +134,7 @@ const ProfileEdit = (): JSX.Element => {
     setSuccess("");
 
     try {
-      const response = await fetchCall<{data: boolean}>(
+      const response = await fetchCall<{ data: boolean }>(
         `/api/v1/users/duplicate?type=nickname&query=${encodeURIComponent(profileData.nickname)}`,
         "post",
       );

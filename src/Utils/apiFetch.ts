@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 
 const API_TOKEN = localStorage.getItem(STORAGE_KEYS.TOKEN);
-
+console.log("Token", API_TOKEN);
 const axiosInstance = axios.create({
   baseURL: "", //import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,

@@ -58,6 +58,7 @@ const Recruitment = React.memo(
 
     const {
       data: recruitData,
+      isLoading,
       isError,
       error,
     } = useQuery({
@@ -70,7 +71,7 @@ const Recruitment = React.memo(
     });
 
     const observer = useRef<IntersectionObserver | null>(null);
-
+    console.log(recruitData);
     // Intersection Observer 설정
     const lastElementRef = useCallback((node: HTMLDivElement | null) => {
       if (observer.current) observer.current.disconnect();
@@ -94,10 +95,14 @@ const Recruitment = React.memo(
       return <>에러 입니다.</>;
     }
 
+    if (isLoading) {
+      return <div>로딩중...</div>;
+    }
+
     return (
       <div className="flex flex-wrap gap-[35px]">
         {recruitData &&
-          recruitData.map((plan: TravelPlan, index: number) => {
+          recruitData?.map((plan: TravelPlan, index: number) => {
             const isLastElement = index === recruitData.length - 1;
             return (
               <div

@@ -6,28 +6,23 @@ import { useRecruitPostStore } from "../../store/recruitPostStore";
 const Btns = React.memo((): JSX.Element => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { postData, clearTravelData } = useRecruitPostStore();
-  const formData = new FormData();
-
-  Object.entries(postData).forEach(([key, value]) => {
-    if (key !== "userId" && key !== "postId") {
-      if (typeof value === "object") {
-        // 배열이나 객체는 JSON 문자열로 변환
-        formData.append(key, JSON.stringify(value));
-      } else {
-        // 그 외 값은 문자열로 변환
-        formData.append(key, String(value));
-      }
-    }
-  });
+  const { clearTravelData } = useRecruitPostStore();
+  const { useId, postID, ...postData } = useRecruitPostStore(
+    state => state.postData,
+  );
 
   const onClickPostData = async () => {
+    console.log(postData);
     try {
       let data;
       if (id) {
-        data = await fetchCall(`/api/v1/posts/${id}`, "put", formData);
+        data = await fetchCall(
+          `/api/v1/posts/${id}`,
+          "put",
+          JSON.stringify(postData),
+        );
       } else {
-        data = await fetchCall("/api/v1/posts", "post", formData);
+        data = await fetchCall("/api/v1/posts", "post", postData);
       }
 
       if (data.status === 201) {
