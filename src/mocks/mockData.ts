@@ -650,85 +650,6 @@ export const ReviewData: ReviewTypes[] = [
     travelEndDate: "2022-1-3",
     createDate: "2022-1-4",
   },
-  {
-    postId: "2",
-    reviewId: "2",
-    continent: "EUROPE",
-    country: "FR",
-    region: "파리",
-    title: "낭만적인 파리 여행기",
-    participants: "4",
-    contents:
-      "에펠탑과 루브르 박물관을 방문했습니다. 파리는 정말 아름다운 도시입니다.",
-    files: [
-      { fileAddress: "/images/paris1.jpg" },
-      { fileAddress: "/images/paris2.jpg" },
-    ],
-    userId: 2,
-    nickname: "tester2",
-    travelStartDate: "2022-12-10",
-    travelEndDate: "2022-12-18",
-    createDate: "2022-12-21",
-  },
-  {
-    postId: "3",
-    reviewId: "3",
-    continent: "NORTH AMERICA",
-    country: "US",
-    region: "뉴욕",
-    title: "뉴욕에서의 하루",
-    participants: "4",
-    contents: "타임스퀘어, 센트럴 파크를 방문하며 뉴욕의 매력을 느꼈습니다.",
-    files: [
-      { fileAddress: "/images/nyc1.jpg" },
-      { fileAddress: "/images/nyc2.jpg" },
-    ],
-    userId: 3,
-    nickname: "tester3",
-    travelStartDate: "2023-10-15",
-    travelEndDate: "2023-10-30",
-    createDate: "2023-11-10",
-  },
-  {
-    postId: "4",
-    reviewId: "4",
-    continent: "OCEANIA",
-    country: "AU",
-    region: "시드니",
-    title: "호주의 자연과 도시를 만나다",
-    participants: "4",
-    contents:
-      "오페라 하우스와 시드니 항구를 둘러보며 호주의 매력을 느꼈습니다.",
-    files: [
-      { fileAddress: "/images/sydney1.jpg" },
-      { fileAddress: "/images/sydney2.jpg" },
-    ],
-    userId: 4,
-    nickname: "tester4",
-    travelStartDate: "2024-5-1",
-    travelEndDate: "2024-5-10",
-    createDate: "2024-5-15",
-  },
-  {
-    postId: "5",
-    reviewId: "5",
-    continent: "AFRICA",
-    country: "EG",
-    region: "카이로",
-    title: "피라미드의 신비를 찾아서",
-    participants: "4",
-    contents:
-      "카이로에서 피라미드를 방문하며 고대 이집트의 역사에 감탄했습니다.",
-    files: [
-      { fileAddress: "/images/cairo1.jpg" },
-      { fileAddress: "/images/cairo2.jpg" },
-    ],
-    userId: 5,
-    nickname: "tester5",
-    travelStartDate: "2024-08-3",
-    travelEndDate: "2024-08-10",
-    createDate: "2024-08-12",
-  },
 ];
 
 export interface Participations {
@@ -840,7 +761,7 @@ export const PaymentsData: Payment[] = [
   },
 ];
 
-export const kakaoPayReadyResponse = {
-  depositId: "T1234567893",
-  next_redirect_pc_url: "https://payment-demo.kakaopay.com/online",
-};
+// export const kakaoPayReadyResponse = {
+//   depositId: "T1234567893",
+//   next_redirect_pc_url: "https://payment-demo.kakaopay.com/online",
+// };
