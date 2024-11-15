@@ -1,33 +1,23 @@
 import React from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useRevalidator } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
 import { useRecruitPostStore } from "../../store/recruitPostStore";
+import StateManagedSelect from "react-select";
 
 const Btns = React.memo((): JSX.Element => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { postData, clearTravelData } = useRecruitPostStore();
-  const formData = new FormData();
+  const { clearTravelData } = useRecruitPostStore();
 
-  Object.entries(postData).forEach(([key, value]) => {
-    if (key !== "userId" && key !== "postId") {
-      if (typeof value === "object") {
-        // 배열이나 객체는 JSON 문자열로 변환
-        formData.append(key, JSON.stringify(value));
-      } else {
-        // 그 외 값은 문자열로 변환
-        formData.append(key, String(value));
-      }
-    }
-  });
+  const { useId, postID, ...postData } = useRecruitPostStore(state =>  state.postData);
 
   const onClickPostData = async () => {
     try {
       let data;
       if (id) {
-        data = await fetchCall(`/api/v1/posts/${id}`, "put", formData);
+        data = await fetchCall(`/api/v1/posts/${id}`, "put", postData);
       } else {
-        data = await fetchCall("/api/v1/posts", "post", formData);
+        data = await fetchCall("/api/v1/posts", "post", JSON.stringify(postData));
       }
 
       if (data.status === 201) {
@@ -41,9 +31,9 @@ const Btns = React.memo((): JSX.Element => {
   return (
     <div
       className="
-				fixed bottom-0 left-0 w-[50%] min-w-[600px] max-w-[50%] h-[80px] 
-				shadow-[0_4px_18px_rgba(0,0,0,0.25)] bg-white
-				flex items-center justify-between"
+                fixed bottom-0 left-0 w-[50%] min-w-[600px] max-w-[50%] h-[80px] 
+                shadow-[0_4px_18px_rgba(0,0,0,0.25)] bg-white
+                flex items-center justify-between"
     >
       <div className="invisible ml-[10px]"></div>
       <div className="mr-[10px]">

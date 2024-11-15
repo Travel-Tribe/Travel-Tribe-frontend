@@ -63,7 +63,7 @@ const ProfileEdit = (): JSX.Element => {
           `/api/v1/users`,
           "get",
         );
-
+        console.log(userData);
         if (profileCheck) {
           const data = await fetchCall<UserDataResponse>(
             `/api/v1/users/${userId}/profile`,
@@ -93,9 +93,15 @@ const ProfileEdit = (): JSX.Element => {
   const profileUpdate = async () => {
     try {
       // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
-      await fetchCall(`/api/v1/users/${userId}/profile`, "patch", {
-        ...profileData,
-      });
+      await fetchCall(
+        `/api/v1/users/profile`,
+        localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) === "true"
+          ? "patch"
+          : "post",
+        {
+          ...profileData,
+        },
+      );
       await fetchCall(`/api/v1/users/info`, "patch", {
         nickname: profileData.nickname,
         phone: profileData.phone,
@@ -110,7 +116,7 @@ const ProfileEdit = (): JSX.Element => {
     const file = event.target.files?.[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-     updateProfileField("fileAddress", imageUrl);
+      updateProfileField("fileAddress", imageUrl);
     }
   };
 
@@ -134,12 +140,12 @@ const ProfileEdit = (): JSX.Element => {
     setSuccess("");
 
     try {
-      const response = await fetchCall<{data: boolean}>(
+      const response = await fetchCall<{ data: boolean }>(
         `/api/v1/users/duplicate?type=nickname&query=${encodeURIComponent(profileData.nickname)}`,
-        "post",
+        "get",
       );
-
-      if (response.data) {
+      console.log(response);
+      if (!response.data) {
         setError("이미 사용 중인 닉네임입니다");
         setValidationStatus({ isChecking: false, isAvailable: false });
       } else {
