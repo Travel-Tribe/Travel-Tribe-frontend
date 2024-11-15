@@ -13,37 +13,36 @@ export const participationHandlers = [
       postId: participation.postId,
       userId: participation.userId,
     }));
-
+    console.log("Participations found:", response);
     return HttpResponse.json(response, { status: 200 });
   }),
 
   // 참여 신청
-  http.post(
-    "/api/v1/posts/:postId/participations",
-    async ({ request, params }) => {
-      let currentParticipationId = ParticipationsData.length + 1;
-      const postId = Number(params.postId);
+  http.post("/api/v1/posts/:postId/participations", async ({ params }) => {
+    console.log("MSW: Creating new participation");
 
-      const response = (await request.json()) as {
-        userId: string;
-      };
+    const currentParticipationId = ParticipationsData.length + 1;
+    const postId = Number(params.postId);
 
-      const newParticipation = {
-        participationId: currentParticipationId++,
-        postId: postId,
-        userId: response.userId,
-        ParticipationStatus: "JOIN",
-        DepositStatus: "DEPOSIT_PAID",
-        RatingStatus: "RATED",
-        depositReturnDate: null,
-      };
+    // const response = (await request.json()) as {
+    //   userId: string;
+    // };
 
-      // 생성된 참여 데이터를 ParticipationsData 배열에 추가
-      ParticipationsData.push(newParticipation);
+    const newParticipation = {
+      participationId: currentParticipationId,
+      postId: postId,
+      userId: "test-user-id",
+      ParticipationStatus: "JOIN",
+      DepositStatus: "UNPAID",
+      RatingStatus: "NOT_RATED",
+      depositReturnDate: null,
+    };
 
-      return HttpResponse.json(newParticipation, { status: 201 });
-    },
-  ),
+    // 생성된 참여 데이터를 ParticipationsData 배열에 추가
+    ParticipationsData.push(newParticipation);
+    console.log("New participation created:", newParticipation);
+    return HttpResponse.json(newParticipation, { status: 201 });
+  }),
 
   // 참여 삭제
   http.delete("/api/v1/posts/:postId/participations", async () => {

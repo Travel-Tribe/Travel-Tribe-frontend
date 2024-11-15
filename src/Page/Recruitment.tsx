@@ -1,24 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import fetchCall from "../Utils/apiFetch";
 import { TravelPlan } from "../mocks/mockData";
-import Post from "../Components/Common/Post";
 import { useRecruitPostStore } from "../store/recruitPostStore";
+import { mappingContinent } from "../Utils/mappingContinent";
+import { mappingCountry } from "../Utils/mappingCountry";
+import { useQuery } from "react-query";
+import debounce from "lodash.debounce";
+import { RecruitmentPost } from "../Components/Post";
 
-const Recruitment = React.memo((): JSX.Element => {
-  const [recruitData, setRecruitData] = useState<TravelPlan[]>([]);
-  const { clearTravelData } = useRecruitPostStore();
-  useEffect(() => {
-    const getRecruitData = async () => {
-      try {
-        const data: { data: { content: TravelPlan[] } } = await fetchCall(
-          "/api/v1/posts",
-          "get",
-        );
+interface RecruitmentProps {
+  selectedContinent: string;
+  selectedCountry: string;
+  city: string;
+  search: string;
+  mbti: string;
+}
 
-        setRecruitData(data.data.content);
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-      }
+const Recruitment = React.memo(
+  ({
+    selectedContinent,
+    selectedCountry,
+    city,
+    search,
+    mbti,
+  }: RecruitmentProps): JSX.Element => {
+    const { clearTravelData } = useRecruitPostStore();
+    const [page, setPage] = useState(0);
+
+    const getFilterParams = () => {
+      const params = new URLSearchParams();
+      if (search) params.append("title", search);
+      if (city) params.append("content", city);
+      if (selectedContinent !== "선택" && selectedContinent !== "기타")
+        params.append("continent", mappingContinent[selectedContinent]);
+      if (selectedCountry !== "선택" && selectedContinent !== "기타")
+        params.append("country", mappingCountry(selectedCountry, "ko"));
+      if (mbti !== "선택") params.append("mbti", mbti);
+      params.append("page", page.toString());
+      return params.toString();
     };
     getRecruitData();
     clearTravelData();

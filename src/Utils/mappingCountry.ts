@@ -256,15 +256,11 @@ const list = {
 export const mappingCountry = (
   str: string | undefined = undefined,
   language: string = "ko",
-): string | void => {
-  if (str === undefined) console.error("입력 값이 없습니다.");
-
+): string => {
   if (language === "en") {
     return list[str][0];
   }
-  if (language === "ko") {
-    return Object.entries(list).filter(v => v[1][0] === str)[0][0];
-  }
+  return Object.entries(list).filter(v => v[1][0] === str)[0][0];
 };
 
 mappingCountry("짐바브웨", "ko");

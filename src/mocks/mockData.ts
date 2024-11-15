@@ -480,7 +480,984 @@ export const RecruitMockData: TravelPlan[] = [
     limitMinAge: 20,
     limitSex: "UNRELATED",
     limitSmoke: "NO",
+<<<<<<< HEAD
     deadline: "2024-11-29",
+=======
+    deadline: "2023-3-25",
+    days: [
+      {
+        dayDetails: [
+          {
+            title: "센소지 아사쿠사",
+            description: "도쿄에서 가장 오래된 절, 주변 먹거리 골목 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄 스카이트리",
+            description: "도쿄의 랜드마크에서 도시 전경 감상과 점심",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "도쿄 야시장",
+            description: "현지 먹거리와 일본의 전통을 느낄 수 있는 야시장 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2531546/pexels-photo-2531546.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.7147,
+            longitude: 139.7967,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.71,
+            longitude: 139.8107,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6892,
+            longitude: 139.7028,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "츠키지 시장",
+            description: "신선한 해산물과 일본 전통 식문화 체험",
+            fileAddress:
+              "https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg",
+          },
+          {
+            title: "하라주쿠 & 오모테산도",
+            description: "일본의 패션 중심지와 트렌디한 카페 방문",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "시부야 스크램블 교차로",
+            description: "세계적으로 유명한 교차로와 주변 맛집 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6654,
+            longitude: 139.7707,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6715,
+            longitude: 139.7031,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6591,
+            longitude: 139.7005,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "메이지 신궁",
+            description: "도쿄의 대표적인 신사, 평화로운 도시 속 자연 산책",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄타워",
+            description: "일본의 상징적인 타워에서 점심과 전망 감상",
+            fileAddress:
+              "https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg",
+          },
+          {
+            title: "긴자",
+            description:
+              "도쿄의 럭셔리 쇼핑가와 미슐랭 레스토랑에서 마지막 저녁",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6763,
+            longitude: 139.6993,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6586,
+            longitude: 139.7454,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6722,
+            longitude: 139.7649,
+            orderNumber: 3,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    postId: 4,
+    userId: 4,
+    title: "도쿄 미식 여행",
+    travelStartDate: "2023-4-1",
+    travelEndDate: "2023-4-3",
+    maxParticipants: 3,
+    travelCountry: "JP",
+    continent: "ASIA",
+    region: "도쿄",
+    otherExpenses: 500000,
+    airplaneFee: 400000,
+    accommodationFee: 200000,
+    limitMaxAge: 60,
+    limitMinAge: 20,
+    limitSex: "UNRELATED",
+    limitSmoke: "NO",
+    deadline: "2023-3-25",
+    days: [
+      {
+        dayDetails: [
+          {
+            title: "센소지 아사쿠사",
+            description: "도쿄에서 가장 오래된 절, 주변 먹거리 골목 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄 스카이트리",
+            description: "도쿄의 랜드마크에서 도시 전경 감상과 점심",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "도쿄 야시장",
+            description: "현지 먹거리와 일본의 전통을 느낄 수 있는 야시장 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2531546/pexels-photo-2531546.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.7147,
+            longitude: 139.7967,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.71,
+            longitude: 139.8107,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6892,
+            longitude: 139.7028,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "츠키지 시장",
+            description: "신선한 해산물과 일본 전통 식문화 체험",
+            fileAddress:
+              "https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg",
+          },
+          {
+            title: "하라주쿠 & 오모테산도",
+            description: "일본의 패션 중심지와 트렌디한 카페 방문",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "시부야 스크램블 교차로",
+            description: "세계적으로 유명한 교차로와 주변 맛집 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6654,
+            longitude: 139.7707,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6715,
+            longitude: 139.7031,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6591,
+            longitude: 139.7005,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "메이지 신궁",
+            description: "도쿄의 대표적인 신사, 평화로운 도시 속 자연 산책",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄타워",
+            description: "일본의 상징적인 타워에서 점심과 전망 감상",
+            fileAddress:
+              "https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg",
+          },
+          {
+            title: "긴자",
+            description:
+              "도쿄의 럭셔리 쇼핑가와 미슐랭 레스토랑에서 마지막 저녁",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6763,
+            longitude: 139.6993,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6586,
+            longitude: 139.7454,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6722,
+            longitude: 139.7649,
+            orderNumber: 3,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    postId: 5,
+    userId: 5,
+    title: "도쿄 미식 여행",
+    travelStartDate: "2023-4-1",
+    travelEndDate: "2023-4-3",
+    maxParticipants: 6,
+    travelCountry: "JP",
+    continent: "ASIA",
+    region: "도쿄",
+    accommodationFee: 500000,
+    otherExpenses: 100000,
+    airplaneFee: 400000,
+    limitMaxAge: 60,
+    limitMinAge: 20,
+    limitSex: "UNRELATED",
+    limitSmoke: "NO",
+    deadline: "2023-3-25",
+    days: [
+      {
+        dayDetails: [
+          {
+            title: "센소지 아사쿠사",
+            description: "도쿄에서 가장 오래된 절, 주변 먹거리 골목 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄 스카이트리",
+            description: "도쿄의 랜드마크에서 도시 전경 감상과 점심",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "도쿄 야시장",
+            description: "현지 먹거리와 일본의 전통을 느낄 수 있는 야시장 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2531546/pexels-photo-2531546.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.7147,
+            longitude: 139.7967,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.71,
+            longitude: 139.8107,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6892,
+            longitude: 139.7028,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "츠키지 시장",
+            description: "신선한 해산물과 일본 전통 식문화 체험",
+            fileAddress:
+              "https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg",
+          },
+          {
+            title: "하라주쿠 & 오모테산도",
+            description: "일본의 패션 중심지와 트렌디한 카페 방문",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "시부야 스크램블 교차로",
+            description: "세계적으로 유명한 교차로와 주변 맛집 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6654,
+            longitude: 139.7707,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6715,
+            longitude: 139.7031,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6591,
+            longitude: 139.7005,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "메이지 신궁",
+            description: "도쿄의 대표적인 신사, 평화로운 도시 속 자연 산책",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄타워",
+            description: "일본의 상징적인 타워에서 점심과 전망 감상",
+            fileAddress:
+              "https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg",
+          },
+          {
+            title: "긴자",
+            description:
+              "도쿄의 럭셔리 쇼핑가와 미슐랭 레스토랑에서 마지막 저녁",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6763,
+            longitude: 139.6993,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6586,
+            longitude: 139.7454,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6722,
+            longitude: 139.7649,
+            orderNumber: 3,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    postId: 6,
+    userId: 6,
+    title: "도쿄 미식 여행",
+    travelStartDate: "2023-4-1",
+    travelEndDate: "2023-4-3",
+    maxParticipants: 3,
+    travelCountry: "JP",
+    continent: "ASIA",
+    region: "도쿄",
+    otherExpenses: 500000,
+    airplaneFee: 400000,
+    accommodationFee: 200000,
+    limitMaxAge: 60,
+    limitMinAge: 20,
+    limitSex: "UNRELATED",
+    limitSmoke: "NO",
+    deadline: "2023-3-25",
+    days: [
+      {
+        dayDetails: [
+          {
+            title: "센소지 아사쿠사",
+            description: "도쿄에서 가장 오래된 절, 주변 먹거리 골목 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄 스카이트리",
+            description: "도쿄의 랜드마크에서 도시 전경 감상과 점심",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "도쿄 야시장",
+            description: "현지 먹거리와 일본의 전통을 느낄 수 있는 야시장 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2531546/pexels-photo-2531546.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.7147,
+            longitude: 139.7967,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.71,
+            longitude: 139.8107,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6892,
+            longitude: 139.7028,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "츠키지 시장",
+            description: "신선한 해산물과 일본 전통 식문화 체험",
+            fileAddress:
+              "https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg",
+          },
+          {
+            title: "하라주쿠 & 오모테산도",
+            description: "일본의 패션 중심지와 트렌디한 카페 방문",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "시부야 스크램블 교차로",
+            description: "세계적으로 유명한 교차로와 주변 맛집 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6654,
+            longitude: 139.7707,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6715,
+            longitude: 139.7031,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6591,
+            longitude: 139.7005,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "메이지 신궁",
+            description: "도쿄의 대표적인 신사, 평화로운 도시 속 자연 산책",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄타워",
+            description: "일본의 상징적인 타워에서 점심과 전망 감상",
+            fileAddress:
+              "https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg",
+          },
+          {
+            title: "긴자",
+            description:
+              "도쿄의 럭셔리 쇼핑가와 미슐랭 레스토랑에서 마지막 저녁",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6763,
+            longitude: 139.6993,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6586,
+            longitude: 139.7454,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6722,
+            longitude: 139.7649,
+            orderNumber: 3,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    postId: 7,
+    userId: 7,
+    title: "도쿄 미식 여행",
+    travelStartDate: "2023-4-1",
+    travelEndDate: "2023-4-3",
+    maxParticipants: 3,
+    travelCountry: "JP",
+    continent: "ASIA",
+    region: "도쿄",
+    otherExpenses: 500000,
+    airplaneFee: 400000,
+    accommodationFee: 200000,
+    limitMaxAge: 60,
+    limitMinAge: 20,
+    limitSex: "UNRELATED",
+    limitSmoke: "NO",
+    deadline: "2023-3-25",
+    days: [
+      {
+        dayDetails: [
+          {
+            title: "센소지 아사쿠사",
+            description: "도쿄에서 가장 오래된 절, 주변 먹거리 골목 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄 스카이트리",
+            description: "도쿄의 랜드마크에서 도시 전경 감상과 점심",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "도쿄 야시장",
+            description: "현지 먹거리와 일본의 전통을 느낄 수 있는 야시장 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2531546/pexels-photo-2531546.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.7147,
+            longitude: 139.7967,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.71,
+            longitude: 139.8107,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6892,
+            longitude: 139.7028,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "츠키지 시장",
+            description: "신선한 해산물과 일본 전통 식문화 체험",
+            fileAddress:
+              "https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg",
+          },
+          {
+            title: "하라주쿠 & 오모테산도",
+            description: "일본의 패션 중심지와 트렌디한 카페 방문",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "시부야 스크램블 교차로",
+            description: "세계적으로 유명한 교차로와 주변 맛집 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6654,
+            longitude: 139.7707,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6715,
+            longitude: 139.7031,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6591,
+            longitude: 139.7005,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "메이지 신궁",
+            description: "도쿄의 대표적인 신사, 평화로운 도시 속 자연 산책",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄타워",
+            description: "일본의 상징적인 타워에서 점심과 전망 감상",
+            fileAddress:
+              "https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg",
+          },
+          {
+            title: "긴자",
+            description:
+              "도쿄의 럭셔리 쇼핑가와 미슐랭 레스토랑에서 마지막 저녁",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6763,
+            longitude: 139.6993,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6586,
+            longitude: 139.7454,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6722,
+            longitude: 139.7649,
+            orderNumber: 3,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    postId: 8,
+    userId: 8,
+    title: "도쿄 미식 여행",
+    travelStartDate: "2023-4-1",
+    travelEndDate: "2023-4-3",
+    maxParticipants: 3,
+    travelCountry: "JP",
+    continent: "ASIA",
+    region: "도쿄",
+    otherExpenses: 500000,
+    airplaneFee: 400000,
+    accommodationFee: 200000,
+    limitMaxAge: 60,
+    limitMinAge: 20,
+    limitSex: "UNRELATED",
+    limitSmoke: "NO",
+    deadline: "2023-3-25",
+    days: [
+      {
+        dayDetails: [
+          {
+            title: "센소지 아사쿠사",
+            description: "도쿄에서 가장 오래된 절, 주변 먹거리 골목 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄 스카이트리",
+            description: "도쿄의 랜드마크에서 도시 전경 감상과 점심",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "도쿄 야시장",
+            description: "현지 먹거리와 일본의 전통을 느낄 수 있는 야시장 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2531546/pexels-photo-2531546.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.7147,
+            longitude: 139.7967,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.71,
+            longitude: 139.8107,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6892,
+            longitude: 139.7028,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "츠키지 시장",
+            description: "신선한 해산물과 일본 전통 식문화 체험",
+            fileAddress:
+              "https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg",
+          },
+          {
+            title: "하라주쿠 & 오모테산도",
+            description: "일본의 패션 중심지와 트렌디한 카페 방문",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "시부야 스크램블 교차로",
+            description: "세계적으로 유명한 교차로와 주변 맛집 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6654,
+            longitude: 139.7707,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6715,
+            longitude: 139.7031,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6591,
+            longitude: 139.7005,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "메이지 신궁",
+            description: "도쿄의 대표적인 신사, 평화로운 도시 속 자연 산책",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄타워",
+            description: "일본의 상징적인 타워에서 점심과 전망 감상",
+            fileAddress:
+              "https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg",
+          },
+          {
+            title: "긴자",
+            description:
+              "도쿄의 럭셔리 쇼핑가와 미슐랭 레스토랑에서 마지막 저녁",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6763,
+            longitude: 139.6993,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6586,
+            longitude: 139.7454,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6722,
+            longitude: 139.7649,
+            orderNumber: 3,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    postId: 9,
+    userId: 9,
+    title: "도쿄 미식 여행",
+    travelStartDate: "2023-4-1",
+    travelEndDate: "2023-4-3",
+    maxParticipants: 3,
+    travelCountry: "JP",
+    continent: "ASIA",
+    region: "도쿄",
+    otherExpenses: 500000,
+    airplaneFee: 400000,
+    accommodationFee: 200000,
+    limitMaxAge: 60,
+    limitMinAge: 20,
+    limitSex: "UNRELATED",
+    limitSmoke: "NO",
+    deadline: "2023-3-25",
+    days: [
+      {
+        dayDetails: [
+          {
+            title: "센소지 아사쿠사",
+            description: "도쿄에서 가장 오래된 절, 주변 먹거리 골목 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄 스카이트리",
+            description: "도쿄의 랜드마크에서 도시 전경 감상과 점심",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "도쿄 야시장",
+            description: "현지 먹거리와 일본의 전통을 느낄 수 있는 야시장 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2531546/pexels-photo-2531546.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.7147,
+            longitude: 139.7967,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.71,
+            longitude: 139.8107,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6892,
+            longitude: 139.7028,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "츠키지 시장",
+            description: "신선한 해산물과 일본 전통 식문화 체험",
+            fileAddress:
+              "https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg",
+          },
+          {
+            title: "하라주쿠 & 오모테산도",
+            description: "일본의 패션 중심지와 트렌디한 카페 방문",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+          {
+            title: "시부야 스크램블 교차로",
+            description: "세계적으로 유명한 교차로와 주변 맛집 탐방",
+            fileAddress:
+              "https://images.pexels.com/photos/2901209/pexels-photo-2901209.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6654,
+            longitude: 139.7707,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6715,
+            longitude: 139.7031,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6591,
+            longitude: 139.7005,
+            orderNumber: 3,
+          },
+        ],
+      },
+      {
+        dayDetails: [
+          {
+            title: "메이지 신궁",
+            description: "도쿄의 대표적인 신사, 평화로운 도시 속 자연 산책",
+            fileAddress:
+              "https://images.pexels.com/photos/5759959/pexels-photo-5759959.jpeg",
+          },
+          {
+            title: "도쿄타워",
+            description: "일본의 상징적인 타워에서 점심과 전망 감상",
+            fileAddress:
+              "https://images.pexels.com/photos/2614818/pexels-photo-2614818.jpeg",
+          },
+          {
+            title: "긴자",
+            description:
+              "도쿄의 럭셔리 쇼핑가와 미슐랭 레스토랑에서 마지막 저녁",
+            fileAddress:
+              "https://images.pexels.com/photos/2506923/pexels-photo-2506923.jpeg",
+          },
+        ],
+        itineraryVisits: [
+          {
+            latitude: 35.6763,
+            longitude: 139.6993,
+            orderNumber: 1,
+          },
+          {
+            latitude: 35.6586,
+            longitude: 139.7454,
+            orderNumber: 2,
+          },
+          {
+            latitude: 35.6722,
+            longitude: 139.7649,
+            orderNumber: 3,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    postId: 10,
+    userId: 10,
+    title: "도쿄 미식 여행",
+    travelStartDate: "2023-4-1",
+    travelEndDate: "2023-4-3",
+    maxParticipants: 3,
+    travelCountry: "JP",
+    continent: "ASIA",
+    region: "도쿄",
+    otherExpenses: 500000,
+    airplaneFee: 400000,
+    accommodationFee: 200000,
+    limitMaxAge: 60,
+    limitMinAge: 20,
+    limitSex: "UNRELATED",
+    limitSmoke: "NO",
+    deadline: "2023-3-25",
+>>>>>>> 06d476ca6fef07e1bf8cbfc8da094beb34c792fa
     days: [
       {
         dayDetails: [
@@ -604,8 +1581,8 @@ export const RecruitMockData: TravelPlan[] = [
   },
 ];
 
-export interface Review {
-  userId: string;
+export interface ReviewTypes {
+  userId: number;
   postId: string;
   reviewId: string;
   continent: string;
@@ -614,13 +1591,17 @@ export interface Review {
   title: string;
   contents: string;
   files: File[];
+  nickname: string;
+  travelStartDate: string;
+  travelEndDate: string;
+  createDate: string;
 }
 
 interface File {
   fileAddress: string;
 }
 
-export const ReviewData: Review[] = [
+export const ReviewData: ReviewTypes[] = [
   {
     postId: "1",
     reviewId: "1",
@@ -628,13 +1609,26 @@ export const ReviewData: Review[] = [
     country: "KR",
     region: "강릉",
     title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents:
-      "강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.",
+    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
+      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
     files: [
       { fileAddress: "/images/gangneung1.jpg" },
       { fileAddress: "/images/gangneung2.jpg" },
     ],
+<<<<<<< HEAD
     userId: "1",
+=======
+    userId: 1,
+    nickname: "tester1",
+    travelStartDate: "2022-1-1",
+    travelEndDate: "2022-1-3",
+    createDate: "2022-1-4",
+>>>>>>> 06d476ca6fef07e1bf8cbfc8da094beb34c792fa
   },
   {
     postId: "2",
@@ -649,7 +1643,15 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/paris1.jpg" },
       { fileAddress: "/images/paris2.jpg" },
     ],
+<<<<<<< HEAD
     userId: "1",
+=======
+    userId: 2,
+    nickname: "tester2",
+    travelStartDate: "2022-12-10",
+    travelEndDate: "2022-12-18",
+    createDate: "2022-12-21",
+>>>>>>> 06d476ca6fef07e1bf8cbfc8da094beb34c792fa
   },
   {
     postId: "3",
@@ -663,7 +1665,15 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/nyc1.jpg" },
       { fileAddress: "/images/nyc2.jpg" },
     ],
+<<<<<<< HEAD
     userId: "3",
+=======
+    userId: 3,
+    nickname: "tester3",
+    travelStartDate: "2023-10-15",
+    travelEndDate: "2023-10-30",
+    createDate: "2023-11-10",
+>>>>>>> 06d476ca6fef07e1bf8cbfc8da094beb34c792fa
   },
   {
     postId: "4",
@@ -678,7 +1688,11 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/sydney1.jpg" },
       { fileAddress: "/images/sydney2.jpg" },
     ],
-    userId: "",
+    userId: 4,
+    nickname: "tester4",
+    travelStartDate: "2024-5-1",
+    travelEndDate: "2024-5-10",
+    createDate: "2024-5-15",
   },
   {
     postId: "5",
@@ -693,22 +1707,11 @@ export const ReviewData: Review[] = [
       { fileAddress: "/images/cairo1.jpg" },
       { fileAddress: "/images/cairo2.jpg" },
     ],
-    userId: "",
-  },
-  {
-    postId: "6",
-    reviewId: "6",
-    continent: "SOUTH AMERICA",
-    country: "BR",
-    region: "리우데자네이루",
-    title: "삼바의 열정을 느끼다",
-    contents:
-      "리우데자네이루의 해변과 삼바 카니발을 경험하며 남미의 열정을 체험했습니다.",
-    files: [
-      { fileAddress: "/images/rio1.jpg" },
-      { fileAddress: "/images/rio2.jpg" },
-    ],
-    userId: "",
+    userId: 5,
+    nickname: "tester5",
+    travelStartDate: "2024-08-3",
+    travelEndDate: "2024-08-10",
+    createDate: "2024-08-12",
   },
 ];
 
@@ -787,3 +1790,41 @@ export const ParticipationsData: Participations[] = [
     depositReturnDate: null,
   },
 ];
+
+// 결제 데이터 인터페이스
+export interface Payment {
+  depositId: string;
+  postId: number;
+  participationId: number;
+  userId: string;
+  amount: number;
+}
+
+export const PaymentsData: Payment[] = [
+  {
+    depositId: "T1234567890",
+    postId: 1,
+    participationId: 1,
+    userId: "1",
+    amount: 10000,
+  },
+  {
+    depositId: "T1234567891",
+    postId: 2,
+    participationId: 2,
+    userId: "3",
+    amount: 10000,
+  },
+  {
+    depositId: "T1234567892",
+    postId: 2,
+    participationId: 3,
+    userId: "4",
+    amount: 10000,
+  },
+];
+
+export const kakaoPayReadyResponse = {
+  depositId: "T1234567893",
+  next_redirect_pc_url: "https://payment-demo.kakaopay.com/online",
+};

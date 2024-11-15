@@ -11,6 +11,7 @@ import PublicOnlyRoutes from "../Components/Layout/PublicOnlyRoutes";
 import Layout from "../Components/Layout";
 import { ProfileRequiredRoutes } from "../Components/Layout/ProfileRequiredRoutes";
 import HomeLayout from "../Components/Layout/HomeLayout";
+import ReviewDetail from "../Page/ReviewDetail";
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -18,10 +19,9 @@ const SignUp = React.lazy(() => import("../Page/SignUp"));
 const Find = React.lazy(() => import("../Page/Find"));
 const Recruitment = React.lazy(() => import("../Page/Recruitment"));
 const RecruitWrite = React.lazy(() => import("../Page/RecruitWrite"));
-const RecruitPost = React.lazy(() => import("../Page/RecruitPost"));
+const RecruitDetail = React.lazy(() => import("../Page/RecruitDetail"));
 const Review = React.lazy(() => import("../Page/Review"));
 const ReviewForm = React.lazy(() => import("../Page/ReviewForm"));
-const ReviewPost = React.lazy(() => import("../Page/ReviewPost"));
 const MyPage = React.lazy(() => import("../Page/MyPage"));
 
 const Router = (): JSX.Element => {
@@ -60,13 +60,16 @@ const Router = (): JSX.Element => {
 
           {/* 로그인 필요없는 일반 페이지 */}
           <Route element={<HomeLayout />}>
-            <Route path="/recruitment" element={<Recruitment />} />
             <Route path="/review" element={<Review />} />
+            <Route path="/recruitment" element={<Recruitment />} />
           </Route>
 
           <Route path="/" element={<Navigate to="/recruitment" replace />} />
-          <Route path="/recruitment/:id" element={<RecruitPost />} />
-          <Route path="/review/:id" element={<ReviewPost />} />
+          <Route path="/recruitment/:id" element={<RecruitDetail />} />
+          <Route
+            path="/posts/:postId/reviews/:reviewId"
+            element={<ReviewDetail />}
+          />
           <Route path="*" element={<Error />} />
         </Route>
       </Routes>

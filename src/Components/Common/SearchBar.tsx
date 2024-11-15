@@ -19,7 +19,7 @@ const SearchBar = React.memo(
     };
 
     return (
-      <div className="w-[480px] h-[36px] mt-[30px] mb-[30px] border border-black rounded-[10px] flex items-center relative z-0">
+      <div className="w-[480px] h-[36px] my-[30px] bg-white border border-black rounded-[10px] flex items-center relative z-0">
         <select
           value={selectedOptions}
           onChange={e => handleSelect(e.target.value)}
@@ -32,7 +32,7 @@ const SearchBar = React.memo(
           ))}
         </select>
 
-        <div className="absolute left-[90px] h-[14px] w-[1px] bg-black"></div>
+        <div className="absolute left-[88px] h-[16px] w-[1px] bg-black"></div>
 
         <input
           type="text"
