@@ -187,8 +187,8 @@ export const RecruitMockData: TravelPlan[] = [
     postId: 1,
     userId: 1,
     title: "도쿄 미식 여행",
-    travelStartDate: "2023-4-1",
-    travelEndDate: "2023-4-3",
+    travelStartDate: "2023-04-01",
+    travelEndDate: "2023-04-03",
     maxParticipants: 6,
     travelCountry: "JP",
     continent: "ASIA",
@@ -761,7 +761,7 @@ export const PaymentsData: Payment[] = [
   },
 ];
 
-// export const kakaoPayReadyResponse = {
-//   depositId: "T1234567893",
-//   next_redirect_pc_url: "https://payment-demo.kakaopay.com/online",
-// };
+export const kakaoPayReadyResponse = {
+  depositId: "T1234567893",
+  next_redirect_pc_url: "https://payment-demo.kakaopay.com/online",
+};

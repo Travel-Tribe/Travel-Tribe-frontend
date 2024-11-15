@@ -10,6 +10,7 @@ const TravelDateSelect = React.memo(() => {
     state => state.postData.travelEndDate,
   );
   const deadline = useRecruitPostStore(state => state.postData.deadline);
+
   const startYear = travelStartDate.split("-")[0];
   const currentYear = new Date().getFullYear();
   const years = Array.from({
@@ -32,6 +33,20 @@ const TravelDateSelect = React.memo(() => {
       </option>
     ));
   }, []);
+
+  const formatDateToYMD = (inputDate: Date | string | number): string => {
+    const date = new Date(inputDate);
+
+    if (isNaN(date.getTime())) {
+      throw new Error("Invalid date input");
+    }
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
 
   return (
     <div>
@@ -58,11 +73,13 @@ const TravelDateSelect = React.memo(() => {
         년
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
-          value={travelStartDate.split("-")[1]}
+          value={Number(travelStartDate.split("-")[1])}
           onChange={e =>
             updateTravelData(
               "travelStartDate",
-              `${travelStartDate.split("-")[0]}-${e.target.value}-${travelStartDate.split("-")[2]}`,
+              formatDateToYMD(
+                `${travelStartDate.split("-")[0]}-${e.target.value}-${travelStartDate.split("-")[2]}`,
+              ),
             )
           }
         >
@@ -75,11 +92,13 @@ const TravelDateSelect = React.memo(() => {
         월
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
-          value={travelStartDate.split("-")[2]}
+          value={Number(travelStartDate.split("-")[2])}
           onChange={e =>
             updateTravelData(
               "travelStartDate",
-              `${travelStartDate.split("-")[0]}-${travelStartDate.split("-")[1]}-${e.target.value}`,
+              formatDateToYMD(
+                `${travelStartDate.split("-")[0]}-${travelStartDate.split("-")[1]}-${e.target.value}`,
+              ),
             )
           }
         >
@@ -114,11 +133,13 @@ const TravelDateSelect = React.memo(() => {
         년
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
-          value={travelEndDate.split("-")[1]}
+          value={Number(travelEndDate.split("-")[1])}
           onChange={e =>
             updateTravelData(
               "travelEndDate",
-              `${travelEndDate.split("-")[0]}-${e.target.value}-${travelEndDate.split("-")[2]}`,
+              formatDateToYMD(
+                `${travelEndDate.split("-")[0]}-${e.target.value}-${travelEndDate.split("-")[2]}`,
+              ),
             )
           }
         >
@@ -131,11 +152,13 @@ const TravelDateSelect = React.memo(() => {
         월
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
-          value={travelEndDate.split("-")[2]}
+          value={Number(travelEndDate.split("-")[2])}
           onChange={e =>
             updateTravelData(
               "travelEndDate",
-              `${travelEndDate.split("-")[0]}-${travelEndDate.split("-")[1]}-${e.target.value}`,
+              formatDateToYMD(
+                `${travelEndDate.split("-")[0]}-${travelEndDate.split("-")[1]}-${e.target.value}`,
+              ),
             )
           }
         >
@@ -155,7 +178,9 @@ const TravelDateSelect = React.memo(() => {
           onChange={e =>
             updateTravelData(
               "deadline",
-              `${e.target.value}-${deadline.split("-")[1]}-${deadline.split("-")[2]}`,
+              formatDateToYMD(
+                `${e.target.value}-${deadline.split("-")[1]}-${deadline.split("-")[2]}`,
+              ),
             )
           }
         >
@@ -170,11 +195,13 @@ const TravelDateSelect = React.memo(() => {
         년
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
-          value={deadline.split("-")[1]}
+          value={Number(deadline.split("-")[1])}
           onChange={e =>
             updateTravelData(
               "deadline",
-              `${deadline.split("-")[0]}-${e.target.value}-${deadline.split("-")[2]}`,
+              formatDateToYMD(
+                `${deadline.split("-")[0]}-${e.target.value}-${deadline.split("-")[2]}`,
+              ),
             )
           }
         >
@@ -187,11 +214,13 @@ const TravelDateSelect = React.memo(() => {
         월
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
-          value={deadline.split("-")[2]}
+          value={Number(deadline.split("-")[2])}
           onChange={e =>
             updateTravelData(
               "deadline",
-              `${deadline.split("-")[0]}-${deadline.split("-")[1]}-${e.target.value}`,
+              formatDateToYMD(
+                `${deadline.split("-")[0]}-${deadline.split("-")[1]}-${e.target.value}`,
+              ),
             )
           }
         >

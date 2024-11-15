@@ -7,7 +7,7 @@ export const recruitHandlers = [
     console.log("모집 글 목록 불러오기");
     return HttpResponse.json(
       {
-        content: RecruitMockData,
+        data: { content: RecruitMockData },
         pageNumber: params.num, // 예: 0
         pageSize: 8, // 예: 8
         totalElements: RecruitMockData.length, // 예: 1
