@@ -51,7 +51,7 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
   const location = useLocation();
 
   const handlePaymentApproval = useCallback(
-    async (pgToken: string) => {
+    async (pgToken: string, depositId: string) => {
       try {
         const depositId = sessionStorage.getItem("depositId");
         if (!depositId) {
@@ -77,7 +77,6 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
 
         // 결제 실패 처리
         try {
-          const depositId = sessionStorage.getItem("depositId");
           if (depositId) {
             await fetchCall<SuccessResponse>(
               "/api/v1/pay/deposit/fail",
@@ -95,7 +94,6 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
             : "결제 처리 중 오류가 발생했습니다.",
         );
       } finally {
-        sessionStorage.removeItem("depositId");
         navigate("/posts");
       }
     },
@@ -105,9 +103,10 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const pgToken = searchParams.get("pg_token");
+    const depositId = searchParams.get("depositId");
 
-    if (pgToken) {
-      handlePaymentApproval(pgToken);
+    if (pgToken && depositId) {
+      handlePaymentApproval(pgToken, depositId);
     }
   }, [location, handlePaymentApproval]);
 
@@ -180,10 +179,10 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
 
       // 카카오 결제 페이지로 리다이렉트
       // depositId를 sessionStorage에 저장
-      sessionStorage.setItem(
-        "depositId",
-        String(paymentReadyData.data.depositId),
-      );
+      // sessionStorage.setItem(
+      //   "depositId",
+      //   String(paymentReadyData.data.depositId),
+      // );
       window.location.href = paymentReadyData.data.nextRedirectPcUrl;
     } catch (error) {
       console.error("Error in join process:", error);
