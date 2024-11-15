@@ -39,23 +39,78 @@ const Recruitment = React.memo(
       params.append("page", page.toString());
       return params.toString();
     };
-    getRecruitData();
-    clearTravelData();
-  }, []);
-  console.log(recruitData)
-  return (
-    <div className="flex flex-wrap gap-[35px]">
-      {recruitData &&
-        recruitData?.map((plan: TravelPlan, index: number) => {
-          const isLastElement = index === recruitData.length - 1;
-          return (
-            <div ref={isLastElement ? lastElementRef : null} key={plan.postId}>
-              <RecruitmentPost plan={plan} />
-            </div>
-          );
-        })}
-    </div>
-  );
-});
+
+    const fetchRecruitData = async () => {
+      const response = await fetchCall(
+        `/api/v1/posts?${getFilterParams()}`,
+        "get",
+      );
+      console.log(response.data.data.content);
+      return response.data.data.content<TravelPlan[]>;
+    };
+
+    const debouncedFetchRecruitData = debounce(fetchRecruitData, 500);
+
+    useEffect(() => {
+      clearTravelData();
+      debouncedFetchRecruitData();
+      return () => debouncedFetchRecruitData.cancel();
+    }, [search, city, selectedContinent, selectedCountry, mbti, page]);
+
+    const {
+      data: recruitData,
+      isError,
+      error,
+    } = useQuery({
+      queryKey: ["recruitData"],
+      queryFn: async () => {
+        const response = fetchRecruitData();
+        console.log(response);
+        return response;
+      },
+    });
+const observer = useRef<IntersectionObserver | null>(null);
+    console.log(recruitData);
+    // Intersection Observer 설정
+    const lastElementRef = useCallback((node: HTMLDivElement | null) => {
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver(
+        entries => {
+          if (entries[0].isIntersecting) {
+            setPage(prevPage => prevPage + 1); // 페이지를 증가시키고 새로운 데이터를 로드
+          }
+        },
+        {
+          threshold: 0.8, // 요소의 80%가 보일 때 콜백 실행
+        },
+      );
+
+      if (node) observer.current.observe(node);
+    }, []);
+
+    if (isError) {
+      console.error("에러", error);
+      return <>에러 입니다.</>;
+    }
+
+    return (
+      <div className="flex flex-wrap gap-[35px]">
+        {recruitData &&
+          recruitData?.map((plan: TravelPlan, index: number) => {
+            const isLastElement = index === recruitData.length - 1;
+            return (
+              <div
+                ref={isLastElement ? lastElementRef : null}
+                key={plan.postId}
+              >
+                <RecruitmentPost plan={plan} />
+              </div>
+            );
+          })}
+      </div>
+    );
+  },
+);
 
 export default Recruitment;
