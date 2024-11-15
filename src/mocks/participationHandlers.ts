@@ -12,7 +12,6 @@ export const participationHandlers = [
       participationId: participation.participationId,
       postId: participation.postId,
       userId: participation.userId,
-      ParticipationStatus: participation.ParticipationStatus,
     }));
     console.log("Participations found:", response);
     return HttpResponse.json(response, { status: 200 });
@@ -47,6 +46,11 @@ export const participationHandlers = [
 
   // 참여 삭제
   http.delete("/api/v1/posts/:postId/participations", async () => {
-    return HttpResponse.json(ParticipationsData, { status: 201 });
+    return HttpResponse.json(
+      {
+        data: null,
+      },
+      { status: 201 },
+    );
   }),
 ];

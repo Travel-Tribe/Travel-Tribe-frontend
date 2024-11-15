@@ -1,3 +1,5 @@
+import fetchCall from "../../Utils/apiFetch";
+
 const MypageTest = () => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -21,6 +23,14 @@ const MypageTest = () => {
       participantsCount: 10,
     },
   ];
+
+  const fetchGetPostId = async () => {
+    try {
+      await fetchCall(`/api/v1/posts/${postId}`)
+    } catch (error) {
+      console.error("Error submitting getPostId", error);
+    }
+  }
 
   return (
     <>

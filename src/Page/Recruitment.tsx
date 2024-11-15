@@ -45,7 +45,8 @@ const Recruitment = React.memo(
         `/api/v1/posts?${getFilterParams()}`,
         "get",
       );
-      return response.data.content<TravelPlan[]>;
+      console.log(response.data.data.content);
+      return response.data.data.content<TravelPlan[]>;
     };
 
     const debouncedFetchRecruitData = debounce(fetchRecruitData, 500);
@@ -68,9 +69,8 @@ const Recruitment = React.memo(
         return response;
       },
     });
-
-    const observer = useRef<IntersectionObserver | null>(null);
-
+const observer = useRef<IntersectionObserver | null>(null);
+    console.log(recruitData);
     // Intersection Observer 설정
     const lastElementRef = useCallback((node: HTMLDivElement | null) => {
       if (observer.current) observer.current.disconnect();
@@ -97,7 +97,7 @@ const Recruitment = React.memo(
     return (
       <div className="flex flex-wrap gap-[35px]">
         {recruitData &&
-          recruitData.map((plan: TravelPlan, index: number) => {
+          recruitData?.map((plan: TravelPlan, index: number) => {
             const isLastElement = index === recruitData.length - 1;
             return (
               <div

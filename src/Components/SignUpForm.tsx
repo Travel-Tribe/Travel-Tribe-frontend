@@ -107,7 +107,7 @@ const SignUp = (): JSX.Element => {
     try {
       const response = await fetchCall<ApiResponse>(
         `/api/v1/users/duplicate?type=${type}&query=${encodeURIComponent(value)}`,
-        "post",
+        "get",
       );
 
       console.log("Response:", response.data.data);

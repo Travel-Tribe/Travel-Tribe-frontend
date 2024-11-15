@@ -36,8 +36,8 @@ const RecruitDetail = (): JSX.Element => {
         "get",
       );
       console.log("Response:", response.data);
-      if (response.data && response.data.length > 0) {
-        return response.data[0];
+      if (response.data) {
+        return response.data;
       }
       throw new Error("모집글을 찾을 수 없습니다.");
     },

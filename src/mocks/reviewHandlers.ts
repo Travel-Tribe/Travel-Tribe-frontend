@@ -23,28 +23,30 @@ export const reviewHandlers = [
     const continent = url.searchParams.get("continent");
     const country = url.searchParams.get("country");
     const userId = url.searchParams.get("userId");
-
-    const responseData = ReviewData.filter(review => {
-      return (
-        (title ? review.title.includes(title) : true) &&
-        (content ? review.contents.includes(content) : true) &&
-        (continent ? review.continent === continent : true) &&
-        (country ? review.country === country : true) &&
-        (userId ? review.userId === userId : true)
-      );
-    }).map(review => ({
-      userId: review.userId,
-      postId: review.postId,
-      reviewId: review.reviewId,
-      continent: review.continent,
-      country: review.country,
-      region: review.region,
-      title: review.title,
-      contents: review.contents,
-      fileAddress: review.files[0]?.fileAddress || null,
-    }));
+    console.log(userId);
+    const responseData = ReviewData
+      .filter(review => {
+        return (
+          (title ? review.title.includes(title) : true) &&
+          (content ? review.contents.includes(content) : true) &&
+          (continent ? review.continent === continent : true) &&
+          (country ? review.country === country : true) &&
+          (userId ? review.userId === userId : true)
+        );
+      })
+      .map(review => ({
+        userId: review.userId,
+        postId: review.postId,
+        reviewId: review.reviewId,
+        continent: review.continent,
+        country: review.country,
+        region: review.region,
+        title: review.title,
+        contents: review.contents,
+        fileAddress: review.files[0]?.fileAddress || null,
+      }));
     console.log("responseData", responseData);
-    return HttpResponse.json({ reviews: ReviewData }, { status: 201 });
+    return HttpResponse.json({ reviews: responseData }, { status: 201 });
   }),
 
   // 후기 글 등록
