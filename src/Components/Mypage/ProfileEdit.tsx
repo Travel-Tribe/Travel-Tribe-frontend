@@ -93,18 +93,12 @@ const ProfileEdit = (): JSX.Element => {
   const profileUpdate = async () => {
     try {
       // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
-      await fetchCall(
-        `/api/v1/users/profile`,
-        localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) === "true"
-          ? "patch"
-          : "post",
-        {
-          ...profileData,
-        },
-      );
+      await fetchCall(`/api/v1/users/profile`, "patch", {
+        ...profileData,
+      });
+      console.log("object");
       await fetchCall(`/api/v1/users/info`, "patch", {
         nickname: profileData.nickname,
-        phone: profileData.phone,
       });
     } catch (error) {
       console.error("Error updating profile data:", error);
@@ -112,11 +106,28 @@ const ProfileEdit = (): JSX.Element => {
   };
 
   // 프로필 이미지 파일 선택 시 처리
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      updateProfileField("fileAddress", imageUrl);
+      const formData = new FormData();
+      formData.append("file", file); // 실제 파일 객체 추가
+
+      const previewUrl = URL.createObjectURL(file);
+      updateProfileField("fileAddress", previewUrl);
+      try {
+        const response = await fetchCall<{ data: { fileUrl: string } }>(
+          `/api/v1/file/upload`,
+          "post",
+          formData,
+        );
+        console.log(response.data.fileUrl);
+        // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
+        // updateProfileField("fileAddress", response.data.fileUrl);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
   };
 
@@ -145,7 +156,7 @@ const ProfileEdit = (): JSX.Element => {
         "get",
       );
       console.log(response);
-      if (!response.data) {
+      if (response.data) {
         setError("이미 사용 중인 닉네임입니다");
         setValidationStatus({ isChecking: false, isAvailable: false });
       } else {
