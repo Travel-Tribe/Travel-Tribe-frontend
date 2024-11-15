@@ -1,15 +1,15 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 
 const API_TOKEN = localStorage.getItem(STORAGE_KEYS.TOKEN);
 console.log(API_TOKEN);
 const axiosInstance = axios.create({
-  baseURL: "http://34.64.39.55:7070/", //import.meta.env.VITE_API_BASE_URL,
+  baseURL: "", //import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-    credentials: "include",
-  },
+  // headers: {
+  //   "Content-Type": "application/json",
+  //   credentials: "include",
+  // },
 });
 
 // 요청 인터셉터 추가
@@ -44,16 +44,23 @@ export default async function fetchCall<T>(
   method: "get" | "post" | "put" | "delete" | "patch",
   data?: any,
 ): Promise<T> {
-  const config = {
+  const config: AxiosRequestConfig = {
     method,
     url,
     ...(data && { data }), // data가 있을 경우에만 data 속성 추가
   };
 
+  // Content-Type 설정
   if (data instanceof FormData) {
+    // FormData인 경우 Content-Type을 multipart/form-data로 자동 처리
     config.headers = {
-      ...config.headers,
-      "Content-Type": "multipart/form-data",
+      ...config.headers, // 기존 헤더 유지
+    };
+  } else {
+    // JSON 데이터인 경우 Content-Type을 application/json으로 설정
+    config.headers = {
+      ...config.headers, // 기존 헤더 유지
+      "Content-Type": "application/json",
     };
   }
 
