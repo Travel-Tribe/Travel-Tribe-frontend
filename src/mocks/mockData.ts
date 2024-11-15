@@ -649,7 +649,7 @@ export const ReviewData: ReviewTypes[] = [
     travelStartDate: "2022-1-1",
     travelEndDate: "2022-1-3",
     createDate: "2022-1-4",
-  }
+  },
 ];
 
 export interface Participations {
@@ -761,7 +761,7 @@ export const PaymentsData: Payment[] = [
   },
 ];
 
-export const kakaoPayReadyResponse = {
-  depositId: "T1234567893",
-  next_redirect_pc_url: "https://payment-demo.kakaopay.com/online",
-};
+// export const kakaoPayReadyResponse = {
+//   depositId: "T1234567893",
+//   next_redirect_pc_url: "https://payment-demo.kakaopay.com/online",
+// };

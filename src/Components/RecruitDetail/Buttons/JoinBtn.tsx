@@ -51,9 +51,8 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
   const location = useLocation();
 
   const handlePaymentApproval = useCallback(
-    async (pgToken: string) => {
+    async (pgToken: string, depositId: string) => {
       try {
-        const depositId = sessionStorage.getItem("depositId");
         if (!depositId) {
           throw new Error("결제 정보를 찾을 수 없습니다.");
         }
@@ -77,7 +76,6 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
 
         // 결제 실패 처리
         try {
-          const depositId = sessionStorage.getItem("depositId");
           if (depositId) {
             await fetchCall<SuccessResponse>(
               "/api/v1/pay/deposit/fail",
@@ -95,7 +93,6 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
             : "결제 처리 중 오류가 발생했습니다.",
         );
       } finally {
-        sessionStorage.removeItem("depositId");
         navigate("/posts");
       }
     },
@@ -105,9 +102,10 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const pgToken = searchParams.get("pg_token");
+    const depositId = searchParams.get("depositId");
 
-    if (pgToken) {
-      handlePaymentApproval(pgToken);
+    if (pgToken && depositId) {
+      handlePaymentApproval(pgToken, depositId);
     }
   }, [location, handlePaymentApproval]);
 
