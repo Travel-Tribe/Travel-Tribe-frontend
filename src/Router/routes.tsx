@@ -12,6 +12,7 @@ import Layout from "../Components/Layout";
 import { ProfileRequiredRoutes } from "../Components/Layout/ProfileRequiredRoutes";
 import HomeLayout from "../Components/Layout/HomeLayout";
 import ReviewDetail from "../Page/ReviewDetail";
+import ProfileCreate from '../Components/Mypage/ProfileCreate';
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -58,6 +59,7 @@ const Router = (): JSX.Element => {
               <Route path="completedTrips" element={<MyCompletedTrips />} />
               <Route path="travelHistory" element={<MyTravelHistory />} />
               <Route path="accountSettings" element={<MyAccountSettings />} />
+              <Route path="profileCreate" element={<ProfileCreate />} />
             </Route>
           </Route>
 
