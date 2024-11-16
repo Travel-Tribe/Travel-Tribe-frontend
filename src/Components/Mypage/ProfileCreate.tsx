@@ -18,11 +18,12 @@ interface UserDataResponse {
   };
 }
 
-const ProfileEdit = (): JSX.Element => {
+const ProfileCreate = (): JSX.Element => {
   const { profileData, setProfileData, updateProfileField } = useProfileStore();
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const profileCheck =
     localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) === "true";
+  const nick = localStorage.getItem("nickname");
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -55,50 +56,12 @@ const ProfileEdit = (): JSX.Element => {
     }
   };
 
-  // 프로필 데이터 불러오기
-  useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const userData = await fetchCall<UserDataResponse>(
-          `/api/v1/users`,
-          "get",
-        );
-        console.log(userData);
-        if (profileCheck) {
-          const data = await fetchCall<UserDataResponse>(
-            `/api/v1/users/${userId}/profile`,
-            "get",
-          );
-          setProfileData({
-            ...data.data,
-            nickname: userData.data.data.nickname,
-            phone: userData.data.data.phone,
-          });
-        } else {
-          setProfileData({
-            ...profileData,
-            nickname: userData.data.data.nickname,
-            phone: userData.data.data.phone,
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-      }
-    };
-
-    fetchProfileData();
-  }, [userId, profileCheck]);
-
   // 프로필 업데이트
   const profileUpdate = async () => {
     try {
       // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
-      await fetchCall(`/api/v1/users/profile`, "patch", {
+      await fetchCall(`/api/v1/users/profile`, "post", {
         ...profileData,
-      });
-      console.log("object");
-      await fetchCall(`/api/v1/users/info`, "patch", {
-        nickname: profileData.nickname,
       });
     } catch (error) {
       console.error("Error updating profile data:", error);
@@ -106,66 +69,15 @@ const ProfileEdit = (): JSX.Element => {
   };
 
   // 프로필 이미지 파일 선택 시 처리
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       const formData = new FormData();
-      formData.append("file", file); // 실제 파일 객체 추가
-
-      const previewUrl = URL.createObjectURL(file);
-      updateProfileField("fileAddress", previewUrl);
-      try {
-        const response = await fetchCall<{ data: { fileUrl: string } }>(
-          `/api/v1/file/upload`,
-          "post",
-          formData,
-        );
-        console.log(response.data.fileUrl);
-        // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
-        // updateProfileField("fileAddress", response.data.fileUrl);
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      }
-    }
-  };
-
-  // 닉네임 유효성 검사 및 중복 체크
-  const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    updateProfileField("nickname", value);
-    setError(
-      /[!@#$%^&*(),.?":{}|<>]/.test(value)
-        ? "특수문자를 사용할 수 없습니다."
-        : "",
-    );
-  };
-
-  const handleNicknameDuplicate = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-    setValidationStatus({ isChecking: true, isAvailable: false });
-    setError("");
-    setSuccess("");
-
-    try {
-      const response = await fetchCall<{ data: boolean }>(
-        `/api/v1/users/duplicate?type=nickname&query=${encodeURIComponent(profileData.nickname)}`,
-        "get",
-      );
-      console.log(response);
-      if (response.data) {
-        setError("이미 사용 중인 닉네임입니다");
-        setValidationStatus({ isChecking: false, isAvailable: false });
-      } else {
-        setSuccess("사용 가능한 닉네임입니다");
-        setValidationStatus({ isChecking: false, isAvailable: true });
-      }
-    } catch (error) {
-      setError("이미 사용 중인 닉네임입니다");
-      setValidationStatus({ isChecking: false, isAvailable: false });
+      const imageUrl = URL.createObjectURL(file);
+      formData.append("fileUrl", imageUrl);
+      console.log(formData);
+      // const response = await fetchCall(`/api/v1/file/upload`,'post',formData);
+      updateProfileField("fileAddress", imageUrl);
     }
   };
 
@@ -197,7 +109,6 @@ const ProfileEdit = (): JSX.Element => {
   // 폼 유효성 검사
   useEffect(() => {
     setFormValid(
-      profileData.nickname.trim() !== "" &&
         profileData.birth.trim() !== "" &&
         profileData.gender.trim() !== "" &&
         profileData.smoking.trim() !== "" &&
@@ -222,7 +133,7 @@ const ProfileEdit = (): JSX.Element => {
             />
             <label htmlFor="file">
               <div className="mt-2 px-4 py-1 bg-gray-300 text-gray-700 text-sm rounded-md cursor-pointer">
-                프로필 변경
+                프로필 생성
               </div>
             </label>
             <input
@@ -232,30 +143,6 @@ const ProfileEdit = (): JSX.Element => {
               accept="image/*"
               onChange={handleFileChange}
             />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-gray-700 text-sm mb-1">닉네임</label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="text"
-                placeholder="Nickname"
-                className="border border-gray-300 rounded px-2 py-1 text-sm w-60"
-                value={profileData.nickname}
-                onChange={handleNicknameChange}
-              />
-              <button
-                className={`px-3 py-1 ${!profileData.nickname ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-gray-300 text-gray-700"} text-sm rounded-md`}
-                onClick={handleNicknameDuplicate}
-                disabled={!profileData.nickname || validationStatus.isChecking}
-              >
-                {validationStatus.isChecking ? "확인 중..." : "중복 검사"}
-              </button>
-            </div>
-            {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-            {success && (
-              <p className="text-green-500 text-xs mt-1">{success}</p>
-            )}
           </div>
         </div>
 
@@ -407,4 +294,4 @@ const ProfileEdit = (): JSX.Element => {
   );
 };
 
-export default ProfileEdit;
+export default ProfileCreate;
