@@ -617,7 +617,6 @@ export const RecruitMockData: TravelPlan[] = [
     limitMinAge: 20,
     limitSex: "UNRELATED",
     limitSmoke: "NO",
->
     deadline: "2024-11-29",
 
     days: [

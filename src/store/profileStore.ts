@@ -76,9 +76,10 @@ export const useProfileStore = create<ProfileState>(set => ({
         data: { data: { nickname: string } };
       }>(`/api/v1/users`, "get");
       console.log(profileResponse);
+      // console.log(object);
       set(state => ({
         profileData: {
-          ...profileResponse.data,
+          ...profileResponse.data.data,
           nickname: userResponse.data.data.nickname,
         },
       }));

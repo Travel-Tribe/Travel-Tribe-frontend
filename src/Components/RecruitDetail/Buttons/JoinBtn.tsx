@@ -65,8 +65,8 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
             depositId: depositId,
           },
         );
-
-        if (response?.success) {
+          console.log(response);
+        if (response?.data.result === "SUCCESS") {
           alert("결제가 완료되었습니다.");
         } else {
           throw new Error("결제 승인에 실패했습니다.");
@@ -93,7 +93,7 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
             : "결제 처리 중 오류가 발생했습니다.",
         );
       } finally {
-        navigate("/posts");
+        navigate("/");
       }
     },
     [navigate],
@@ -149,16 +149,16 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
       );
 
       console.log("Participation response:", participationData);
-      console.log(participationData.data.participationId);
+      console.log(participationData.data.data.participationId);
 
-      if (!participationData?.data.participationId) {
+      if (!participationData?.data.data.participationId) {
         throw new Error("참여 신청 처리 중 오류가 발생했습니다.");
       }
 
       // 2. 결제 준비 요청
       const paymentReadyRequest: PaymentReadyRequest = {
         postId: postId,
-        participationId: participationData.data.participationId,
+        participationId: participationData.data.data.participationId,
         PGMethod: "KAKAOPAY",
       };
 
@@ -172,7 +172,7 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
 
       console.log("Payment ready response:", paymentReadyData);
 
-      if (!paymentReadyData?.data?.nextRedirectPcUrl) {
+      if (!paymentReadyData?.data?.data.next_redirect_pc_url) {
         throw new Error("결제 정보를 불러오는데 실패했습니다.");
       }
 
@@ -182,7 +182,7 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
       //   "depositId",
       //   String(paymentReadyData.data.depositId),
       // );
-      window.location.href = paymentReadyData.data.nextRedirectPcUrl;
+      window.location.href = paymentReadyData.data.data.next_redirect_pc_url;
     } catch (error) {
       console.error("Error in join process:", error);
       alert(
