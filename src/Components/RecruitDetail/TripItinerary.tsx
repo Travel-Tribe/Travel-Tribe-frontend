@@ -7,9 +7,9 @@ interface TripItineraryProps {
 }
 
 const DayHeader = ({ dayIndex, date }: { dayIndex: number; date: string }) => (
-  <div className="sticky top-0 bg-base-100 py-3 z-20 border-b">
+  <div className="sticky top-0 bg-base-100 py-3 z-20 border-b px-8">
     <div className="flex items-center justify-between">
-      <span className="text-lg font-bold ml-2">Day {dayIndex + 1}</span>
+      <span className="text-lg font-bold">Day {dayIndex + 1}</span>
       <span className="text-base-content/70">{date}</span>
     </div>
   </div>
@@ -58,13 +58,14 @@ export default function TripItinerary({ travelPlan }: TripItineraryProps) {
       </div>
     );
   }
+  console.log("플랜:", travelPlan);
 
   return (
-    <div className="h-[1100px] p-8">
+    <div className="h-[1100px]">
       <div className="card bg-base-100 border h-full">
         <div className="card-body p-0 h-full">
           {/* Header */}
-          <div className="border-b p-4">
+          <div className="border-b p-8">
             <div className="flex items-center gap-2">
               <img src={Schedule} alt="schedule icon" className="w-6 h-6" />
               <h2 className="card-title">여행 일정</h2>
@@ -72,7 +73,7 @@ export default function TripItinerary({ travelPlan }: TripItineraryProps) {
           </div>
 
           {/* Content */}
-          <div className="overflow-y-auto h-[calc(1100px-4rem)] pb-4">
+          <div className="overflow-y-auto overflow-x-hidden h-[calc(1100px-4rem)] pb-4">
             {travelPlan.days.map((day, dayIndex) => (
               <div key={dayIndex} className="mb-8 last:mb-0">
                 <DayHeader

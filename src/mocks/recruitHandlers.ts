@@ -28,7 +28,7 @@ export const recruitHandlers = [
     const postId = parseInt(postIdParam);
 
     return HttpResponse.json(
-      RecruitMockData.filter(recruitment => recruitment.postId === postId),
+      RecruitMockData.find(recruitment => recruitment.postId === postId),
       { status: 201 },
     );
   }),
