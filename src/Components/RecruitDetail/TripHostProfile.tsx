@@ -10,6 +10,13 @@ interface UserProfile {
   profile: string;
 }
 
+interface UserData {
+  data: UserProfile;
+}
+
+interface UseResponse {
+  data: UserData;
+}
 interface TripHostProfileProps {
   travelPlan?: TravelPlan;
 }
@@ -26,24 +33,18 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
       if (!userId) {
         throw new Error("호스트 ID가 없습니다.");
       }
-      const response = await fetchCall<{ data: UserProfile }>(
+      const response = await fetchCall<UseResponse>(
         `api/v1/users/${userId}`,
         "get",
       );
 
-      console.log(response);
-      if (!response.data) {
+      console.log("유저:", response);
+      if (!response.data.data) {
         throw new Error("사용자 데이터를 받아올 수 없습니다.");
       }
-      return response.data;
-      // return {
-      //   nickname: "SEOK",
-      //   ratingAvg: null,
-      //   gender: "MALE",
-      //   count: "12",
-      // };
+      return response.data.data;
     },
-    enabled: Boolean(userId),
+    // enabled: Boolean(travelPlan?.userId),
   });
 
   if (isLoading) return <div>로딩중...</div>;
@@ -52,7 +53,7 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
   return (
     <div className="card bg-base-100 border">
       <div className="card-body">
-        <div className="flex items-center">
+        <div className="flex items-center gap-3">
           <div className="avatar placeholder">
             {userData?.profile ? (
               <img
@@ -60,22 +61,20 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
                 alt={`${userData.nickname}의 프로필`}
               />
             ) : (
-              <div className="bg-neutral text-neutral-content w-full h-full flex items-center justify-center">
+              <div className="bg-neutral text-neutral-content w-12 h-12 flex items-center justify-center rounded-full">
                 <span className="text-xs">사진</span>
               </div>
             )}
           </div>
           <div>
             <div>
-              <span className="ml-3 text-sm text-center">
-                {userData?.nickname}
-              </span>
-              <span className="ml-3 text-sm text-center">
+              <span className="text-sm text-center">{userData?.nickname}</span>
+              <span className="text-sm text-center ml-3">
                 성별 {userData?.gender === "MALE" ? "남" : "여"}
               </span>
             </div>
             <div>
-              <span className="ml-3 text-sm text-center">
+              <span className="text-sm text-center">
                 평점 {userData?.ratingAvg ?? 0}
               </span>
               <span className="ml-3 text-sm text-center">
