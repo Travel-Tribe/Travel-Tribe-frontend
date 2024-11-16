@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import fetchCall from "../Utils/apiFetch";
-import { ReviewTypes, TravelPlan } from "../mocks/mockData";
+import { ReviewTypes } from "../mocks/mockData";
 import { mappingContinent } from "../Utils/mappingContinent";
 import { mappingCountry } from "../Utils/mappingCountry";
 import { useQuery } from "react-query";
@@ -40,7 +40,7 @@ const Review = React.memo(
         `/api/v1/reviews?${getFilterParams()}`,
         "get",
       );
-      return response.data.reviews<TravelPlan[]>;
+      return response.data.reviews<ReviewTypes[]>;
     };
 
     const debouncedFetchRecruitData = debounce(fetchRecruitData, 500);

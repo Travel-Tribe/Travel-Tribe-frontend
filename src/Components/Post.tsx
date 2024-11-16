@@ -65,6 +65,7 @@ interface ReviewPostProps {
 
 export const ReviewPost = React.memo(
   ({ review }: ReviewPostProps): JSX.Element => {
+    console.log(review);
     return (
       <div className="mb-[20px]">
         <Link
