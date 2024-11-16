@@ -73,7 +73,7 @@ export const ReviewPost = React.memo(
           className="w-[300px] h-[290px] bg-white border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
         >
           <img
-            src={review.files[0].fileAddress}
+            src={review.fileAddress}
             alt={review.title}
             className="w-[300px] h-[150px] object-cover"
           />
