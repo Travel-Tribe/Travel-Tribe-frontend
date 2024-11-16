@@ -178,10 +178,10 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
 
       // 카카오 결제 페이지로 리다이렉트
       // depositId를 sessionStorage에 저장
-      sessionStorage.setItem(
-        "depositId",
-        String(paymentReadyData.data.depositId),
-      );
+      // sessionStorage.setItem(
+      //   "depositId",
+      //   String(paymentReadyData.data.depositId),
+      // );
       window.location.href = paymentReadyData.data.nextRedirectPcUrl;
     } catch (error) {
       console.error("Error in join process:", error);
