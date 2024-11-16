@@ -17,7 +17,6 @@ interface UserData {
 interface UseResponse {
   data: UserData;
 }
-
 interface TripHostProfileProps {
   travelPlan?: TravelPlan;
 }

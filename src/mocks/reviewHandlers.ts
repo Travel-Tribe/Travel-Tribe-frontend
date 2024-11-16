@@ -23,7 +23,6 @@ export const reviewHandlers = [
     const continent = url.searchParams.get("continent");
     const country = url.searchParams.get("country");
     const userId = url.searchParams.get("userId");
-
     const responseData = ReviewData.filter(review => {
       return (
         (title ? review.title.includes(title) : true) &&

@@ -67,7 +67,7 @@ const Header = React.memo((): JSX.Element => {
             </Link>
           </div>
         )}
-      </div>
+      </div>    
     </div>
   );
 });
