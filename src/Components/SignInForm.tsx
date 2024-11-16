@@ -1,7 +1,7 @@
 import { useState } from "react";
 import EyeIcon from "../assets/icons/visibility.svg";
 import EyeOffIcon from "../assets/icons/visibility_off.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -44,7 +44,6 @@ const STORAGE_KEYS = {
 } as const;
 
 const SignIn = (): JSX.Element => {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -82,9 +81,11 @@ const SignIn = (): JSX.Element => {
         );
 
         if (responseData?.profileCheck) {
-          navigate("/");
+          window.location.href = "/";
         } else {
-          navigate("/mypage/profileCreate");
+
+          window.location.href = "/mypage/profileCreate";
+
         }
       } else {
         throw new Error("로그인에 실패했습니다");

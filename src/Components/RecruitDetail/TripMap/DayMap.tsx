@@ -58,6 +58,8 @@ const DayMap = ({ visits, dayDetails }: DayMapProps) => {
     lng: point.longitude,
   }));
 
+  console.log("방문:", visits);
+
   // 마커 생성 및 관리
   useEffect(() => {
     if (!map || !visits.length) return;
