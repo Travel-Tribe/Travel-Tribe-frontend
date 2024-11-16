@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { ReviewData, Review } from "./mockData";
+import { ReviewData, ReviewTypes } from "./mockData";
 
 export const reviewHandlers = [
   // 후기 조회
@@ -23,28 +23,26 @@ export const reviewHandlers = [
     const continent = url.searchParams.get("continent");
     const country = url.searchParams.get("country");
     const userId = url.searchParams.get("userId");
-    console.log(userId);
-    const responseData = ReviewData
-      .filter(review => {
-        return (
-          (title ? review.title.includes(title) : true) &&
-          (content ? review.contents.includes(content) : true) &&
-          (continent ? review.continent === continent : true) &&
-          (country ? review.country === country : true) &&
-          (userId ? review.userId === userId : true)
-        );
-      })
-      .map(review => ({
-        userId: review.userId,
-        postId: review.postId,
-        reviewId: review.reviewId,
-        continent: review.continent,
-        country: review.country,
-        region: review.region,
-        title: review.title,
-        contents: review.contents,
-        fileAddress: review.files[0]?.fileAddress || null,
-      }));
+
+    const responseData = ReviewData.filter(review => {
+      return (
+        (title ? review.title.includes(title) : true) &&
+        (content ? review.contents.includes(content) : true) &&
+        (continent ? review.continent === continent : true) &&
+        (country ? review.country === country : true) &&
+        (userId ? review.userId === Number(userId) : true)
+      );
+    }).map(review => ({
+      userId: review.userId,
+      postId: review.postId,
+      reviewId: review.reviewId,
+      continent: review.continent,
+      country: review.country,
+      region: review.region,
+      title: review.title,
+      contents: review.contents,
+      fileAddress: review.files[0]?.fileAddress || null,
+    }));
     console.log("responseData", responseData);
     return HttpResponse.json({ reviews: responseData }, { status: 201 });
   }),
@@ -52,7 +50,7 @@ export const reviewHandlers = [
   // 후기 글 등록
   http.post("/api/v1/posts/{postId}/reviews", async ({ request }) => {
     console.log("후기 글 등록", request.json());
-    const newReview = (await request.json()) as Review;
+    const newReview = (await request.json()) as ReviewTypes;
 
     ReviewData.push(newReview);
 
@@ -70,7 +68,7 @@ export const reviewHandlers = [
     async ({ request, params }) => {
       const postId = params.postId;
       const reviewId = params.reviewId;
-      const response = (await request.json()) as Review;
+      const response = (await request.json()) as ReviewTypes;
 
       ReviewData[reviewId] = { ...response };
 
