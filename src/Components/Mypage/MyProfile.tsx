@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { useProfileStore } from "../../store/profileStore";
@@ -33,21 +33,11 @@ const MyProfile = (): JSX.Element => {
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const profileCheck = localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (profileCheck === "false") {
-      navigate("/mypage/myProfileEdit");
-    } else if (userId) {
-      fetchProfileData(userId);
-    }
-  }, [profileCheck, navigate, userId]);
+  const [age, setAge] = useState<number | null>(null);
 
   const calculateAge = (birthDateString: string): number => {
     const today = new Date();
-    const birthDate = new Date(String(birthDateString));
-    if (isNaN(birthDate.getTime())) {
-      throw new Error("Invalid date format"); // 유효하지 않은 날짜 형식 처리
-    }
+    const birthDate = new Date(birthDateString);
     let age = today.getFullYear() - birthDate.getFullYear();
     if (
       today.getMonth() < birthDate.getMonth() ||
@@ -59,7 +49,29 @@ const MyProfile = (): JSX.Element => {
     return age;
   };
 
-  const age = calculateAge(profileData.birth);
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        if (profileCheck === "false") {
+          navigate("/mypage/myProfileEdit");
+        } else if (userId) {
+          await fetchProfileData(userId); // 데이터를 로드
+          if (profileData.birth) {
+            setAge(calculateAge(profileData.birth)); // 나이 계산
+          }
+        }
+      } catch (error) {
+        console.error("Error loading profile data:", error);
+      }
+    };
+
+    loadProfileData();
+  }, [profileCheck, navigate, userId, profileData.birth]);
+
+  // if (!profileData.birth || age === null) {
+  //   // 데이터가 로드되지 않았거나 나이가 계산되지 않은 경우 로딩 상태 표시
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <main className="ml-[60px] py-5">

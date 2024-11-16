@@ -9,32 +9,21 @@ import SelectBox from "../Common/SelectBox";
 import { MBTI } from "../../Constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
 
-interface UserDataResponse {
-  data: {
-    data: {
-      nickname: string;
-      phone: string;
-    };
-  };
-}
-
-const ProfileCreate = (): JSX.Element => {
+const ProfileCreate = (): JSX.Element | null => {
   const { profileData, setProfileData, updateProfileField } = useProfileStore();
-  const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+  console.log(profileData);
   const profileCheck =
-    localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) === "true";
-  const nick = localStorage.getItem("nickname");
+    localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) == "true";
 
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [formValid, setFormValid] = useState(false);
-  const [validationStatus, setValidationStatus] = useState({
-    isChecking: false,
-    isAvailable: false,
-  });
 
   const navigate = useNavigate();
   const animatedComponents = makeAnimated();
+
+  if (profileCheck) {
+    return null;
+  }
 
   const handleVisitedCountriesChange = (newValue: unknown) => {
     if (Array.isArray(newValue)) {
@@ -56,28 +45,29 @@ const ProfileCreate = (): JSX.Element => {
     }
   };
 
-  // 프로필 업데이트
-  const profileUpdate = async () => {
-    try {
-      // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
-      await fetchCall(`/api/v1/users/profile`, "post", {
-        ...profileData,
-      });
-    } catch (error) {
-      console.error("Error updating profile data:", error);
-    }
-  };
-
   // 프로필 이미지 파일 선택 시 처리
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       const formData = new FormData();
-      const imageUrl = URL.createObjectURL(file);
-      formData.append("fileUrl", imageUrl);
-      console.log(formData);
-      // const response = await fetchCall(`/api/v1/file/upload`,'post',formData);
-      updateProfileField("fileAddress", imageUrl);
+      formData.append("file", file); // 실제 파일 객체 추가
+
+      const previewUrl = URL.createObjectURL(file);
+      updateProfileField("fileAddress", previewUrl);
+      try {
+        const response = await fetchCall<{ data: { fileUrl: string } }>(
+          `/api/v1/file/upload`,
+          "post",
+          formData,
+        );
+        console.log(response.data.fileUrl);
+        // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
+        updateProfileField("fileAddress", response.data.fileUrl);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      }
     }
   };
 
@@ -98,18 +88,26 @@ const ProfileCreate = (): JSX.Element => {
     updateProfileField("smoking", smoking);
   const handleMbtiChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
     updateProfileField("mbti", event.target.value);
+
   // 프로필 저장
   const handleUpdateProfile = async () => {
-    await profileUpdate();
-    localStorage.setItem("ProfileCheck", "true");
-    // alert("변경완료");
-    navigate("/mypage");
+    try {
+      const { nickname, phone, ...filteredProfileData } = profileData;
+      await fetchCall(`/api/v1/users/profile`, "post", {
+        ...filteredProfileData,
+      });
+      localStorage.setItem("ProfileCheck", "true");
+      alert("프로필 생성 완료");
+      navigate("/mypage");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+    }
   };
 
   // 폼 유효성 검사
   useEffect(() => {
     setFormValid(
-        profileData.birth.trim() !== "" &&
+      profileData.birth.trim() !== "" &&
         profileData.gender.trim() !== "" &&
         profileData.smoking.trim() !== "" &&
         profileData.mbti.trim() !== "" &&
@@ -120,7 +118,7 @@ const ProfileCreate = (): JSX.Element => {
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
-        <h2 className="text-3xl">프로필 수정</h2>
+        <h2 className="text-3xl">프로필 생성</h2>
       </div>
 
       <form>
@@ -133,7 +131,7 @@ const ProfileCreate = (): JSX.Element => {
             />
             <label htmlFor="file">
               <div className="mt-2 px-4 py-1 bg-gray-300 text-gray-700 text-sm rounded-md cursor-pointer">
-                프로필 생성
+                프로필 이미지
               </div>
             </label>
             <input

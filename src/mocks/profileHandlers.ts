@@ -12,8 +12,7 @@ export const profileHandlers = [
   }),
 
   // 프로필 생성
-  http.post("/api/v1/users/:userId/profile", async ({ request, params }) => {
-    const userId = params.userId;
+  http.post("/api/v1/users/profile", async ({ request }) => {
     const response = (await request.json()) as {
       introduction: string;
       mbti: string;
