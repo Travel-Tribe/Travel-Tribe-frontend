@@ -13,13 +13,6 @@ import fetchCall from "../Utils/apiFetch";
 import EditBtn from "../Components/RecruitPost/Buttons/EditBtn";
 import JoinBtn from "../Components/RecruitPost/Buttons/JoinBtn";
 
-<<<<<<< Updated upstream:src/Page/RecruitPost.tsx
-interface postResponse {
-  data: TravelPlan[];
-}
-
-const RecruitPost = (): JSX.Element => {
-=======
 interface postProps {
   data: TravelPlan;
 }
@@ -28,8 +21,7 @@ interface postResponse {
   data: postProps;
 }
 
-const RecruitDetail = (): JSX.Element => {
->>>>>>> Stashed changes:src/Page/RecruitDetail.tsx
+const RecruitPost = (): JSX.Element => {
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
@@ -47,15 +39,9 @@ const RecruitDetail = (): JSX.Element => {
         `/api/v1/posts/${postId}`,
         "get",
       );
-<<<<<<< Updated upstream:src/Page/RecruitPost.tsx
-      console.log("Response:", response.data);
-      if (response.data && response.data.length > 0) {
-        return response.data[0];
-=======
       console.log("Response:", response);
       if (response.data.data) {
         return response.data.data;
->>>>>>> Stashed changes:src/Page/RecruitDetail.tsx
       }
       throw new Error("모집글을 찾을 수 없습니다.");
     },
