@@ -53,14 +53,18 @@ export const useProfileStore = create<ProfileState>(set => ({
   userProfiles: {},
   // 일부 속성만 업데이트
   setProfileData: data =>
-    set(state => ({
-      profileData: { ...state.profileData, ...data },
-    })),
+    set(state => {
+      const updatedData = { ...state.profileData, ...data };
+      console.log("Profile Data Updated:", updatedData); // 로그 추가
+      return { profileData: updatedData };
+    }),
   // 특정 속성 하나만 업데이트 할 때 사용
   updateProfileField: (key, value) =>
-    set(state => ({
-      profileData: { ...state.profileData, [key]: value },
-    })),
+    set(state => {
+      const updatedData = { ...state.profileData, [key]: value };
+      console.log("Profile Field Updated:", key, value, updatedData); // 로그 추가
+      return { profileData: updatedData };
+    }),
 
   fetchProfileData: async (userId: string) => {
     try {
@@ -72,7 +76,6 @@ export const useProfileStore = create<ProfileState>(set => ({
         data: { data: { nickname: string } };
       }>(`/api/v1/users`, "get");
       console.log(profileResponse);
-      console.log(userResponse);
       set(state => ({
         profileData: {
           ...profileResponse.data,
@@ -81,6 +84,8 @@ export const useProfileStore = create<ProfileState>(set => ({
       }));
     } catch (error) {
       console.error("Error fetching profile data:", error);
+
+      set(() => ({ profileData: initialProfileData }));
     }
   },
 
@@ -132,7 +137,8 @@ export const useProfileStore = create<ProfileState>(set => ({
 
   // 프로필 데이터를 기본 상태로 리셋하는 함수
   resetProfileData: () =>
-    set(() => ({
-      profileData: initialProfileData,
-    })),
+    set(() => {
+      console.log("Resetting Profile Data to Initial State"); // 로그 추가
+      return { profileData: initialProfileData };
+    }),
 }));

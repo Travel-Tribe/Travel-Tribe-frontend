@@ -4,6 +4,7 @@ import useLocalStorage from "../../Hooks/useLocalStorage";
 import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import profileImg from "../../assets/profileImg.webp";
+import { useProfileStore } from "../../store/profileStore";
 
 const fetchSideUserProfile = async (userId: string) => {
   try {
@@ -41,6 +42,7 @@ const Sidebar = (): JSX.Element => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState("내 프로필");
   const location = useLocation();
+  const { resetProfileData } = useProfileStore();
 
   const onClickLogout = async () => {
     try {
@@ -50,6 +52,7 @@ const Sidebar = (): JSX.Element => {
       document.cookie =
         "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       setToken(null);
+      resetProfileData();
       navigate("/");
     } catch (error) {
       console.error("POST 요청에 실패했습니다:", error);

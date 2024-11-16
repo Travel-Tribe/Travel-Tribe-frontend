@@ -164,8 +164,7 @@ const ProfileEdit = (): JSX.Element => {
         setValidationStatus({ isChecking: false, isAvailable: true });
       }
     } catch (error) {
-      setError("이미 사용 중인 닉네임입니다");
-      setValidationStatus({ isChecking: false, isAvailable: false });
+      console.error("Error duplicate nickname:", error);
     }
   };
 
@@ -189,7 +188,6 @@ const ProfileEdit = (): JSX.Element => {
   // 프로필 저장
   const handleUpdateProfile = async () => {
     await profileUpdate();
-    localStorage.setItem("ProfileCheck", "true");
     // alert("변경완료");
     navigate("/mypage");
   };
