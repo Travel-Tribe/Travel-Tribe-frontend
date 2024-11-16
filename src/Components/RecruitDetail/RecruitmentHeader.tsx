@@ -26,14 +26,14 @@ const RecruitmentHeader = ({
 
   return (
     <div className="card bg-base-100">
-      <div className="px-8 pt-8">
+      <div className="p-8">
         <div className="flex items-center">
           <button className="btn btn-xs btn-success text-white">모집중</button>
           <span className="ml-3 text-sm text-center">
             모집마감: {travelPlan.deadline}
           </span>
         </div>
-        <h2 className="card-title text-2xl">{travelPlan.title}</h2>
+        <h2 className="card-title text-2xl mt-2">{travelPlan.title}</h2>
         <div className="flex flex-wrap gap-4 mt-0.5 font-medium">
           <div className="flex">
             <img src={Group} />

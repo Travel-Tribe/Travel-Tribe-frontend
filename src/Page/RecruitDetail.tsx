@@ -13,8 +13,12 @@ import fetchCall from "../Utils/apiFetch";
 import EditBtn from "../Components/RecruitDetail/Buttons/EditBtn";
 import JoinBtn from "../Components/RecruitDetail/Buttons/JoinBtn";
 
-interface postResponse {
+interface postProps {
   data: TravelPlan;
+}
+
+interface postResponse {
+  data: postProps;
 }
 
 const RecruitDetail = (): JSX.Element => {
@@ -35,9 +39,9 @@ const RecruitDetail = (): JSX.Element => {
         `/api/v1/posts/${postId}`,
         "get",
       );
-      console.log("Response:", response.data);
-      if (response.data) {
-        return response.data;
+      console.log("Response:", response);
+      if (response.data.data) {
+        return response.data.data;
       }
       throw new Error("모집글을 찾을 수 없습니다.");
     },
@@ -51,6 +55,10 @@ const RecruitDetail = (): JSX.Element => {
       </div>
     );
   }
+
+  const handleGoToList = () => {
+    navigate("/recruitment");
+  };
 
   if (error) {
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
@@ -106,7 +114,7 @@ const RecruitDetail = (): JSX.Element => {
         <div>
           <button
             className="btn btn-sm text-slate-50  btn-error"
-            onClick={() => navigate("/recruitment")}
+            onClick={handleGoToList}
           >
             목록으로
           </button>
