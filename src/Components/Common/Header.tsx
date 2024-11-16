@@ -38,6 +38,7 @@ const Header = React.memo((): JSX.Element => {
   };
 
   return (
+<<<<<<< Updated upstream
     <div className="w-full h-10 mt-[20px] mb-[30px] mx-auto max-w-[1347px] min-w-[540px] flex justify-between align-center">
       <h1 className="text-4xl font-bold">
         <Link to={"/"}>여행족</Link>
@@ -63,6 +64,38 @@ const Header = React.memo((): JSX.Element => {
           </Link>
         </div>
       )}
+=======
+    <div className="w-full h-10 mb-[30px]  max-w-[1347px] min-w-[540px] ">
+      <div className="container mx-auto flex justify-between items-center">
+        <h1 className="text-4xl font-bold">
+          <Link to={"/"}>여행족</Link>
+        </h1>
+        {token === "null" || token === null ? (
+          <div className="text-16 flex align-center">
+            <Link to="/signIn" className="text-black hover:underline">
+              로그인
+            </Link>
+            <span className="mx-2">/</span>
+            <Link to="/signUp" className="text-black hover:underline">
+              회원가입
+            </Link>
+          </div>
+        ) : (
+          <div className="text-16">
+            <span
+              className="text-black hover:underline"
+              onClick={onClickLogout}
+            >
+              로그아웃
+            </span>
+            <span className="mx-2">/</span>
+            <Link to="/mypage" className="text-black hover:underline">
+              마이페이지
+            </Link>
+          </div>
+        )}
+      </div>
+>>>>>>> Stashed changes
     </div>
   );
 });

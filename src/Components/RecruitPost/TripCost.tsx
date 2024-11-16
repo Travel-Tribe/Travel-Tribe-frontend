@@ -28,19 +28,31 @@ export default function TripCost({ travelPlan }: TripCostProps) {
               <div className="flex flex-col">
                 <span className="text-sm text-gray-500">숙박비</span>
                 <span className="text-sm">
+<<<<<<< Updated upstream:src/Components/RecruitPost/TripCost.tsx
                   {travelPlan?.accommodationFee.toLocaleString()}원
+=======
+                  {travelPlan?.accommodationFee?.toLocaleString()}원
+>>>>>>> Stashed changes:src/Components/RecruitDetail/TripCost.tsx
                 </span>
               </div>
               <div className="flex flex-col">
                 <span className="text-sm text-gray-500">항공권</span>
                 <span className="text-sm">
+<<<<<<< Updated upstream:src/Components/RecruitPost/TripCost.tsx
                   {travelPlan?.airplaneFee.toLocaleString()}원
+=======
+                  {travelPlan?.airplaneFee?.toLocaleString()}원
+>>>>>>> Stashed changes:src/Components/RecruitDetail/TripCost.tsx
                 </span>
               </div>
               <div className="flex flex-col">
                 <span className="text-sm text-gray-500">기타비용</span>
                 <span className="text-sm">
+<<<<<<< Updated upstream:src/Components/RecruitPost/TripCost.tsx
                   {travelPlan?.otherExpenses.toLocaleString()}원
+=======
+                  {travelPlan?.otherExpenses?.toLocaleString()}원
+>>>>>>> Stashed changes:src/Components/RecruitDetail/TripCost.tsx
                 </span>
               </div>
             </div>
@@ -49,7 +61,11 @@ export default function TripCost({ travelPlan }: TripCostProps) {
           <div className="flex justify-between">
             <span className="text-lg font-medium">총 예상 비용</span>
             <span className="text-lg font-medium w-[200px] text-right">
+<<<<<<< Updated upstream:src/Components/RecruitPost/TripCost.tsx
               {totalCost(travelPlan).toLocaleString()}원
+=======
+              {totalCost(travelPlan)?.toLocaleString()}원
+>>>>>>> Stashed changes:src/Components/RecruitDetail/TripCost.tsx
             </span>
           </div>
         </div>

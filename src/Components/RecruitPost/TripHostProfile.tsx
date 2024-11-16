@@ -8,6 +8,14 @@ interface UserProfile {
   count: string;
 }
 
+interface UserData {
+  data: UserProfile;
+}
+
+interface UseResponse {
+  data: UserData;
+}
+
 interface TripHostProfileProps {
   travelPlan?: TravelPlan;
 }
@@ -21,6 +29,7 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
   } = useQuery<UserProfile>({
     queryKey: ["user", userId],
     queryFn: async () => {
+<<<<<<< Updated upstream:src/Components/RecruitPost/TripHostProfile.tsx
       // if (!travelPlan?.userId) {
       //   throw new Error("호스트 ID가 없습니다.");
       // }
@@ -40,6 +49,21 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
         gender: "MALE",
         count: "12",
       };
+=======
+      if (!userId) {
+        throw new Error("호스트 ID가 없습니다.");
+      }
+      const response = await fetchCall<UseResponse>(
+        `api/v1/users/${userId}`,
+        "get",
+      );
+
+      console.log("유저:", response);
+      if (!response.data.data) {
+        throw new Error("사용자 데이터를 받아올 수 없습니다.");
+      }
+      return response.data.data;
+>>>>>>> Stashed changes:src/Components/RecruitDetail/TripHostProfile.tsx
     },
     // enabled: Boolean(travelPlan?.userId),
   });
@@ -50,23 +74,34 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
   return (
     <div className="card bg-base-100 border">
       <div className="card-body">
-        <div className="flex items-center">
+        <div className="flex items-center gap-3">
           <div className="avatar placeholder">
+<<<<<<< Updated upstream:src/Components/RecruitPost/TripHostProfile.tsx
             <div className="bg-neutral text-neutral-content w-12 rounded-full">
               <span className="text-xs">사진</span>
             </div>
+=======
+            {userData?.profile ? (
+              <img
+                src={userData.profile}
+                alt={`${userData.nickname}의 프로필`}
+              />
+            ) : (
+              <div className="bg-neutral text-neutral-content w-12 h-12 flex items-center justify-center rounded-full">
+                <span className="text-xs">사진</span>
+              </div>
+            )}
+>>>>>>> Stashed changes:src/Components/RecruitDetail/TripHostProfile.tsx
           </div>
           <div>
             <div>
-              <span className="ml-3 text-sm text-center">
-                {userData?.nickname}
-              </span>
-              <span className="ml-3 text-sm text-center">
+              <span className="text-sm text-center">{userData?.nickname}</span>
+              <span className="text-sm text-center ml-3">
                 성별 {userData?.gender === "MALE" ? "남" : "여"}
               </span>
             </div>
             <div>
-              <span className="ml-3 text-sm text-center">
+              <span className="text-sm text-center">
                 평점 {userData?.ratingAvg ?? 0}
               </span>
               <span className="ml-3 text-sm text-center">
