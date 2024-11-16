@@ -15,6 +15,7 @@ const TravelPlan = React.memo((): JSX.Element => {
   useEffect(() => {
     const numberOfDays =
       getDiffDate(postData.travelStartDate, postData.travelEndDate) + 1;
+    console.log(postData.travelStartDate, postData.travelEndDate, numberOfDays);
     const newDays = Array.from({ length: numberOfDays }, () => ({
       dayDetails: [{ title: "", description: "", image: "" }],
       itineraryVisits: [{ latitude: 0, longitude: 0, orderNumber: 1 }],
@@ -25,7 +26,7 @@ const TravelPlan = React.memo((): JSX.Element => {
     if (postData.days[0]) {
       setDays(postData.days);
     }
-  }, []);
+  }, [postData.travelStartDate, postData.travelEndDate]);
 
   const handleAddDaySchedule = useCallback(
     (dayIndex: number) => {
@@ -89,7 +90,7 @@ const TravelPlan = React.memo((): JSX.Element => {
       {days.map((day, dayIndex) => (
         <div key={dayIndex} className="w-[600px] mb-[30px]">
           <p className="text-[18px] mb-[10px]">
-            {`${postData.travelStartDate.split("-")[0]} - ${postData.travelStartDate.split("-")[1]} - ${Number(postData.travelStartDate.split("-")[2]) + dayIndex} (DAY-${dayIndex + 1})`}
+            {`${postData.travelStartDate.split("-")[0]}-${postData.travelStartDate.split("-")[1].padStart(2, "0")}-${String(Number(postData.travelStartDate.split("-")[2]) + dayIndex).padStart(2, "0")} (DAY-${dayIndex + 1})`}
           </p>
           <div className="w-[400px] border">
             {day.dayDetails.map((info, destIndex) => (

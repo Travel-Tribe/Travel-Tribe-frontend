@@ -45,23 +45,15 @@ const Recruitment = React.memo(
         `/api/v1/posts?${getFilterParams()}`,
         "get",
       );
-      console.log(response.data.data.content);
-      return response.data.data.content<TravelPlan[]>;
+      return [
+        response.data.totalPages,
+        response.data.data.content<TravelPlan[]>,
+      ];
     };
 
     const debouncedFetchRecruitData = debounce(fetchRecruitData, 500);
 
-    useEffect(() => {
-      clearTravelData();
-      debouncedFetchRecruitData();
-      return () => debouncedFetchRecruitData.cancel();
-    }, [search, city, selectedContinent, selectedCountry, mbti, page]);
-
-    const {
-      data: recruitData,
-      isError,
-      error,
-    } = useQuery({
+    const { data, isError, error, isLoading } = useQuery({
       queryKey: ["recruitData"],
       queryFn: async () => {
         const response = fetchRecruitData();
@@ -69,9 +61,15 @@ const Recruitment = React.memo(
         return response;
       },
     });
-const observer = useRef<IntersectionObserver | null>(null);
-    console.log(recruitData);
-    // Intersection Observer 설정
+
+    useEffect(() => {
+      clearTravelData();
+      debouncedFetchRecruitData();
+      return () => debouncedFetchRecruitData.cancel();
+    }, [search, city, selectedContinent, selectedCountry, mbti, page]);
+
+    const observer = useRef<IntersectionObserver | null>(null);
+
     const lastElementRef = useCallback((node: HTMLDivElement | null) => {
       if (observer.current) observer.current.disconnect();
 
@@ -94,11 +92,15 @@ const observer = useRef<IntersectionObserver | null>(null);
       return <>에러 입니다.</>;
     }
 
+    if (isLoading) {
+      return <div>로딩중...</div>;
+    }
+
     return (
       <div className="flex flex-wrap gap-[35px]">
-        {recruitData &&
-          recruitData?.map((plan: TravelPlan, index: number) => {
-            const isLastElement = index === recruitData.length - 1;
+        {data?.[1]<TravelPlan> &&
+          data?.[1]?.map((plan: TravelPlan) => {
+            const isLastElement = page === Number(data[0]);
             return (
               <div
                 ref={isLastElement ? lastElementRef : null}
