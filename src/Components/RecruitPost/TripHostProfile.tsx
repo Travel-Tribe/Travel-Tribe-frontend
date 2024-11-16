@@ -1,11 +1,13 @@
 import { useQuery } from "react-query";
 import { TravelPlan } from "../../mocks/mockData";
+import fetchCall from "../../Utils/apiFetch";
 
 interface UserProfile {
   nickname: string;
   gender: string;
   ratingAvg: number | null;
   count: string;
+  profile: string;
 }
 
 interface UserData {
@@ -29,27 +31,6 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
   } = useQuery<UserProfile>({
     queryKey: ["user", userId],
     queryFn: async () => {
-<<<<<<< Updated upstream:src/Components/RecruitPost/TripHostProfile.tsx
-      // if (!travelPlan?.userId) {
-      //   throw new Error("호스트 ID가 없습니다.");
-      // }
-      // const response = await fetchCall<UserProfile>(
-      //   `api/v1/users/${travelPlan.userId}`,
-      //   "get",
-      // );
-
-      // console.log(response);
-      // if (!response) {
-      //   throw new Error("사용자 데이터를 받아올 수 없습니다.");
-      // }
-      // return response
-      return {
-        nickname: "SEOK",
-        ratingAvg: null,
-        gender: "MALE",
-        count: "12",
-      };
-=======
       if (!userId) {
         throw new Error("호스트 ID가 없습니다.");
       }
@@ -63,7 +44,6 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
         throw new Error("사용자 데이터를 받아올 수 없습니다.");
       }
       return response.data.data;
->>>>>>> Stashed changes:src/Components/RecruitDetail/TripHostProfile.tsx
     },
     // enabled: Boolean(travelPlan?.userId),
   });
@@ -76,11 +56,6 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
       <div className="card-body">
         <div className="flex items-center gap-3">
           <div className="avatar placeholder">
-<<<<<<< Updated upstream:src/Components/RecruitPost/TripHostProfile.tsx
-            <div className="bg-neutral text-neutral-content w-12 rounded-full">
-              <span className="text-xs">사진</span>
-            </div>
-=======
             {userData?.profile ? (
               <img
                 src={userData.profile}
@@ -91,7 +66,6 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
                 <span className="text-xs">사진</span>
               </div>
             )}
->>>>>>> Stashed changes:src/Components/RecruitDetail/TripHostProfile.tsx
           </div>
           <div>
             <div>
