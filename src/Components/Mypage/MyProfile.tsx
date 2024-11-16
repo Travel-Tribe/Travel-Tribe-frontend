@@ -81,7 +81,7 @@ const MyProfile = (): JSX.Element => {
           <div className="flex items-center">
             <img
               className="w-16 h-16 rounded-full"
-              src={profileData.fileAddress || profileImg}
+              src="http://34.64.39.55:7070/api/v1/file/preview?fileUrl=%2Ftravel%2Fupload%2Fa3a79f8d-06e7-4871-a4f2-e542b0af3459____no_title.png"
             />
             <div className="ml-5">
               <span className="block text-lg font-bold">

@@ -66,11 +66,12 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
         `/api/v1/users/duplicate?type=email&query=${encodeURIComponent(
           emailInput,
         )}`,
-        "post",
+        "get",
       );
+      console.log(response);
       const isDuplicate = response.data;
 
-      if (isDuplicate) {
+      if (!isDuplicate) {
         setError("이미 사용 중인 이메일입니다");
         setValidationStatus({ isChecking: false, isAvailable: false });
       } else {
@@ -100,7 +101,8 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
       alert("인증 코드 전송에 실패했습니다.");
     }
   };
-
+console.log(emailInput);
+console.log(inputCode);
   // 이메일 변경
   const handleEmailChange = async () => {
     try {

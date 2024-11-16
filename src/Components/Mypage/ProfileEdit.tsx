@@ -93,10 +93,10 @@ const ProfileEdit = (): JSX.Element => {
   const profileUpdate = async () => {
     try {
       // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
-      await fetchCall(`/api/v1/users/profile`, "patch", {
+      const response = await fetchCall(`/api/v1/users/profile`, "patch", {
         ...profileData,
       });
-      console.log("object");
+      console.log(response);
       await fetchCall(`/api/v1/users/info`, "patch", {
         nickname: profileData.nickname,
       });
@@ -122,9 +122,9 @@ const ProfileEdit = (): JSX.Element => {
           "post",
           formData,
         );
-        console.log(response.data.fileUrl);
+        console.log(response.data.data);
         // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
-        // updateProfileField("fileAddress", response.data.fileUrl);
+        updateProfileField("fileAddress", response.data.data.fileUrl);
       } catch (error) {
         console.error("Error uploading file:", error);
       }
@@ -156,7 +156,7 @@ const ProfileEdit = (): JSX.Element => {
         "get",
       );
       console.log(response);
-      if (response.data) {
+      if (!response.data) {
         setError("이미 사용 중인 닉네임입니다");
         setValidationStatus({ isChecking: false, isAvailable: false });
       } else {
