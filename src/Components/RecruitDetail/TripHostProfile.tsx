@@ -1,11 +1,13 @@
 import { useQuery } from "react-query";
 import { TravelPlan } from "../../mocks/mockData";
+import fetchCall from "../../Utils/apiFetch";
 
 interface UserProfile {
   nickname: string;
   gender: string;
   ratingAvg: number | null;
   count: string;
+  profile: string;
 }
 
 interface TripHostProfileProps {
@@ -21,27 +23,27 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
   } = useQuery<UserProfile>({
     queryKey: ["user", userId],
     queryFn: async () => {
-      // if (!travelPlan?.userId) {
-      //   throw new Error("호스트 ID가 없습니다.");
-      // }
-      // const response = await fetchCall<UserProfile>(
-      //   `api/v1/users/${travelPlan.userId}`,
-      //   "get",
-      // );
+      if (!userId) {
+        throw new Error("호스트 ID가 없습니다.");
+      }
+      const response = await fetchCall<{ data: UserProfile }>(
+        `api/v1/users/${userId}`,
+        "get",
+      );
 
-      // console.log(response);
-      // if (!response) {
-      //   throw new Error("사용자 데이터를 받아올 수 없습니다.");
-      // }
-      // return response
-      return {
-        nickname: "SEOK",
-        ratingAvg: null,
-        gender: "MALE",
-        count: "12",
-      };
+      console.log(response);
+      if (!response.data) {
+        throw new Error("사용자 데이터를 받아올 수 없습니다.");
+      }
+      return response.data;
+      // return {
+      //   nickname: "SEOK",
+      //   ratingAvg: null,
+      //   gender: "MALE",
+      //   count: "12",
+      // };
     },
-    // enabled: Boolean(travelPlan?.userId),
+    enabled: Boolean(userId),
   });
 
   if (isLoading) return <div>로딩중...</div>;
@@ -52,9 +54,16 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
       <div className="card-body">
         <div className="flex items-center">
           <div className="avatar placeholder">
-            <div className="bg-neutral text-neutral-content w-12 rounded-full">
-              <span className="text-xs">사진</span>
-            </div>
+            {userData?.profile ? (
+              <img
+                src={userData.profile}
+                alt={`${userData.nickname}의 프로필`}
+              />
+            ) : (
+              <div className="bg-neutral text-neutral-content w-full h-full flex items-center justify-center">
+                <span className="text-xs">사진</span>
+              </div>
+            )}
           </div>
           <div>
             <div>

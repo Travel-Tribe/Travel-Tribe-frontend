@@ -6,7 +6,7 @@ import { useRecruitPostStore } from "../../../store/recruitPostStore";
 interface ButtonProps {
   postId?: number;
   userId?: number;
-  travelPlan: TravelPlan;
+  travelPlan?: TravelPlan;
 }
 
 export default function EditBtn({ postId, userId, travelPlan }: ButtonProps) {
@@ -15,8 +15,10 @@ export default function EditBtn({ postId, userId, travelPlan }: ButtonProps) {
   const { setTravelData } = useRecruitPostStore();
 
   const handleEdit = () => {
-    setTravelData(travelPlan);
-    navigate(`/recruitment/edit/:${postId}`);
+    if (travelPlan) {
+      setTravelData(travelPlan);
+      navigate(`/recruitment/edit/:${postId}`);
+    }
   };
 
   if (currentUserId?.toString() !== userId?.toString()) {
