@@ -83,9 +83,13 @@ const SignIn = (): JSX.Element => {
         if (responseData?.profileCheck) {
           window.location.href = "/";
         } else {
+<<<<<<< HEAD
 
           window.location.href = "/mypage/profileCreate";
 
+=======
+          navigate("/mypage/profileCreate");
+>>>>>>> e48a5660d2c6de58e058c6a51b6db04a39de7961
         }
       } else {
         throw new Error("로그인에 실패했습니다");

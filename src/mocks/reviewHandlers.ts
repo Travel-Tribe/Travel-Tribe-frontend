@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { ReviewData, Review } from "./mockData";
+import { ReviewData, ReviewTypes } from "./mockData";
 
 export const reviewHandlers = [
   // 후기 조회
@@ -29,7 +29,7 @@ export const reviewHandlers = [
         (content ? review.contents.includes(content) : true) &&
         (continent ? review.continent === continent : true) &&
         (country ? review.country === country : true) &&
-        (userId ? review.userId === userId : true)
+        (userId ? review.userId === Number(userId) : true)
       );
     }).map(review => ({
       userId: review.userId,
@@ -49,7 +49,7 @@ export const reviewHandlers = [
   // 후기 글 등록
   http.post("/api/v1/posts/{postId}/reviews", async ({ request }) => {
     console.log("후기 글 등록", request.json());
-    const newReview = (await request.json()) as Review;
+    const newReview = (await request.json()) as ReviewTypes;
 
     ReviewData.push(newReview);
 
@@ -67,7 +67,7 @@ export const reviewHandlers = [
     async ({ request, params }) => {
       const postId = params.postId;
       const reviewId = params.reviewId;
-      const response = (await request.json()) as Review;
+      const response = (await request.json()) as ReviewTypes;
 
       ReviewData[reviewId] = { ...response };
 
