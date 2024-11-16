@@ -57,7 +57,6 @@ const Recruitment = React.memo(
       queryKey: ["recruitData"],
       queryFn: async () => {
         const response = fetchRecruitData();
-        console.log(response);
         return response;
       },
     });
