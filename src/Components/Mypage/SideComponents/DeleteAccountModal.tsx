@@ -20,8 +20,8 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   const clickDeleteAccount = async () => {
     try {
       await fetchCall(`/api/v1/users`, "delete");
-      navigate("/");
       setToken(null);
+      navigate("/");
     } catch (error) {
       console.error("delete 요청에 실패했습니다:", error);
     }

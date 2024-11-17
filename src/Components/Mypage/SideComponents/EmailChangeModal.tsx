@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import fetchCall from "../../../Utils/apiFetch";
+import { useNavigate } from "react-router-dom";
 
 interface EmailChangeModalProps {
   isOpen: boolean;
@@ -20,7 +21,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     isChecking: false,
     isAvailable: false,
   });
-
+  const navigate = useNavigate();
   const resetFields = () => {
     setEmailInput("");
     setInputCode("");
@@ -101,8 +102,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
       alert("인증 코드 전송에 실패했습니다.");
     }
   };
-console.log(emailInput);
-console.log(inputCode);
+
   // 이메일 변경
   const handleEmailChange = async () => {
     try {
@@ -111,6 +111,8 @@ console.log(inputCode);
         code: inputCode,
       });
       alert("이메일이 성공적으로 변경되었습니다.");
+      setToken(null);
+      navigate("/signIn");
       onClose();
     } catch (error) {
       console.error("이메일 변경 중 에러 발생:", error);
