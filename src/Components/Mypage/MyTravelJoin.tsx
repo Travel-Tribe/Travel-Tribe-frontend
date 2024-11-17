@@ -1,36 +1,107 @@
 import fetchCall from "../../Utils/apiFetch";
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { mappingCountry } from "../../Utils/mappingCountry";
+
+interface TravelPlan {
+  postId: string;
+  id: string;
+  title: string;
+  travelStartDate: string;
+  travelEndDate: string;
+  maxParticipants: number;
+  travelCountry: string;
+  continent: string;
+  deadline: string;
+  participantsCount: number;
+  userId: string;
+}
+
+interface TravelPlanResponse {
+  data: {
+    data: {
+      content: TravelPlan;
+    };
+  };
+}
+
+interface participantion {
+  participationId: number;
+  postId: number;
+  userId: string;
+}
 
 const MypageTest = () => {
+  const navigate = useNavigate();
   const week = ["일", "월", "화", "수", "목", "금", "토"];
+  const userId = localStorage.getItem("USER_ID");
 
-  const travelInfos = [
-    {
-      travelStartDate: "2024-10-23",
-      travelEndDate: "2024-10-30",
-      maxParticipants: 6,
-      travelCountry: "프랑스",
-      deadline: "2024-11-28",
-      title: "도쿄 3박4일 가실 mz들~~",
-      participantsCount: 4,
-    },
-    {
-      travelStartDate: "2024-12-15",
-      travelEndDate: "2024-12-20",
-      maxParticipants: 10,
-      travelCountry: "이탈리아",
-      deadline: "2024-12-01",
-      title: "이탈리아 로마투어 같이 가실 분?",
-      participantsCount: 10,
-    },
-  ];
+  const [participationDataList, setParticipationDataList] = useState<TravelPlan[]>([]);
 
-  const fetchGetPostId = async () => {
-    try {
-      await fetchCall(`/api/v1/posts/${postId}`)
-    } catch (error) {
-      console.error("Error submitting getPostId", error);
-    }
-  }
+  useEffect(() => {
+    const fetchMyRecruitData = async () => {
+      try {
+        if (!userId) {
+          console.error("USER_ID가 로컬 스토리지에 없습니다.");
+          return;
+        }
+
+        const response = await fetchCall<TravelPlanResponse>(`/api/v1/posts/participations`, "get");
+        console.log(response);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0); // 현재 날짜의 시간 부분을 초기화
+
+        // travelStartDate가 현재보다 미래이고, userId가 동일한 여행 계획만 필터링
+        const filteredPlans = response.data.data.content.filter(
+          (plan: TravelPlan) => {
+            const travelStartDate = new Date(plan.travelStartDate);
+
+            // 날짜 유효성 검증 및 필터링
+            if (isNaN(travelStartDate.getTime())) {
+              console.warn("Invalid travelStartDate:", plan.travelStartDate);
+              return false;
+            }
+
+            return (
+              travelStartDate >= today && String(plan.userId) === String(userId)
+            );
+          },
+        );
+
+        // 필터링된 계획에 참여자 수 추가
+        const plansWithParticipants = await Promise.all(
+          filteredPlans.map(async (plan: TravelPlan) => {
+            try {
+              const participants = await fetchCall<participantion[]>(
+                `/api/v1/posts/${plan.postId}/participations`,
+                "get",
+              );
+              return {
+                ...plan,
+                participantsCount: participants.data.length, // 참여 인원 수 추가
+              };
+            } catch (error) {
+              console.error(
+                `Error fetching participants for postId ${plan.postId}:`,
+                error,
+              );
+              return {
+                ...plan,
+                participantsCount: 0, // 에러 발생 시 기본값 설정
+              };
+            }
+          }),
+        );
+
+        // 최종 데이터를 상태에 저장
+        setParticipationDataList(plansWithParticipants);
+      } catch (error) {
+        console.error("Error fetching recruitment data:", error);
+      }
+    };
+
+    fetchMyRecruitData();
+  }, [userId]);
 
   return (
     <>
@@ -43,7 +114,7 @@ const MypageTest = () => {
         </div>
 
         <ul className="mt-4 space-y-6">
-          {travelInfos.map((info, index) => {
+          {participationDataList.map((info, index) => {
             const today: any = new Date();
             const deadlineDate: any = new Date(info.deadline);
             const diffTime = deadlineDate - today;

@@ -1,5 +1,6 @@
 import { http, HttpResponse } from "msw";
 import { ParticipationsData } from "./mockData";
+import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 
 export const participationHandlers = [
   // 참여 조회
@@ -52,5 +53,19 @@ export const participationHandlers = [
       },
       { status: 201 },
     );
+  }),
+
+  http.get("/api/v1/posts/participations", async () => {
+    const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+
+    const response = ParticipationsData.filter(
+      participation => participation.userId === userId,
+    ).map(participation => ({
+      participationId: participation.participationId,
+      postId: participation.postId,
+      ParticipationStatus: participation.ParticipationStatus,
+    }));
+    console.log("Participations found:", response);
+    return HttpResponse.json(response, { status: 200 });
   }),
 ];
