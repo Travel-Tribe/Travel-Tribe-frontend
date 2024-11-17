@@ -1,10 +1,10 @@
 import fetchCall from "../../Utils/apiFetch";
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { mappingCountry } from "../../Utils/mappingCountry";
 
 interface TravelPlan {
-  postId: string;
+  postId: number;
   id: string;
   title: string;
   travelStartDate: string;
@@ -20,15 +20,15 @@ interface TravelPlan {
 interface TravelPlanResponse {
   data: {
     data: {
-      content: TravelPlan;
+      content: TravelPlan[];
     };
   };
 }
 
-interface participantion {
+interface Participation {
   participationId: number;
   postId: number;
-  userId: string;
+  ParticipationStatus: string;
 }
 
 const MypageTest = () => {
@@ -36,43 +36,58 @@ const MypageTest = () => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const userId = localStorage.getItem("USER_ID");
 
-  const [participationDataList, setParticipationDataList] = useState<TravelPlan[]>([]);
+  const [filteredPlans, setFilteredPlans] = useState<TravelPlan[]>([]);
 
   useEffect(() => {
-    const fetchMyRecruitData = async () => {
+    const fetchData = async () => {
       try {
         if (!userId) {
           console.error("USER_ID가 로컬 스토리지에 없습니다.");
           return;
         }
 
-        const response = await fetchCall<TravelPlanResponse>(`/api/v1/posts/participations`, "get");
-        console.log(response);
+        // 전체 모집글 조회
+        const { data: allPostsResponse } = await fetchCall<TravelPlanResponse>(
+          `/api/v1/posts`,
+          "get",
+        );
+        const allPosts = allPostsResponse.data.content;
+
+        // 참여 데이터 조회
+        const participationResponse = await fetchCall<Participation[]>(
+          "/api/v1/posts/participations",
+          "get",
+        );
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // 현재 날짜의 시간 부분을 초기화
+        today.setHours(0, 0, 0, 0);
 
-        // travelStartDate가 현재보다 미래이고, userId가 동일한 여행 계획만 필터링
-        const filteredPlans = response.data.data.content.filter(
-          (plan: TravelPlan) => {
-            const travelStartDate = new Date(plan.travelStartDate);
-
-            // 날짜 유효성 검증 및 필터링
-            if (isNaN(travelStartDate.getTime())) {
-              console.warn("Invalid travelStartDate:", plan.travelStartDate);
-              return false;
-            }
-
-            return (
-              travelStartDate >= today && String(plan.userId) === String(userId)
-            );
-          },
+        // 참여 중인 postId 리스트 추출
+        const participatingPostIds = participationResponse.data.map(
+          (item: { postId: number }) => item.postId,
         );
 
-        // 필터링된 계획에 참여자 수 추가
+        // 전체 모집글 중 조건에 맞는 글 필터링
+        const filteredPlans = allPosts.filter(plan => {
+          const travelStartDate = new Date(plan.travelStartDate);
+
+          // 날짜 유효성 검증 및 필터링
+          if (isNaN(travelStartDate.getTime())) {
+            console.warn("Invalid travelStartDate:", plan.travelStartDate);
+            return false;
+          }
+
+          // 조건: travelStartDate가 오늘 이후 && userId가 일치 && 참여 중인 postId에 포함
+          return (
+            travelStartDate >= today &&
+            participatingPostIds.includes(plan.postId)
+          );
+        });
+
         const plansWithParticipants = await Promise.all(
           filteredPlans.map(async (plan: TravelPlan) => {
             try {
-              const participants = await fetchCall<participantion[]>(
+              // 모집글별 참여자 데이터 조회
+              const participants = await fetchCall<Participation[]>(
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
@@ -93,14 +108,14 @@ const MypageTest = () => {
           }),
         );
 
-        // 최종 데이터를 상태에 저장
-        setParticipationDataList(plansWithParticipants);
+        // 최종 필터링된 모집글 설정
+        setFilteredPlans(plansWithParticipants);
       } catch (error) {
-        console.error("Error fetching recruitment data:", error);
+        console.error("데이터를 가져오는 중 오류 발생:", error);
       }
     };
 
-    fetchMyRecruitData();
+    fetchData();
   }, [userId]);
 
   return (
@@ -109,24 +124,30 @@ const MypageTest = () => {
         <div className="flex justify-between items-center mt-10 pb-1">
           <div className="flex items-center">
             <h2 className="text-2xl font-bold mr-2">신청</h2>
-            <span className="text-lg">4</span>
+            <span className="text-lg">{filteredPlans.length}</span>
           </div>
         </div>
 
         <ul className="mt-4 space-y-6">
-          {participationDataList.map((info, index) => {
+          {filteredPlans.map((plan, index) => {
             const today: any = new Date();
-            const deadlineDate: any = new Date(info.deadline);
+            const deadlineDate: any = new Date(plan.deadline);
             const diffTime = deadlineDate - today;
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-            const travelStartDay = new Date(info.travelStartDate).getDay();
-            const travelEndDay = new Date(info.travelEndDate).getDay();
+            const travelStartDay = new Date(plan.travelStartDate).getDay();
+            const travelEndDay = new Date(plan.travelEndDate).getDay();
+
+            const travelCountry =
+              mappingCountry(plan.travelCountry, "en") || plan.travelCountry;
             return (
               <li key={index} className="list-none">
-                <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">
+                <div
+                  className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg cursor-pointer"
+                  onClick={() => navigate(`/recruitment/${plan.postId}`)}
+                >
                   <div className="flex justify-between mb-2">
-                    <h3 className=" text-xl mt-2.5 ml-2.5">{info.title}</h3>
+                    <h3 className=" text-xl mt-2.5 ml-2.5">{plan.title}</h3>
                     <div className="flex items-center">
                       <span className=" text-base ml-2.5 mt-2.5 mr-2.5">
                         마감 {diffDays}일전
@@ -137,19 +158,19 @@ const MypageTest = () => {
                     <div className="flex items-center space-x-3">
                       <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center">
                         <span className="text-base truncate">
-                          {info.travelCountry}
+                          {travelCountry}
                         </span>
                       </div>
                       <span className="text-base">
-                        참여인원 {info.participantsCount}/{info.maxParticipants}
+                        참여인원 {plan.participantsCount}/{plan.maxParticipants}
                       </span>
                       <span className="text-base">
-                        {info.travelStartDate}({week[travelStartDay]}) ~{" "}
-                        {info.travelEndDate}({week[travelEndDay]})
+                        {plan.travelStartDate}({week[travelStartDay]}) ~{" "}
+                        {plan.travelEndDate}({week[travelEndDay]})
                       </span>
                     </div>
                     <div className="flex space-x-2.5 items-center">
-                      {info.participantsCount !== info.maxParticipants ? (
+                      {plan.participantsCount !== plan.maxParticipants ? (
                         <div className="bg-white text-green-500  w-[60px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
                           모집중
                         </div>
