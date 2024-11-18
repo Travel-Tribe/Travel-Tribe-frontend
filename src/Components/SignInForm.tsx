@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import fetchCall from "../Utils/apiFetch";
+import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 
 const schema = z.object({
   email: z
@@ -36,12 +37,6 @@ interface LoginResponseHeaders {
   };
   data: LoginResponse;
 }
-
-const STORAGE_KEYS = {
-  TOKEN: "TOKEN",
-  USER_ID: "USER_ID",
-  PROFILE_CHECK: "ProfileCheck",
-} as const;
 
 const SignIn = (): JSX.Element => {
   const [showPassword, setShowPassword] = useState(false);
@@ -83,9 +78,7 @@ const SignIn = (): JSX.Element => {
         if (responseData?.profileCheck) {
           window.location.href = "/";
         } else {
-
           window.location.href = "/mypage/profileCreate";
-
         }
       } else {
         throw new Error("로그인에 실패했습니다");

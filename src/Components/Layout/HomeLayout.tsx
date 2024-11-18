@@ -116,14 +116,15 @@ const HomeLayout = () => {
       </div>
       <div className="flex justify-between items-center">
         <SearchBar value={search} setValue={setSearch} />
-        {localStorage.getItem(STORAGE_KEYS.TOKEN) && (
+        {localStorage.getItem(STORAGE_KEYS.TOKEN) &&
+        location.pathname === "/recruitment" ? (
           <Link
-            to={`${location.pathname}/write`}
+            to={`/recruitment/write`}
             className="btn btn-sm !h-[32px] bg-custom-green text-white"
           >
-            {selectedTab} 글 작성
+            모집 글 작성
           </Link>
-        )}
+        ) : null}
       </div>
       {location.pathname === "/recruitment" ? (
         <Recruitment

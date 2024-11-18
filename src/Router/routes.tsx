@@ -12,7 +12,7 @@ import Layout from "../Components/Layout";
 import { ProfileRequiredRoutes } from "../Components/Layout/ProfileRequiredRoutes";
 import HomeLayout from "../Components/Layout/HomeLayout";
 import ReviewDetail from "../Page/ReviewDetail";
-import ProfileCreate from '../Components/Mypage/ProfileCreate';
+import ProfileCreate from "../Components/Mypage/ProfileCreate";
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));

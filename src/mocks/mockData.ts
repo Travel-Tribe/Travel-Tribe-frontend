@@ -144,7 +144,7 @@ export const EmailChangeMockData: EmailCode = {
 interface DayDetail {
   title: string;
   description: string;
-  fileAddress: string;
+  fileAddress: string | File;
 }
 
 // 방문 장소 정보

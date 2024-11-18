@@ -8,10 +8,10 @@ import debounce from "lodash.debounce";
 import { ReviewPost } from "../Components/Post";
 
 interface ReviewProps {
-  selectedContinent: string;
-  selectedCountry: string;
-  city: string;
-  search: string;
+  selectedContinent?: string;
+  selectedCountry?: string;
+  city?: string;
+  search?: string;
 }
 
 const Review = React.memo(
