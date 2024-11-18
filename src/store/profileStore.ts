@@ -13,6 +13,7 @@ interface UserProfile {
   visitedCountries: string[];
   langAbilities: string[];
   phone: string;
+  fileAddressPreview: string;
 }
 
 interface SimplifiedUserProfile {
@@ -46,6 +47,7 @@ const initialProfileData: UserProfile = {
   visitedCountries: [],
   langAbilities: [],
   phone: "",
+  fileAddressPreview: "",
 };
 
 export const useProfileStore = create<ProfileState>(set => ({
@@ -72,16 +74,23 @@ export const useProfileStore = create<ProfileState>(set => ({
         `/api/v1/users/${userId}/profile`,
         "get",
       );
-      console.log(profileResponse.data);
+
       const userResponse = await fetchCall<{
         data: { data: { nickname: string } };
       }>(`/api/v1/users`, "get");
 
+      const {
+        id,
+        userId: _,
+        ...filteredProfileData
+      } = profileResponse.data.data;
+
       set(state => ({
         profileData: {
           // 서버 연동 시 .data 추가
-          ...profileResponse.data,
+          ...filteredProfileData,
           nickname: userResponse.data.data.nickname,
+          fileAddressPreview: "",
         },
       }));
     } catch (error) {

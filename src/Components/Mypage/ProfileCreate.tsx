@@ -61,7 +61,7 @@ const ProfileCreate = (): JSX.Element | null => {
           "post",
           formData,
         );
-        console.log(response);
+        console.log(response.data.data.fileUrl);
         // console.log(response.data.fileUrl);
         // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
         updateProfileField("fileAddress", response.data.data.fileUrl);
@@ -93,6 +93,7 @@ const ProfileCreate = (): JSX.Element | null => {
   const handleUpdateProfile = async () => {
     try {
       const { nickname, phone, ...filteredProfileData } = profileData;
+      console.log({...filteredProfileData});
       const response = await fetchCall(`/api/v1/users/profile`, "post", {
         ...filteredProfileData,
       });

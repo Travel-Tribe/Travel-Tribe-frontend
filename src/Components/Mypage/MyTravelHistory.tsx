@@ -53,7 +53,7 @@ const MyTravelHistory: FC = () => {
         `/api/v1/reviews?${params.toString()}`,
         "get",
       );
-      const reviews = reviewResponse.data.reviews;
+      const reviews = reviewResponse.data.data.reviews;
       const travelInfosWithDates = await Promise.all(
         reviews.map(async review => {
           const travelResponse = await fetchCall<TravelDatesResponse>(

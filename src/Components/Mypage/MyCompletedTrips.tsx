@@ -39,7 +39,7 @@ const MyCompletedTrips = (): JSX.Element => {
         "/api/v1/posts",
         "get",
       );
-      const completedTrips = response.data.content.filter(
+      const completedTrips = response.data.data.content.filter(
         (info: TravelPlan) => {
           const travelEndDate = new Date(info.travelEndDate);
           return travelEndDate < today;
