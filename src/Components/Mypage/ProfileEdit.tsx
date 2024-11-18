@@ -8,6 +8,7 @@ import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import SelectBox from "../Common/SelectBox";
 import { MBTI } from "../../Constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
+import { postImgUrl } from "../../Utils/postImgUrl";
 
 const ProfileEdit = (): JSX.Element => {
   const { profileData, setProfileData, updateProfileField, fetchProfileData } =
@@ -53,7 +54,12 @@ const ProfileEdit = (): JSX.Element => {
       console.error("USER_ID가 null입니다.");
       return;
     }
-    fetchProfileData(userId);
+    const previewImg = async (fileAddress: string) => {
+      await fetchProfileData(userId);
+      const fileAddressPreview =
+        (await previewImg(profileData.fileAddress)) ?? "";
+      updateProfileField("fileAddressPreview", fileAddressPreview);
+    };
   }, [userId, profileCheck]);
 
   // 프로필 이미지 파일 선택 시 처리
@@ -62,37 +68,67 @@ const ProfileEdit = (): JSX.Element => {
   ) => {
     const file = event.target.files?.[0];
     if (file) {
-      const formData = new FormData();
-      formData.append("file", file); // 실제 파일 객체 추가
-
       try {
-        const response = await fetchCall<{ data: { fileUrl: string } }>(
-          `/api/v1/file/upload`,
-          "post",
-          formData,
-        );
-        console.log(response.data.data);
-        updateProfileField("fileAddress", response.data.data.fileUrl);
-        // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
-        // 완전한 URI 생성
+        // 이미지 업로드 및 URL 생성
+        const imgUrl = await postImgUrl(file);
+
+        const encodedFileAddress = encodeURIComponent(imgUrl);
+
         const previewResponse = await fetchCall<Blob>(
-          `/api/v1/file/preview?fileUrl=${response.data.data.fileUrl}`,
+          `/api/v1/file/preview?fileUrl=${imgUrl}`,
           "get",
           undefined,
           "blob",
         );
-        console.log(previewResponse.data);
-        // 상태 업데이트
+
         if (previewResponse.data) {
           const imgPreviewUrl = URL.createObjectURL(previewResponse.data);
-
           // 상태 업데이트 (미리보기 URL)
           updateProfileField("fileAddressPreview", imgPreviewUrl);
         }
+
+        // 상태 업데이트
+        updateProfileField("fileAddress", imgUrl); // 최종 이미지 URL
+        // updateProfileField("fileAddressPreview", encodedFileAddress); // 미리보기 URL
+        console.log("Image URL updated:", imgUrl);
       } catch (error) {
         console.error("Error uploading file:", error);
       }
     }
+
+    // const file = event.target.files?.[0];
+    // if (file) {
+    //   const formData = new FormData();
+    //   formData.append("file", file); // 실제 파일 객체 추가
+
+    //   try {
+    //     const response = await fetchCall<{ data: { fileUrl: string } }>(
+    //       `/api/v1/file/upload`,
+    //       "post",
+    //       formData,
+    //     );
+    //     console.log(response.data.data);
+    //     updateProfileField("fileAddress", response.data.data.fileUrl);
+    //     // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
+    //     // 완전한 URI 생성
+    //     const previewResponse = await fetchCall<Blob>(
+    //       `/api/v1/file/preview?fileUrl=${response.data.data.fileUrl}`,
+    //       "get",
+    //       undefined,
+    //       "blob",
+    //     );
+    //     console.log(previewResponse.data);
+    //     // 상태 업데이트
+    //     if (previewResponse.data) {
+    //       const imgPreviewUrl = URL.createObjectURL(previewResponse.data);
+
+    //       // 상태 업데이트 (미리보기 URL)
+    //       updateProfileField("fileAddressPreview", imgPreviewUrl);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error uploading file:", error);
+    //   }
+    // }
   };
 
   // 닉네임 유효성 검사 및 중복 체크
@@ -143,6 +179,8 @@ const ProfileEdit = (): JSX.Element => {
   // 생년월일, 성별, 흡연 여부, MBTI 업데이트
   const handleBirthChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     updateProfileField("birth", event.target.value);
+  const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    updateProfileField("phone", event.target.value);
   const handleGenderChange = (gender: string) =>
     updateProfileField("gender", gender);
   const handleSmokingChange = (smoking: string) =>
@@ -155,20 +193,19 @@ const ProfileEdit = (): JSX.Element => {
   // 프로필 업데이트
   const profileUpdate = async () => {
     try {
-      const encodedFileAddress = encodeURIComponent(profileData.fileAddress);
-      console.log(encodedFileAddress);
       // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
       const response = await fetchCall(`/api/v1/users/profile`, "patch", {
         ...filteredProfileData,
-        fileAddress: encodedFileAddress,
+        // fileAddress: encodedFileAddress,
         gender: profileData.gender === "남자" ? "MALE" : "FEMALE", // URL-safe 인코딩된 fileAddress 추가
         smoking: profileData.smoking === "흡연자" ? "YES" : "NO", // URL-safe 인코딩된 fileAddress 추가
       });
 
       console.log(response);
-      // await fetchCall(`/api/v1/users/info`, "patch", {
-      //   nickname: profileData.nickname,
-      // });
+      await fetchCall(`/api/v1/users/info`, "patch", {
+        nickname: profileData.nickname,
+        phone: profileData.phone,
+      });
     } catch (error) {
       console.error("Error updating profile data:", error);
     }
@@ -192,7 +229,7 @@ const ProfileEdit = (): JSX.Element => {
         error === "",
     );
   }, [profileData, error]);
-console.log(profileData);
+  console.log(profileData);
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -204,7 +241,11 @@ console.log(profileData);
           <div className="flex flex-col items-center">
             <img
               className="w-20 h-20 rounded-full border border-gray-300"
-              src={profileData.fileAddressPreview || profileData.fileAddress || profileImg}
+              src={
+                profileData.fileAddressPreview ||
+                profileData.fileAddress ||
+                profileImg
+              }
               alt="Profile"
             />
             <label htmlFor="file">
@@ -243,6 +284,27 @@ console.log(profileData);
             {success && (
               <p className="text-green-500 text-xs mt-1">{success}</p>
             )}
+            <div className="form-control w-full">
+              <label htmlFor="signUp-phone" className="label">
+                <span className="label-text">전화번호</span>
+                <button
+                  className="btn btn-xs bg-custom-pink text-white hover:bg-custom-pink-hover"
+                  onClick={() => {}}
+                >
+                  인증하기
+                </button>
+              </label>
+              <input
+                id="signUp-phone"
+                type="tel"
+                autoComplete="tel"
+                placeholder="예시: 010-1234-5678 ('-' 포함하여 입력)"
+                maxLength={13}
+                className="input input-bordered w-full"
+                value={profileData.phone}
+                onChange={handlePhoneChange}
+              />
+            </div>
           </div>
         </div>
 
