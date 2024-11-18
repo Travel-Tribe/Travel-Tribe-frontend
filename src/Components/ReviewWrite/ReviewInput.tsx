@@ -1,13 +1,14 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useReviewStore } from "../../store/reviewStore";
 import fetchCall from "../../Utils/apiFetch";
 import RecruitInfo from "./RecruitInfo";
 
 const ReviewInput = () => {
   // TODO: 실제 구현 시 useParams()로 변경
-  const TEST_POST_ID = 1;
-  const postId = TEST_POST_ID;
+  const params = useParams<{ postId: string }>();
+  const postId = params.postId;
+  console.log("URL postId:", postId);
   const navigate = useNavigate();
   const { formData, setFormData, resetForm, isSubmitting, setIsSubmitting } =
     useReviewStore();
@@ -53,11 +54,17 @@ const ReviewInput = () => {
 
     try {
       const reviewData = {
-        ...formData,
-        postId,
-        userId: 1,
-        nickname: "currentUser",
+        continent: formData.continent,
+        country: formData.country,
+        region: formData.region,
+        title: formData.title,
+        contents: formData.contents,
+        files: formData.files.map(file => ({
+          fileAddress: file.fileAddress,
+        })),
       };
+
+      console.log("전송할 데이터:", reviewData); // 데이터 확인용
 
       const response = await fetchCall(
         `/api/v1/posts/${postId}/reviews`,
@@ -66,16 +73,12 @@ const ReviewInput = () => {
       );
 
       if (response) {
-        document.getElementById("successAlert")?.classList.remove("hidden");
         resetForm();
-
-        setTimeout(() => {
-          navigate(`/posts/${postId}/reviews`);
-        }, 3000);
+        navigate(`/review`);
       }
     } catch (err) {
       console.error("Error submitting review:", err);
-      document.getElementById("errorAlert")?.classList.remove("hidden");
+      alert("리뷰 등록에 실패했습니다.");
     } finally {
       setIsSubmitting(false);
     }
