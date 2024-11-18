@@ -77,10 +77,8 @@ const Recruitment = React.memo(
       },
       onSuccess: newData => {
         if (page.current) {
-          // page가 증가한 경우에만 데이터 추가
           setData(prevData => [...prevData, ...newData.content]);
         } else {
-          // 첫 페이지라면 데이터 덮어쓰기
           setData(newData.content);
         }
       },
@@ -119,7 +117,7 @@ const Recruitment = React.memo(
     if (isLoading) {
       return <div>로딩중...</div>;
     }
-
+    console.log(data);
     return (
       <div className="flex flex-wrap gap-[35px]">
         {data &&

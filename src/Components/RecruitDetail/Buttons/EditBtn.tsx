@@ -17,7 +17,7 @@ export default function EditBtn({ postId, userId, travelPlan }: ButtonProps) {
   const handleEdit = () => {
     if (travelPlan) {
       setTravelData(travelPlan);
-      navigate(`/recruitment/edit/:${postId}`);
+      navigate(`/recruitment/edit/${postId}`);
     }
   };
 
