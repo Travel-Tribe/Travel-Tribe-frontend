@@ -40,7 +40,7 @@ const Review = React.memo(
         `/api/v1/reviews?${getFilterParams()}`,
         "get",
       );
-      return response.data.reviews<ReviewTypes[]>;
+      return response.data.data.reviews<ReviewTypes[]>;
     };
 
     const debouncedFetchRecruitData = debounce(fetchRecruitData, 500);
@@ -97,7 +97,7 @@ const Review = React.memo(
             return (
               <div
                 ref={isLastElement ? lastElementRef : null}
-                key={review.postId}
+                key={review.reviewId}
               >
                 <ReviewPost review={review} />
               </div>

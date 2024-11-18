@@ -22,7 +22,7 @@ const ReviewDetail = (): JSX.Element => {
         "get",
       );
       console.log("reviewData", response);
-      return response.data;
+      return response.data.data;
     },
   });
 
@@ -74,7 +74,7 @@ const ReviewDetail = (): JSX.Element => {
       <div className="w-[100%] min-x-[600px] mb-[10px] px-[15px] py-[20px] border bg-white radius-10px">
         <div className="mb-[20px] whitespace-pre-line">{data.contents}</div>
         <div className="flex gap-[10px] items-center overScroll-x-scroll">
-          {data.files.map(file => (
+          {data.files?.map(file => (
             <img
               key={file.fileAddress}
               src={file.fileAddress}
