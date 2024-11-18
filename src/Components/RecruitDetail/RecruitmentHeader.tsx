@@ -1,22 +1,47 @@
+import { useQuery } from "react-query";
 import Calendar from "../../assets/icons/date_range.svg";
 import Group from "../../assets/icons/group.svg";
 import { TravelPlan } from "../../mocks/mockData";
+import fetchCall from "../../Utils/apiFetch";
+import { useParams } from "react-router-dom";
 
 interface RecruitmentHeaderProps {
   travelPlan?: TravelPlan;
   // 현재 참가자 수는 API에서 받아오기
 }
 
-const RecruitmentHeader = ({
-  travelPlan,
-}: RecruitmentHeaderProps): JSX.Element => {
-  if (!travelPlan) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
-      </div>
-    );
-  } // 또는 로딩 상태나 에러 처리
+const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
+  // const params = useParams<{ id: string }>();
+  // const postId = params.id;
+  // console.log("URL postId:", postId);
+
+  // const {
+  //   data: participationsData,
+  //   isLoading,
+  //   error,
+  // } = useQuery({
+  //   queryKey: ["participations", postId],
+  //   queryFn: async () => {
+  //     if (!postId) {
+  //       throw new Error("포스트 ID가 없습니다.");
+  //     }
+  //     const response = await fetchCall(
+  //       `api/v1/posts/${postId}/participations`,
+  //       "get",
+  //     );
+
+  //     console.log("참여자:", response);
+  //     if (!response.data.data) {
+  //       throw new Error("사용자 데이터를 받아올 수 없습니다.");
+  //     }
+  //     return response.data.data;
+  //   },
+  //   // enabled: Boolean(travelPlan?.userId),
+  // });
+
+  // if (isLoading) return <div>로딩중...</div>;
+  // if (error) return <div>에러가 발생했습니다.</div>;
+  if (!travelPlan) return <div className="error"></div>;
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -38,7 +63,8 @@ const RecruitmentHeader = ({
           <div className="flex">
             <img src={Group} />
             <span className="whitespace-nowrap">
-              2/{travelPlan.maxParticipants}명
+              2/
+              {travelPlan.maxParticipants}명
             </span>
           </div>
           <div className="flex">
