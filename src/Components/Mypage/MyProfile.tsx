@@ -9,8 +9,11 @@ import profileImg from "../../assets/profileImg.webp";
 import CountryName from "./SideComponents/CountryName";
 import MyLang from "./SideComponents/MyLang";
 
+import { previewImg } from "../../Utils/postImgUrl";
+
 const MyProfile = (): JSX.Element => {
-  const { profileData, fetchProfileData } = useProfileStore();
+  const { profileData, fetchProfileData, updateProfileField } =
+    useProfileStore();
   const mbtiColors: { [key: string]: string } = {
     ISTJ: "bg-istj",
     ISFJ: "bg-isfj",
@@ -56,6 +59,8 @@ const MyProfile = (): JSX.Element => {
           navigate("/mypage/myProfileEdit");
         } else if (userId) {
           await fetchProfileData(userId); // 데이터를 로드
+          const fileAddressPreview = await previewImg(profileData.fileAddress) ?? "";
+          updateProfileField("fileAddressPreview", fileAddressPreview);
           if (profileData.birth) {
             setAge(calculateAge(profileData.birth)); // 나이 계산
           }
@@ -67,7 +72,7 @@ const MyProfile = (): JSX.Element => {
 
     loadProfileData();
   }, [profileCheck, navigate, userId, profileData.birth]);
-console.log(profileData);
+
   return (
     <main className="ml-[60px] py-5">
       {/* Profile Card */}
@@ -76,7 +81,11 @@ console.log(profileData);
           <div className="flex items-center">
             <img
               className="w-16 h-16 rounded-full"
-              src={profileData.fileAddress !== "" ? profileData.fileAddress : profileImg}
+              src={
+                profileData.fileAddressPreview ||
+                profileData.fileAddress ||
+                profileImg
+              }
             />
             <div className="ml-5">
               <span className="block text-lg font-bold">
@@ -91,7 +100,9 @@ console.log(profileData);
                     ({profileData.ratingAvg?.toFixed(1) ?? "0.0"}/5.0)
                   </span>
                 </span>
-                <span>{profileData.smoking === "흡연자" ? "흡연" : "비흡연"}</span>
+                <span>
+                  {profileData.smoking === "흡연자" ? "흡연" : "비흡연"}
+                </span>
               </div>
             </div>
           </div>

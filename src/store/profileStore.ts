@@ -107,7 +107,7 @@ export const useProfileStore = create<ProfileState>(set => ({
       userIds.map(async userId => {
         try {
           const profile = await fetchCall<{ data: { fileAddress: string } }>(
-            `/api/v1/users/${userId}/profile`,
+            `/api/v1/users/profile`,
             "get",
           );
           const userData = await fetchCall<{
