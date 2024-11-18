@@ -64,7 +64,7 @@ const MyTravelJoin = () => {
         today.setHours(0, 0, 0, 0);
 
         // 참여 중인 postId 리스트 추출
-        const participatingPostIds = participationResponse.data.map(
+        const participatingPostIds = participationResponse.data.data.map(
           (item: { postId: number }) => item.postId,
         );
 
@@ -93,9 +93,10 @@ const MyTravelJoin = () => {
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
+              console.log(participants);
               return {
                 ...plan,
-                participantsCount: participants.data.length, // 참여 인원 수 추가
+                participantsCount: participants.data.data.length, // 참여 인원 수 추가
               };
             } catch (error) {
               console.error(

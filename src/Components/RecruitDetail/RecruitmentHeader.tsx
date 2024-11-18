@@ -7,40 +7,51 @@ import { useParams } from "react-router-dom";
 
 interface RecruitmentHeaderProps {
   travelPlan?: TravelPlan;
-  // 현재 참가자 수는 API에서 받아오기
+}
+
+interface Participation {
+  participationId: number;
+  postId: number;
+  userId: string;
+}
+
+interface ApiResponse {
+  data: {
+    data: Participation[];
+  };
 }
 
 const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
-  // const params = useParams<{ id: string }>();
-  // const postId = params.id;
-  // console.log("URL postId:", postId);
+  const params = useParams<{ id: string }>();
+  const postId = params.id;
+  console.log("URL postId:", postId);
 
-  // const {
-  //   data: participationsData,
-  //   isLoading,
-  //   error,
-  // } = useQuery({
-  //   queryKey: ["participations", postId],
-  //   queryFn: async () => {
-  //     if (!postId) {
-  //       throw new Error("포스트 ID가 없습니다.");
-  //     }
-  //     const response = await fetchCall(
-  //       `api/v1/posts/${postId}/participations`,
-  //       "get",
-  //     );
+  const {
+    data: Participation,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["participations", postId],
+    queryFn: async () => {
+      if (!postId) {
+        throw new Error("포스트 ID가 없습니다.");
+      }
+      const response = await fetchCall<ApiResponse>(
+        `api/v1/posts/${postId}/participations`,
+        "get",
+      );
 
-  //     console.log("참여자:", response);
-  //     if (!response.data.data) {
-  //       throw new Error("사용자 데이터를 받아올 수 없습니다.");
-  //     }
-  //     return response.data.data;
-  //   },
-  //   // enabled: Boolean(travelPlan?.userId),
-  // });
+      console.log("참여자:", response);
+      if (!response.data.data) {
+        throw new Error("사용자 데이터를 받아올 수 없습니다.");
+      }
+      return response.data.data;
+    },
+    enabled: Boolean(travelPlan?.userId),
+  });
 
-  // if (isLoading) return <div>로딩중...</div>;
-  // if (error) return <div>에러가 발생했습니다.</div>;
+  if (isLoading) return <div>로딩중...</div>;
+  if (error) return <div>에러가 발생했습니다.</div>;
   if (!travelPlan) return <div className="error"></div>;
 
   const formatDate = (dateString: string) => {
@@ -63,8 +74,7 @@ const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
           <div className="flex">
             <img src={Group} />
             <span className="whitespace-nowrap">
-              2/
-              {travelPlan.maxParticipants}명
+              {Participation?.length}/{travelPlan.maxParticipants}명
             </span>
           </div>
           <div className="flex">
