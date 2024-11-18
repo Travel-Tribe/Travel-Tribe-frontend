@@ -67,7 +67,7 @@ const MyProfile = (): JSX.Element => {
 
     loadProfileData();
   }, [profileCheck, navigate, userId, profileData.birth]);
-
+console.log(profileData);
   return (
     <main className="ml-[60px] py-5">
       {/* Profile Card */}
@@ -76,7 +76,7 @@ const MyProfile = (): JSX.Element => {
           <div className="flex items-center">
             <img
               className="w-16 h-16 rounded-full"
-              src={profileImg}
+              src={profileData.fileAddress !== "" ? profileData.fileAddress : profileImg}
             />
             <div className="ml-5">
               <span className="block text-lg font-bold">

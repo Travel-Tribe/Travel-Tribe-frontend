@@ -5,7 +5,6 @@ const API_TOKEN = localStorage.getItem(STORAGE_KEYS.TOKEN);
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL, //import.meta.env.VITE_API_BASE_URL,
-  withCredentials: true,
 });
 
 // 요청 인터셉터 추가
@@ -39,11 +38,13 @@ export default async function fetchCall<T>(
   url: string,
   method: "get" | "post" | "put" | "delete" | "patch",
   data?: any,
+  responseType?: "json" | "blob",
 ): Promise<T> {
   const config: AxiosRequestConfig = {
     method,
     url,
-    ...(data && { data }), // data가 있을 경우에만 data 속성 추가
+    ...(data && { data }),
+    responseType: responseType || "json", // data가 있을 경우에만 data 속성 추가
   };
 
   // Content-Type 설정

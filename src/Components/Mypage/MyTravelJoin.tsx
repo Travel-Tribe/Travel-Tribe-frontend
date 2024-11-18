@@ -31,7 +31,7 @@ interface Participation {
   ParticipationStatus: string;
 }
 
-const MypageTest = () => {
+const MyTravelJoin = () => {
   const navigate = useNavigate();
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const userId = localStorage.getItem("USER_ID");
@@ -51,6 +51,7 @@ const MypageTest = () => {
           `/api/v1/posts`,
           "get",
         );
+        console.log(allPostsResponse);
         const allPosts = allPostsResponse.data.content;
 
         // 참여 데이터 조회
@@ -58,6 +59,7 @@ const MypageTest = () => {
           "/api/v1/posts/participations",
           "get",
         );
+        console.log(participationResponse);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -194,4 +196,4 @@ const MypageTest = () => {
     </>
   );
 };
-export default MypageTest;
+export default MyTravelJoin;

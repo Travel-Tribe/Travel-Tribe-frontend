@@ -56,22 +56,6 @@ const ProfileEdit = (): JSX.Element => {
     fetchProfileData(userId);
   }, [userId, profileCheck]);
 
-  // 프로필 업데이트
-  const profileUpdate = async () => {
-    try {
-      // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
-      const response = await fetchCall(`/api/v1/users/profile`, "patch", {
-        ...profileData,
-      });
-      console.log(response);
-      await fetchCall(`/api/v1/users/info`, "patch", {
-        nickname: profileData.nickname,
-      });
-    } catch (error) {
-      console.error("Error updating profile data:", error);
-    }
-  };
-
   // 프로필 이미지 파일 선택 시 처리
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -81,16 +65,30 @@ const ProfileEdit = (): JSX.Element => {
       const formData = new FormData();
       formData.append("file", file); // 실제 파일 객체 추가
 
-      const previewUrl = URL.createObjectURL(file);
-      updateProfileField("fileAddress", previewUrl);
       try {
         const response = await fetchCall<{ data: { fileUrl: string } }>(
           `/api/v1/file/upload`,
           "post",
           formData,
         );
-        // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
+        console.log(response.data.data);
         updateProfileField("fileAddress", response.data.data.fileUrl);
+        // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
+        // 완전한 URI 생성
+        const previewResponse = await fetchCall<Blob>(
+          `/api/v1/file/preview?fileUrl=${response.data.data.fileUrl}`,
+          "get",
+          undefined,
+          "blob",
+        );
+        console.log(previewResponse.data);
+        // 상태 업데이트
+        if (previewResponse.data) {
+          const imgPreviewUrl = URL.createObjectURL(previewResponse.data);
+
+          // 상태 업데이트 (미리보기 URL)
+          updateProfileField("fileAddressPreview", imgPreviewUrl);
+        }
       } catch (error) {
         console.error("Error uploading file:", error);
       }
@@ -151,6 +149,31 @@ const ProfileEdit = (): JSX.Element => {
     updateProfileField("smoking", smoking);
   const handleMbtiChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
     updateProfileField("mbti", event.target.value);
+
+  const { nickname, phone, ratingAvg, ...filteredProfileData } = profileData;
+
+  // 프로필 업데이트
+  const profileUpdate = async () => {
+    try {
+      const encodedFileAddress = encodeURIComponent(profileData.fileAddress);
+      console.log(encodedFileAddress);
+      // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
+      const response = await fetchCall(`/api/v1/users/profile`, "patch", {
+        ...filteredProfileData,
+        fileAddress: encodedFileAddress,
+        gender: profileData.gender === "남자" ? "MALE" : "FEMALE", // URL-safe 인코딩된 fileAddress 추가
+        smoking: profileData.smoking === "흡연자" ? "YES" : "NO", // URL-safe 인코딩된 fileAddress 추가
+      });
+
+      console.log(response);
+      // await fetchCall(`/api/v1/users/info`, "patch", {
+      //   nickname: profileData.nickname,
+      // });
+    } catch (error) {
+      console.error("Error updating profile data:", error);
+    }
+  };
+
   // 프로필 저장
   const handleUpdateProfile = async () => {
     await profileUpdate();
@@ -169,7 +192,7 @@ const ProfileEdit = (): JSX.Element => {
         error === "",
     );
   }, [profileData, error]);
-
+console.log(profileData);
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -181,7 +204,7 @@ const ProfileEdit = (): JSX.Element => {
           <div className="flex flex-col items-center">
             <img
               className="w-20 h-20 rounded-full border border-gray-300"
-              src={profileData.fileAddress || profileImg}
+              src={profileData.fileAddressPreview || profileData.fileAddress || profileImg}
               alt="Profile"
             />
             <label htmlFor="file">
@@ -261,7 +284,10 @@ const ProfileEdit = (): JSX.Element => {
                   type="radio"
                   name="gender"
                   value="MALE"
-                  checked={profileData.gender === "MALE"}
+                  checked={
+                    profileData.gender === "남자" ||
+                    profileData.gender === "MALE"
+                  }
                   onChange={() => handleGenderChange("MALE")}
                   className="mr-2"
                 />{" "}
@@ -272,7 +298,10 @@ const ProfileEdit = (): JSX.Element => {
                   type="radio"
                   name="gender"
                   value="FEMALE"
-                  checked={profileData.gender === "FEMALE"}
+                  checked={
+                    profileData.gender === "여자" ||
+                    profileData.gender === "FEMALE"
+                  }
                   onChange={() => handleGenderChange("FEMALE")}
                   className="mr-2"
                 />{" "}
@@ -292,7 +321,10 @@ const ProfileEdit = (): JSX.Element => {
                   type="radio"
                   name="smoking"
                   value="YES"
-                  checked={profileData.smoking === "YES"}
+                  checked={
+                    profileData.smoking === "흡연자" ||
+                    profileData.gender === "YES"
+                  }
                   onChange={() => handleSmokingChange("YES")}
                   className="mr-2"
                 />{" "}
@@ -303,7 +335,10 @@ const ProfileEdit = (): JSX.Element => {
                   type="radio"
                   name="smoking"
                   value="NO"
-                  checked={profileData.smoking === "NO"}
+                  checked={
+                    profileData.smoking === "비흡연자" ||
+                    profileData.gender === "NO"
+                  }
                   onChange={() => handleSmokingChange("NO")}
                   className="mr-2"
                 />{" "}

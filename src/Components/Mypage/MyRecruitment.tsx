@@ -80,7 +80,7 @@ const MyRecruitment = (): JSX.Element => {
               );
               return {
                 ...plan,
-                participantsCount: participants.data.length, // 참여 인원 수 추가
+                participantsCount: participants.data.data.length, // 참여 인원 수 추가
               };
             } catch (error) {
               console.error(
