@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
 import { mappingCountry } from "../../Utils/mappingCountry";
 
@@ -46,8 +46,10 @@ const MyRecruitment = (): JSX.Element => {
           return;
         }
 
-        const response = await fetchCall<TravelPlanResponse>(`/api/v1/posts`, "get");
-        console.log(response);
+        const response = await fetchCall<TravelPlanResponse>(
+          `/api/v1/posts`,
+          "get",
+        );
         const today = new Date();
         today.setHours(0, 0, 0, 0); // 현재 날짜의 시간 부분을 초기화
 
@@ -165,7 +167,7 @@ const MyRecruitment = (): JSX.Element => {
                   </div>
                   <div className="flex justify-between ">
                     <div className="flex items-center m-2.5 space-x-8">
-                      <div className="bg-custom-red max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
+                      <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
                         <span className="truncate">{travelCountry}</span>
                       </div>
                       <span>
