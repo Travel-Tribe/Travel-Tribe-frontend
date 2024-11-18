@@ -9,17 +9,9 @@ import SelectBox from "../Common/SelectBox";
 import { MBTI } from "../../Constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
 
-interface UserDataResponse {
-  data: {
-    data: {
-      nickname: string;
-      phone: string;
-    };
-  };
-}
-
 const ProfileEdit = (): JSX.Element => {
-  const { profileData, setProfileData, updateProfileField } = useProfileStore();
+  const { profileData, setProfileData, updateProfileField, fetchProfileData } =
+    useProfileStore();
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const profileCheck =
     localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) === "true";
@@ -57,36 +49,11 @@ const ProfileEdit = (): JSX.Element => {
 
   // 프로필 데이터 불러오기
   useEffect(() => {
-    const fetchProfileData = async () => {
-      try {
-        const userData = await fetchCall<UserDataResponse>(
-          `/api/v1/users`,
-          "get",
-        );
-        console.log(userData);
-        if (profileCheck) {
-          const data = await fetchCall<UserDataResponse>(
-            `/api/v1/users/${userId}/profile`,
-            "get",
-          );
-          setProfileData({
-            ...data.data,
-            nickname: userData.data.data.nickname,
-            phone: userData.data.data.phone,
-          });
-        } else {
-          setProfileData({
-            ...profileData,
-            nickname: userData.data.data.nickname,
-            phone: userData.data.data.phone,
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-      }
-    };
-
-    fetchProfileData();
+    if (!userId) {
+      console.error("USER_ID가 null입니다.");
+      return;
+    }
+    fetchProfileData(userId);
   }, [userId, profileCheck]);
 
   // 프로필 업데이트
@@ -122,7 +89,6 @@ const ProfileEdit = (): JSX.Element => {
           "post",
           formData,
         );
-        console.log(response.data.data);
         // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
         updateProfileField("fileAddress", response.data.data.fileUrl);
       } catch (error) {

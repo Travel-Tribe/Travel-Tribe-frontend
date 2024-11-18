@@ -68,11 +68,6 @@ const MyProfile = (): JSX.Element => {
     loadProfileData();
   }, [profileCheck, navigate, userId, profileData.birth]);
 
-  // if (!profileData.birth || age === null) {
-  //   // 데이터가 로드되지 않았거나 나이가 계산되지 않은 경우 로딩 상태 표시
-  //   return <div>Loading...</div>;
-  // }
-
   return (
     <main className="ml-[60px] py-5">
       {/* Profile Card */}
@@ -81,7 +76,7 @@ const MyProfile = (): JSX.Element => {
           <div className="flex items-center">
             <img
               className="w-16 h-16 rounded-full"
-              src="http://34.64.39.55:7070/api/v1/file/preview?fileUrl=%2Ftravel%2Fupload%2Fa3a79f8d-06e7-4871-a4f2-e542b0af3459____no_title.png"
+              src={profileImg}
             />
             <div className="ml-5">
               <span className="block text-lg font-bold">
@@ -89,14 +84,14 @@ const MyProfile = (): JSX.Element => {
               </span>
               <div className="flex items-center space-x-5">
                 <span>{age}세</span>
-                <span>{profileData.gender === "MALE" ? "남자" : "여자"}</span>
+                <span>{profileData.gender === "남자" ? "남자" : "여자"}</span>
                 <span className="flex items-center">
                   ⭐{" "}
                   <span className="ml-1">
                     ({profileData.ratingAvg?.toFixed(1) ?? "0.0"}/5.0)
                   </span>
                 </span>
-                <span>{profileData.smoking === "NO" ? "비흡연" : "흡연"}</span>
+                <span>{profileData.smoking === "흡연자" ? "흡연" : "비흡연"}</span>
               </div>
             </div>
           </div>

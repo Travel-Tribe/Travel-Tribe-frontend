@@ -72,14 +72,15 @@ export const useProfileStore = create<ProfileState>(set => ({
         `/api/v1/users/${userId}/profile`,
         "get",
       );
+      console.log(profileResponse.data);
       const userResponse = await fetchCall<{
         data: { data: { nickname: string } };
       }>(`/api/v1/users`, "get");
-      console.log(profileResponse);
-      // console.log(object);
+
       set(state => ({
         profileData: {
-          ...profileResponse.data.data,
+          // 서버 연동 시 .data 추가
+          ...profileResponse.data,
           nickname: userResponse.data.data.nickname,
         },
       }));

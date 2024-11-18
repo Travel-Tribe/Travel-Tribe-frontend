@@ -48,15 +48,13 @@ export default async function fetchCall<T>(
 
   // Content-Type 설정
   if (data instanceof FormData) {
-    // FormData인 경우 Content-Type을 multipart/form-data로 자동 처리
     config.headers = {
-      ...config.headers, // 기존 헤더 유지
+      ...config.headers,
       "Content-Type": "multipart/form-data",
     };
   } else {
-    // JSON 데이터인 경우 Content-Type을 application/json으로 설정
     config.headers = {
-      ...config.headers, // 기존 헤더 유지
+      ...config.headers,
       "Content-Type": "application/json",
     };
   }
