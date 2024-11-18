@@ -2,12 +2,13 @@ import React, { useCallback, useEffect, useState } from "react";
 import { getDiffDate } from "../../Utils/getDiffDate";
 import SpecificLocationSearch from "./SpecificLocationSearch";
 import { useRecruitPostStore } from "../../store/recruitPostStore";
+import { postImgUrl } from "../../Utils/postImgUrl";
 
 const TravelPlan = React.memo((): JSX.Element => {
   const { postData, updateTravelData } = useRecruitPostStore();
   const [days, setDays] = useState([
     {
-      dayDetails: [{ title: "", description: "", image: "" }],
+      dayDetails: [{ title: "", description: "", fileAddress: "" }],
       itineraryVisits: [{ latitude: 0, longitude: 0, orderNumber: 1 }],
     },
   ]);
@@ -15,9 +16,8 @@ const TravelPlan = React.memo((): JSX.Element => {
   useEffect(() => {
     const numberOfDays =
       getDiffDate(postData.travelStartDate, postData.travelEndDate) + 1;
-    console.log(postData.travelStartDate, postData.travelEndDate, numberOfDays);
     const newDays = Array.from({ length: numberOfDays }, () => ({
-      dayDetails: [{ title: "", description: "", image: "" }],
+      dayDetails: [{ title: "", description: "", fileAddress: "" }],
       itineraryVisits: [{ latitude: 0, longitude: 0, orderNumber: 1 }],
     }));
 
@@ -33,7 +33,7 @@ const TravelPlan = React.memo((): JSX.Element => {
       const newDays = [...days];
       const newDayDetails = [
         ...newDays[dayIndex].dayDetails,
-        { title: "", description: "", image: "" },
+        { title: "", description: "", fileAddress: "" },
       ];
       const newItineraryVisits = [
         ...newDays[dayIndex].itineraryVisits,
@@ -56,19 +56,19 @@ const TravelPlan = React.memo((): JSX.Element => {
   const handleDayDetailsInputChange = (
     dayIndex: number,
     destIndex: number,
-    field: "title" | "description" | "image",
+    field: "title" | "description" | "fileAddress",
     e:
+      | string
       | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>,
+      | React.ChangeEvent<HTMLTextAreaElement>
+      | null,
   ) => {
     const newDays = [...days];
-    if (field !== "image")
+    if (typeof e === "string")
+      newDays[dayIndex].dayDetails[destIndex][field] = e;
+    else if (e !== null)
       newDays[dayIndex].dayDetails[destIndex][field] = e.target.value;
-    else if (e.target.files?.[0]) {
-      newDays[dayIndex].dayDetails[destIndex][field] = URL.createObjectURL(
-        e.target.files?.[0],
-      );
-    }
+    updateTravelData("days", newDays);
     updateTravelData("days", newDays);
   };
 
@@ -126,15 +126,20 @@ const TravelPlan = React.memo((): JSX.Element => {
                   <div className="relative">
                     <input
                       type="file"
-                      className="w-[300px] h-[24px] leading-[24px] text-[12px] bg-white border border-gray-300 rounded-md text-gray-700 text-centercursor-pointer"
-                      onChange={e =>
+                      accept=".png, .jpeg, .jpg"
+                      className="w-[300px] h-[24px] leading-[24px] text-[12px] bg-white border border-gray-300 rounded-md text-gray-700 text-center cursor-pointer"
+                      onChange={async e => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+
+                        const url = await postImgUrl(file);
                         handleDayDetailsInputChange(
                           dayIndex,
                           destIndex,
-                          "image",
-                          e,
-                        )
-                      }
+                          "fileAddress",
+                          url,
+                        );
+                      }}
                     />
                   </div>
                 </div>

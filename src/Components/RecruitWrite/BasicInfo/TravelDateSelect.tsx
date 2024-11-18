@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const TravelDateSelect = React.memo(() => {
@@ -11,7 +11,7 @@ const TravelDateSelect = React.memo(() => {
   );
   const deadline = useRecruitPostStore(state => state.postData.deadline);
 
-  const startYear = travelStartDate.split("-")[0];
+  const startYear = useMemo(() => travelStartDate.split("-")[0], []);
   const currentYear = new Date().getFullYear();
   const years = Array.from({
     length: Math.abs(Number(currentYear) - Number(startYear) + 2),

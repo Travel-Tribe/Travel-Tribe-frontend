@@ -144,7 +144,7 @@ export const EmailChangeMockData: EmailCode = {
 interface DayDetail {
   title: string;
   description: string;
-  fileAddress: string;
+  fileAddress: string | File;
 }
 
 // 방문 장소 정보
@@ -601,7 +601,7 @@ export const RecruitMockData: TravelPlan[] = [
     ],
   },
   {
-    postId: 3,
+    postId: 4,
     userId: 1,
     title: "도쿄 미식 여행",
     travelStartDate: "2024-12-3",

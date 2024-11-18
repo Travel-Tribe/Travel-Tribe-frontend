@@ -2,23 +2,19 @@ import { useEffect, useState } from "react";
 
 const useLocalStorage = (key: string) => {
   const [storedValue, setStoredValue] = useState<string | null>(
-    localStorage.getItem(key) === "undefined"
+    !localStorage.getItem(key)
       ? null
       : JSON.stringify(localStorage.getItem(key)),
   );
 
-  const setValue = (
-    value: string | null | ((val: string | null) => string | null),
-  ) => {
-    const valueToStore = value instanceof Function ? value(storedValue) : value;
-
-    if (valueToStore === null) {
+  const setValue = (value: string | null) => {
+    if (value === null) {
       localStorage.removeItem(key);
     } else {
-      localStorage.setItem(key, valueToStore);
+      localStorage.setItem(key, value);
     }
 
-    setStoredValue(valueToStore);
+    setStoredValue(value);
     window.dispatchEvent(new Event("local-storage")); // Trigger sync event
   };
 

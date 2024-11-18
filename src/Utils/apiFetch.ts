@@ -4,12 +4,8 @@ import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 const API_TOKEN = localStorage.getItem(STORAGE_KEYS.TOKEN);
 
 const axiosInstance = axios.create({
-  baseURL: "", //import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL, //import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
-  // headers: {
-  //   "Content-Type": "application/json",
-  //   credentials: "include",
-  // },
 });
 
 // 요청 인터셉터 추가
@@ -55,6 +51,7 @@ export default async function fetchCall<T>(
     // FormData인 경우 Content-Type을 multipart/form-data로 자동 처리
     config.headers = {
       ...config.headers, // 기존 헤더 유지
+      "Content-Type": "multipart/form-data",
     };
   } else {
     // JSON 데이터인 경우 Content-Type을 application/json으로 설정

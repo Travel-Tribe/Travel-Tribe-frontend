@@ -9,11 +9,11 @@ import debounce from "lodash.debounce";
 import { RecruitmentPost } from "../Components/Post";
 
 interface RecruitmentProps {
-  selectedContinent: string;
-  selectedCountry: string;
-  city: string;
-  search: string;
-  mbti: string;
+  selectedContinent?: string;
+  selectedCountry?: string;
+  city?: string;
+  search?: string;
+  mbti?: string;
 }
 
 const Recruitment = React.memo(
@@ -25,7 +25,7 @@ const Recruitment = React.memo(
     mbti,
   }: RecruitmentProps): JSX.Element => {
     const { clearTravelData } = useRecruitPostStore();
-    const [page, setPage] = useState(0);
+    const page = useRef(0);
 
     const getFilterParams = () => {
       const params = new URLSearchParams();
@@ -75,7 +75,7 @@ const Recruitment = React.memo(
       observer.current = new IntersectionObserver(
         entries => {
           if (entries[0].isIntersecting) {
-            setPage(prevPage => prevPage + 1); // 페이지를 증가시키고 새로운 데이터를 로드
+            page.current += 1; // 페이지를 증가시키고 새로운 데이터를 로드
           }
         },
         {

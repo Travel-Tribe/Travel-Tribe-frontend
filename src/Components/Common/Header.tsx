@@ -22,14 +22,15 @@ const Header = React.memo((): JSX.Element => {
   const onClickLogout = async () => {
     try {
       const response = await fetchCall<AxiosResponse>("/logout", "post");
-      // const response = await fetchCall(`/logoutCookie:${document.cookie}`, "post");
       console.log("logout", response);
       if (response.data.result === "SUCCESS") {
         localStorage.removeItem(STORAGE_KEYS.USER_ID);
         localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
         document.cookie =
           "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        setToken(null);
+        if (typeof setToken === "function") {
+          setToken(null);
+        }
         navigate("/recruitment");
       }
     } catch (error) {
@@ -38,13 +39,13 @@ const Header = React.memo((): JSX.Element => {
   };
 
   return (
-    <div className="w-full h-10 mb-[30px]  max-w-[1347px] min-w-[540px] ">
-      <div className="container mx-auto flex justify-between items-center">
+    <div className="w-full h-10 mb-[30px]  max-w-[1347px] min-w-[540px] mx-auto">
+      <div className="container flex justify-between items-center">
         <h1 className="text-4xl font-bold">
           <Link to={"/"}>여행족</Link>
         </h1>
         {token === "null" || token === null ? (
-          <div className="text-16 flex align-center">
+          <div className="text-16 flex">
             <Link to="/signIn" className="text-black hover:underline">
               로그인
             </Link>
@@ -54,9 +55,9 @@ const Header = React.memo((): JSX.Element => {
             </Link>
           </div>
         ) : (
-          <div className="text-16">
+          <div className="text-16 flex">
             <span
-              className="text-black hover:underline"
+              className="text-black hover:underline hover:cursor-pointer"
               onClick={onClickLogout}
             >
               로그아웃
@@ -67,7 +68,7 @@ const Header = React.memo((): JSX.Element => {
             </Link>
           </div>
         )}
-      </div>    
+      </div>
     </div>
   );
 });
