@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const Gender = React.memo((): JSX.Element => {
   const updateTravelData = useRecruitPostStore(state => state.updateTravelData);
   const limitSex = useRecruitPostStore(state => state.postData.limitSex);
+
+  useEffect(() => {
+    if (limitSex === "무관") updateTravelData("limitSmoke", "UNRELATED");
+    if (limitSex === "남자") updateTravelData("limitSmoke", "MALE");
+    if (limitSex === "여자") updateTravelData("limitSmoke", "FEMALE");
+  }, []);
 
   return (
     <div className="flex items-center mb-2">

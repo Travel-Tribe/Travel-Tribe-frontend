@@ -12,7 +12,7 @@ const DestinationSelect = React.memo(() => {
   useEffect(() => {
     if (postData.continent) setContinent(mappingContinent[postData.continent]);
     if (postData.travelCountry)
-      setCountry(mappingCountry(postData.travelCountry, "en"));
+      setCountry(mappingCountry(postData.travelCountry, "ko"));
   }, []);
 
   const availableCountries = useMemo(() => {
