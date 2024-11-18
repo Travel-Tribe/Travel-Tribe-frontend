@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import fetchCall from "../Utils/apiFetch";
 import { ReviewTypes } from "../mocks/mockData";
 import { mappingContinent } from "../Utils/mappingContinent";
@@ -21,17 +21,17 @@ const Review = React.memo(
     city,
     search,
   }: ReviewProps): JSX.Element => {
-    const [page, setPage] = useState(0);
+    const page = useRef(0);
 
     const getFilterParams = () => {
       const params = new URLSearchParams();
       if (search) params.append("title", search);
       if (city) params.append("content", city);
-      if (selectedContinent !== "선택" && selectedContinent !== "기타")
+      if (selectedContinent !== "선택")
         params.append("continent", mappingContinent[selectedContinent]);
       if (selectedCountry !== "선택" && selectedContinent !== "기타")
         params.append("country", mappingCountry(selectedCountry, "ko"));
-      params.append("page", page.toString());
+      params.append("page", page.current.toString());
       return params.toString();
     };
 
@@ -40,7 +40,10 @@ const Review = React.memo(
         `/api/v1/reviews?${getFilterParams()}`,
         "get",
       );
-      return response.data.reviews<ReviewTypes[]>;
+      return [
+        response.data.totalPages,
+        response.data.data.reviews<ReviewTypes[]>,
+      ];
     };
 
     const debouncedFetchRecruitData = debounce(fetchRecruitData, 500);
@@ -55,7 +58,14 @@ const Review = React.memo(
       isError,
       error,
     } = useQuery({
-      queryKey: ["reviewData"],
+      queryKey: [
+        "reviewData",
+        search,
+        city,
+        selectedContinent,
+        selectedCountry,
+        page,
+      ],
       queryFn: async () => {
         const response = fetchRecruitData();
         console.log(response);
@@ -72,7 +82,7 @@ const Review = React.memo(
       observer.current = new IntersectionObserver(
         entries => {
           if (entries[0].isIntersecting) {
-            setPage(prevPage => prevPage + 1); // 페이지를 증가시키고 새로운 데이터를 로드
+            page.current += 1; // 페이지를 증가시키고 새로운 데이터를 로드
           }
         },
         {
@@ -90,14 +100,14 @@ const Review = React.memo(
 
     return (
       <div className="flex flex-wrap gap-[35px]">
-        {reviewData &&
-          reviewData.map((review: ReviewTypes, index: number) => {
+        {reviewData?.[1] &&
+          reviewData?.[1].map((review: ReviewTypes) => {
             // 마지막 요소에 ref를 연결하여 Intersection Observer를 활성화
-            const isLastElement = index === reviewData.length - 1;
+            const isLastElement = page.current === Number(reviewData[0]);
             return (
               <div
                 ref={isLastElement ? lastElementRef : null}
-                key={review.postId}
+                key={review.reviewId}
               >
                 <ReviewPost review={review} />
               </div>

@@ -25,39 +25,64 @@ const Recruitment = React.memo(
     mbti,
   }: RecruitmentProps): JSX.Element => {
     const { clearTravelData } = useRecruitPostStore();
+    const [data, setData] = useState<TravelPlan[]>([]);
     const page = useRef(0);
 
     const getFilterParams = () => {
       const params = new URLSearchParams();
       if (search) params.append("title", search);
       if (city) params.append("content", city);
-      if (selectedContinent !== "선택" && selectedContinent !== "기타")
+      if (selectedContinent && selectedContinent !== "선택")
         params.append("continent", mappingContinent[selectedContinent]);
       if (selectedCountry !== "선택" && selectedContinent !== "기타")
         params.append("country", mappingCountry(selectedCountry, "ko"));
       if (mbti !== "선택") params.append("mbti", mbti);
-      params.append("page", page.toString());
+      params.append("page", page.current.toString());
       return params.toString();
     };
 
     const fetchRecruitData = async () => {
-      const response = await fetchCall(
-        `/api/v1/posts?${getFilterParams()}`,
-        "get",
-      );
-      return [
-        response.data.totalPages,
-        response.data.data.content<TravelPlan[]>,
-      ];
+      const response = await fetchCall<{
+        data: {
+          totalPages: number;
+          data: { content: TravelPlan[] };
+        };
+      }>(`/api/v1/posts?${getFilterParams()}`, "get");
+      return {
+        totalPages: response.data.totalPages,
+        content: response.data.data.content,
+      };
     };
 
     const debouncedFetchRecruitData = debounce(fetchRecruitData, 500);
 
-    const { data, isError, error, isLoading } = useQuery({
-      queryKey: ["recruitData"],
+    const {
+      data: recruitData,
+      isError,
+      error,
+      isLoading,
+    } = useQuery({
+      queryKey: [
+        "recruitData",
+        search,
+        city,
+        selectedContinent,
+        selectedCountry,
+        mbti,
+        page,
+      ],
       queryFn: async () => {
         const response = fetchRecruitData();
         return response;
+      },
+      onSuccess: newData => {
+        if (page.current) {
+          // page가 증가한 경우에만 데이터 추가
+          setData(prevData => [...prevData, ...newData.content]);
+        } else {
+          // 첫 페이지라면 데이터 덮어쓰기
+          setData(newData.content);
+        }
       },
     });
 
@@ -65,7 +90,7 @@ const Recruitment = React.memo(
       clearTravelData();
       debouncedFetchRecruitData();
       return () => debouncedFetchRecruitData.cancel();
-    }, [search, city, selectedContinent, selectedCountry, mbti, page]);
+    }, []);
 
     const observer = useRef<IntersectionObserver | null>(null);
 
@@ -97,9 +122,10 @@ const Recruitment = React.memo(
 
     return (
       <div className="flex flex-wrap gap-[35px]">
-        {data?.[1]<TravelPlan> &&
-          data?.[1]?.map((plan: TravelPlan) => {
-            const isLastElement = page === Number(data[0]);
+        {data &&
+          data.map((plan: TravelPlan) => {
+            const isLastElement =
+              page.current === Number(recruitData?.totalPages);
             return (
               <div
                 ref={isLastElement ? lastElementRef : null}
