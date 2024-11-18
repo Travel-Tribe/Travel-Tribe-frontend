@@ -1,16 +1,18 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Person from "../assets/icons/person.svg";
 import Calendar from "../assets/icons/Calendar.svg";
 import MapPin from "../assets/icons/Map pin.svg";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import fetchCall from "../Utils/apiFetch";
 import { useQuery } from "react-query";
+import { useCallback } from "react";
 
 const ReviewDetail = (): JSX.Element => {
   const { reviewId, postId } = useParams<{
     reviewId: string;
     postId: string;
   }>();
+  const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["reviewData", postId],
@@ -23,6 +25,11 @@ const ReviewDetail = (): JSX.Element => {
       return response.data;
     },
   });
+
+  const deleteReview = useCallback(async () => {
+    await fetchCall(`/api/v1/posts/${postId}/reviews/${reviewId}`, "delete");
+    alert(`${data.title}이 삭제되었습니다.`);
+  }, []);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -80,7 +87,20 @@ const ReviewDetail = (): JSX.Element => {
       </div>
       <div className="w-[100%] min-x-[600px] flex justify-between">
         {reviewId === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
-          <button className="btn bg-custom-red text-white">수정하기</button>
+          <>
+            <button
+              className="btn bg-custom-blue text-white"
+              onClick={() => navigate(`/review/edit/${reviewId}`)}
+            >
+              수정하기
+            </button>
+            <button
+              className="btn bg-custom-red text-white"
+              onClick={deleteReview}
+            >
+              삭제하기
+            </button>
+          </>
         ) : (
           <div className="invisible ml-[10px]"></div>
         )}

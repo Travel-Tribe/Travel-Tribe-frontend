@@ -28,7 +28,11 @@ export const recruitHandlers = [
     const postId = parseInt(postIdParam);
 
     return HttpResponse.json(
-      RecruitMockData.find(recruitment => recruitment.postId === postId),
+      {
+        data: RecruitMockData.find(
+          recruitment => recruitment.postId === postId,
+        ),
+      },
       { status: 201 },
     );
   }),
@@ -44,7 +48,7 @@ export const recruitHandlers = [
     );
 
     if (!postExists) {
-      return new HttpResponse(null, { status: 404 }); // Not Found
+      return new HttpResponse(null, { status: 404 });
     }
 
     // 게시글 삭제 (필터링)
