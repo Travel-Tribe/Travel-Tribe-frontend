@@ -3,18 +3,15 @@ import { ReviewData, ReviewTypes } from "./mockData";
 
 export const reviewHandlers = [
   // 후기 조회
-  http.get(
-    "/api/v1/posts/:postId/reviews/:reviewId/view",
-    async ({ params }) => {
-      const postId = params.postId;
-      const reviewId = params.reviewId;
-      console.log("후기 글 불러오기");
-      return HttpResponse.json(
-        ReviewData.find(review => review.reviewId === reviewId),
-        { status: 201 },
-      );
-    },
-  ),
+  http.get("/api/v1/posts/:postId/reviews/:reviewId", async ({ params }) => {
+    const postId = params.postId;
+    const reviewId = params.reviewId;
+    console.log("후기 글 불러오기");
+    return HttpResponse.json(
+      ReviewData.find(review => review.reviewId === reviewId),
+      { status: 201 },
+    );
+  }),
   // 후기 목록 조회
   http.get("/api/v1/reviews", async ({ request }) => {
     const url = new URL(request.url);

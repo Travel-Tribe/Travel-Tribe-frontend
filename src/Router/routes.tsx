@@ -13,6 +13,7 @@ import { ProfileRequiredRoutes } from "../Components/Layout/ProfileRequiredRoute
 import HomeLayout from "../Components/Layout/HomeLayout";
 import ReviewDetail from "../Page/ReviewDetail";
 import ProfileCreate from "../Components/Mypage/ProfileCreate";
+import ReviewEdit from "../Components/ReviewWrite/ReviewEdit";
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -49,7 +50,10 @@ const Router = (): JSX.Element => {
                 path="/recruitment/:postId/review/write"
                 element={<ReviewForm />}
               />
-              <Route path="/review/edit/:id" element={<ReviewForm />} />
+              <Route
+                path="/recruitment/:postId/review/edit/:id"
+                element={<ReviewEdit />}
+              />
             </Route>
 
             {/* 프로필 불필요 라우트 */}
