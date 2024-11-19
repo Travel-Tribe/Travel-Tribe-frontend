@@ -28,13 +28,13 @@ export interface PaymentReadyResponse {
   };
 }
 
-interface ParticipationResponse {
+export interface ParticipationResponse {
   data: {
     data: ParticipationsData; // 중첩된 data 구조 추가
   };
 }
 
-interface ParticipationsData {
+export interface ParticipationsData {
   participationId: number;
   postId: number;
   userId: string;
@@ -44,7 +44,7 @@ interface ParticipationsData {
   depositReturnDate: string | null;
 }
 
-interface SuccessResponse {
+export interface SuccessResponse {
   data: {
     result: string;
     message?: string;
