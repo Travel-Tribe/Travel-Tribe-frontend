@@ -5,8 +5,6 @@ import SelectBox from "../Common/SelectBox";
 import { COUNTRY_DATA } from "../../Constants/COUNTRY_DATA";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { MBTI } from "../../Constants/MBTI";
-import { mappingCountry } from "../../Utils/mappingCountry";
-import { mappingContinent } from "../../Utils/mappingContinent";
 import Recruitment from "../../Page/Recruitment";
 import Review from "../../Page/Review";
 
@@ -23,18 +21,21 @@ const HomeLayout = () => {
   useEffect(() => {
     const urlList = location.pathname.split("/");
     setSelectedTab(urlList.includes("recruitment") ? "모집" : "후기");
+    setSelectedContinent("선택");
+    setSelectedCountry("선택");
+    setCity("");
+    setMbti("선택");
+    setSearch("");
   }, [location]);
 
   const handleContinentChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
-    const continentCode = mappingContinent[event.target.value]; // filter by continent code
     setSelectedContinent(event.target.value);
-    setSelectedCountry(""); // 대륙 변경 시 국가 초기화
+    setSelectedCountry("선택"); // 대륙 변경 시 국가 초기화
   };
 
   const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const countryCode = mappingCountry(event.target.value, "ko"); // filter by country code
     setSelectedCountry(event.target.value);
   };
 

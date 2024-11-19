@@ -262,5 +262,3 @@ export const mappingCountry = (
   }
   return Object.entries(list).filter(v => v[1][0] === str)[0][0];
 };
-
-mappingCountry("짐바브웨", "ko");

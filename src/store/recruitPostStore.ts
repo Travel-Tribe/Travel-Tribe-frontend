@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { RecruitMockData, TravelPlan } from "../mocks/mockData";
-import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
+import { TravelPlan } from "../mocks/mockData";
 
 interface RecruitPostType {
   postData: TravelPlan;
@@ -14,8 +13,6 @@ interface RecruitPostType {
 
 export const useRecruitPostStore = create<RecruitPostType>(set => ({
   postData: {
-    // userId: Number(localStorage.getItem(STORAGE_KEYS.USER_ID)),
-    // postId: RecruitMockData.length + 1,
     title: "",
     travelStartDate: `${new Date().getFullYear()}-01-01`,
     travelEndDate: `${new Date().getFullYear()}-01-01`,
@@ -44,8 +41,6 @@ export const useRecruitPostStore = create<RecruitPostType>(set => ({
   clearTravelData: () =>
     set({
       postData: {
-        userId: Number(localStorage.getItem(STORAGE_KEYS.USER_ID)),
-        postId: RecruitMockData.length + 1,
         title: "",
         travelStartDate: `${new Date().getFullYear()}-1-1`,
         travelEndDate: `${new Date().getFullYear()}-1-1`,
