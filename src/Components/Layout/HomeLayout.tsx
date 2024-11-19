@@ -7,9 +7,12 @@ import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { MBTI } from "../../Constants/MBTI";
 import Recruitment from "../../Page/Recruitment";
 import Review from "../../Page/Review";
+import Community from "../../Page/Community";
 
 const HomeLayout = () => {
-  const [selectedTab, setSelectedTab] = useState<"모집" | "후기">("모집");
+  const [selectedTab, setSelectedTab] = useState<"모집" | "후기" | "커뮤니티">(
+    "모집",
+  );
   const [selectedContinent, setSelectedContinent] = useState<string>("선택");
   const [selectedCountry, setSelectedCountry] = useState<string>("선택");
   const [city, setCity] = useState<string>("");
@@ -20,7 +23,13 @@ const HomeLayout = () => {
 
   useEffect(() => {
     const urlList = location.pathname.split("/");
-    setSelectedTab(urlList.includes("recruitment") ? "모집" : "후기");
+    setSelectedTab(
+      urlList.includes("recruitment")
+        ? "모집"
+        : urlList.includes("community")
+          ? "커뮤니티"
+          : "후기",
+    );
     setSelectedContinent("선택");
     setSelectedCountry("선택");
     setCity("");
@@ -81,6 +90,18 @@ const HomeLayout = () => {
         >
           후기
         </Link>
+
+        <Link
+          to={"/community"}
+          onClick={() => setSelectedTab("커뮤니티")}
+          className={`cursor-pointer text-[24px] ${
+            selectedTab === "커뮤니티"
+              ? "text-black border-b border-black"
+              : "text-black opacity-40"
+          } pb-2`}
+        >
+          커뮤니티
+        </Link>
       </div>
       <div className="flex gap-[30px]">
         <SelectBox
@@ -118,16 +139,26 @@ const HomeLayout = () => {
       <div className="flex justify-between items-center">
         <SearchBar value={search} setValue={setSearch} />
         {localStorage.getItem(STORAGE_KEYS.TOKEN) &&
-        location.pathname === "/recruitment" ? (
-          <Link
-            to={`/recruitment/write`}
-            className="btn btn-sm !h-[32px] bg-custom-green text-white"
-          >
-            모집 글 작성
-          </Link>
-        ) : null}
+          location.pathname === "/recruitment" && (
+            <Link
+              to={`/recruitment/write`}
+              className="btn btn-sm !h-[32px] bg-custom-green text-white"
+            >
+              모집 글 작성
+            </Link>
+          )}
+
+        {localStorage.getItem(STORAGE_KEYS.TOKEN) &&
+          location.pathname === "/community" && (
+            <Link
+              to={`/community/write`}
+              className="btn btn-sm !h-[32px] bg-custom-green text-white"
+            >
+              게시글 작성
+            </Link>
+          )}
       </div>
-      {location.pathname === "/recruitment" ? (
+      {location.pathname === "/recruitment" && (
         <Recruitment
           selectedContinent={selectedContinent}
           selectedCountry={selectedCountry}
@@ -135,8 +166,17 @@ const HomeLayout = () => {
           search={search}
           mbti={mbti}
         />
-      ) : (
+      )}
+      {location.pathname === "/review" && (
         <Review
+          selectedContinent={selectedContinent}
+          selectedCountry={selectedCountry}
+          city={city}
+          search={search}
+        />
+      )}
+      {location.pathname === "/community" && (
+        <Community
           selectedContinent={selectedContinent}
           selectedCountry={selectedCountry}
           city={city}

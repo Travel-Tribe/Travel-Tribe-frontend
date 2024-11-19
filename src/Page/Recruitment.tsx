@@ -46,6 +46,7 @@ const Recruitment = React.memo(
         if (value) params.append(key, value);
       });
 
+      console.log(params.toString());
       return params.toString();
     };
 
@@ -55,7 +56,7 @@ const Recruitment = React.memo(
           totalPages: number;
           data: { content: TravelPlan[] };
         };
-      }>(`/api/v1/posts?page=${pageParam}&${getFilterParams()}`, "get");
+      }>(`/api/v1/posts?page=${pageParam}${getFilterParams()}`, "get");
       return {
         totalPages: response.data.totalPages,
         content: response.data.data.content,

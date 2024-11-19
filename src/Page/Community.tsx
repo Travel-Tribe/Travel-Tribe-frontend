@@ -1,28 +1,23 @@
-import React, { useCallback, useEffect, useRef } from "react";
-import fetchCall from "../Utils/apiFetch";
-import { ReviewTypes } from "../mocks/mockData";
+import React, { useCallback, useRef } from "react";
 import { mappingContinent } from "../Utils/mappingContinent";
 import { mappingCountry } from "../Utils/mappingCountry";
+import fetchCall from "../Utils/apiFetch";
 import { useInfiniteQuery } from "react-query";
-import { ReviewPost } from "../Components/Post";
-import { useReviewPostStore } from "../store/reviewPostStore";
 
-interface ReviewProps {
+interface CommunityProps {
   selectedContinent?: string;
   selectedCountry?: string;
   city?: string;
   search?: string;
 }
 
-const Review = React.memo(
+const Community = React.memo(
   ({
     selectedContinent,
     selectedCountry,
     city,
     search,
-  }: ReviewProps): JSX.Element => {
-    const { resetForm } = useReviewPostStore();
-
+  }: CommunityProps): JSX.Element => {
     const getFilterParams = () => {
       const filters: Record<string, string> = {
         title: search || "",
@@ -36,7 +31,6 @@ const Review = React.memo(
             ? mappingCountry(selectedCountry, "ko")
             : "",
       };
-
       // 빈 값 필터 제거
       const params = new URLSearchParams();
       Object.entries(filters).forEach(([key, value]) => {
@@ -50,9 +44,9 @@ const Review = React.memo(
       const response = await fetchCall<{
         data: {
           totalPages: number;
-          data: { reviews: ReviewTypes[] };
+          data: { reviews: [] };
         };
-      }>(`/api/v1/reviews?page=${pageParam}${getFilterParams()}`, "get");
+      }>(`/api/v1/communities?page=${pageParam}${getFilterParams()}`, "get");
       return {
         totalPages: response.data.totalPages,
         reviews: response.data.data.reviews,
@@ -69,7 +63,7 @@ const Review = React.memo(
       error,
     } = useInfiniteQuery({
       queryKey: [
-        "reviewData",
+        "communityData",
         {
           search,
           city,
@@ -84,10 +78,6 @@ const Review = React.memo(
       },
       keepPreviousData: true,
     });
-
-    useEffect(() => {
-      resetForm();
-    }, [resetForm]);
 
     const observer = useRef<IntersectionObserver | null>(null);
 
@@ -116,21 +106,11 @@ const Review = React.memo(
       return <>에러가 발생했습니다.</>;
     }
 
-    const reviews = data?.pages.flatMap(page => page.reviews) || [];
+    const communities = data?.pages.flatMap(page => page.reviews) || [];
 
     return (
       <div className="flex flex-wrap gap-[35px]">
-        {reviews.map((review: ReviewTypes, index: number) => {
-          const isLastElement = index === reviews.length - 1;
-          return (
-            <div
-              ref={isLastElement ? lastElementRef : null}
-              key={review.reviewId}
-            >
-              <ReviewPost review={review} />
-            </div>
-          );
-        })}
+        {communities}
 
         {isFetchingNextPage && <div>Loading more...</div>}
       </div>
@@ -138,4 +118,4 @@ const Review = React.memo(
   },
 );
 
-export default Review;
+export default Community;
