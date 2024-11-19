@@ -69,7 +69,7 @@ export const ReviewPost = React.memo(
     return (
       <div className="mb-[20px]">
         <Link
-          to={`/posts/${review.postId}/reviews/${review.reviewId}`}
+          to={`/recruitment/${review.postId}/review/${review.reviewId}`}
           key={review.postId}
           className="w-[300px] h-[290px] bg-white border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
         >

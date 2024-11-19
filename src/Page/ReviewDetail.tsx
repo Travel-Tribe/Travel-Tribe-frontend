@@ -86,7 +86,7 @@ const ReviewDetail = (): JSX.Element => {
         <div className="mt-[10px]">작성일: {data.createDate}</div>
       </div>
       <div className="w-[100%] min-x-[600px] flex justify-between">
-        {reviewId === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
+        {data.userId === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
           <>
             <button
               className="btn bg-custom-blue text-white"

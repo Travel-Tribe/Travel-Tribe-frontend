@@ -27,7 +27,7 @@ const initialState: ReviewFormData = {
   files: [],
 };
 
-export const useReviewStore = create<ReviewFormState>()(
+export const useReviewPost = create<ReviewFormState>()(
   persist(
     set => ({
       formData: initialState,
