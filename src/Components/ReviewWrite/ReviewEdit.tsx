@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useReviewPost } from "../../store/reviewPost";
 import fetchCall from "../../Utils/apiFetch";
 import RecruitInfo from "./RecruitInfo";
 import { useQuery, useMutation, useQueryClient } from "react-query";
+import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
 
 interface ReviewData {
   title: string;
@@ -21,18 +22,18 @@ interface ApiResponse {
 }
 
 const ReviewEdit = () => {
-  const params = useParams<{ postId: string; reviewId: string }>();
-  const { postId, reviewId } = params;
+  const params = useParams<{ postId: string; id: string }>();
+  const { postId, id } = params;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { formData, setFormData, setIsSubmitting } = useReviewPost();
 
   // 리뷰 데이터 조회
   const { isLoading } = useQuery(
-    ["review", postId, reviewId],
+    ["review", postId, id],
     async () => {
       const response = await fetchCall<ApiResponse>(
-        `/api/v1/posts/${postId}/reviews/${reviewId}`,
+        `/api/v1/posts/${postId}/reviews/${id}/view`,
         "get",
       );
       console.log("리뷰:", response);
@@ -62,7 +63,7 @@ const ReviewEdit = () => {
   const updateReviewMutation = useMutation(
     async (reviewData: ReviewData) => {
       return await fetchCall(
-        `/api/v1/posts/${postId}/reviews/${reviewId}`,
+        `/api/v1/posts/${postId}/reviews/${id}`,
         "put",
         reviewData,
       );
@@ -70,9 +71,9 @@ const ReviewEdit = () => {
     {
       onSuccess: () => {
         // 캐시 무효화
-        queryClient.invalidateQueries(["review", postId, reviewId]);
-        queryClient.invalidateQueries(["reviews"]); // 리뷰 목록도 함께 업데이트
-        navigate(`/review/${reviewId}`);
+        queryClient.invalidateQueries(["review", postId, id]);
+        // queryClient.invalidateQueries(["reviews"]); // 리뷰 목록도 함께 업데이트
+        navigate(`/recruitment/${postId}/review/${id}`);
       },
       onError: error => {
         console.error("Error updating review:", error);
@@ -91,15 +92,38 @@ const ReviewEdit = () => {
     setFormData({ [name]: value });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
 
-    const newFiles = Array.from(e.target.files).map(file => ({
-      fileAddress: URL.createObjectURL(file),
-    }));
+    try {
+      const uploadedFiles = await Promise.all(
+        Array.from(e.target.files).map(async file => {
+          const fileUrl = await postImgUrl(file);
+          const previewUrl = await previewImg(fileUrl);
+          return {
+            fileAddress: fileUrl,
+            previewAddress: previewUrl,
+          };
+        }),
+      );
 
-    setFormData({ files: [...formData.files, ...newFiles] });
+      setFormData({ files: [...formData.files, ...uploadedFiles] });
+    } catch (error) {
+      console.error("파일 업로드 중 오류 발생:", error);
+      alert("파일 업로드에 실패했습니다.");
+    }
   };
+
+  // 언마운트될 때 클린업 함수 실행
+  useEffect(() => {
+    return () => {
+      formData.files.forEach(file => {
+        if (file.previewAddress) {
+          URL.revokeObjectURL(file.previewAddress);
+        }
+      });
+    };
+  }, [formData.files]);
 
   const removeFile = (index: number) => {
     setFormData({
@@ -109,7 +133,7 @@ const ReviewEdit = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!postId || !reviewId) return;
+    if (!postId || !id) return;
 
     if (!formData.title.trim()) {
       alert("제목을 입력해주세요");
@@ -193,7 +217,7 @@ const ReviewEdit = () => {
                   {formData.files.map((file, index) => (
                     <div key={index} className="relative">
                       <img
-                        src={file.fileAddress}
+                        src={file.previewAddress || file.fileAddress}
                         alt={`Preview ${index + 1}`}
                         className="w-full h-24 object-cover rounded"
                       />
@@ -225,7 +249,7 @@ const ReviewEdit = () => {
               <button
                 type="button"
                 className="btn btn-outline"
-                onClick={() => navigate(`/review/${reviewId}`)}
+                onClick={() => navigate(`/review/${id}`)}
                 disabled={updateReviewMutation.isLoading}
               >
                 취소
