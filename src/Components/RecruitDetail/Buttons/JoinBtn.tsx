@@ -15,19 +15,23 @@ export interface PaymentReadyRequest {
 
 export interface PaymentReadyResponse {
   data: {
-    tid: string;
-    postId: number;
-    participationId: number;
-    depositId: number;
-    depositStatus: string;
-    amount: number;
-    userId: string;
-    nextRedirectPcUrl: string;
+    data: {
+      tid: string;
+      postId: number;
+      participationId: number;
+      depositId: number;
+      depositStatus: string;
+      amount: number;
+      userId: string;
+      nextRedirectPcUrl: string;
+    };
   };
 }
 
 interface ParticipationResponse {
-  data: ParticipationsData;
+  data: {
+    data: ParticipationsData; // 중첩된 data 구조 추가
+  };
 }
 
 interface ParticipationsData {
@@ -41,8 +45,10 @@ interface ParticipationsData {
 }
 
 interface SuccessResponse {
-  success: boolean;
-  message?: string;
+  data: {
+    result: string;
+    message?: string;
+  };
 }
 
 export default function JoinBtn({ postId }: JoinBtnProps) {
@@ -65,7 +71,7 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
             depositId: depositId,
           },
         );
-          console.log(response);
+        console.log(response);
         if (response?.data.result === "SUCCESS") {
           alert("결제가 완료되었습니다.");
         } else {
@@ -172,17 +178,11 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
 
       console.log("Payment ready response:", paymentReadyData);
 
-      if (!paymentReadyData?.data?.data.next_redirect_pc_url) {
+      if (!paymentReadyData?.data?.data.nextRedirectPcUrl) {
         throw new Error("결제 정보를 불러오는데 실패했습니다.");
       }
 
-      // 카카오 결제 페이지로 리다이렉트
-      // depositId를 sessionStorage에 저장
-      // sessionStorage.setItem(
-      //   "depositId",
-      //   String(paymentReadyData.data.depositId),
-      // );
-      window.location.href = paymentReadyData.data.data.next_redirect_pc_url;
+      window.location.href = paymentReadyData.data.data.nextRedirectPcUrl;
     } catch (error) {
       console.error("Error in join process:", error);
       alert(
