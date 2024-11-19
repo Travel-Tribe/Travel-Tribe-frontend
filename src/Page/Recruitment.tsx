@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import fetchCall from "../Utils/apiFetch";
 import { TravelPlan } from "../mocks/mockData";
 import { useRecruitPostStore } from "../store/recruitPostStore";
 import { mappingContinent } from "../Utils/mappingContinent";
 import { mappingCountry } from "../Utils/mappingCountry";
-import { useQuery } from "react-query";
-import debounce from "lodash.debounce";
+import { useInfiniteQuery } from "react-query";
 import { RecruitmentPost } from "../Components/Post";
 
 interface RecruitmentProps {
@@ -25,80 +24,85 @@ const Recruitment = React.memo(
     mbti,
   }: RecruitmentProps): JSX.Element => {
     const { clearTravelData } = useRecruitPostStore();
-    const [data, setData] = useState<TravelPlan[]>([]);
-    const page = useRef(0);
 
     const getFilterParams = () => {
+      const filters: Record<string, string> = {
+        title: search || "",
+        content: city || "",
+        continent:
+          selectedContinent && selectedContinent !== "선택"
+            ? mappingContinent[selectedContinent]
+            : "",
+        country:
+          selectedCountry !== "선택" && selectedContinent !== "기타"
+            ? mappingCountry(selectedCountry, "ko")
+            : "",
+        mbti: mbti !== "선택" ? mbti : "",
+      };
+
+      // 빈값 필터 제거
       const params = new URLSearchParams();
-      if (search) params.append("title", search);
-      if (city) params.append("content", city);
-      if (selectedContinent && selectedContinent !== "선택")
-        params.append("continent", mappingContinent[selectedContinent]);
-      if (selectedCountry !== "선택" && selectedContinent !== "기타")
-        params.append("country", mappingCountry(selectedCountry, "ko"));
-      if (mbti !== "선택") params.append("mbti", mbti);
-      params.append("page", page.current.toString());
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) params.append(key, value);
+      });
+
       return params.toString();
     };
 
-    const fetchRecruitData = async () => {
+    const fetchRecruitData = async ({ pageParam = 0 }) => {
       const response = await fetchCall<{
         data: {
           totalPages: number;
           data: { content: TravelPlan[] };
         };
-      }>(`/api/v1/posts?${getFilterParams()}`, "get");
+      }>(`/api/v1/posts?page=${pageParam}&${getFilterParams()}`, "get");
       return {
         totalPages: response.data.totalPages,
         content: response.data.data.content,
       };
     };
 
-    const debouncedFetchRecruitData = debounce(fetchRecruitData, 500);
-
     const {
-      data: recruitData,
+      data,
+      fetchNextPage,
+      hasNextPage,
+      isFetchingNextPage,
+      isLoading,
       isError,
       error,
-      isLoading,
-    } = useQuery({
+    } = useInfiniteQuery({
       queryKey: [
         "recruitData",
-        search,
-        city,
-        selectedContinent,
-        selectedCountry,
-        mbti,
-        page,
+        {
+          search,
+          city,
+          continent: selectedContinent,
+          country: selectedCountry,
+          mbti,
+        },
       ],
-      queryFn: async () => {
-        const response = fetchRecruitData();
-        return response;
+      queryFn: fetchRecruitData,
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage = allPages.length;
+        return nextPage < lastPage.totalPages ? nextPage : undefined;
       },
-      onSuccess: newData => {
-        if (page.current) {
-          setData(prevData => [...prevData, ...newData.content]);
-        } else {
-          setData(newData.content);
-        }
-      },
+      keepPreviousData: true, // 이전 데이터를 유지
     });
 
     useEffect(() => {
       clearTravelData();
-      debouncedFetchRecruitData();
-      return () => debouncedFetchRecruitData.cancel();
-    }, []);
+    }, [clearTravelData]);
 
     const observer = useRef<IntersectionObserver | null>(null);
 
     const lastElementRef = useCallback((node: HTMLDivElement | null) => {
+      if (isLoading || !hasNextPage) return;
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver(
         entries => {
           if (entries[0].isIntersecting) {
-            page.current += 1; // 페이지를 증가시키고 새로운 데이터를 로드
+            fetchNextPage();
           }
         },
         {
@@ -114,16 +118,13 @@ const Recruitment = React.memo(
       return <>에러 입니다.</>;
     }
 
-    if (isLoading) {
-      return <div>로딩중...</div>;
-    }
-    console.log(data);
+    const recruitment = data?.pages.flatMap(page => page.content) || [];
+
     return (
       <div className="flex flex-wrap gap-[35px]">
-        {data &&
-          data.map((plan: TravelPlan) => {
-            const isLastElement =
-              page.current === Number(recruitData?.totalPages);
+        {recruitment &&
+          recruitment.map((plan: TravelPlan, index: number) => {
+            const isLastElement = index === recruitment.length - 1;
             return (
               <div
                 ref={isLastElement ? lastElementRef : null}
@@ -133,6 +134,7 @@ const Recruitment = React.memo(
               </div>
             );
           })}
+        {isFetchingNextPage && <div>Loading more...</div>}
       </div>
     );
   },

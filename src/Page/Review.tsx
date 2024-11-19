@@ -3,9 +3,9 @@ import fetchCall from "../Utils/apiFetch";
 import { ReviewTypes } from "../mocks/mockData";
 import { mappingContinent } from "../Utils/mappingContinent";
 import { mappingCountry } from "../Utils/mappingCountry";
-import { useQuery } from "react-query";
-import debounce from "lodash.debounce";
+import { useInfiniteQuery } from "react-query";
 import { ReviewPost } from "../Components/Post";
+import { useReviewStore } from "../store/reviewStore";
 
 interface ReviewProps {
   selectedContinent?: string;
@@ -21,98 +21,118 @@ const Review = React.memo(
     city,
     search,
   }: ReviewProps): JSX.Element => {
-    const page = useRef(0);
+    const { resetForm } = useReviewStore();
 
     const getFilterParams = () => {
+      const filters: Record<string, string> = {
+        title: search || "",
+        content: city || "",
+        continent:
+          selectedContinent && selectedContinent !== "선택"
+            ? mappingContinent[selectedContinent]
+            : "",
+        country:
+          selectedCountry !== "선택" && selectedContinent !== "기타"
+            ? mappingCountry(selectedCountry, "ko")
+            : "",
+      };
+
+      // 빈 값 필터 제거
       const params = new URLSearchParams();
-      if (search) params.append("title", search);
-      if (city) params.append("content", city);
-      if (selectedContinent !== "선택")
-        params.append("continent", mappingContinent[selectedContinent]);
-      if (selectedCountry !== "선택" && selectedContinent !== "기타")
-        params.append("country", mappingCountry(selectedCountry, "ko"));
-      params.append("page", page.current.toString());
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) params.append(key, value);
+      });
+
       return params.toString();
     };
 
-    const fetchRecruitData = async () => {
-      const response = await fetchCall(
-        `/api/v1/reviews?${getFilterParams()}`,
-        "get",
-      );
-      return [
-        response.data.totalPages,
-        response.data.data.reviews<ReviewTypes[]>,
-      ];
+    const fetchRecruitData = async ({ pageParam = 0 }) => {
+      const response = await fetchCall<{
+        data: {
+          totalPages: number;
+          data: { reviews: ReviewTypes[] };
+        };
+      }>(`/api/v1/reviews?page=${pageParam}&${getFilterParams()}`, "get");
+      return {
+        totalPages: response.data.totalPages,
+        reviews: response.data.data.reviews,
+      };
     };
 
-    const debouncedFetchRecruitData = debounce(fetchRecruitData, 500);
-
-    useEffect(() => {
-      debouncedFetchRecruitData();
-      return () => debouncedFetchRecruitData.cancel();
-    }, [search, city, selectedContinent, selectedCountry, page]);
-
     const {
-      data: reviewData,
+      data,
+      fetchNextPage,
+      hasNextPage,
+      isFetchingNextPage,
+      isLoading,
       isError,
       error,
-    } = useQuery({
+    } = useInfiniteQuery({
       queryKey: [
         "reviewData",
-        search,
-        city,
-        selectedContinent,
-        selectedCountry,
-        page,
+        {
+          search,
+          city,
+          continent: selectedContinent,
+          country: selectedCountry,
+        },
       ],
-      queryFn: async () => {
-        const response = fetchRecruitData();
-        console.log(response);
-        return response;
+      queryFn: fetchRecruitData,
+      getNextPageParam: (lastPage, allPages) => {
+        const nextPage = allPages.length;
+        return nextPage < lastPage.totalPages ? nextPage : undefined;
       },
+      keepPreviousData: true,
     });
+
+    useEffect(() => {
+      resetForm();
+    }, [resetForm]);
 
     const observer = useRef<IntersectionObserver | null>(null);
 
-    // Intersection Observer 설정
-    const lastElementRef = useCallback((node: HTMLDivElement | null) => {
-      if (observer.current) observer.current.disconnect();
+    const lastElementRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        if (isLoading || !hasNextPage) return;
 
-      observer.current = new IntersectionObserver(
-        entries => {
-          if (entries[0].isIntersecting) {
-            page.current += 1; // 페이지를 증가시키고 새로운 데이터를 로드
-          }
-        },
-        {
-          threshold: 0.8, // 요소의 80%가 보일 때 콜백 실행
-        },
-      );
+        if (observer.current) observer.current.disconnect();
 
-      if (node) observer.current.observe(node);
-    }, []);
+        observer.current = new IntersectionObserver(
+          entries => {
+            if (entries[0].isIntersecting) {
+              fetchNextPage();
+            }
+          },
+          { threshold: 0.8 },
+        );
+
+        if (node) observer.current.observe(node);
+      },
+      [fetchNextPage, hasNextPage, isLoading],
+    );
 
     if (isError) {
       console.error("에러", error);
-      return <>에러 입니다.</>;
+      return <>에러가 발생했습니다.</>;
     }
+
+    const reviews = data?.pages.flatMap(page => page.reviews) || [];
 
     return (
       <div className="flex flex-wrap gap-[35px]">
-        {reviewData?.[1] &&
-          reviewData?.[1].map((review: ReviewTypes) => {
-            // 마지막 요소에 ref를 연결하여 Intersection Observer를 활성화
-            const isLastElement = page.current === Number(reviewData[0]);
-            return (
-              <div
-                ref={isLastElement ? lastElementRef : null}
-                key={review.reviewId}
-              >
-                <ReviewPost review={review} />
-              </div>
-            );
-          })}
+        {reviews.map((review: ReviewTypes, index: number) => {
+          const isLastElement = index === reviews.length - 1;
+          return (
+            <div
+              ref={isLastElement ? lastElementRef : null}
+              key={review.reviewId}
+            >
+              <ReviewPost review={review} />
+            </div>
+          );
+        })}
+
+        {isFetchingNextPage && <div>Loading more...</div>}
       </div>
     );
   },
