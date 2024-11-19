@@ -90,7 +90,9 @@ const ReviewDetail = (): JSX.Element => {
           <>
             <button
               className="btn bg-custom-blue text-white"
-              onClick={() => navigate(`/review/edit/${reviewId}`)}
+              onClick={() =>
+                navigate(`/recruitment/${postId}/review/edit/${reviewId}`)
+              }
             >
               수정하기
             </button>
