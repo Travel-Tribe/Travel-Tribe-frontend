@@ -4,6 +4,7 @@ import Rating from "./Rating";
 import { Participations } from "../../mocks/mockData";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { mappingCountry } from "../../Utils/mappingCountry";
+import {useNavigate} from 'react-router-dom';
 
 interface TravelPlan {
   postId: string;
@@ -14,6 +15,7 @@ interface TravelPlan {
   travelCountry: string;
   deadline: string;
   participation: Participations[];
+  participationStatus: string;
 }
 
 interface participantion {
@@ -22,16 +24,25 @@ interface participantion {
   userId: string;
 }
 
+interface Participation {
+  participationId: number;
+  postId: number;
+  ParticipationStatus: string;
+}
+
 const MyCompletedTrips = (): JSX.Element => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const today = new Date();
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
-  const [travelInfos, setTravelInfos] = useState<TravelPlan[]>([]);
   const [filteredTravelInfos, setFilteredTravelInfos] = useState<TravelPlan[]>(
     [],
   );
   const [participationUserId, setParticipationUserId] = useState<string[]>([]);
+  const [ratedPosts, setRatedPosts] = useState<string[]>([]);
+  const [participationStatusUpdated, setParticipationStatusUpdated] =
+    useState(false);
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+  const navigate = useNavigate();
 
   const fetchCompletedTrips = async () => {
     try {
@@ -62,16 +73,40 @@ const MyCompletedTrips = (): JSX.Element => {
     }
   };
 
+  const fetchParticipationStatus = async () => {
+    try {
+      const response = await fetchCall<Participation[]>(
+        "/api/v1/posts/participations",
+        "get",
+      );
+        console.log(response);
+      const participationData = response.data;
+        console.log(filteredTravelInfos);
+      // 여행 정보에 ParticipationStatus 추가
+      const updatedTrips = filteredTravelInfos.filter(trip => {
+        const participation = participationData.find(
+          (p: { postId: number }) => p.postId === Number(trip.postId),
+        );
+        return participation?.ParticipationStatus === "TRAVEL_FINISHED";
+      });
+      console.log(updatedTrips);
+      setFilteredTravelInfos(updatedTrips);
+      setParticipationStatusUpdated(true);
+    } catch (error) {
+      console.error("Error fetching participation data:", error);
+    }
+  };
+console.log(filteredTravelInfos);
   const fetchParticipation = async (postId: string) => {
     try {
       const response = await fetchCall<participantion[]>(
         `/api/v1/posts/${postId}/participations`,
         "get",
       );
+      // console.log(response);
       const userIds = response.data.map(
         (participation: { userId: string }) => participation.userId,
       );
-      console.log(userIds);
       if (userIds.includes(userId || "")) {
         setParticipationUserId(userIds);
         return true;
@@ -83,10 +118,21 @@ const MyCompletedTrips = (): JSX.Element => {
     }
   };
 
+  const handleRatingComplete = (postId: string) => {
+    setRatedPosts(prev => [...prev, postId]); // 평점 완료된 postId 추가
+    setActiveModalIndex(null); // 모달 닫기
+  };
+
   useEffect(() => {
-    fetchCompletedTrips();
+    fetchCompletedTrips(); // 초기 여행 데이터 가져오기
   }, []);
 
+  useEffect(() => {
+    if (!participationStatusUpdated && filteredTravelInfos.length > 0) {
+      fetchParticipationStatus(); // 상태 업데이트
+    }
+  }, [filteredTravelInfos, participationStatusUpdated]);
+console.log(filteredTravelInfos);
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -107,7 +153,7 @@ const MyCompletedTrips = (): JSX.Element => {
             const travelStartDay = new Date(info.travelStartDate).getDay();
             const travelEndDay = new Date(info.travelEndDate).getDay();
             const travelCountry =
-            mappingCountry(info.travelCountry, "en") || info.travelCountry;
+              mappingCountry(info.travelCountry, "en") || info.travelCountry;
 
             return (
               <li key={info.postId} className="list-none">
@@ -129,7 +175,22 @@ const MyCompletedTrips = (): JSX.Element => {
                       </span>
                     </div>
                     <button
-                      className="btn btn-sm rounded-md"
+                      className={`btn btn-sm rounded-md ${
+                        info.participationStatus === "JOIN"
+                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                          : ""
+                      }`}
+                      onClick={() => navigate(`/recruitment/${info.postId}/review/write`)}
+                    >
+                      후기 작성
+                    </button>
+                    <button
+                      className={`btn btn-sm rounded-md ${
+                        info.participationStatus === "JOIN"
+                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                          : ""
+                      }`}
+                      disabled={info.participationStatus === "JOIN"}
                       onClick={async () => {
                         const isParticipant = await fetchParticipation(
                           info.postId,
@@ -149,6 +210,7 @@ const MyCompletedTrips = (): JSX.Element => {
                     onClose={() => setActiveModalIndex(null)}
                     participants={participationUserId}
                     postId={info.postId}
+                    onRatingComplete={() => handleRatingComplete(info.postId)}
                   />
                 )}
               </li>
