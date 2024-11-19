@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useReviewStore } from "../../store/reviewStore";
+import { useReviewPost } from "../../store/reviewPost";
 import fetchCall from "../../Utils/apiFetch";
 import RecruitInfo from "./RecruitInfo";
+import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
 
 const ReviewInput = () => {
   // TODO: 실제 구현 시 useParams()로 변경
@@ -11,7 +12,7 @@ const ReviewInput = () => {
   console.log("URL postId:", postId);
   const navigate = useNavigate();
   const { formData, setFormData, resetForm, isSubmitting, setIsSubmitting } =
-    useReviewStore();
+    useReviewPost();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -20,15 +21,38 @@ const ReviewInput = () => {
     setFormData({ [name]: value });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.length) return;
 
-    const newFiles = Array.from(e.target.files).map(file => ({
-      fileAddress: URL.createObjectURL(file),
-    }));
+    try {
+      const uploadedFiles = await Promise.all(
+        Array.from(e.target.files).map(async file => {
+          const fileUrl = await postImgUrl(file);
+          const previewUrl = await previewImg(fileUrl);
+          return {
+            fileAddress: fileUrl,
+            previewAddress: previewUrl,
+          };
+        }),
+      );
 
-    setFormData({ files: [...formData.files, ...newFiles] });
+      setFormData({ files: [...formData.files, ...uploadedFiles] });
+    } catch (error) {
+      console.error("파일 업로드 중 오류 발생:", error);
+      alert("파일 업로드에 실패했습니다.");
+    }
   };
+
+  // 언마운트될 때 클린업 함수 실행
+  useEffect(() => {
+    return () => {
+      formData.files.forEach(file => {
+        if (file.previewAddress) {
+          URL.revokeObjectURL(file.previewAddress);
+        }
+      });
+    };
+  }, [formData.files]);
 
   const removeFile = (index: number) => {
     setFormData({
@@ -85,6 +109,13 @@ const ReviewInput = () => {
   };
 
   const handleReset = () => {
+    // URL 객체들 해제
+    formData.files.forEach(file => {
+      if (file.previewAddress) {
+        URL.revokeObjectURL(file.previewAddress);
+      }
+    });
+
     setFormData({
       ...formData,
       title: "",
@@ -145,7 +176,7 @@ const ReviewInput = () => {
                   {formData.files.map((file, index) => (
                     <div key={index} className="relative">
                       <img
-                        src={file.fileAddress}
+                        src={file.previewAddress || file.fileAddress}
                         alt={`Preview ${index + 1}`}
                         className="w-full h-24 object-cover rounded"
                       />

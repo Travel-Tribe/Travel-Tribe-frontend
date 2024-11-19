@@ -76,7 +76,7 @@ const Router = (): JSX.Element => {
           <Route path="/" element={<Navigate to="/recruitment" replace />} />
           <Route path="/recruitment/:id" element={<RecruitDetail />} />
           <Route
-            path="/posts/:postId/reviews/:reviewId"
+            path="/recruitment/:postId/review/:reviewId"
             element={<ReviewDetail />}
           />
           <Route path="*" element={<Error />} />

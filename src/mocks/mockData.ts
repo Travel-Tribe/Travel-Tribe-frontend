@@ -761,6 +761,7 @@ export interface ReviewTypes {
 
 interface File {
   fileAddress: string;
+  previewAddress?: string;
 }
 
 export const ReviewData: ReviewTypes[] = [

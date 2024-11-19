@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useReviewStore } from "../../store/reviewStore";
+import { useReviewPost } from "../../store/reviewPost";
 import fetchCall from "../../Utils/apiFetch";
 import RecruitInfo from "./RecruitInfo";
 import { useQuery, useMutation, useQueryClient } from "react-query";
@@ -25,7 +25,7 @@ const ReviewEdit = () => {
   const { postId, reviewId } = params;
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { formData, setFormData, setIsSubmitting } = useReviewStore();
+  const { formData, setFormData, setIsSubmitting } = useReviewPost();
 
   // 리뷰 데이터 조회
   const { isLoading } = useQuery(
