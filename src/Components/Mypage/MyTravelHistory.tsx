@@ -2,6 +2,7 @@ import { FC, useState, useEffect } from "react";
 import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { mappingCountry } from "../../Utils/mappingCountry";
+import { useNavigate } from "react-router-dom";
 
 interface TravelInfo {
   postId: string;
@@ -33,6 +34,7 @@ const MyTravelHistory: FC = () => {
   const [travelInfos, setTravelInfos] = useState<TravelInfo[]>([]);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+  const navigate = useNavigate();
 
   const fetchReviewInfos = async (
     title?: string,
@@ -60,8 +62,8 @@ const MyTravelHistory: FC = () => {
             `/api/v1/posts/${review.postId}`,
             "get",
           );
-
-          const travelData = travelResponse.data[0];
+            console.log(travelResponse.data.data);
+          const travelData = travelResponse.data.data;
           console.log(travelData);
           return {
             ...review,
@@ -75,7 +77,7 @@ const MyTravelHistory: FC = () => {
       console.error("Error fetching user review data:", error);
     }
   };
-
+console.log(travelInfos);
   useEffect(() => {
     fetchReviewInfos();
   }, []);
@@ -102,7 +104,9 @@ const MyTravelHistory: FC = () => {
 
           return (
             <li key={info.reviewId} className="list-none">
-              <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">
+              <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg cursor-pointer"
+              onClick={() => navigate(`/posts/${info.postId}/reviews/${info.reviewId}`)}
+              >
                 <h3 className="text-xl pt-2.5 pl-2.5">{info.title}</h3>
                 <div className="flex items-center m-2.5 space-x-8 justify-between">
                   <div className="flex items-center space-x-4">
