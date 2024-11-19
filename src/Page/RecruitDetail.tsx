@@ -113,7 +113,7 @@ const RecruitDetail = (): JSX.Element => {
         />
         <div>
           <button
-            className="btn btn-sm text-slate-50  btn-error"
+            className="btn btn-sm text-slate-50  btn-error mr-3"
             onClick={handleGoToList}
           >
             목록으로
