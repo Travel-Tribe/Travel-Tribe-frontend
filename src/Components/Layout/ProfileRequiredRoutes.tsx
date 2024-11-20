@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-export const ProfileRequiredRoutes = () => {
+const ProfileRequiredRoutes = () => {
   const profileCheck = localStorage.getItem("ProfileCheck");
-  
+
   return profileCheck === "true" ? (
     <Outlet />
   ) : (
@@ -13,3 +13,5 @@ export const ProfileRequiredRoutes = () => {
     />
   );
 };
+
+export default ProfileRequiredRoutes;

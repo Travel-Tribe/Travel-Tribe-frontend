@@ -9,7 +9,7 @@ import MyAccountSettings from "../Components/Mypage/MyAccountSettings";
 import PrivateRoutes from "../Components/Layout/PrivateRoutes";
 import PublicOnlyRoutes from "../Components/Layout/PublicOnlyRoutes";
 import Layout from "../Components/Layout";
-import { ProfileRequiredRoutes } from "../Components/Layout/ProfileRequiredRoutes";
+import ProfileRequiredRoutes from "../Components/Layout/ProfileRequiredRoutes";
 import HomeLayout from "../Components/Layout/HomeLayout";
 import ReviewDetail from "../Page/ReviewDetail";
 import ProfileCreate from "../Components/Mypage/ProfileCreate";
@@ -25,6 +25,7 @@ const RecruitDetail = React.lazy(() => import("../Page/RecruitDetail"));
 const Review = React.lazy(() => import("../Page/Review"));
 const ReviewForm = React.lazy(() => import("../Page/ReviewForm"));
 const MyPage = React.lazy(() => import("../Page/MyPage"));
+const Community = React.lazy(() => import("../Page/Community"));
 
 const Router = (): JSX.Element => {
   return (
@@ -71,6 +72,7 @@ const Router = (): JSX.Element => {
           <Route element={<HomeLayout />}>
             <Route path="/review" element={<Review />} />
             <Route path="/recruitment" element={<Recruitment />} />
+            <Route path="/community" element={<Community />} />
           </Route>
 
           <Route path="/" element={<Navigate to="/recruitment" replace />} />

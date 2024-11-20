@@ -40,7 +40,10 @@ export const reviewHandlers = [
       fileAddress: review.files[0]?.fileAddress || null,
     }));
     console.log("responseData", responseData);
-    return HttpResponse.json({ reviews: responseData }, { status: 201 });
+    return HttpResponse.json(
+      { data: { reviews: responseData } },
+      { status: 201 },
+    );
   }),
 
   // 후기 글 등록

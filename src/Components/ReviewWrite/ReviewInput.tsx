@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useReviewPost } from "../../store/reviewPost";
+import { useReviewPost } from "../../store/reviewPostStore";
 import fetchCall from "../../Utils/apiFetch";
 import RecruitInfo from "./RecruitInfo";
 import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
