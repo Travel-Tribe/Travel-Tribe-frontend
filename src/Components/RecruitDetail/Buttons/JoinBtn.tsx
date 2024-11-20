@@ -195,7 +195,7 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
 
   return (
     <button
-      className="btn btn-success btn-sm text-slate-50 ml-3"
+      className="btn btn-success btn-sm text-slate-50"
       onClick={handleJoin}
       disabled={isLoading || !postId}
     >
