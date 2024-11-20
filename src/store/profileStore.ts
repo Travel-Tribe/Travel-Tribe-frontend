@@ -84,7 +84,7 @@ export const useProfileStore = create<ProfileState>(set => ({
         userId: _,
         ...filteredProfileData
       } = profileResponse.data.data;
-
+      console.log(profileResponse.data);
       set(state => ({
         profileData: {
           // 서버 연동 시 .data 추가

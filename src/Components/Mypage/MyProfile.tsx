@@ -59,11 +59,11 @@ const MyProfile = (): JSX.Element => {
           navigate("/mypage/myProfileEdit");
         } else if (userId) {
           await fetchProfileData(userId); // 데이터를 로드
-          const fileAddressPreview = await previewImg(profileData.fileAddress) ?? "";
-          updateProfileField("fileAddressPreview", fileAddressPreview);
           if (profileData.birth) {
             setAge(calculateAge(profileData.birth)); // 나이 계산
           }
+          const fileAddressPreview = await previewImg(profileData.fileAddress) ?? "";
+          updateProfileField("fileAddressPreview", fileAddressPreview);
         }
       } catch (error) {
         console.error("Error loading profile data:", error);
@@ -72,7 +72,7 @@ const MyProfile = (): JSX.Element => {
 
     loadProfileData();
   }, [profileCheck, navigate, userId, profileData.birth]);
-
+// console.log(profileData);
   return (
     <main className="ml-[60px] py-5">
       {/* Profile Card */}
