@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ReviewTypes, TravelPlan } from "../mocks/mockData";
+import { CommunityListProps, ReviewTypes, TravelPlan } from "../mocks/mockData";
 import { mappingCountry } from "../Utils/mappingCountry";
 
 interface PostProps {
@@ -16,11 +16,13 @@ export const RecruitmentPost = React.memo(
           key={plan.userId}
           className="w-[300px] h-[290px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0 bg-white"
         >
-          <img
-            src={plan.days[0].dayDetails[0].fileAddress}
-            alt={plan.title}
-            className="w-[300px] h-[150px] object-cover"
-          />
+          {plan.days[0].dayDetails[0].fileAddress && (
+            <img
+              src={plan.days[0].dayDetails[0].fileAddress}
+              alt={plan.title}
+              className="w-[300px] h-[150px] object-cover"
+            />
+          )}
           <div className="pl-[25px] max-w-[250px] mb-[20px]">
             <p className="text-[16px] truncate mb-[10px] mt-[10px]">
               {plan.title}
@@ -73,19 +75,71 @@ export const ReviewPost = React.memo(
           key={review.postId}
           className="w-[300px] h-[290px] bg-white border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
         >
-          <img
-            src={review.fileAddress}
-            alt={review.title}
-            className="w-[300px] h-[150px] object-cover"
-          />
+          {review.files && (
+            <img
+              src={review.files[0].fileAddress}
+              alt={review.title}
+              className="w-[300px] h-[150px] object-cover"
+            />
+          )}
           <div className="pl-[25px] max-w-[250px] mb-[20px]">
             <p className="text-[16px] truncate mb-[10px] mt-[10px]">
               {review.title}
             </p>
+            <p className="text-[12px] truncate">대륙: {review.continent}</p>
             <p className="text-[12px] truncate">
               여행 국가: {mappingCountry(review.country, "en")}
             </p>
             <p className="text-[12px] truncate">여행 지역: {review.region}</p>
+          </div>
+
+          <div className="w-full border-t bc-[#DEDEDE]" />
+        </Link>
+        <div className="w-full h-[30px] bg-white flex justify-between items-center px-[25px] border rounded-bl-lg rounded-br-lg border-t-0">
+          <Link to={"#"} className="text-[12px]">
+            작성자
+          </Link>
+        </div>
+      </div>
+    );
+  },
+);
+
+interface CommunityPostProps {
+  community: CommunityListProps;
+}
+
+export const CommunityPost = React.memo(
+  ({ community }: CommunityPostProps): JSX.Element => {
+    console.log(community);
+    return (
+      <div className="mb-[20px]">
+        <Link
+          to={`/community/${community.communityId}`}
+          key={community.communityId}
+          className="w-[300px] h-[290px] bg-white border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
+        >
+          {community.file[0].fileAddress && (
+            <img
+              src={community.file[0].fileAddress}
+              alt={community.title}
+              className="w-[300px] h-[150px] object-cover"
+            />
+          )}
+          <div className="pl-[25px] max-w-[250px] mb-[20px]">
+            <p className="text-[16px] truncate mb-[10px] mt-[10px]">
+              {community.title}
+            </p>
+            <p className="text-[12px] truncate">대륙: {community.continent}</p>
+            <p className="text-[12px] truncate">
+              여행 국가: {community.country}
+            </p>
+            <p className="text-[12px] truncate">
+              여행 지역: {community.region}
+            </p>
+            <p className="text-[12px] truncate">
+              작성 날짜: {community.createDate}
+            </p>
           </div>
 
           <div className="w-full border-t bc-[#DEDEDE]" />

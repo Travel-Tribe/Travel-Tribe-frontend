@@ -1199,7 +1199,7 @@ export const kakaoPayReadyResponse = {
 // 커뮤니티 글 관련 //
 /** */
 
-export interface Community {
+export interface CommunityListProps {
   communityId: number;
   title: string;
   content: string;
@@ -1210,14 +1210,14 @@ export interface Community {
   file: File[];
 }
 
-export const CommunityData: Community[] = [
+export const CommunityData: CommunityListProps[] = [
   {
     communityId: 1,
     title: "일본 여행 후기",
-    content: "string",
-    continent: "string",
-    country: "string",
-    region: "string",
+    content: "오사카오사카",
+    continent: "아시아",
+    country: "일본",
+    region: "오사카",
     createDate: "2023-01-03",
     file: [{ fileAddress: "/images/gangneung1.jpg" }],
   },
