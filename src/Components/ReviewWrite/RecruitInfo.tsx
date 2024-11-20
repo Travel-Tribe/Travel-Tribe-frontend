@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { useReviewPost } from "../../store/reviewPost";
+import { useReviewPostStore } from "../../store/reviewPostStore";
 import fetchCall from "../../Utils/apiFetch";
 
 interface TravelPlan {
@@ -24,7 +24,7 @@ interface ApiResponse {
 
 const PostInfo = ({ postId }: PostInfoProps) => {
   // store hooks를 상단에서 한 번만 호출
-  const { formData, setFormData } = useReviewPost();
+  const { formData, setFormData } = useReviewPostStore();
 
   const { isError, isLoading } = useQuery<TravelPlan>({
     queryKey: ["post", postId],
