@@ -61,7 +61,7 @@ export const participationHandlers = [
     const response = ParticipationsData.filter(
       participation =>
         String(participation.userId) === String(userId) &&
-        participation.ParticipationStatus === "JOIN", // 타입 일치 비교
+        participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
     ).map(participation => ({
       participationId: participation.participationId,
       postId: participation.postId,

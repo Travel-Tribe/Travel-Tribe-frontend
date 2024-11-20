@@ -72,7 +72,7 @@ const ProfileEdit = (): JSX.Element => {
         // 이미지 업로드 및 URL 생성
         const imgUrl = await postImgUrl(file);
 
-        const encodedFileAddress = encodeURIComponent(imgUrl);
+        // const encodedFileAddress = encodeURIComponent(imgUrl);
 
         const previewResponse = await fetchCall<Blob>(
           `/api/v1/file/preview?fileUrl=${imgUrl}`,
@@ -385,7 +385,7 @@ const ProfileEdit = (): JSX.Element => {
                   value="YES"
                   checked={
                     profileData.smoking === "흡연자" ||
-                    profileData.gender === "YES"
+                    profileData.smoking === "YES"
                   }
                   onChange={() => handleSmokingChange("YES")}
                   className="mr-2"
@@ -399,7 +399,7 @@ const ProfileEdit = (): JSX.Element => {
                   value="NO"
                   checked={
                     profileData.smoking === "비흡연자" ||
-                    profileData.gender === "NO"
+                    profileData.smoking === "NO"
                   }
                   onChange={() => handleSmokingChange("NO")}
                   className="mr-2"
