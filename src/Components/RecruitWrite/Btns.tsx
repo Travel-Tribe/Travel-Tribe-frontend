@@ -1,37 +1,39 @@
 import React from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import fetchCall from "../../Utils/apiFetch";
+import { Link, useParams } from "react-router-dom";
+
 import { useRecruitPostStore } from "../../store/recruitPostStore";
 
+import PostBtn from "./PostBtn";
+
 const Btns = React.memo((): JSX.Element => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { id } = useParams();
   const { postData, clearTravelData } = useRecruitPostStore();
 
-  const onClickPostData = async () => {
-    try {
-      let data;
-      if (id) {
-        data = await fetchCall(
-          `/api/v1/posts/${id}`,
-          "put",
-          JSON.stringify(postData),
-        );
-      } else {
-        data = await fetchCall(
-          "/api/v1/posts",
-          "post",
-          JSON.stringify(postData),
-        );
-      }
+  // const onClickPostData = async () => {
+  //   try {
+  //     let data;
+  //     if (id) {
+  //       data = await fetchCall(
+  //         `/api/v1/posts/${id}`,
+  //         "put",
+  //         JSON.stringify(postData),
+  //       );
+  //     } else {
+  //       data = await fetchCall(
+  //         "/api/v1/posts",
+  //         "post",
+  //         JSON.stringify(postData),
+  //       );
+  //     }
 
-      if (data.status === 201) {
-        navigate("/recruitment");
-      }
-    } catch (error) {
-      console.error("Error fetching profile data:", error);
-    }
-  };
+  //     if (data.status === 201) {
+  //       navigate("/recruitment");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching profile data:", error);
+  //   }
+  // };
 
   return (
     <div
@@ -55,12 +57,13 @@ const Btns = React.memo((): JSX.Element => {
         >
           취소하기
         </Link>
-        <button
+        {/* <button
           className="btn w-[130px] h-[35px] bg-custom-green text-white"
           onClick={onClickPostData}
         >
           등록하기
-        </button>
+        </button> */}
+        <PostBtn id={Number(id)} postData={postData} />
       </div>
     </div>
   );

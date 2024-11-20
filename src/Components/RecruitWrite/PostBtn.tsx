@@ -1,57 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import fetchCall from "../../../Utils/apiFetch";
 import { useLocation, useNavigate } from "react-router-dom";
-import { ParticipationsData } from "../../../mocks/mockData";
+import fetchCall from "../../Utils/apiFetch";
+import {
+  ParticipationResponse,
+  PaymentReadyRequest,
+  PaymentReadyResponse,
+  SuccessResponse,
+} from "../RecruitDetail/Buttons/JoinBtn";
+import { TravelPlan } from "../../mocks/mockData";
 
-interface JoinBtnProps {
-  postId: number | undefined;
+interface PostBtnProps {
+  id?: number | undefined;
+  postData: TravelPlan;
 }
 
-export interface PaymentReadyRequest {
-  postId: number;
-  participationId: number;
-  PGMethod: string;
-}
-
-export interface PaymentReadyResponse {
-  data: {
-    data: {
-      tid: string;
-      postId: number;
-      participationId: number;
-      depositId: number;
-      depositStatus: string;
-      amount: number;
-      userId: string;
-      nextRedirectPcUrl: string;
-    };
-  };
-}
-
-export interface ParticipationResponse {
-  data: {
-    data: ParticipationsData; // 중첩된 data 구조 추가
-  };
-}
-
-export interface ParticipationsData {
-  participationId: number;
-  postId: number;
-  userId: string;
-  ParticipationStatus: string;
-  DepositStatus: string;
-  RatingStatus: string;
-  depositReturnDate: string | null;
-}
-
-export interface SuccessResponse {
-  data: {
-    result: string;
-    message?: string;
-  };
-}
-
-export default function JoinBtn({ postId }: JoinBtnProps) {
+export default function PostBtn({ id, postData }: PostBtnProps) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -71,7 +34,7 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
             depositId: depositId,
           },
         );
-        console.log(response);
+
         if (response?.data.result === "SUCCESS") {
           alert("결제가 완료되었습니다.");
         } else {
@@ -80,7 +43,6 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
       } catch (error) {
         console.error("Payment approval error:", error);
 
-        // 결제 실패 처리
         try {
           if (depositId) {
             await fetchCall<SuccessResponse>(
@@ -115,60 +77,48 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
     }
   }, [location, handlePaymentApproval]);
 
-  // 유저 정보 확인
-  const checkUserProfile = () => {
-    const token = localStorage.getItem("TOKEN");
-    const userProfile = localStorage.getItem("ProfileCheck") === "true";
-
-    if (!token) {
-      alert("로그인이 필요한 서비스입니다.");
-      navigate("/signIn");
-      return false;
-    }
-
-    if (!userProfile) {
-      alert("프로필 작성이 필요합니다.");
-      navigate("/mypage/myProfileEdit");
-      return false;
-    }
-
-    return true;
-  };
-
-  // 참여하기
-  const handleJoin = async () => {
-    if (!postId) {
-      alert("게시글 정보를 찾을 수 없습니다.");
-      return;
-    }
-
-    if (!checkUserProfile()) return;
-
+  const handlePost = async () => {
     setIsLoading(true);
     try {
-      console.log("Starting join process for postId:", postId);
+      // 1. 게시글 등록
+      let data;
+      if (id) {
+        data = await fetchCall(
+          `/api/v1/posts/${id}`,
+          "put",
+          JSON.stringify(postData),
+        );
+      } else {
+        data = await fetchCall(
+          "/api/v1/posts",
+          "post",
+          JSON.stringify(postData),
+        );
+      }
 
-      // 1. 참여 신청
+      if (data.status !== 201) {
+        throw new Error("게시글 등록에 실패했습니다.");
+      }
+      console.log(data.data);
+
+      const newPostId = data.data.postId;
+
+      // 2. 참여 신청
       const participationData = await fetchCall<ParticipationResponse>(
-        `/api/v1/posts/${postId}/participations`,
+        `/api/v1/posts/${newPostId}/participations`,
         "post",
       );
-
-      console.log("Participation response:", participationData);
-      console.log(participationData.data.data.participationId);
 
       if (!participationData?.data.data.participationId) {
         throw new Error("참여 신청 처리 중 오류가 발생했습니다.");
       }
 
-      // 2. 결제 준비 요청
+      // 3. 결제 준비 요청
       const paymentReadyRequest: PaymentReadyRequest = {
-        postId: postId,
+        postId: newPostId,
         participationId: participationData.data.data.participationId,
         PGMethod: "KAKAOPAY",
       };
-
-      console.log("Sending payment ready request:", paymentReadyRequest);
 
       const paymentReadyData = await fetchCall<PaymentReadyResponse>(
         "/api/v1/pay/deposit/ready",
@@ -176,18 +126,18 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
         paymentReadyRequest,
       );
 
-      console.log("Payment ready response:", paymentReadyData);
-
       if (!paymentReadyData?.data?.data.nextRedirectPcUrl) {
         throw new Error("결제 정보를 불러오는데 실패했습니다.");
       }
 
+      // 4. 결제 페이지로 이동
       window.location.href = paymentReadyData.data.data.nextRedirectPcUrl;
     } catch (error) {
-      console.error("Error in join process:", error);
+      console.error("Error in process:", error);
       alert(
         error instanceof Error ? error.message : "처리 중 오류가 발생했습니다.",
       );
+      navigate("/recruitment"); // 에러 발생 시 목록으로 이동
     } finally {
       setIsLoading(false);
     }
@@ -195,11 +145,11 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
 
   return (
     <button
-      className="btn btn-success btn-sm text-slate-50"
-      onClick={handleJoin}
-      disabled={isLoading || !postId}
+      className="btn w-[130px] h-[35px] bg-custom-green text-white"
+      onClick={handlePost}
+      disabled={isLoading}
     >
-      {isLoading ? "처리 중..." : "참여 신청하기"}
+      {isLoading ? "처리 중..." : "등록하기"}
     </button>
   );
 }
