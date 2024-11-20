@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
 import fetchCall from "../../Utils/apiFetch";
 import { useNavigate } from "react-router-dom";
-import { useCommunityPostStore } from "../../store/CommunityPostStore";
+import { useCommunityPostStore } from "../../store/communityPostStore";
 
 const CommunityInput = () => {
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ const CommunityInput = () => {
     try {
       const communityData = {
         title: formData.title,
-        contents: formData.content,
+        content: formData.content,
         files: formData.files.map(file => ({
           fileAddress: file.fileAddress,
         })),
