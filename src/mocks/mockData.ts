@@ -923,3 +923,22 @@ export const kakaoPayReadyResponse = {
   depositId: "T1234567893",
   next_redirect_pc_url: "https://payment-demo.kakaopay.com/online",
 };
+
+export interface voting {
+  postId: string;
+  votingStartsId: number;
+  votingStatus: string;
+}
+
+export const votingStarts: voting[] = [
+  {
+    postId: "3",
+    votingStartsId: 1,
+    votingStatus: "voting",
+  },
+  {
+    postId: "1",
+    votingStartsId: 2,
+    votingStatus: "unVoting",
+  },
+];
