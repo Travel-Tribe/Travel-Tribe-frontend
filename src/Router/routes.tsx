@@ -14,6 +14,8 @@ import HomeLayout from "../Components/Layout/HomeLayout";
 import ReviewDetail from "../Page/ReviewDetail";
 import ProfileCreate from "../Components/Mypage/ProfileCreate";
 import ReviewEdit from "../Components/ReviewWrite/ReviewEdit";
+import CommunityForm from "../Page/CommunityForm";
+import CommunityEdit from "../Components/CommunityWrite/CommunityEdit";
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -55,6 +57,8 @@ const Router = (): JSX.Element => {
                 path="/recruitment/:postId/review/edit/:id"
                 element={<ReviewEdit />}
               />
+              <Route path="/community/write" element={<CommunityForm />} />
+              <Route path="/community/edit/:id" element={<CommunityEdit />} />
             </Route>
 
             {/* 프로필 불필요 라우트 */}
