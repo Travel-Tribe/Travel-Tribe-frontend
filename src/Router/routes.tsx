@@ -13,6 +13,7 @@ import ProfileRequiredRoutes from "../Components/Layout/ProfileRequiredRoutes";
 import HomeLayout from "../Components/Layout/HomeLayout";
 import ReviewDetail from "../Page/ReviewDetail";
 import ProfileCreate from "../Components/Mypage/ProfileCreate";
+import MyVoting from '../Components/Mypage/MyVoting';
 import ReviewEdit from "../Components/ReviewWrite/ReviewEdit";
 
 const Error = React.lazy(() => import("../Page/Error"));
@@ -65,6 +66,7 @@ const Router = (): JSX.Element => {
               <Route path="travelHistory" element={<MyTravelHistory />} />
               <Route path="accountSettings" element={<MyAccountSettings />} />
               <Route path="profileCreate" element={<ProfileCreate />} />
+              <Route path="voting" element={<MyVoting />} />
             </Route>
           </Route>
 
