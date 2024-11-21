@@ -125,7 +125,7 @@ const Review = React.memo(
           return (
             <div
               ref={isLastElement ? lastElementRef : null}
-              key={review.reviewId}
+              key={String(review.reviewId) + String(review.postId)}
             >
               <ReviewPost review={review} />
             </div>
