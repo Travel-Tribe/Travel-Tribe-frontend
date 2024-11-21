@@ -8,6 +8,7 @@ interface RatingModalProps {
   onClose: () => void;
   participants: string[];
   postId: string;
+  onRatingComplete: () => void;
 }
 
 const Rating: React.FC<RatingModalProps> = ({
@@ -15,6 +16,7 @@ const Rating: React.FC<RatingModalProps> = ({
   onClose,
   participants,
   postId,
+  onRatingComplete,
 }): JSX.Element | null => {
   const [ratings, setRatings] = useState<number[]>([]);
   const { userProfiles, fetchParticipantsProfiles } = useProfileStore();
@@ -34,6 +36,7 @@ const Rating: React.FC<RatingModalProps> = ({
       console.log("평점이 서버에 전송되었습니다:", ratings);
       alert("평점이 저장되었습니다.");
       onClose();
+      onRatingComplete();
     } catch (error) {
       console.error("Error submitting ratings:", error);
     }

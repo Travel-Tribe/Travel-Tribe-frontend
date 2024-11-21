@@ -104,10 +104,22 @@ const MyRecruitment = (): JSX.Element => {
 
     fetchMyRecruitData();
   }, [userId]);
+console.log(recruitDataList);
+  const voting = async (postId: string) => {
+    try {
+      await fetchCall(`/api/v1/posts/${postId}/voting-starts`, "post");
+      // const response = await fetchCall(
+      //   `/api/v1/posts/${postId}/voting-starts`,
+      //   "get",
+      // );
+    } catch (error) {
+      console.error(`Error voting`, error);
+    }
+  };
 
   const fetchDeleteParticipation = async (postId: string) => {
     try {
-      await fetchCall(`api/v1/posts/${postId}/participations`, "delete");
+      await fetchCall(`/api/v1/posts/${postId}/participations`, "delete");
       setRecruitDataList(prev => prev.filter(plan => plan.postId !== postId)); // Update state to remove the deleted item
       console.log(`Participation for postId ${postId} deleted successfully.`);
     } catch (error) {
@@ -121,7 +133,8 @@ const MyRecruitment = (): JSX.Element => {
   const clickRecruitForm = () => {
     navigate("/recruitment/write");
   };
-
+  // console.log(recruitDataList);
+  // console.log(typeof recruitDataList);
   return (
     <>
       <section>
@@ -192,7 +205,8 @@ const MyRecruitment = (): JSX.Element => {
                         className="btn btn-xs bg-red-500 text-white rounded-md text-center hover:bg-custom-pink-hover z-10"
                         onClick={e => {
                           e.stopPropagation();
-                          fetchDeleteParticipation(plan.postId);
+                          // fetchDeleteParticipation(plan.postId);
+                          voting(plan.postId);
                         }}
                       >
                         취소하기

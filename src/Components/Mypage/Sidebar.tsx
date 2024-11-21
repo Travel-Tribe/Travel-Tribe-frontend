@@ -91,6 +91,7 @@ const Sidebar = (): JSX.Element => {
       "/mypage/completedTrips": "다녀온 여행들",
       "/mypage/travelHistory": "내 후기 글",
       "/mypage/accountSettings": "계정 설정",
+      "/mypage/voting": "투표 확인",
     };
     setSelected(pathMap[location.pathname] || "내 프로필");
   }, [location.pathname]);
@@ -138,6 +139,9 @@ const Sidebar = (): JSX.Element => {
           ))}
         </ul>
         <ul className="border-t border-black py-2.5 flex justify-center space-x-5">
+        <li className="text-sm">
+            <Link to="/mypage/voting">투표 확인</Link>
+          </li>
           <li className="text-sm">
             <Link to="/mypage/accountSettings">계정 설정</Link>
           </li>

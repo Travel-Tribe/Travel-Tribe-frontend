@@ -105,7 +105,7 @@ console.log(travelInfos);
           return (
             <li key={info.reviewId} className="list-none">
               <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg cursor-pointer"
-              onClick={() => navigate(`/posts/${info.postId}/reviews/${info.reviewId}`)}
+              onClick={() => navigate(`/recruitment/${info.postId}/review/${info.reviewId}`)}
               >
                 <h3 className="text-xl pt-2.5 pl-2.5">{info.title}</h3>
                 <div className="flex items-center m-2.5 space-x-8 justify-between">
