@@ -1,20 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import fetchCall from "../../Utils/apiFetch";
+import fetchCall from "../../../Utils/apiFetch";
 import {
   ParticipationResponse,
   PaymentReadyRequest,
   PaymentReadyResponse,
   SuccessResponse,
-} from "../RecruitDetail/Buttons/JoinBtn";
-import { TravelPlan } from "../../mocks/mockData";
+} from "../../RecruitDetail/Buttons/JoinBtn";
 
-interface PostBtnProps {
-  id?: number | undefined;
-  postData: TravelPlan;
-}
-
-export default function PostBtn({ id, postData }: PostBtnProps) {
+const SubmitBtn = React.memo(() => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -80,27 +74,6 @@ export default function PostBtn({ id, postData }: PostBtnProps) {
   const handlePost = async () => {
     setIsLoading(true);
     try {
-      // 1. 게시글 등록
-      let data;
-      if (id) {
-        data = await fetchCall(
-          `/api/v1/posts/${id}`,
-          "put",
-          JSON.stringify(postData),
-        );
-      } else {
-        data = await fetchCall(
-          "/api/v1/posts",
-          "post",
-          JSON.stringify(postData),
-        );
-      }
-
-      if (data.status !== 201) {
-        throw new Error("게시글 등록에 실패했습니다.");
-      }
-      console.log(data.data);
-
       const newPostId = data.data.postId;
 
       // 2. 참여 신청
@@ -149,7 +122,9 @@ export default function PostBtn({ id, postData }: PostBtnProps) {
       onClick={handlePost}
       disabled={isLoading}
     >
-      {isLoading ? "처리 중..." : "등록하기"}
+      {isLoading ? "처리 중..." : "결제하기"}
     </button>
   );
-}
+});
+
+export default SubmitBtn;
