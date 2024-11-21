@@ -1,15 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const Smoke = React.memo((): JSX.Element => {
   const updateTravelData = useRecruitPostStore(state => state.updateTravelData);
   const limitSmoke = useRecruitPostStore(state => state.postData.limitSmoke);
-
-  useEffect(() => {
-    if (limitSmoke === "무관") updateTravelData("limitSmoke", "UNRELATED");
-    if (limitSmoke === "흡연자") updateTravelData("limitSmoke", "SMOKE");
-    if (limitSmoke === "비흡현자") updateTravelData("limitSmoke", "NO_SMOKE");
-  }, []);
 
   return (
     <div className="flex items-center mb-2">
@@ -19,9 +13,9 @@ const Smoke = React.memo((): JSX.Element => {
         onChange={e => updateTravelData("limitSmoke", e.target.value)}
         value={limitSmoke}
       >
-        <option value="UNRELATED">무관</option>
-        <option value="SMOKE">흡연자</option>
-        <option value="NO_SMOKE">비흡연자</option>
+        <option value="무관">무관</option>
+        <option value="흡연자">흡연자</option>
+        <option value="비흡연자">비흡연자</option>
       </select>
     </div>
   );

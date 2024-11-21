@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import fetchCall from "../../../Utils/apiFetch";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
+import { mappingCondition } from "../../../Utils/mappingCondition";
 
 const SubmitBtn = React.memo(() => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { postData } = useRecruitPostStore();
+  const postData = useRecruitPostStore(state => state.postData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handlePost = async () => {
@@ -17,18 +18,25 @@ const SubmitBtn = React.memo(() => {
         data = await fetchCall(
           `/api/v1/posts/${id}`,
           "put",
-          JSON.stringify(postData),
+          JSON.stringify({
+            ...postData,
+            limitSex: mappingCondition[postData.limitSex],
+            limitSmoke: mappingCondition[postData.limitSmoke],
+          }),
         );
       } else {
         data = await fetchCall(
           "/api/v1/posts",
           "post",
-          JSON.stringify(postData),
+          JSON.stringify({
+            ...postData,
+            limitSex: mappingCondition[postData.limitSex],
+            limitSmoke: mappingCondition[postData.limitSmoke],
+          }),
         );
       }
 
-      setIsLoading(false);
-      if (data.status === 200) {
+      if (data.status === 201) {
         navigate("/recruitment");
       } else {
         throw new Error("게시글 등록에 실패했습니다.");
