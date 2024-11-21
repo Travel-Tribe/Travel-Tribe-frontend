@@ -15,13 +15,13 @@ interface TravelInfo {
   fileAddress: string | null;
   travelStartDate?: string;
   travelEndDate?: string;
+  votingStatus: string;
+  votingStartsId: number;
 }
 
-interface ReviewResponse {
-  data: {
-    reviews: TravelInfo[];
-  };
-}
+// interface VotingInfo extends TravelInfo {
+//   votingStartsId?: string;
+// }
 
 interface TravelPlanResponse {
   data: {
@@ -31,18 +31,29 @@ interface TravelPlanResponse {
   };
 }
 
-interface TravelDatesResponse {
-  data: Array<{
-    travelStartDate: string;
-    travelEndDate: string;
-  }>;
+interface Participation {
+  participationId: number;
+  postId: number;
+  ParticipationStatus: string;
 }
-
 const MyVoting = (): JSX.Element => {
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const [travelInfos, setTravelInfos] = useState<TravelInfo[]>([]);
   const [openVotingId, setOpenVotingId] = useState<number | null>(null); // 현재 열려 있는 Voting ID
+
+  const fetchVoting = async (postId: number): Promise<any> => {
+    try {
+      const response = await fetchCall(
+        `/api/v1/posts/${postId}/voting-starts`,
+        "get",
+      );
+      return response?.data;
+    } catch (error) {
+      console.error("Fetching voting data failed:", error);
+      return null;
+    }
+  };
 
   const fetchParticipation = async () => {
     try {
@@ -54,84 +65,73 @@ const MyVoting = (): JSX.Element => {
     } catch (error) {}
   };
 
-  // useEffect(() => {
-  //   const fetchVoting = async () => {
-  //     try {
-  //       const response = await fetchCall(`api/v1/posts/${postId}/voting-starts`,'get')
-  //     } catch (error) {
-
-  //     }
-  //   }
-  // })
-
-  const fetchVoting = async (postId: number) => {
-    try {
-      const response = await fetchCall(
-        `/api/v1/posts/${postId}/voting-starts`,
-        "get",
-      );
-    } catch (error) {}
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 전체 모집글 조회
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Step 1: 전체 모집글 조회
         const { data: allPostsResponse } = await fetchCall<TravelPlanResponse>(
           `/api/v1/posts`,
           "get",
         );
-        const allPosts = allPostsResponse.data.content;
+        const allPosts: TravelInfo[] = allPostsResponse.data.content;
 
-        // 참여 데이터 조회
-        const participationResponse = await fetchCall(
+        // Step 2: 참여 데이터 조회
+        const participationResponse = await fetchCall<Participation[]>(
           "/api/v1/posts/participations",
           "get",
         );
-
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
 
         // 참여 중인 postId 리스트 추출
         const participatingPostIds = participationResponse.data.data.map(
           (item: { postId: number }) => item.postId,
         );
 
-        const filteredPlans = allPosts.filter(plan => {
+        // Step 3: 내가 참여한 post만 필터링
+        const participatingPosts = allPosts.filter(post =>
+          participatingPostIds.includes(post.postId),
+        );
+
+        // Step 4: 투표가 생성된 post만 필터링
+        const validPosts: VotingInfo[] = [];
+        for (const post of participatingPosts) {
+          const votingData = await fetchVoting(post.postId);
+          console.log(votingData?.data);
+          if (votingData?.data.votingStartsId) {
+            console.log(typeof votingData?.data.votingStartsId);
+            validPosts.push({
+              ...post,
+              votingStatus: votingData?.data.votingStatus,
+              votingStartsId: votingData?.data.votingStartsId,
+            });
+          }
+        }
+
+        // Step 5: 날짜 조건으로 필터링
+        const filteredPlans = validPosts.filter(plan => {
           const travelStartDate = new Date(plan.travelStartDate);
 
-          // 날짜 유효성 검증 및 필터링
           if (isNaN(travelStartDate.getTime())) {
             console.warn("Invalid travelStartDate:", plan.travelStartDate);
             return false;
           }
-          // 조건: travelStartDate가 오늘 이후 && userId가 일치 && 참여 중인 postId에 포함
-          return participatingPostIds.includes(plan.postId);
+
+          // 조건: travelStartDate가 오늘 이후
+          return travelStartDate >= today;
         });
+        console.log(filteredPlans);
+        // 최종 결과 설정
         setTravelInfos(filteredPlans);
-        // 최종 필터링된 모집글 설정
-        // setFilteredPlans(plansWithParticipants);
-        participatingPostIds.forEach((postId: number) => {
-          // fetchVoting(postId); // 각 postId로 fetchVoting 호출
-        });
       } catch (error) {
         console.error("데이터를 가져오는 중 오류 발생:", error);
-      }
-    };
-    const fetchVoting = async (postId: number) => {
-      try {
-        const response = await fetchCall(
-          `/api/v1/posts/${postId}/voting-starts`,
-          "get",
-        );
-        return response.data;
-      } catch (error) {
-        console.error("Fetching voting data failed:", error);
       }
     };
 
     fetchData();
   }, [userId]);
+  console.log(travelInfos);
 
   const handleOpenVoting = (postId: number) => {
     setOpenVotingId(postId);
@@ -166,10 +166,14 @@ const MyVoting = (): JSX.Element => {
               <div
                 className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg cursor-pointer"
                 onClick={async () => {
-                  const isVoting = await fetchVoting(Number(info.postId));
-                  console.log(isVoting);
-                  // if()
-                  handleOpenVoting(info.postId);
+                  // const isVoting = await fetchVoting(Number(info.postId));
+                  // console.log(isVoting);
+                  if (info.votingStatus == "STARTING") {
+                    // response.data가 true일 경우 Voting 열기
+                    handleOpenVoting(info.postId);
+                  } else {
+                    alert("투표를 시작할 수 없습니다."); // 실패 시 메시지 표시
+                  }
                 }}
               >
                 <h3 className="text-xl pt-2.5 pl-2.5">{info.title}</h3>
@@ -185,7 +189,18 @@ const MyVoting = (): JSX.Element => {
                   </div>
                 </div>
               </div>
-              {/* <Voting isOpen={true} onClose={handleCloseVoting} title={info.title} /> */}
+              {openVotingId && (
+                <Voting
+                  isOpen={true}
+                  onClose={handleCloseVoting}
+                  title={info.title}
+                  travelCountry={info.travelCountry}
+                  travelStartDate={info.travelStartDate}
+                  travelEndDate={info.travelEndDate}
+                  votingStartsId={info.votingStartsId}
+                  postId={info.postId}
+                />
+              )}
             </li>
           );
         })}
