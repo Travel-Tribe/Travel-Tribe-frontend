@@ -47,7 +47,7 @@ const MyProfile = (): JSX.Element => {
       (today.getMonth() === birthDate.getMonth() &&
         today.getDate() < birthDate.getDate())
     ) {
-      age--;
+      age -= 1;
     }
     return age;
   };
@@ -62,7 +62,8 @@ const MyProfile = (): JSX.Element => {
           if (profileData.birth) {
             setAge(calculateAge(profileData.birth)); // 나이 계산
           }
-          const fileAddressPreview = await previewImg(profileData.fileAddress) ?? "";
+          const fileAddressPreview =
+            (await previewImg(profileData.fileAddress)) ?? "";
           updateProfileField("fileAddressPreview", fileAddressPreview);
         }
       } catch (error) {
@@ -72,7 +73,7 @@ const MyProfile = (): JSX.Element => {
 
     loadProfileData();
   }, [profileCheck, navigate, userId, profileData.birth]);
-// console.log(profileData);
+  // console.log(profileData);
   return (
     <main className="ml-[60px] py-5">
       {/* Profile Card */}

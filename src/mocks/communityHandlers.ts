@@ -7,7 +7,7 @@ export const communityHandlers = [
 
     return HttpResponse.json(
       {
-        data: { data: CommunityData },
+        data: { content: CommunityData },
         pageNumber: params.num, // 예: 0
         pageSize: 8, // 예: 8
         totalElements: CommunityData.length, // 예: 1

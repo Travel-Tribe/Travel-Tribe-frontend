@@ -46,12 +46,12 @@ const Community = React.memo(
       const response = await fetchCall<{
         data: {
           totalPages: number;
-          data: { data: [] };
+          data: { content: [] };
         };
       }>(`/api/v1/communities?page=${pageParam}${getFilterParams()}`, "get");
       return {
         totalPages: response.data.totalPages,
-        lists: response.data.data.data,
+        lists: response.data.data.content,
       };
     };
 
@@ -110,19 +110,18 @@ const Community = React.memo(
 
     return (
       <div className="flex flex-wrap gap-[35px]">
-        {communities
-          ? communities.map((community: CommunityListProps, index: number) => {
-              const isLastElement = index === communities.length - 1;
-              return (
-                <div
-                  ref={isLastElement ? lastElementRef : null}
-                  key={community.communityId}
-                >
-                  <CommunityPost community={community} />
-                </div>
-              );
-            })
-          : "글을 등록해 주세요."}
+        {communities &&
+          communities.map((community: CommunityListProps, index: number) => {
+            const isLastElement = index === communities.length - 1;
+            return (
+              <div
+                ref={isLastElement ? lastElementRef : null}
+                key={community.communityId}
+              >
+                <CommunityPost community={community} />
+              </div>
+            );
+          })}
 
         {isFetchingNextPage && <div>Loading more...</div>}
       </div>

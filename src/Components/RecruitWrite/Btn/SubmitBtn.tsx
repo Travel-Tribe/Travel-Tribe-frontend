@@ -35,12 +35,12 @@ const SubmitBtn = React.memo(() => {
           }),
         );
       }
-
-      if (data.status === 201) {
-        navigate("/recruitment");
-      } else {
-        throw new Error("게시글 등록에 실패했습니다.");
-      }
+      console.log("등록하기 클릭 응답: ", data);
+      // if (data.status === 201) {
+      //   navigate("/recruitment");
+      // } else {
+      //   throw new Error("게시글 등록에 실패했습니다.");
+      // }
     } catch {
       throw new Error("게시글 등록에 실패했습니다.");
     } finally {
