@@ -16,7 +16,7 @@ export const RecruitmentPost = React.memo(
           key={plan.userId}
           className="w-[300px] h-[290px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0 bg-white"
         >
-          {plan.days[0].dayDetails[0].fileAddress && (
+          {plan.days[0]?.dayDetails[0]?.fileAddress && (
             <img
               src={plan.days[0].dayDetails[0].fileAddress}
               alt={plan.title}
