@@ -8,6 +8,7 @@ import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import SelectBox from "../Common/SelectBox";
 import { MBTI } from "../../Constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
+import { postImgUrl } from "../../Utils/postImgUrl";
 
 const ProfileCreate = (): JSX.Element | null => {
   const { profileData, setProfileData, updateProfileField } = useProfileStore();
@@ -50,21 +51,29 @@ const ProfileCreate = (): JSX.Element | null => {
   ) => {
     const file = event.target.files?.[0];
     if (file) {
-      const formData = new FormData();
-      formData.append("file", file); // 실제 파일 객체 추가
-
-      const previewUrl = URL.createObjectURL(file);
-      updateProfileField("fileAddress", previewUrl);
       try {
-        const response = await fetchCall<{ data: { fileUrl: string } }>(
-          `/api/v1/file/upload`,
-          "post",
-          formData,
+        // 이미지 업로드 및 URL 생성
+        const imgUrl = await postImgUrl(file);
+
+        // const encodedFileAddress = encodeURIComponent(imgUrl);
+
+        const previewResponse = await fetchCall<Blob>(
+          `/api/v1/file/preview?fileUrl=${imgUrl}`,
+          "get",
+          undefined,
+          "blob",
         );
-        console.log(response.data.data.fileUrl);
-        // console.log(response.data.fileUrl);
-        // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
-        updateProfileField("fileAddress", response.data.data.fileUrl);
+          console.log(previewResponse);
+        if (previewResponse.data) {
+          const imgPreviewUrl = URL.createObjectURL(previewResponse.data);
+          // 상태 업데이트 (미리보기 URL)
+          updateProfileField("fileAddressPreview", imgPreviewUrl);
+        }
+
+        // 상태 업데이트
+        updateProfileField("fileAddress", imgUrl); // 최종 이미지 URL
+        // updateProfileField("fileAddressPreview", encodedFileAddress); // 미리보기 URL
+        console.log("Image URL updated:", imgUrl);
       } catch (error) {
         console.error("Error uploading file:", error);
       }
@@ -125,9 +134,13 @@ const ProfileCreate = (): JSX.Element | null => {
       <form>
         <div className="h-40 border-b border-gray-300 flex justify-between items-center pt-5">
           <div className="flex flex-col items-center">
-            <img
+          <img
               className="w-20 h-20 rounded-full border border-gray-300"
-              src={profileData.fileAddress || profileImg}
+              src={
+                profileData.fileAddressPreview ||
+                profileData.fileAddress ||
+                profileImg
+              }
               alt="Profile"
             />
             <label htmlFor="file">
