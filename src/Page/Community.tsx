@@ -3,6 +3,8 @@ import { mappingContinent } from "../Utils/mappingContinent";
 import { mappingCountry } from "../Utils/mappingCountry";
 import fetchCall from "../Utils/apiFetch";
 import { useInfiniteQuery } from "react-query";
+import { CommunityListProps } from "../mocks/mockData";
+import { CommunityPost } from "../Components/Post";
 
 interface CommunityProps {
   selectedContinent?: string;
@@ -44,12 +46,12 @@ const Community = React.memo(
       const response = await fetchCall<{
         data: {
           totalPages: number;
-          data: { reviews: [] };
+          data: { data: [] };
         };
       }>(`/api/v1/communities?page=${pageParam}${getFilterParams()}`, "get");
       return {
         totalPages: response.data.totalPages,
-        reviews: response.data.data.reviews,
+        lists: response.data.data.data,
       };
     };
 
@@ -106,11 +108,23 @@ const Community = React.memo(
       return <>에러가 발생했습니다.</>;
     }
 
-    const communities = data?.pages.flatMap(page => page.reviews) || [];
+    const communities = data?.pages.flatMap(page => page.lists) || [];
 
     return (
       <div className="flex flex-wrap gap-[35px]">
-        {communities}
+        {communities
+          ? communities.map((community: CommunityListProps, index: number) => {
+              const isLastElement = index === communities.length - 1;
+              return (
+                <div
+                  ref={isLastElement ? lastElementRef : null}
+                  key={community.communityId}
+                >
+                  <CommunityPost community={community} />
+                </div>
+              );
+            })
+          : "글을 등록해 주세요."}
 
         {isFetchingNextPage && <div>Loading more...</div>}
       </div>

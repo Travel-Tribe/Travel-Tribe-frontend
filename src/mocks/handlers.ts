@@ -9,6 +9,7 @@ import { paymentHandlers } from "./paymentHandlers";
 import { fileHandler } from "./fileHandler";
 import { votingHandler } from "./votingHandler";
 import { http, passthrough } from "msw";
+import { communityHandlers } from "./communityHandlers";
 
 export const handlers = [
   ...userHandlers,
@@ -21,7 +22,8 @@ export const handlers = [
   ...paymentHandlers,
   ...fileHandler,
   ...votingHandler,
-  http.post("https://maps.googleapis.com/*", async ({}) => {
+  ...communityHandlers,
+  http.post("https://maps.googleapis.com/*", async () => {
     return passthrough();
   }),
 ];

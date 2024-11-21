@@ -1,18 +1,59 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useReviewPostStore } from "../../store/reviewPostStore";
-import fetchCall from "../../Utils/apiFetch";
-import RecruitInfo from "./RecruitInfo";
+import { useEffect } from "react";
 import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
+import fetchCall from "../../Utils/apiFetch";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  FileData,
+  useCommunityPostStore,
+} from "../../store/CommunityPostStore";
 
-const ReviewInput = () => {
-  // TODO: 실제 구현 시 useParams()로 변경
-  const params = useParams<{ postId: string }>();
-  const postId = params.postId;
-  console.log("URL postId:", postId);
+interface CommunityResponse {
+  communityId: number;
+  userId: number;
+  title: string;
+  content: string;
+  files: FileData[];
+}
+
+const CommunityEdit = () => {
   const navigate = useNavigate();
+  const { id } = useParams(); // URL에서 게시글 ID 가져오기
   const { formData, setFormData, resetForm, isSubmitting, setIsSubmitting } =
-    useReviewPostStore();
+    useCommunityPostStore();
+
+  // 기존 게시글 데이터 불러오기
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await fetchCall<CommunityResponse>(
+          `/api/v1/communities/${id}`,
+          "get",
+        );
+        if (response) {
+          setFormData({
+            title: response.title,
+            content: response.content,
+            files: response.files.map((file: { fileAddress: string }) => ({
+              fileAddress: file.fileAddress,
+              previewAddress: file.fileAddress,
+            })),
+          });
+        }
+      } catch (error) {
+        console.error("게시글 조회 중 오류:", error);
+        alert("게시글을 불러오는데 실패했습니다.");
+        navigate("/community");
+      }
+    };
+
+    if (id) {
+      fetchPost();
+    }
+
+    return () => {
+      resetForm();
+    };
+  }, [id, setFormData, resetForm, navigate]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -43,17 +84,6 @@ const ReviewInput = () => {
     }
   };
 
-  // 언마운트될 때 클린업 함수 실행
-  useEffect(() => {
-    return () => {
-      formData.files.forEach(file => {
-        if (file.previewAddress) {
-          URL.revokeObjectURL(file.previewAddress);
-        }
-      });
-    };
-  }, [formData.files]);
-
   const removeFile = (index: number) => {
     setFormData({
       files: formData.files.filter((_, i) => i !== index),
@@ -62,14 +92,13 @@ const ReviewInput = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!postId) return;
 
     if (!formData.title.trim()) {
       alert("제목을 입력해주세요");
       return;
     }
 
-    if (!formData.contents.trim()) {
+    if (!formData.content.trim()) {
       alert("내용을 입력해주세요");
       return;
     }
@@ -77,38 +106,34 @@ const ReviewInput = () => {
     setIsSubmitting(true);
 
     try {
-      const reviewData = {
-        continent: formData.continent,
-        country: formData.country,
-        region: formData.region,
+      const communityData = {
+        communityId: Number(id),
         title: formData.title,
-        contents: formData.contents,
+        contents: formData.content,
         files: formData.files.map(file => ({
           fileAddress: file.fileAddress,
         })),
       };
 
-      console.log("전송할 데이터:", reviewData); // 데이터 확인용
-
       const response = await fetchCall(
-        `/api/v1/posts/${postId}/reviews`,
-        "post",
-        reviewData,
+        `/api/v1/communities/${id}`,
+        "put",
+        communityData,
       );
 
       if (response) {
         resetForm();
-        navigate(`/review`);
+        navigate(`/community/${id}`);
       }
     } catch (err) {
-      console.error("Error submitting review:", err);
-      alert("리뷰 등록에 실패했습니다.");
+      console.error("게시글 수정 중 오류:", err);
+      alert("게시글 수정에 실패했습니다.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleReset = () => {
+  const handleCancel = () => {
     // URL 객체들 해제
     formData.files.forEach(file => {
       if (file.previewAddress) {
@@ -116,19 +141,15 @@ const ReviewInput = () => {
       }
     });
 
-    setFormData({
-      ...formData,
-      title: "",
-      contents: "",
-      files: [],
-    });
+    resetForm();
+    navigate(`/community/${id}`);
   };
 
   return (
     <div className="max-w-2xl mx-auto p-4">
       <div className="card bg-base-100 shadow-xl">
         <div className="card-body">
-          <h2 className="card-title text-2xl mb-6">여행 후기 작성</h2>
+          <h2 className="card-title text-2xl mb-6">커뮤니티 글 수정하기</h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="form-control w-full">
@@ -140,22 +161,20 @@ const ReviewInput = () => {
                 name="title"
                 value={formData.title}
                 onChange={handleInputChange}
-                placeholder="후기 제목을 입력하세요"
+                placeholder="제목을 입력하세요"
                 className="input input-bordered w-full"
               />
             </div>
-
-            {postId && <RecruitInfo postId={postId.toString()} />}
 
             <div className="form-control w-full">
               <label className="label">
                 <span className="label-text">내용</span>
               </label>
               <textarea
-                name="contents"
-                value={formData.contents}
+                name="content"
+                value={formData.content}
                 onChange={handleInputChange}
-                placeholder="여행 후기를 작성해주세요"
+                placeholder="내용을 입력해주세요"
                 className="textarea textarea-bordered h-32"
               />
             </div>
@@ -196,18 +215,18 @@ const ReviewInput = () => {
             <div className="flex gap-4 mt-6">
               <button
                 type="submit"
-                className={`btn btn-success flex-1 text-white ${isSubmitting ? "loading" : ""}`}
+                className={`btn btn-primary flex-1 ${isSubmitting ? "loading" : ""}`}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "등록 중..." : "후기 등록하기"}
+                {isSubmitting ? "수정 중..." : "수정하기"}
               </button>
               <button
                 type="button"
                 className="btn btn-outline"
-                onClick={handleReset}
+                onClick={handleCancel}
                 disabled={isSubmitting}
               >
-                초기화
+                취소
               </button>
             </div>
           </form>
@@ -217,4 +236,4 @@ const ReviewInput = () => {
   );
 };
 
-export default ReviewInput;
+export default CommunityEdit;
