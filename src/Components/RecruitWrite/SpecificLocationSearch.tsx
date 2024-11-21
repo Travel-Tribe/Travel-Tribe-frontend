@@ -32,10 +32,6 @@ const SpecificLocationSearch = React.memo(
     const [options, setOptions] = useState<
       { name: string; address: string; lat: number; lng: number }[]
     >([]);
-    const [selectedCoordinates, setSelectedCoordinates] = useState<{
-      lat: number;
-      lng: number;
-    } | null>(null);
 
     const libraries: Libraries = useMemo(() => ["places", "geometry"], []);
 
@@ -114,10 +110,6 @@ const SpecificLocationSearch = React.memo(
 
     const handleOptionSelect = (selectedIndex: number) => {
       const selectedOption = options[selectedIndex];
-      setSelectedCoordinates({
-        lat: selectedOption.lat,
-        lng: selectedOption.lng,
-      });
       onPlaceSelected(dayIndex, destIndex, "latitude", selectedOption.lat);
       onPlaceSelected(dayIndex, destIndex, "longitude", selectedOption.lng);
 

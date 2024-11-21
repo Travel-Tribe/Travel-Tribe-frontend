@@ -43,9 +43,7 @@ export const RecruitmentPost = React.memo(
           <div className="w-full border-t bc-[#DEDEDE]" />
         </Link>
         <div className="w-full h-[30px] bg-white flex justify-between items-center pl-[25px] pr-[10px] border rounded-bl-lg rounded-br-lg border-t-0">
-          <Link to={"#"} className="text-[12px]">
-            작성자
-          </Link>
+          <Link to={"#"} className="text-[12px]"></Link>
           <div
             className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${
               new Date(plan.deadline) > new Date()
@@ -96,9 +94,7 @@ export const ReviewPost = React.memo(
           <div className="w-full border-t bc-[#DEDEDE]" />
         </Link>
         <div className="w-full h-[30px] bg-white flex justify-between items-center px-[25px] border rounded-bl-lg rounded-br-lg border-t-0">
-          <Link to={"#"} className="text-[12px]">
-            작성자
-          </Link>
+          <Link to={"#"} className="text-[12px]"></Link>
         </div>
       </div>
     );
@@ -145,9 +141,7 @@ export const CommunityPost = React.memo(
           <div className="w-full border-t bc-[#DEDEDE]" />
         </Link>
         <div className="w-full h-[30px] bg-white flex justify-between items-center px-[25px] border rounded-bl-lg rounded-br-lg border-t-0">
-          <Link to={"#"} className="text-[12px]">
-            작성자
-          </Link>
+          <Link to={"#"} className="text-[12px]"></Link>
         </div>
       </div>
     );
