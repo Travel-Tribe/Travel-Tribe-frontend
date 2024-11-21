@@ -22,7 +22,7 @@ const ReviewDetail = (): JSX.Element => {
         "get",
       );
       console.log("reviewData", response);
-      return response.data.data;
+      return response.data;
     },
   });
 

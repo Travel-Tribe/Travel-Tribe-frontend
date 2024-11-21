@@ -69,9 +69,7 @@ const CommunityInput = () => {
       const communityData = {
         title: formData.title,
         content: formData.content,
-        files: formData.files.map(file => ({
-          fileAddress: file.fileAddress,
-        })),
+        files: formData.files.map(file => file.fileAddress),
       };
 
       console.log("전송할 데이터:", communityData); // 데이터 확인용
@@ -79,7 +77,7 @@ const CommunityInput = () => {
       const response = await fetchCall(
         `/api/v1/communities`,
         "post",
-        communityData,
+        JSON.stringify(communityData),
       );
 
       if (response) {

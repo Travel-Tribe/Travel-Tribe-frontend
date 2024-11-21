@@ -1352,7 +1352,7 @@ export interface CommunityListProps {
   country: string;
   region: string;
   createDate: string;
-  file: File[];
+  files: File[];
 }
 
 export const CommunityData: CommunityListProps[] = [
@@ -1364,6 +1364,6 @@ export const CommunityData: CommunityListProps[] = [
     country: "일본",
     region: "오사카",
     createDate: "2023-01-03",
-    file: [{ fileAddress: "/images/gangneung1.jpg" }],
+    files: [{ fileAddress: "/images/gangneung1.jpg" }],
   },
 ];

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { CommunityListProps, ReviewTypes, TravelPlan } from "../mocks/mockData";
 import { mappingCountry } from "../Utils/mappingCountry";
+import { previewImg } from "../Utils/postImgUrl";
 
 interface PostProps {
   plan: TravelPlan;
@@ -9,6 +10,11 @@ interface PostProps {
 
 export const RecruitmentPost = React.memo(
   ({ plan }: PostProps): JSX.Element => {
+    const url = useMemo(
+      async () => await previewImg(plan.days[0].dayDetails[0].fileAddress),
+      [],
+    );
+
     return (
       <div className="mb-[20px]">
         <Link
@@ -18,7 +24,9 @@ export const RecruitmentPost = React.memo(
         >
           {plan.days[0]?.dayDetails[0]?.fileAddress && (
             <img
-              src={plan.days[0].dayDetails[0].fileAddress}
+              src={
+                "http://34.64.39.55:7070/api/v1/file/preview?fileUrl=/travel/upload/d2107946-2a47-48ab-90aa-fbd53971e1ab____%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+              }
               alt={plan.title}
               className="w-[300px] h-[150px] object-cover"
             />
@@ -115,9 +123,9 @@ export const CommunityPost = React.memo(
           key={community.communityId}
           className="w-[300px] h-[290px] bg-white border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
         >
-          {community.file[0].fileAddress && (
+          {community?.files[0] && (
             <img
-              src={community.file[0].fileAddress}
+              src={community.files[0]}
               alt={community.title}
               className="w-[300px] h-[150px] object-cover"
             />
