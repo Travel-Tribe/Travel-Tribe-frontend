@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useReviewPost } from "../../store/reviewPostStore";
+import { useReviewPostStore } from "../../store/reviewPostStore";
 import fetchCall from "../../Utils/apiFetch";
 import RecruitInfo from "./RecruitInfo";
 import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
@@ -12,7 +12,7 @@ const ReviewInput = () => {
   console.log("URL postId:", postId);
   const navigate = useNavigate();
   const { formData, setFormData, resetForm, isSubmitting, setIsSubmitting } =
-    useReviewPost();
+    useReviewPostStore();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
