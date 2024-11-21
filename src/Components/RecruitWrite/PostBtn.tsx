@@ -2,19 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
 import {
-  ParticipationResponse,
   PaymentReadyRequest,
   PaymentReadyResponse,
   SuccessResponse,
 } from "../RecruitDetail/Buttons/JoinBtn";
-import { TravelPlan } from "../../mocks/mockData";
 
 interface PostBtnProps {
-  id?: number | undefined;
-  postData: TravelPlan;
+  postId?: number;
+  participationId?: number;
 }
 
-export default function PostBtn({ id, postData }: PostBtnProps) {
+export default function PostBtn({ postId, participationId }: PostBtnProps) {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -80,43 +78,10 @@ export default function PostBtn({ id, postData }: PostBtnProps) {
   const handlePost = async () => {
     setIsLoading(true);
     try {
-      // 1. 게시글 등록
-      let data;
-      if (id) {
-        data = await fetchCall(
-          `/api/v1/posts/${id}`,
-          "put",
-          JSON.stringify(postData),
-        );
-      } else {
-        data = await fetchCall(
-          "/api/v1/posts",
-          "post",
-          JSON.stringify(postData),
-        );
-      }
-
-      if (data.status !== 201) {
-        throw new Error("게시글 등록에 실패했습니다.");
-      }
-      console.log(data.data);
-
-      const newPostId = data.data.postId;
-
-      // 2. 참여 신청
-      const participationData = await fetchCall<ParticipationResponse>(
-        `/api/v1/posts/${newPostId}/participations`,
-        "post",
-      );
-
-      if (!participationData?.data.data.participationId) {
-        throw new Error("참여 신청 처리 중 오류가 발생했습니다.");
-      }
-
       // 3. 결제 준비 요청
       const paymentReadyRequest: PaymentReadyRequest = {
-        postId: newPostId,
-        participationId: participationData.data.data.participationId,
+        postId: postId,
+        participationId: participationId,
         PGMethod: "KAKAOPAY",
       };
 
