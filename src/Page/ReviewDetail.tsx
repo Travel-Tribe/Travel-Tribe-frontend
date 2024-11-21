@@ -18,7 +18,7 @@ const ReviewDetail = (): JSX.Element => {
     queryKey: ["reviewData", postId],
     queryFn: async () => {
       const response = await fetchCall(
-        `/api/v1/posts/${postId}/reviews/${reviewId}/view`,
+        `/api/v1/posts/${postId}/reviews/${reviewId}`,
         "get",
       );
       console.log("reviewData", response);
