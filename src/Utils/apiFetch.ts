@@ -4,7 +4,7 @@ import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 const API_TOKEN = localStorage.getItem(STORAGE_KEYS.TOKEN);
 
 const axiosInstance = axios.create({
-  baseURL: "", //import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL, //import.meta.env.VITE_API_BASE_URL,
 });
 
 // 요청 인터셉터 추가
