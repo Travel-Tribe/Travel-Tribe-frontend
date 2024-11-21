@@ -52,7 +52,6 @@ const MyTravelJoin = () => {
           `/api/v1/posts`,
           "get",
         );
-        console.log(allPostsResponse);
         const allPosts = allPostsResponse.data.content;
 
         // 참여 데이터 조회
@@ -60,12 +59,7 @@ const MyTravelJoin = () => {
           "/api/v1/posts/participations",
           "get",
         );
-        // if(userId){
-        //   const filteredParticipants = participationResponse.data.data.filter(
-        //     participant => participant.
-        //   )
-        // }
-        console.log(participationResponse.data);
+
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -128,7 +122,7 @@ const MyTravelJoin = () => {
 
     fetchData();
   }, [userId]);
-console.log(filteredPlans);
+
   const deleteParticipation = async (postId: number) => {
     try {
       const response = await fetchCall(
