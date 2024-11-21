@@ -26,11 +26,11 @@ export const useRecruitPostStore = create<RecruitPostType>(set => ({
     airplaneFee: 0,
     limitMaxAge: 1,
     limitMinAge: 1,
-    limitSex: "UNRELATED",
-    limitSmoke: "UNRELATED",
+    limitSex: "무관",
+    limitSmoke: "무관",
     days: [],
   },
-  updateTravelData: (key, value) =>
+  updateTravelData: (key: string, value: any) =>
     set(state => ({
       postData: {
         ...state.postData,
@@ -54,8 +54,8 @@ export const useRecruitPostStore = create<RecruitPostType>(set => ({
         airplaneFee: 0,
         limitMaxAge: 1,
         limitMinAge: 1,
-        limitSex: "UNRELATED",
-        limitSmoke: "UNRELATED",
+        limitSex: "무관",
+        limitSmoke: "무관",
         days: [],
       },
     }),

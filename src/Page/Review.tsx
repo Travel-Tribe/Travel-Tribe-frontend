@@ -43,7 +43,7 @@ const Review = React.memo(
         if (value) params.append(key, value);
       });
 
-      return params.toString();
+      return "&" + params.toString();
     };
 
     const fetchRecruitData = async ({ pageParam = 0 }) => {
@@ -70,12 +70,10 @@ const Review = React.memo(
     } = useInfiniteQuery({
       queryKey: [
         "reviewData",
-        {
-          search,
-          city,
-          continent: selectedContinent,
-          country: selectedCountry,
-        },
+        search,
+        city,
+        selectedContinent,
+        selectedCountry,
       ],
       queryFn: fetchRecruitData,
       getNextPageParam: (lastPage, allPages) => {
@@ -125,7 +123,7 @@ const Review = React.memo(
           return (
             <div
               ref={isLastElement ? lastElementRef : null}
-              key={String(review.reviewId) + String(review.postId)}
+              key={review.reviewId}
             >
               <ReviewPost review={review} />
             </div>

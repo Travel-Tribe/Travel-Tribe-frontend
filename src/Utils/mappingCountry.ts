@@ -219,7 +219,7 @@ const list = {
   TD: ["차드", "Chad"],
   TF: ["프랑스령 남방 및 남극", "French Southern & Antarctic Lands"],
   TG: ["토고", "Togo"],
-  TH: ["타이", "Thailand"],
+  TH: ["태국", "Thailand"],
   TJ: ["타지키스탄", "Tajikistan"],
   TK: ["토켈라우", "Tokelau"],
   TL: ["동티모르", "East Timor"],
