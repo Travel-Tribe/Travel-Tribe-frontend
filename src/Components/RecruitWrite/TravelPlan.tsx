@@ -14,8 +14,10 @@ const TravelPlan = React.memo((): JSX.Element => {
   ]);
 
   useEffect(() => {
-    const numberOfDays =
-      getDiffDate(postData.travelStartDate, postData.travelEndDate) + 1;
+    const numberOfDays = getDiffDate(
+      postData.travelStartDate,
+      postData.travelEndDate,
+    );
     const newDays = Array.from({ length: numberOfDays }, () => ({
       dayDetails: [{ title: "", description: "", fileAddress: "" }],
       itineraryVisits: [{ latitude: 0, longitude: 0, orderNumber: 1 }],

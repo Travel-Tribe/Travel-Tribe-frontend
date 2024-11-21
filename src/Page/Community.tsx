@@ -39,7 +39,7 @@ const Community = React.memo(
         if (value) params.append(key, value);
       });
 
-      return params.toString();
+      return "&" + params.toString();
     };
 
     const fetchRecruitData = async ({ pageParam = 0 }) => {
@@ -66,12 +66,10 @@ const Community = React.memo(
     } = useInfiniteQuery({
       queryKey: [
         "communityData",
-        {
-          search,
-          city,
-          continent: selectedContinent,
-          country: selectedCountry,
-        },
+        search,
+        city,
+        selectedContinent,
+        selectedCountry,
       ],
       queryFn: fetchRecruitData,
       getNextPageParam: (lastPage, allPages) => {

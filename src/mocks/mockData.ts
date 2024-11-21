@@ -937,31 +937,6 @@ export const ReviewData: ReviewTypes[] = [
       { fileAddress: "/images/gangneung1.jpg" },
       { fileAddress: "/images/gangneung2.jpg" },
     ],
-    userId: 1,
-    nickname: "tester1",
-    travelStartDate: "2022-1-1",
-    travelEndDate: "2022-1-3",
-    createDate: "2022-1-4",
-  },
-  {
-    postId: "1",
-    reviewId: "3",
-    continent: "ASIA",
-    country: "KR",
-    region: "강릉",
-    participants: "4",
-    title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
-    files: [
-      { fileAddress: "/images/gangneung1.jpg" },
-      { fileAddress: "/images/gangneung2.jpg" },
-    ],
     userId: 2,
     nickname: "tester1",
     travelStartDate: "2022-1-1",
@@ -970,7 +945,7 @@ export const ReviewData: ReviewTypes[] = [
   },
   {
     postId: "1",
-    reviewId: "3",
+    reviewId: "2",
     continent: "ASIA",
     country: "KR",
     region: "강릉",

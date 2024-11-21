@@ -12,8 +12,8 @@ const OtherExpenses = React.memo((): JSX.Element => {
       <p className="text-[18px] mr-2">기타비용:</p>
       <input
         type="text"
-        value={otherExpenses}
-        className="border border-gray-300 rounded-sm w-[100px] px-2 text-[16px]"
+        value={Number(otherExpenses).toLocaleString()}
+        className="border border-gray-300 rounded-sm w-[200px] px-2 text-[16px]"
         onChange={e =>
           updateTravelData("otherExpenses", Number(e.target.value))
         }

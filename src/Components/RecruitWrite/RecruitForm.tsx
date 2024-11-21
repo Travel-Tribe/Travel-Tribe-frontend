@@ -7,7 +7,7 @@ import TravelPlan from "./TravelPlan";
 const RecruitForm = React.memo((): JSX.Element => {
   return (
     <div
-      className="w-[90%] min-w-[512px] mt-[30px] mx-auto overflow-y-scroll"
+      className="w-[80%] min-w-[400px] mt-[30px] mx-auto overflow-y-scroll"
       style={{ height: "calc(100% - 150px)" }}
     >
       {/* 기본 정보 */}

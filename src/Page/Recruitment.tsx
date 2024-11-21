@@ -47,7 +47,7 @@ const Recruitment = React.memo(
       });
 
       console.log(params.toString());
-      return params.toString();
+      return "&" + params.toString();
     };
 
     const fetchRecruitData = async ({ pageParam = 0 }) => {
@@ -74,13 +74,11 @@ const Recruitment = React.memo(
     } = useInfiniteQuery({
       queryKey: [
         "recruitData",
-        {
-          search,
-          city,
-          continent: selectedContinent,
-          country: selectedCountry,
-          mbti,
-        },
+        search,
+        city,
+        selectedContinent,
+        selectedCountry,
+        mbti,
       ],
       queryFn: fetchRecruitData,
       getNextPageParam: (lastPage, allPages) => {
