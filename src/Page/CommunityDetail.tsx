@@ -63,7 +63,7 @@ const ReviewDetail = (): JSX.Element => {
           <div className="gap-[10px]">
             <button
               className="btn bg-custom-blue text-white"
-              onClick={() => navigate(`/api/v1/communities/edit/${id}`)}
+              onClick={() => navigate(`/community/edit/${id}`)}
             >
               수정하기
             </button>
