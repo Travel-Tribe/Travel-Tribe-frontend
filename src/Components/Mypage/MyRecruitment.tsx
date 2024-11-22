@@ -108,6 +108,7 @@ const MyRecruitment = (): JSX.Element => {
   const voting = async (postId: string) => {
     try {
       await fetchCall(`/api/v1/posts/${postId}/voting-starts`, "post");
+      alert("투표 올림")
     } catch (error) {
       console.error(`Error voting`, error);
     }

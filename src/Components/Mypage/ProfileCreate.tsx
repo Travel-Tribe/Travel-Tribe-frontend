@@ -120,7 +120,7 @@ const ProfileCreate = (): JSX.Element | null => {
               src={
                 profileData.fileAddress
                   ? import.meta.env.VITE_API_BASE_URL +
-                    `api/v1/file/preview?fileUrl=${profileData.fileAddress}`
+                    `/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
                   : profileImg
               }
               alt="Profile"
