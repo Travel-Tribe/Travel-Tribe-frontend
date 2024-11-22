@@ -54,26 +54,8 @@ const ProfileCreate = (): JSX.Element | null => {
       try {
         // 이미지 업로드 및 URL 생성
         const imgUrl = await postImgUrl(file);
-
-        // const encodedFileAddress = encodeURIComponent(imgUrl);
-
-        const previewResponse = await fetchCall<Blob>(
-          `/api/v1/file/preview?fileUrl=${imgUrl}`,
-          "get",
-          undefined,
-          "blob",
-        );
-          console.log(previewResponse);
-        if (previewResponse.data) {
-          const imgPreviewUrl = URL.createObjectURL(previewResponse.data);
-          // 상태 업데이트 (미리보기 URL)
-          updateProfileField("fileAddressPreview", imgPreviewUrl);
-        }
-
         // 상태 업데이트
         updateProfileField("fileAddress", imgUrl); // 최종 이미지 URL
-        // updateProfileField("fileAddressPreview", encodedFileAddress); // 미리보기 URL
-        console.log("Image URL updated:", imgUrl);
       } catch (error) {
         console.error("Error uploading file:", error);
       }
@@ -102,7 +84,6 @@ const ProfileCreate = (): JSX.Element | null => {
   const handleUpdateProfile = async () => {
     try {
       const { nickname, phone, ...filteredProfileData } = profileData;
-      console.log({...filteredProfileData});
       const response = await fetchCall(`/api/v1/users/profile`, "post", {
         ...filteredProfileData,
       });
@@ -137,9 +118,9 @@ const ProfileCreate = (): JSX.Element | null => {
           <img
               className="w-20 h-20 rounded-full border border-gray-300"
               src={
-                profileData.fileAddressPreview ||
-                profileData.fileAddress ||
-                profileImg
+                profileData.fileAddress
+                  ? `http://34.64.39.55:7070/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
+                  : profileImg
               }
               alt="Profile"
             />

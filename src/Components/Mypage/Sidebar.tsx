@@ -21,46 +21,12 @@ const Sidebar = (): JSX.Element => {
   const [selected, setSelected] = useState("내 프로필");
   const location = useLocation();
 
-  // const fetchSideUserProfile = async (userId: string) => {
-  //   try {
-  //     await fetchProfileData(userId);
-  //   } catch (error) {
-  //     console.error("Error fetching user profile data:", error);
-  //     return null;
-  //   }
-  // };
-
-  // const fetchSideUserImg = async () => {
-  //   const fileAddressPreview =
-  //     (await previewImg(profileData.fileAddress)) ?? "";
-  //   updateProfileField("fileAddressPreview", fileAddressPreview);
-  // };
-
-  // const fetchSideUserData = async () => {
-  //   try {
-  //     const response = await fetchCall<{ nickname: string }>(
-  //       `/api/v1/users`,
-  //       "get",
-  //     );
-  //     return response.data.data;
-  //   } catch (error) {
-  //     console.error("Error fetching user data:", error);
-  //     return null;
-  //   }
-  // };
-
   const loadProfileData = async () => {
     if (!userId) return;
 
     try {
       // 프로필 데이터 가져오기
       await fetchProfileData(userId);
-
-      // 미리보기 이미지 생성
-      const fileAddressPreview =
-        (await previewImg(profileData.fileAddress)) ?? "";
-      updateProfileField("fileAddressPreview", fileAddressPreview);
-      // 사이드바 데이터 업데이트
     } catch (error) {
       console.error("Error loading profile data:", error);
     }
@@ -105,9 +71,9 @@ const Sidebar = (): JSX.Element => {
         <img
           className="w-[112px] h-[112px] rounded-full"
           src={
-            profileData.fileAddressPreview ||
-            profileData.fileAddress ||
-            profileImg
+            profileData.fileAddress
+              ? `http://34.64.39.55:7070/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
+              : profileImg
           }
         />
         <span className="w-[320px] h-8 mt-3 font-bold text-2xl overflow-y-hidden text-center">

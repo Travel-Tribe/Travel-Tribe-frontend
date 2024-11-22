@@ -71,64 +71,12 @@ const ProfileEdit = (): JSX.Element => {
       try {
         // 이미지 업로드 및 URL 생성
         const imgUrl = await postImgUrl(file);
-
-        // const encodedFileAddress = encodeURIComponent(imgUrl);
-
-        const previewResponse = await fetchCall<Blob>(
-          `/api/v1/file/preview?fileUrl=${imgUrl}`,
-          "get",
-          undefined,
-          "blob",
-        );
-
-        if (previewResponse.data) {
-          const imgPreviewUrl = URL.createObjectURL(previewResponse.data);
-          // 상태 업데이트 (미리보기 URL)
-          updateProfileField("fileAddressPreview", imgPreviewUrl);
-        }
-
         // 상태 업데이트
         updateProfileField("fileAddress", imgUrl); // 최종 이미지 URL
-        // updateProfileField("fileAddressPreview", encodedFileAddress); // 미리보기 URL
-        console.log("Image URL updated:", imgUrl);
       } catch (error) {
         console.error("Error uploading file:", error);
       }
     }
-
-    // const file = event.target.files?.[0];
-    // if (file) {
-    //   const formData = new FormData();
-    //   formData.append("file", file); // 실제 파일 객체 추가
-
-    //   try {
-    //     const response = await fetchCall<{ data: { fileUrl: string } }>(
-    //       `/api/v1/file/upload`,
-    //       "post",
-    //       formData,
-    //     );
-    //     console.log(response.data.data);
-    //     updateProfileField("fileAddress", response.data.data.fileUrl);
-    //     // 서버 응답의 fileUrl을 fileAddress로 상태 업데이트
-    //     // 완전한 URI 생성
-    //     const previewResponse = await fetchCall<Blob>(
-    //       `/api/v1/file/preview?fileUrl=${response.data.data.fileUrl}`,
-    //       "get",
-    //       undefined,
-    //       "blob",
-    //     );
-    //     console.log(previewResponse.data);
-    //     // 상태 업데이트
-    //     if (previewResponse.data) {
-    //       const imgPreviewUrl = URL.createObjectURL(previewResponse.data);
-
-    //       // 상태 업데이트 (미리보기 URL)
-    //       updateProfileField("fileAddressPreview", imgPreviewUrl);
-    //     }
-    //   } catch (error) {
-    //     console.error("Error uploading file:", error);
-    //   }
-    // }
   };
 
   // 닉네임 유효성 검사 및 중복 체크
@@ -242,9 +190,9 @@ const ProfileEdit = (): JSX.Element => {
             <img
               className="w-20 h-20 rounded-full border border-gray-300"
               src={
-                profileData.fileAddressPreview ||
-                profileData.fileAddress ||
-                profileImg
+                profileData.fileAddress
+                  ? `http://34.64.39.55:7070/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
+                  : profileImg
               }
               alt="Profile"
             />

@@ -83,10 +83,13 @@ const MyProfile = (): JSX.Element => {
             <img
               className="w-16 h-16 rounded-full"
               src={
-                profileData.fileAddressPreview ||
-                profileData.fileAddress ||
-                profileImg
+                profileData.fileAddress
+                  ? `http://34.64.39.55:7070/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
+                  : profileImg
               }
+              // src={
+              //   "http://34.64.39.55:7070/api/v1/file/preview?fileUrl=/travel/upload/d2107946-2a47-48ab-90aa-fbd53971e1ab____%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+              // }
             />
             <div className="ml-5">
               <span className="block text-lg font-bold">

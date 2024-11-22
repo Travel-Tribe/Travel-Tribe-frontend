@@ -104,14 +104,10 @@ const MyRecruitment = (): JSX.Element => {
 
     fetchMyRecruitData();
   }, [userId]);
-console.log(recruitDataList);
+
   const voting = async (postId: string) => {
     try {
       await fetchCall(`/api/v1/posts/${postId}/voting-starts`, "post");
-      // const response = await fetchCall(
-      //   `/api/v1/posts/${postId}/voting-starts`,
-      //   "get",
-      // );
     } catch (error) {
       console.error(`Error voting`, error);
     }
