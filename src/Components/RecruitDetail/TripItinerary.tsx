@@ -27,9 +27,12 @@ const DayScheduleCard = ({
     </div>
     <figure className="my-4">
       <img
-        src={detail.fileAddress}
+        src={
+          import.meta.env.VITE_API_BASE_URL +
+          `/api/v1/file/preview?fileUrl=${detail.fileAddress}`
+        }
         alt={detail.title}
-        className="rounded-xl w-full h-60 object-cover"
+        className="rounded-xl mr-2 w-full h-60 object-cover"
       />
     </figure>
     <p className="text-base-content/70 text-sm">{detail.description}</p>
