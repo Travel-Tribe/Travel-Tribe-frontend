@@ -9,10 +9,8 @@ import profileImg from "../../assets/profileImg.webp";
 import CountryName from "./SideComponents/CountryName";
 import MyLang from "./SideComponents/MyLang";
 
-import { previewImg } from "../../Utils/postImgUrl";
-
 const MyProfile = (): JSX.Element => {
-  const { profileData, fetchProfileData, updateProfileField } =
+  const { profileData, fetchProfileData, age } =
     useProfileStore();
   const mbtiColors: { [key: string]: string } = {
     ISTJ: "bg-istj",
@@ -36,21 +34,21 @@ const MyProfile = (): JSX.Element => {
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const profileCheck = localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK);
   const navigate = useNavigate();
-  const [age, setAge] = useState<number | null>(null);
+  // const [age, setAge] = useState<number | null>(null);
 
-  const calculateAge = (birthDateString: string): number => {
-    const today = new Date();
-    const birthDate = new Date(birthDateString);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    if (
-      today.getMonth() < birthDate.getMonth() ||
-      (today.getMonth() === birthDate.getMonth() &&
-        today.getDate() < birthDate.getDate())
-    ) {
-      age -= 1;
-    }
-    return age;
-  };
+  // const calculateAge = (birthDateString: string): number => {
+  //   const today = new Date();
+  //   const birthDate = new Date(birthDateString);
+  //   let age = today.getFullYear() - birthDate.getFullYear();
+  //   if (
+  //     today.getMonth() < birthDate.getMonth() ||
+  //     (today.getMonth() === birthDate.getMonth() &&
+  //       today.getDate() < birthDate.getDate())
+  //   ) {
+  //     age -= 1;
+  //   }
+  //   return age;
+  // };
 
   useEffect(() => {
     const loadProfileData = async () => {
@@ -58,13 +56,10 @@ const MyProfile = (): JSX.Element => {
         if (profileCheck === "false") {
           navigate("/mypage/myProfileEdit");
         } else if (userId) {
-          await fetchProfileData(userId); // 데이터를 로드
-          if (profileData.birth) {
-            setAge(calculateAge(profileData.birth)); // 나이 계산
-          }
-          const fileAddressPreview =
-            (await previewImg(profileData.fileAddress)) ?? "";
-          updateProfileField("fileAddressPreview", fileAddressPreview);
+          await fetchProfileData(userId);
+          // if (profileData.birth) {
+          //   setAge(calculateAge(profileData.birth)); // 나이 계산
+          // }
         }
       } catch (error) {
         console.error("Error loading profile data:", error);
@@ -85,7 +80,7 @@ const MyProfile = (): JSX.Element => {
               src={
                 profileData.fileAddress
                   ? import.meta.env.VITE_API_BASE_URL +
-                    `api/v1/file/preview?fileUrl=${profileData.fileAddress}`
+                    `/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
                   : profileImg
               }
             />
