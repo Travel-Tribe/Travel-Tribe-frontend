@@ -107,7 +107,7 @@ const Community = React.memo(
     }
 
     const communities = data?.pages.flatMap(page => page.lists) || [];
-
+    console.log("커뮤니티 목록", communities);
     return (
       <div className="flex flex-wrap gap-[35px]">
         {communities &&
