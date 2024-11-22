@@ -13,10 +13,11 @@ import ProfileRequiredRoutes from "../Components/Layout/ProfileRequiredRoutes";
 import HomeLayout from "../Components/Layout/HomeLayout";
 import ReviewDetail from "../Page/ReviewDetail";
 import ProfileCreate from "../Components/Mypage/ProfileCreate";
-import MyVoting from '../Components/Mypage/MyVoting';
+import MyVoting from "../Components/Mypage/MyVoting";
 import ReviewEdit from "../Components/ReviewWrite/ReviewEdit";
 import CommunityForm from "../Page/CommunityForm";
 import CommunityEdit from "../Components/CommunityWrite/CommunityEdit";
+import CommunityDetail from "../Page/CommunityDetail";
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -50,6 +51,7 @@ const Router = (): JSX.Element => {
               {/* 글쓰기 관련 */}
               <Route path="/recruitment/write" element={<RecruitWrite />} />
               <Route path="/recruitment/edit/:id" element={<RecruitWrite />} />
+              {/* 리뷰 작성 관련 */}
               <Route
                 path="/recruitment/:postId/review/write"
                 element={<ReviewForm />}
@@ -58,6 +60,7 @@ const Router = (): JSX.Element => {
                 path="/recruitment/:postId/review/edit/:id"
                 element={<ReviewEdit />}
               />
+              {/* 일반 글 작성 관련 */}
               <Route path="/community/write" element={<CommunityForm />} />
               <Route path="/community/edit/:id" element={<CommunityEdit />} />
             </Route>
@@ -83,10 +86,12 @@ const Router = (): JSX.Element => {
 
           <Route path="/" element={<Navigate to="/recruitment" replace />} />
           <Route path="/recruitment/:id" element={<RecruitDetail />} />
+          <Route path="/community/:id" element={<CommunityDetail />} />
           <Route
             path="/recruitment/:postId/review/:reviewId"
             element={<ReviewDetail />}
           />
+
           <Route path="*" element={<Error />} />
         </Route>
       </Routes>

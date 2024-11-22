@@ -115,7 +115,7 @@ const Review = React.memo(
     }
 
     const reviews = data?.pages.flatMap(page => page.reviews) || [];
-
+    console.log("리뷰 글 목록", reviews);
     return (
       <div className="flex flex-wrap gap-[35px]">
         {reviews.map((review: ReviewTypes, index: number) => {

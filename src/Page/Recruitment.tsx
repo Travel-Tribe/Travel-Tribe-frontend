@@ -118,7 +118,7 @@ const Recruitment = React.memo(
     }
 
     const recruitment = data?.pages.flatMap(page => page.content) || [];
-
+    console.log("모집 글 목록", recruitment);
     return (
       <div className="flex flex-wrap gap-[35px]">
         {recruitment &&

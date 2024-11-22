@@ -1,8 +1,7 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { CommunityListProps, ReviewTypes, TravelPlan } from "../mocks/mockData";
 import { mappingCountry } from "../Utils/mappingCountry";
-import { previewImg } from "../Utils/postImgUrl";
 
 interface PostProps {
   plan: TravelPlan;
@@ -10,11 +9,6 @@ interface PostProps {
 
 export const RecruitmentPost = React.memo(
   ({ plan }: PostProps): JSX.Element => {
-    const url = useMemo(
-      async () => await previewImg(plan.days[0].dayDetails[0].fileAddress),
-      [],
-    );
-
     return (
       <div className="mb-[20px]">
         <Link
@@ -25,7 +19,8 @@ export const RecruitmentPost = React.memo(
           {plan.days[0]?.dayDetails[0]?.fileAddress && (
             <img
               src={
-                "http://34.64.39.55:7070/api/v1/file/preview?fileUrl=/travel/upload/d2107946-2a47-48ab-90aa-fbd53971e1ab____%EB%8B%A4%EC%9A%B4%EB%A1%9C%EB%93%9C.png"
+                import.meta.env.VITE_API_BASE_URL +
+                `/api/v1/file/preview?fileUrl=${plan.days[0].dayDetails[0].fileAddress}`
               }
               alt={plan.title}
               className="w-[300px] h-[150px] object-cover"
@@ -73,7 +68,6 @@ interface ReviewPostProps {
 
 export const ReviewPost = React.memo(
   ({ review }: ReviewPostProps): JSX.Element => {
-    console.log(review);
     return (
       <div className="mb-[20px]">
         <Link
@@ -83,7 +77,10 @@ export const ReviewPost = React.memo(
         >
           {review.files && (
             <img
-              src={review.files[0].fileAddress}
+              src={
+                import.meta.env.VITE_API_BASE_URL +
+                `/api/v1/file/preview?fileUrl=${review.files[0].fileAddress}`
+              }
               alt={review.title}
               className="w-[300px] h-[150px] object-cover"
             />
@@ -115,7 +112,6 @@ interface CommunityPostProps {
 
 export const CommunityPost = React.memo(
   ({ community }: CommunityPostProps): JSX.Element => {
-    console.log(community);
     return (
       <div className="mb-[20px]">
         <Link
@@ -125,7 +121,10 @@ export const CommunityPost = React.memo(
         >
           {community?.files[0] && (
             <img
-              src={community.files[0]}
+              src={
+                import.meta.env.VITE_API_BASE_URL +
+                `/api/v1/file/preview?fileUrl=${community.files[0]}`
+              }
               alt={community.title}
               className="w-[300px] h-[150px] object-cover"
             />
@@ -142,7 +141,7 @@ export const CommunityPost = React.memo(
               여행 지역: {community.region}
             </p>
             <p className="text-[12px] truncate">
-              작성 날짜: {community.createDate}
+              작성 날짜: {community.createAt}
             </p>
           </div>
 

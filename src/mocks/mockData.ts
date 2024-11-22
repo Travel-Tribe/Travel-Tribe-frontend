@@ -1346,24 +1346,26 @@ export const votingStarts: voting = {
 
 export interface CommunityListProps {
   communityId: number;
+  userId: number;
   title: string;
   content: string;
   continent: string;
   country: string;
   region: string;
-  createDate: string;
-  files: File[];
+  createdAt: string;
+  files: [{ fileName: string }];
 }
 
 export const CommunityData: CommunityListProps[] = [
   {
     communityId: 1,
+    userId: 1,
     title: "일본 여행 후기",
     content: "오사카오사카",
     continent: "아시아",
     country: "일본",
     region: "오사카",
-    createDate: "2023-01-03",
-    files: [{ fileAddress: "/images/gangneung1.jpg" }],
+    createdAt: "2023-01-03",
+    files: [{ fileName: "/images/gangneung1.jpg" }],
   },
 ];
