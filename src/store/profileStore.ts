@@ -63,7 +63,7 @@ export const useProfileStore = create<ProfileState>(set => ({
       const age = updatedData.birth ? calculateAge(updatedData.birth) : null;
 
       console.log("Profile Data Updated:", updatedData); // 로그 추가
-      return { profileData: updatedData, age: age };
+      return { profileData: updatedData, age };
     }),
   // 특정 속성 하나만 업데이트 할 때 사용
   updateProfileField: (key, value) =>
@@ -73,7 +73,7 @@ export const useProfileStore = create<ProfileState>(set => ({
         key === "birth" ? calculateAge(value as string) : state.profileData.age;
       console.log(age);
       console.log("Profile Field Updated:", key, value, updatedData); // 로그 추가
-      return { profileData: updatedData, age: age };
+      return { profileData: updatedData, age };
     }),
 
   fetchProfileData: async (userId: string) => {
@@ -102,8 +102,8 @@ export const useProfileStore = create<ProfileState>(set => ({
           // 서버 연동 시 .data 추가
           ...filteredProfileData,
           nickname: userResponse.data.data.nickname,
-          age: age,
         },
+        age,
       }));
     } catch (error) {
       console.error("Error fetching profile data:", error);
