@@ -9,10 +9,8 @@ import profileImg from "../../assets/profileImg.webp";
 import CountryName from "./SideComponents/CountryName";
 import MyLang from "./SideComponents/MyLang";
 
-import { previewImg } from "../../Utils/postImgUrl";
-
 const MyProfile = (): JSX.Element => {
-  const { profileData, fetchProfileData, updateProfileField } =
+  const { profileData, fetchProfileData } =
     useProfileStore();
   const mbtiColors: { [key: string]: string } = {
     ISTJ: "bg-istj",
@@ -59,12 +57,10 @@ const MyProfile = (): JSX.Element => {
           navigate("/mypage/myProfileEdit");
         } else if (userId) {
           await fetchProfileData(userId); // 데이터를 로드
+          console.log(profileData.age);
           if (profileData.birth) {
             setAge(calculateAge(profileData.birth)); // 나이 계산
           }
-          const fileAddressPreview =
-            (await previewImg(profileData.fileAddress)) ?? "";
-          updateProfileField("fileAddressPreview", fileAddressPreview);
         }
       } catch (error) {
         console.error("Error loading profile data:", error);
