@@ -14,7 +14,6 @@ interface UserProfile {
   langAbilities: string[];
   phone: string;
   fileAddressPreview: string;
-  age: string | null;
 }
 
 interface SimplifiedUserProfile {
@@ -26,6 +25,7 @@ interface SimplifiedUserProfile {
 interface ProfileState {
   profileData: UserProfile;
   userProfiles: { [key: string]: UserProfile | SimplifiedUserProfile }; // 추가: 여러 사용자 프로필 저장
+  age: number | null;
   setProfileData: (data: Partial<UserProfile>) => void; // 일부 프로필 속성만 업데이트 할 수 있음
   updateProfileField: <K extends keyof UserProfile>(
     key: K,
@@ -49,7 +49,6 @@ const initialProfileData: UserProfile = {
   langAbilities: [],
   phone: "",
   fileAddressPreview: "",
-  age: null,
 };
 
 export const useProfileStore = create<ProfileState>(set => ({
@@ -86,7 +85,7 @@ export const useProfileStore = create<ProfileState>(set => ({
       const userResponse = await fetchCall<{
         data: { data: { nickname: string } };
       }>(`/api/v1/users`, "get");
-
+      console.log(userResponse);
       const {
         id,
         userId: _,
@@ -108,7 +107,7 @@ export const useProfileStore = create<ProfileState>(set => ({
     } catch (error) {
       console.error("Error fetching profile data:", error);
 
-      set(() => ({ profileData: initialProfileData }));
+      set(() => ({ profileData: initialProfileData, age: null }));
     }
   },
 
@@ -162,7 +161,7 @@ export const useProfileStore = create<ProfileState>(set => ({
   resetProfileData: () =>
     set(() => {
       console.log("Resetting Profile Data to Initial State"); // 로그 추가
-      return { profileData: initialProfileData };
+      return { profileData: initialProfileData, age: null };
     }),
 }));
 
