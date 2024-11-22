@@ -123,7 +123,7 @@ export const CommunityPost = React.memo(
             <img
               src={
                 import.meta.env.VITE_API_BASE_URL +
-                `/api/v1/file/preview?fileUrl=${community.files[0]}`
+                `/api/v1/file/preview?fileUrl=${community.files[0].fileName}`
               }
               alt={community.title}
               className="w-[300px] h-[150px] object-cover"
@@ -133,15 +133,8 @@ export const CommunityPost = React.memo(
             <p className="text-[16px] truncate mb-[10px] mt-[10px]">
               {community.title}
             </p>
-            <p className="text-[12px] truncate">대륙: {community.continent}</p>
             <p className="text-[12px] truncate">
-              여행 국가: {community.country}
-            </p>
-            <p className="text-[12px] truncate">
-              여행 지역: {community.region}
-            </p>
-            <p className="text-[12px] truncate">
-              작성 날짜: {community.createAt}
+              작성 날짜: {community.createdAt}
             </p>
           </div>
 
