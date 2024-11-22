@@ -72,7 +72,8 @@ const Sidebar = (): JSX.Element => {
           className="w-[112px] h-[112px] rounded-full"
           src={
             profileData.fileAddress
-              ? `http://34.64.39.55:7070/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
+              ? import.meta.env.VITE_API_BASE_URL +
+                `api/v1/file/preview?fileUrl=${profileData.fileAddress}`
               : profileImg
           }
         />
@@ -105,7 +106,7 @@ const Sidebar = (): JSX.Element => {
           ))}
         </ul>
         <ul className="border-t border-black py-2.5 flex justify-center space-x-5">
-        <li className="text-sm">
+          <li className="text-sm">
             <Link to="/mypage/voting">투표 확인</Link>
           </li>
           <li className="text-sm">

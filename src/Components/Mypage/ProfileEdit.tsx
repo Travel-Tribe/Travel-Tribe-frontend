@@ -191,7 +191,8 @@ const ProfileEdit = (): JSX.Element => {
               className="w-20 h-20 rounded-full border border-gray-300"
               src={
                 profileData.fileAddress
-                  ? `http://34.64.39.55:7070/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
+                  ? import.meta.env.VITE_API_BASE_URL +
+                    `api/v1/file/preview?fileUrl=${profileData.fileAddress}`
                   : profileImg
               }
               alt="Profile"
