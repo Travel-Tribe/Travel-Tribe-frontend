@@ -12,7 +12,7 @@ const AccommodationFee = React.memo((): JSX.Element => {
       <p className="text-[18px] mr-2">숙박비:</p>
       <input
         type="text"
-        value={Number(accommodationFee).toLocaleString()}
+        value={accommodationFee}
         className="border border-gray-300 rounded-sm w-[200px] px-2 text-[16px]"
         onChange={e =>
           updateTravelData("accommodationFee", Number(e.target.value))

@@ -17,6 +17,26 @@ const TravelDateSelect = React.memo(() => {
     length: Math.abs(Number(currentYear) - Number(startYear) + 2),
   }).map((_, i) => i + Number(startYear));
 
+  const setMonth = useCallback(
+    (year: number) => {
+      return year > currentYear
+        ? Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
+            <option key={month} value={month}>
+              {month}
+            </option>
+          ))
+        : Array.from(
+            { length: 12 - new Date().getMonth() },
+            (_, i) => i + 1 + new Date().getMonth(),
+          ).map(month => (
+            <option key={month} value={month}>
+              {month}
+            </option>
+          ));
+    },
+    [currentYear],
+  );
+
   const getDaysInMonth = useCallback((year: number, month: number) => {
     const days = [];
     const date = new Date(year, month, 0);
@@ -83,11 +103,7 @@ const TravelDateSelect = React.memo(() => {
             )
           }
         >
-          {[...Array(12).keys()].map(month => (
-            <option key={month + 1} value={month + 1}>
-              {month + 1}
-            </option>
-          ))}
+          {setMonth(Number(travelStartDate.split("-")[0]))}
         </select>
         월
         <select

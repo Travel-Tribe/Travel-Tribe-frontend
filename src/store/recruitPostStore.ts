@@ -14,9 +14,9 @@ interface RecruitPostType {
 export const useRecruitPostStore = create<RecruitPostType>(set => ({
   postData: {
     title: "",
-    travelStartDate: `${new Date().getFullYear()}-01-01`,
-    travelEndDate: `${new Date().getFullYear()}-01-01`,
-    deadline: `${new Date().getFullYear()}-01-01`,
+    travelStartDate: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
+    travelEndDate: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
+    deadline: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
     maxParticipants: 1,
     travelCountry: "",
     continent: "",
@@ -42,9 +42,9 @@ export const useRecruitPostStore = create<RecruitPostType>(set => ({
     set({
       postData: {
         title: "",
-        travelStartDate: `${new Date().getFullYear()}-1-1`,
-        travelEndDate: `${new Date().getFullYear()}-1-1`,
-        deadline: `${new Date().getFullYear()}-1-1`,
+        travelStartDate: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
+        travelEndDate: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
+        deadline: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
         maxParticipants: 1,
         travelCountry: "",
         continent: "",
