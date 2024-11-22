@@ -1,15 +1,35 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import fetchCall from "../../../Utils/apiFetch";
-import {
-  PaymentReadyRequest,
-  PaymentReadyResponse,
-  SuccessResponse,
-} from "../../RecruitDetail/Buttons/JoinBtn";
 
 interface PaymentBtnProps {
   postId?: number;
   participationId?: number;
+}
+
+interface PaymentReadyRequest {
+  postId: number;
+  participationId: number;
+  PGMethod: string;
+}
+
+interface PaymentReadyResponse {
+  data: {
+    data: {
+      tid: string;
+      postId: number;
+      participationId: number;
+      depositId: number;
+      depositStatus: string;
+      amount: number;
+      userId: string;
+      nextRedirectPcUrl: string;
+    };
+  };
+}
+
+interface SuccessResponse {
+  result: string;
 }
 
 const PaymentBtn = React.memo(
@@ -34,7 +54,7 @@ const PaymentBtn = React.memo(
             },
           );
 
-          if (response?.data.result === "SUCCESS") {
+          if (response?.result === "SUCCESS") {
             alert("결제가 완료되었습니다.");
           } else {
             throw new Error("결제 승인에 실패했습니다.");
@@ -78,6 +98,11 @@ const PaymentBtn = React.memo(
 
     const handlePost = async () => {
       setIsLoading(true);
+      if (!postId || !participationId) {
+        alert("결제 정보가 없습니다.");
+        return;
+      }
+
       try {
         // 3. 결제 준비 요청
         const paymentReadyRequest: PaymentReadyRequest = {
@@ -113,11 +138,11 @@ const PaymentBtn = React.memo(
 
     return (
       <button
-        className="btn w-[130px] h-[35px] bg-custom-green text-white"
+        className="btn w-[130px] h-[35px] btn-success text-white"
         onClick={handlePost}
         disabled={isLoading}
       >
-        {isLoading ? "처리 중..." : "등록하기"}
+        {isLoading ? "처리 중..." : "결제하기"}
       </button>
     );
   },

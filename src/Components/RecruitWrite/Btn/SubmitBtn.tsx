@@ -1,14 +1,19 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import fetchCall from "../../../Utils/apiFetch";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 import { mappingCondition } from "../../../Utils/mappingCondition";
+import PaymentBtn from "./PaymentBtn";
 
 const SubmitBtn = React.memo(() => {
-  const navigate = useNavigate();
   const { id } = useParams();
   const postData = useRecruitPostStore(state => state.postData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showPaymentBtn, setShowPaymentBtn] = useState(false);
+  const [paymentInfo, setPaymentInfo] = useState<{
+    postId: number;
+    participationId: number;
+  } | null>(null);
 
   const handlePost = async () => {
     try {
@@ -36,6 +41,9 @@ const SubmitBtn = React.memo(() => {
         );
       }
       console.log("등록하기 클릭 응답: ", data);
+      setPaymentInfo(data.data.data);
+      setShowPaymentBtn(true);
+
       // if (data.status === 201) {
       //   navigate("/recruitment");
       // } else {
@@ -48,7 +56,12 @@ const SubmitBtn = React.memo(() => {
     }
   };
 
-  return (
+  return showPaymentBtn && paymentInfo ? (
+    <PaymentBtn
+      postId={paymentInfo.postId}
+      participationId={paymentInfo.participationId}
+    />
+  ) : (
     <button
       className="btn w-[130px] h-[35px] bg-custom-green text-white"
       onClick={handlePost}
