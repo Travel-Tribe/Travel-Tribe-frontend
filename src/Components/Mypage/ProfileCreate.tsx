@@ -115,11 +115,12 @@ const ProfileCreate = (): JSX.Element | null => {
       <form>
         <div className="h-40 border-b border-gray-300 flex justify-between items-center pt-5">
           <div className="flex flex-col items-center">
-          <img
+            <img
               className="w-20 h-20 rounded-full border border-gray-300"
               src={
                 profileData.fileAddress
-                  ? `http://34.64.39.55:7070/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
+                  ? import.meta.env.VITE_API_BASE_URL +
+                    `api/v1/file/preview?fileUrl=${profileData.fileAddress}`
                   : profileImg
               }
               alt="Profile"
