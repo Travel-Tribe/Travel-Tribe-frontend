@@ -2,22 +2,28 @@ import { useEffect } from "react";
 import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
 import fetchCall from "../../Utils/apiFetch";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  FileData,
-  useCommunityPostStore,
-} from "../../store/CommunityPostStore";
+import { useCommunityPostStore } from "../../store/communityPostStore";
 
-interface CommunityResponse {
-  communityId: number;
-  userId: number;
-  title: string;
-  content: string;
-  files: FileData[];
+interface AxiosResponse {
+  data: {
+    data: {
+      communityId: number;
+      userId: string;
+      title: string;
+      content: string;
+      files: Array<{
+        communityId: number;
+        fileName: string;
+      }>;
+    };
+  };
 }
 
 const CommunityEdit = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // URL에서 게시글 ID 가져오기
+  const { id } = useParams<{
+    id: string;
+  }>(); // URL에서 게시글 ID 가져오기
   const { formData, setFormData, resetForm, isSubmitting, setIsSubmitting } =
     useCommunityPostStore();
 
@@ -25,18 +31,20 @@ const CommunityEdit = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await fetchCall<CommunityResponse>(
+        const response = await fetchCall<AxiosResponse>(
           `/api/v1/communities/${id}`,
           "get",
         );
+        console.log("게시글 불러오기:", response);
         if (response) {
           setFormData({
-            title: response.title,
-            content: response.content,
-            files: response.files.map((file: { fileAddress: string }) => ({
-              fileAddress: file.fileAddress,
-              previewAddress: file.fileAddress,
-            })),
+            title: response.data.data.title,
+            content: response.data.data.content,
+            files: response.data.data.files.map(
+              (file: { fileName: string }) => ({
+                fileAddress: file.fileName,
+              }),
+            ),
           });
         }
       } catch (error) {
@@ -109,7 +117,7 @@ const CommunityEdit = () => {
       const communityData = {
         communityId: Number(id),
         title: formData.title,
-        contents: formData.content,
+        content: formData.content,
         files: formData.files.map(file => ({
           fileAddress: file.fileAddress,
         })),
