@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import fetchCall from "../Utils/apiFetch";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useCallback } from "react";
 import { CommunityListProps } from "../mocks/mockData";
 
@@ -9,6 +9,7 @@ const ReviewDetail = (): JSX.Element => {
   const { id } = useParams<{
     id: string;
   }>();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useQuery({
@@ -17,14 +18,20 @@ const ReviewDetail = (): JSX.Element => {
       const response = await fetchCall<{
         data: { data: CommunityListProps };
       }>(`/api/v1/communities/${id}`, "get");
-      console.log("communityData", response.data.data);
       return response.data.data;
     },
   });
 
   const deleteCommunities = useCallback(async () => {
-    await fetchCall(`/api/v1/communities/${id}`, "delete");
-    alert(`${data.title}이 삭제되었습니다.`);
+    const response = await fetchCall<{ state: number }>(
+      `/api/v1/communities/${id}`,
+      "delete",
+    );
+    if (response.state === 200) {
+      alert(`${data.title}이 삭제되었습니다.`);
+      queryClient.invalidateQueries("communityData");
+      navigate(`/community`);
+    }
   }, []);
 
   if (isLoading) {

@@ -53,12 +53,11 @@ const Recruitment = React.memo(
     const fetchRecruitData = async ({ pageParam = 0 }) => {
       const response = await fetchCall<{
         data: {
-          totalPages: number;
-          data: { content: TravelPlan[] };
+          data: { content: TravelPlan[]; totalPages: number };
         };
       }>(`/api/v1/posts?page=${pageParam}${getFilterParams()}`, "get");
       return {
-        totalPages: response.data.totalPages,
+        totalPages: response.data.data.totalPages,
         content: response.data.data.content,
       };
     };

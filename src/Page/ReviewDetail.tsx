@@ -4,7 +4,7 @@ import Calendar from "../assets/icons/Calendar.svg";
 import MapPin from "../assets/icons/Map pin.svg";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import fetchCall from "../Utils/apiFetch";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { useCallback } from "react";
 
 const ReviewDetail = (): JSX.Element => {
@@ -12,6 +12,7 @@ const ReviewDetail = (): JSX.Element => {
     reviewId: string;
     postId: string;
   }>();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const { data, isLoading, isError, error } = useQuery({
@@ -27,8 +28,14 @@ const ReviewDetail = (): JSX.Element => {
   });
 
   const deleteReview = useCallback(async () => {
-    await fetchCall(`/api/v1/posts/${postId}/reviews/${reviewId}`, "delete");
-    alert(`${data.title}이 삭제되었습니다.`);
+    const response = await fetchCall(
+      `/api/v1/posts/${postId}/reviews/${reviewId}`,
+      "delete",
+    );
+    if (response.state === 200) {
+      queryClient.invalidateQueries("reviewData");
+      alert(`${data.title}이 삭제되었습니다.`);
+    }
   }, []);
 
   if (isLoading) {

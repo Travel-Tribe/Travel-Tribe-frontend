@@ -1,7 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { COUNTRY_DATA } from "../../../Constants/COUNTRY_DATA";
-import { mappingContinent } from "../../../Utils/mappingContinent";
-import { mappingCountry } from "../../../Utils/mappingCountry";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const DestinationSelect = React.memo(() => {
@@ -9,20 +7,19 @@ const DestinationSelect = React.memo(() => {
   const [continent, setContinent] = useState<string>("선택");
   const [country, setCountry] = useState<string>("선택");
 
-  useEffect(() => {
-    if (postData.continent) setContinent(mappingContinent[postData.continent]);
-    if (postData.travelCountry)
-      setCountry(mappingCountry(postData.travelCountry, "ko"));
-  }, []);
-
   const availableCountries = useMemo(() => {
     if (continent !== "선택") return COUNTRY_DATA[continent];
   }, [continent]);
 
+  useEffect(() => {
+    if (postData.continent) setContinent(postData.continent);
+    if (postData.travelCountry) setCountry(postData.travelCountry);
+  }, [postData.continent, postData.travelCountry]);
+
   const handleContinentChange = useCallback(
     (selectedContinent: string) => {
       setContinent(selectedContinent);
-      updateTravelData("continent", mappingContinent[selectedContinent]);
+      updateTravelData("continent", selectedContinent);
     },
     [updateTravelData],
   );
@@ -30,7 +27,7 @@ const DestinationSelect = React.memo(() => {
   const handleCountryChange = useCallback(
     (selectedCountry: string) => {
       setCountry(selectedCountry);
-      updateTravelData("travelCountry", mappingCountry(selectedCountry, "ko"));
+      updateTravelData("travelCountry", selectedCountry);
     },
     [updateTravelData],
   );
