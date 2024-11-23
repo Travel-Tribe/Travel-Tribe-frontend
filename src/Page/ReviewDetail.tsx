@@ -33,7 +33,7 @@ const ReviewDetail = (): JSX.Element => {
       "delete",
     );
     if (response.state === 200) {
-      queryClient.invalidateQueries("communityData");
+      queryClient.invalidateQueries("reviewData");
       alert(`${data.title}이 삭제되었습니다.`);
     }
   }, []);
