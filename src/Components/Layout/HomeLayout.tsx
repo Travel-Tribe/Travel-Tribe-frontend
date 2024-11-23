@@ -115,7 +115,7 @@ const HomeLayout = () => {
           onSelect={e => handleCountryChange(e)}
         />
         <input
-          className="input w-[140px] h-[30px] select-bordered border-custom-green"
+          className="input w-[140px] !h-[32px] select-bordered border-custom-green focus:border-custom-green focus:outline-none focus:ring-custom-green focus:ring-1"
           type="text"
           onChange={handleCityChange}
           value={city}
@@ -130,7 +130,7 @@ const HomeLayout = () => {
         )}
 
         <button
-          className="btn btn-sm !h-[32px] bg-custom-green text-white"
+          className="btn btn-sm !h-[32px] btn-success text-white"
           onClick={handleClickReset}
         >
           초기화
@@ -142,7 +142,7 @@ const HomeLayout = () => {
           location.pathname === "/recruitment" && (
             <Link
               to={`/recruitment/write`}
-              className="btn btn-sm !h-[32px] bg-custom-green text-white"
+              className="btn btn-sm !h-[32px] bg-custom-green hover:bg-custom-green-hover text-white"
             >
               모집 글 작성
             </Link>
@@ -152,7 +152,7 @@ const HomeLayout = () => {
           location.pathname === "/community" && (
             <Link
               to={`/community/write`}
-              className="btn btn-sm !h-[32px] bg-custom-green text-white"
+              className="btn btn-sm !h-[32px] btn-success text-white"
             >
               게시글 작성
             </Link>

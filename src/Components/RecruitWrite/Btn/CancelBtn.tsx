@@ -7,7 +7,7 @@ const CancelBtn = React.memo(() => {
   return (
     <Link
       to={"/recruitment"}
-      className="btn w-[130px] h-[35px] bg-custom-pink text-white mr-[30px]"
+      className="btn w-[130px] h-[35px] btn-error text-white mr-[30px]"
       onClick={clearTravelData}
     >
       취소하기
