@@ -1,26 +1,30 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import fetchCall from "../../../Utils/apiFetch";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 import { mappingCondition } from "../../../Utils/mappingCondition";
-import PaymentBtn from "./PaymentBtn";
+
+// interface PostResponse {
+//   data: {
+//     data: {
+//       postId: number;
+//       participationId: number;
+//     };
+//   };
+// }
 
 const SubmitBtn = React.memo(() => {
   const { id } = useParams();
   const postData = useRecruitPostStore(state => state.postData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [showPaymentBtn, setShowPaymentBtn] = useState(false);
-  const [paymentInfo, setPaymentInfo] = useState<{
-    postId: number;
-    participationId: number;
-  } | null>(null);
+  const navigate = useNavigate();
 
   const handlePost = async () => {
     try {
       setIsLoading(true);
-      let data;
+      let response;
       if (id) {
-        data = await fetchCall(
+        response = await fetchCall(
           `/api/v1/posts/${id}`,
           "put",
           JSON.stringify({
@@ -30,7 +34,7 @@ const SubmitBtn = React.memo(() => {
           }),
         );
       } else {
-        data = await fetchCall(
+        response = await fetchCall(
           "/api/v1/posts",
           "post",
           JSON.stringify({
@@ -40,15 +44,21 @@ const SubmitBtn = React.memo(() => {
           }),
         );
       }
-      console.log("등록하기 클릭 응답: ", data);
-      setPaymentInfo(data.data.data);
-      setShowPaymentBtn(true);
+      console.log("등록하기 클릭 응답: ", response);
+      console.log("결제정보 응답: ", response.data.data);
 
-      // if (data.status === 201) {
-      //   navigate("/recruitment");
-      // } else {
-      //   throw new Error("게시글 등록에 실패했습니다.");
-      // }
+      if (
+        response.status === 201 &&
+        response.data.data.postId &&
+        response.data.data.participationId
+      ) {
+        // 결제 페이지로 이동
+        navigate(
+          `/recruitment/${response.data.data.postId}/pay/${response.data.data.participationId}`,
+        );
+      } else {
+        throw new Error("게시글 등록에 실패했습니다.");
+      }
     } catch {
       throw new Error("게시글 등록에 실패했습니다.");
     } finally {
@@ -56,14 +66,9 @@ const SubmitBtn = React.memo(() => {
     }
   };
 
-  return showPaymentBtn && paymentInfo ? (
-    <PaymentBtn
-      postId={paymentInfo.postId}
-      participationId={paymentInfo.participationId}
-    />
-  ) : (
+  return (
     <button
-      className="btn w-[130px] h-[35px] bg-custom-green text-white"
+      className="btn w-[130px] h-[35px] btn-success text-white"
       onClick={handlePost}
       disabled={isLoading}
     >

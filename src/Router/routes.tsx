@@ -18,6 +18,8 @@ import ReviewEdit from "../Components/ReviewWrite/ReviewEdit";
 import CommunityForm from "../Page/CommunityForm";
 import CommunityEdit from "../Components/CommunityWrite/CommunityEdit";
 import CommunityDetail from "../Page/CommunityDetail";
+import PaymentPage from "../Page/PaymentPage";
+import PaymentResultPage from "../Page/PaymentResultPage";
 
 const Error = React.lazy(() => import("../Page/Error"));
 const SignIn = React.lazy(() => import("../Page/SignIn"));
@@ -47,7 +49,17 @@ const Router = (): JSX.Element => {
           {/* 로그인 필요한 라우트 */}
           <Route element={<PrivateRoutes />}>
             {/* 프로필 필수 라우트 */}
+            {/* 결제 관련 */}
             <Route element={<ProfileRequiredRoutes />}>
+              <Route
+                path="/recruitment/:postId/pay"
+                element={<PaymentPage />}
+              />
+              <Route
+                path="/recruitment/:postId/pay/:participationId"
+                element={<PaymentPage />}
+              />
+              <Route path="/payment/result" element={<PaymentResultPage />} />
               {/* 글쓰기 관련 */}
               <Route path="/recruitment/write" element={<RecruitWrite />} />
               <Route path="/recruitment/edit/:id" element={<RecruitWrite />} />
