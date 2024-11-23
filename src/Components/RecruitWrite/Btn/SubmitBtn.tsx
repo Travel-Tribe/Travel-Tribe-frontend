@@ -3,15 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import fetchCall from "../../../Utils/apiFetch";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 import { mappingCondition } from "../../../Utils/mappingCondition";
-
-// interface PostResponse {
-//   data: {
-//     data: {
-//       postId: number;
-//       participationId: number;
-//     };
-//   };
-// }
+import { mappingCountry } from "../../../Utils/mappingCountry";
+import { mappingContinent } from "../../../Utils/mappingContinent";
 
 const SubmitBtn = React.memo(() => {
   const { id } = useParams();
@@ -31,6 +24,8 @@ const SubmitBtn = React.memo(() => {
             ...postData,
             limitSex: mappingCondition[postData.limitSex],
             limitSmoke: mappingCondition[postData.limitSmoke],
+            travelCountry: mappingCountry(postData.travelCountry, "ko"),
+            continent: mappingContinent[postData.continent],
           }),
         );
       } else {
@@ -41,6 +36,8 @@ const SubmitBtn = React.memo(() => {
             ...postData,
             limitSex: mappingCondition[postData.limitSex],
             limitSmoke: mappingCondition[postData.limitSmoke],
+            travelCountry: mappingCountry(postData.travelCountry, "ko"),
+            continent: mappingContinent[postData.continent],
           }),
         );
       }

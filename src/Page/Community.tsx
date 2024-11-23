@@ -45,12 +45,11 @@ const Community = React.memo(
     const fetchRecruitData = async ({ pageParam = 0 }) => {
       const response = await fetchCall<{
         data: {
-          totalPages: number;
-          data: { content: [] };
+          data: { content: []; totalPages: number };
         };
       }>(`/api/v1/communities?page=${pageParam}${getFilterParams()}`, "get");
       return {
-        totalPages: response.data.totalPages,
+        totalPages: response.data.data.totalPages,
         lists: response.data.data.content,
       };
     };

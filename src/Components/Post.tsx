@@ -49,12 +49,10 @@ export const RecruitmentPost = React.memo(
           <Link to={"#"} className="text-[12px]"></Link>
           <div
             className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${
-              new Date(plan.deadline) > new Date()
-                ? "bg-custom-green"
-                : "bg-btn-closed"
+              plan.status !== "모집완료" ? "bg-custom-green" : "bg-btn-closed"
             } text-center`}
           >
-            {new Date(plan.deadline) > new Date() ? "모집중" : "모집종료"}
+            {plan.status}
           </div>
         </div>
       </div>

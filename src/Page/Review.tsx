@@ -49,12 +49,11 @@ const Review = React.memo(
     const fetchRecruitData = async ({ pageParam = 0 }) => {
       const response = await fetchCall<{
         data: {
-          totalPages: number;
-          data: { reviews: ReviewTypes[] };
+          data: { reviews: ReviewTypes[]; totalPages: number };
         };
       }>(`/api/v1/reviews?page=${pageParam}${getFilterParams()}`, "get");
       return {
-        totalPages: response.data.totalPages,
+        totalPages: response.data.data.totalPages,
         reviews: response.data.data.reviews,
       };
     };
