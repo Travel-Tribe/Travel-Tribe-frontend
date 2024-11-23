@@ -15,10 +15,10 @@ const ReviewDetail = (): JSX.Element => {
     queryKey: ["communityData", id],
     queryFn: async () => {
       const response = await fetchCall<{
-        data: { data: CommunityListProps };
+        data: { data: [CommunityListProps] };
       }>(`/api/v1/communities/${id}`, "get");
       console.log("communityData", response.data.data);
-      return response.data.data;
+      return response.data.data[0];
     },
   });
 
