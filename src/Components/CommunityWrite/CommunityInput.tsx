@@ -3,9 +3,11 @@ import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
 import fetchCall from "../../Utils/apiFetch";
 import { useNavigate } from "react-router-dom";
 import { useCommunityPostStore } from "../../store/communityPostStore";
+import { useQueryClient } from "react-query";
 
 const CommunityInput = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { formData, setFormData, resetForm, isSubmitting, setIsSubmitting } =
     useCommunityPostStore();
 
@@ -81,6 +83,7 @@ const CommunityInput = () => {
       );
 
       if (response) {
+        queryClient.invalidateQueries("communityData");
         resetForm();
         navigate(`/community`);
       }
