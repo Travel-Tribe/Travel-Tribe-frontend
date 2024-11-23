@@ -8,7 +8,8 @@ export default {
     extend: {
       colors: {
         "custom-gray": "#dbdbdb",
-        "custom-green": "#ABD8B9",
+        "custom-green": "#00a96d",
+        "custom-green-disable": "rgba(47, 158, 68, 0.5)",
         "custom-teal-green": "#006D5B",
         "custom-pink": "#FFB5A7",
         "custom-pink-hover": "#ff9e8d",
@@ -16,7 +17,12 @@ export default {
         "custom-purple": "#E6C3DB",
         "custom-yellow": "#FFE3AA",
         "custom-blue": "#B8E3FF",
-        "custom-bg": "#f9fbfc",
+        "custom-bg": "#ffffff",
+        "custom-border": "#E5E7EB",
+        "btn-closed": "#9CA3AF",
+        "btn-black": "#0A0A0B",
+        "btn-black-hover": "#3B3B40",
+        // "custom-bg": "#f9fbfc",
         istj: "#1F3B5F",
         isfj: "#2D572C",
         infj: "#6B4E71",

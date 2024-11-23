@@ -119,7 +119,7 @@ const MyProfile = (): JSX.Element => {
           </div>
         </div>
         <textarea
-          className="w-full p-3 border border-gray-300 rounded-lg mb-5"
+          className="w-full p-3 border border-gray-300 rounded-lg mb-5 focus:outline-none"
           placeholder="자기소개를 작성해주세요."
           value={profileData.introduction}
           readOnly

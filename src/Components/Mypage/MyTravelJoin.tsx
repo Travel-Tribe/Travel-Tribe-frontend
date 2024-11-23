@@ -199,7 +199,7 @@ const MyTravelJoin = () => {
                         </div>
                       )}
                       <button
-                        className="btn btn-xs bg-red-500 text-white rounded-md text-center hover:bg-custom-pink-hover"
+                        className="btn btn-xs btn-error text-white rounded-md text-center "
                         onClick={e => {
                           e.stopPropagation();
                           deleteParticipation(plan.postId);
