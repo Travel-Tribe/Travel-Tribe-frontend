@@ -108,6 +108,7 @@ const MyRecruitment = (): JSX.Element => {
   const voting = async (postId: string) => {
     try {
       await fetchCall(`/api/v1/posts/${postId}/voting-starts`, "post");
+      alert("투표 올림")
     } catch (error) {
       console.error(`Error voting`, error);
     }
@@ -140,7 +141,7 @@ const MyRecruitment = (): JSX.Element => {
             <span className="text-lg">{recruitDataList.length}</span>
           </div>
           <button
-            className="btn btn-sm w-[100px] !h-[32px] bg-custom-teal-green  rounded-lg mr-5 hover:bg-custom-teal-green text-white"
+            className="btn btn-sm w-[100px] !h-[32px] btn-success rounded-lg mr-5 text-white"
             onClick={clickRecruitForm}
           >
             모집글 작성
@@ -198,7 +199,7 @@ const MyRecruitment = (): JSX.Element => {
                         </div>
                       )}
                       <button
-                        className="btn btn-xs bg-red-500 text-white rounded-md text-center hover:bg-custom-pink-hover z-10"
+                        className="btn btn-xs btn-error text-white rounded-md text-center  z-10"
                         onClick={e => {
                           e.stopPropagation();
                           // fetchDeleteParticipation(plan.postId);

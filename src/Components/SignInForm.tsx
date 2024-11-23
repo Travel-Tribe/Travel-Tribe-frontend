@@ -156,7 +156,7 @@ const SignIn = (): JSX.Element => {
 
       <button
         type="submit"
-        className="btn bg-custom-green hover:bg-custom-green text-white w-full"
+        className="btn bg-custom-green hover:bg-custom-green-hover text-white w-full"
         disabled={isSubmitting}
       >
         로그인

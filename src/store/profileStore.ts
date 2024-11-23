@@ -25,6 +25,7 @@ interface SimplifiedUserProfile {
 interface ProfileState {
   profileData: UserProfile;
   userProfiles: { [key: string]: UserProfile | SimplifiedUserProfile }; // 추가: 여러 사용자 프로필 저장
+  age: number | null;
   setProfileData: (data: Partial<UserProfile>) => void; // 일부 프로필 속성만 업데이트 할 수 있음
   updateProfileField: <K extends keyof UserProfile>(
     key: K,
@@ -53,19 +54,25 @@ const initialProfileData: UserProfile = {
 export const useProfileStore = create<ProfileState>(set => ({
   profileData: initialProfileData,
   userProfiles: {},
+  age: null,
   // 일부 속성만 업데이트
   setProfileData: data =>
     set(state => {
       const updatedData = { ...state.profileData, ...data };
+      const age = updatedData.birth ? calculateAge(updatedData.birth) : null;
+
       console.log("Profile Data Updated:", updatedData); // 로그 추가
-      return { profileData: updatedData };
+      return { profileData: updatedData, age };
     }),
   // 특정 속성 하나만 업데이트 할 때 사용
   updateProfileField: (key, value) =>
     set(state => {
       const updatedData = { ...state.profileData, [key]: value };
+      const age =
+        key === "birth" ? calculateAge(value as string) : state.profileData.age;
+      console.log(age);
       console.log("Profile Field Updated:", key, value, updatedData); // 로그 추가
-      return { profileData: updatedData };
+      return { profileData: updatedData, age };
     }),
 
   fetchProfileData: async (userId: string) => {
@@ -78,25 +85,29 @@ export const useProfileStore = create<ProfileState>(set => ({
       const userResponse = await fetchCall<{
         data: { data: { nickname: string } };
       }>(`/api/v1/users`, "get");
-
+      console.log(userResponse);
       const {
         id,
         userId: _,
         ...filteredProfileData
       } = profileResponse.data.data;
-      console.log(profileResponse.data);
+
+      const age = filteredProfileData.birth
+        ? calculateAge(filteredProfileData.birth)
+        : null;
+      console.log(age);
       set(state => ({
         profileData: {
           // 서버 연동 시 .data 추가
           ...filteredProfileData,
           nickname: userResponse.data.data.nickname,
-          fileAddressPreview: "",
         },
+        age,
       }));
     } catch (error) {
       console.error("Error fetching profile data:", error);
 
-      set(() => ({ profileData: initialProfileData }));
+      set(() => ({ profileData: initialProfileData, age: null }));
     }
   },
 
@@ -150,6 +161,21 @@ export const useProfileStore = create<ProfileState>(set => ({
   resetProfileData: () =>
     set(() => {
       console.log("Resetting Profile Data to Initial State"); // 로그 추가
-      return { profileData: initialProfileData };
+      return { profileData: initialProfileData, age: null };
     }),
 }));
+
+// 유틸리티 함수: 생년월일로 나이 계산
+const calculateAge = (birthDateString: string): number => {
+  const today = new Date();
+  const birthDate = new Date(birthDateString);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  if (
+    today.getMonth() < birthDate.getMonth() ||
+    (today.getMonth() === birthDate.getMonth() &&
+      today.getDate() < birthDate.getDate())
+  ) {
+    age -= 1;
+  }
+  return age;
+};
