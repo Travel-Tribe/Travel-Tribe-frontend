@@ -19,7 +19,8 @@ const Rating: React.FC<RatingModalProps> = ({
   onRatingComplete,
 }): JSX.Element | null => {
   const [ratings, setRatings] = useState<number[]>([]);
-  const { userProfiles, fetchParticipantsProfiles } = useProfileStore();
+  const { userProfiles, fetchParticipantsProfiles, fetchProfileData } =
+    useProfileStore();
 
   const handleRatingSubmit = async () => {
     try {
@@ -75,13 +76,18 @@ const Rating: React.FC<RatingModalProps> = ({
               nickname: "Unknown",
               fileAddress: profileImg,
             };
-            const profileImage = profile.fileAddress || profileImg;
+
             return (
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center justify-center">
                   <img
                     className="w-12 h-12 rounded-full"
-                    src={profileImage}
+                    src={
+                      profile.fileAddress
+                        ? import.meta.env.VITE_API_BASE_URL +
+                          `/api/v1/file/preview?fileUrl=${profile.fileAddress}`
+                        : profileImg
+                    }
                     alt="User profile"
                   />
                   <span className="ml-5 w-[200px] truncate">

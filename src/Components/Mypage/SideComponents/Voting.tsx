@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { mappingCountry } from "../../../Utils/mappingCountry";
 import fetchCall from "../../../Utils/apiFetch";
 
@@ -13,10 +13,6 @@ interface VotingProps {
   postId: number;
 }
 
-// interface VotingApproval {
-//   approval: boolean;
-// }
-
 const Voting: React.FC<VotingProps> = ({
   isOpen,
   onClose,
@@ -30,7 +26,21 @@ const Voting: React.FC<VotingProps> = ({
   const [selectedOption, setSelectedOption] = useState<true | false | null>(
     null,
   );
-  console.log(selectedOption);
+
+  const hasLogged = useRef(false);
+
+  useEffect(() => {
+    if (isOpen && !hasLogged.current) {
+      console.log(`Title: ${title}`);
+      console.log(`Voting ID: ${votingStartsId}`);
+      hasLogged.current = true; // Ensure log happens only once per opening
+    }
+
+    if (!isOpen) {
+      hasLogged.current = false; // Reset when component is closed
+    }
+  }, [isOpen, title, votingStartsId]);
+
   if (!isOpen) return null;
 
   const formatDate = (dateString: string) => {
@@ -56,60 +66,65 @@ const Voting: React.FC<VotingProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
-        {/* 닫기 버튼 */}
-        <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-black"
-          onClick={onClose}
-        >
-          ✖
-        </button>
+    <>
+      <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="bg-white rounded-lg shadow-lg p-6 w-96 relative">
+          {/* 닫기 버튼 */}
+          <button
+            className="absolute top-2 right-2 text-gray-500 hover:text-black"
+            onClick={onClose}
+          >
+            ✖
+          </button>
 
-        {/* 제목 */}
-        <h2 className="text-lg font-semibold mb-4">{title}</h2>
+          {/* 제목 */}
+          <h2 className="text-lg font-semibold mb-4">{title}</h2>
 
-        {/* 여행 정보 */}
-        <div className="flex items-center mb-4">
-          <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
-            <span className="truncate">{travelCountries}</span>
+          {/* 여행 정보 */}
+          <div className="flex items-center mb-4">
+            <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
+              <span className="truncate">{travelCountries}</span>
+            </div>
+            <span className="ml-3 text-gray-600 text-sm">
+              일정 ({formatDate(travelStartDate)} ~ {formatDate(travelEndDate)})
+            </span>
           </div>
-          <span className="ml-3 text-gray-600 text-sm">
-            일정 ({formatDate(travelStartDate)} ~ {formatDate(travelEndDate)})
-          </span>
+
+          {/* 투표 옵션 */}
+          <div className="flex items-center gap-4 mb-6">
+            <label className="flex items-center cursor-pointer">
+              <input
+                type="radio"
+                name="vote"
+                value="찬성"
+                className="radio radio-primary"
+                onChange={() => setSelectedOption(true)}
+              />
+              <span className="ml-2">찬성</span>
+            </label>
+
+            <label className="flex items-center cursor-pointer">
+              <input
+                type="radio"
+                name="vote"
+                value="반대"
+                className="radio radio-primary"
+                onChange={() => setSelectedOption(false)}
+              />
+              <span className="ml-2">반대</span>
+            </label>
+          </div>
+
+          {/* 투표하기 버튼 */}
+          <button
+            className="btn btn-primary w-full"
+            onClick={() => fetchVoting()}
+          >
+            투표하기
+          </button>
         </div>
-
-        {/* 투표 옵션 */}
-        <div className="flex items-center gap-4 mb-6">
-          <label className="flex items-center cursor-pointer">
-            <input
-              type="radio"
-              name="vote"
-              value="찬성"
-              className="radio radio-primary"
-              onChange={() => setSelectedOption(true)}
-            />
-            <span className="ml-2">찬성</span>
-          </label>
-
-          <label className="flex items-center cursor-pointer">
-            <input
-              type="radio"
-              name="vote"
-              value="반대"
-              className="radio radio-primary"
-              onChange={() => setSelectedOption(false)}
-            />
-            <span className="ml-2">반대</span>
-          </label>
-        </div>
-
-        {/* 투표하기 버튼 */}
-        <button className="btn btn-primary w-full" onClick={() => fetchVoting()}>
-          투표하기
-        </button>
       </div>
-    </div>
+    </>
   );
 };
 
