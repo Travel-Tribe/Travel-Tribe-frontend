@@ -6,6 +6,8 @@ import { mappingContinent } from "../Utils/mappingContinent";
 import { mappingCountry } from "../Utils/mappingCountry";
 import { useInfiniteQuery } from "react-query";
 import { RecruitmentPost } from "../Components/Post";
+import { useProfileStore } from "../store/profileStore";
+import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 
 interface RecruitmentProps {
   selectedContinent?: string;
@@ -24,7 +26,7 @@ const Recruitment = React.memo(
     mbti,
   }: RecruitmentProps): JSX.Element => {
     const { clearTravelData } = useRecruitPostStore();
-
+    const { fetchProfileData } = useProfileStore();
     const getFilterParams = () => {
       const filters: Record<string, string> = {
         title: search || "",
@@ -89,6 +91,13 @@ const Recruitment = React.memo(
 
     useEffect(() => {
       clearTravelData();
+      const userId: string | null = localStorage.getItem(STORAGE_KEYS.USER_ID);
+      if (userId) {
+        const fetchUserProfile = async (userId: string) => {
+          await fetchProfileData(userId);
+        };
+        fetchUserProfile(userId);
+      }
     }, [clearTravelData]);
 
     const observer = useRef<IntersectionObserver | null>(null);

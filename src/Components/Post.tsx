@@ -49,7 +49,11 @@ export const RecruitmentPost = React.memo(
           <Link to={"#"} className="text-[12px]"></Link>
           <div
             className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${
-              plan.status !== "모집완료" ? "bg-custom-green" : "bg-btn-closed"
+              plan.status === "모집완료"
+                ? "bg-btn-closed"
+                : plan.status !== "투표중"
+                  ? "bg-custom-green"
+                  : "bg-custom-red"
             } text-center`}
           >
             {plan.status}
