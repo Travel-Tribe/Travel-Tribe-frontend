@@ -2,9 +2,10 @@ import { useNavigate } from "react-router-dom";
 
 interface JoinBtnProps {
   postId: number | undefined;
+  status: string | undefined;
 }
 
-export default function JoinBtn({ postId }: JoinBtnProps) {
+export default function JoinBtn({ postId, status }: JoinBtnProps) {
   const navigate = useNavigate();
 
   const handleJoin = () => {
@@ -19,7 +20,7 @@ export default function JoinBtn({ postId }: JoinBtnProps) {
     <button
       className="btn btn-success btn-sm text-slate-50"
       onClick={handleJoin}
-      disabled={!postId}
+      disabled={!postId || status !== "모집중"}
     >
       참여 신청하기
     </button>

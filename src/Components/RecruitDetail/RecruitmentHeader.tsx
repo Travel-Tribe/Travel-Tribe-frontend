@@ -64,16 +64,15 @@ const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
     <div className="card bg-base-100">
       <div className="p-8">
         <div className="flex items-center">
-          {Participation?.length !== travelPlan.maxParticipants ? (
-            <button className="btn btn-xs btn-success text-white">
-              모집중
-            </button>
-          ) : (
-            <button className="btn btn-xs bg-btn-closed hover:bg-slate-600 text-white">
-              모집종료
-            </button>
-          )}
-
+          {/* Participation?.length !== travelPlan.maxParticipants */}
+          <button
+            className={`btn btn-xs text-white ${travelPlan.status === "모집완료" ? "btn-success" : travelPlan.status === "투표중" ? "btn-error" : "bg-btn-closed"}`}
+          >
+            {travelPlan.status}
+          </button>
+          {/* //   <button className="btn btn-xs bg-btn-closed hover:bg-slate-600 text-white">
+          //     모집종료
+          //   </button> */}
           <span className="ml-3 text-sm text-center">
             모집마감: {travelPlan.deadline}
           </span>
