@@ -34,21 +34,6 @@ const MyProfile = (): JSX.Element => {
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const profileCheck = localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK);
   const navigate = useNavigate();
-  // const [age, setAge] = useState<number | null>(null);
-
-  // const calculateAge = (birthDateString: string): number => {
-  //   const today = new Date();
-  //   const birthDate = new Date(birthDateString);
-  //   let age = today.getFullYear() - birthDate.getFullYear();
-  //   if (
-  //     today.getMonth() < birthDate.getMonth() ||
-  //     (today.getMonth() === birthDate.getMonth() &&
-  //       today.getDate() < birthDate.getDate())
-  //   ) {
-  //     age -= 1;
-  //   }
-  //   return age;
-  // };
 
   useEffect(() => {
     const loadProfileData = async () => {
@@ -57,9 +42,6 @@ const MyProfile = (): JSX.Element => {
           navigate("/mypage/myProfileEdit");
         } else if (userId) {
           await fetchProfileData(userId);
-          // if (profileData.birth) {
-          //   setAge(calculateAge(profileData.birth)); // 나이 계산
-          // }
         }
       } catch (error) {
         console.error("Error loading profile data:", error);
