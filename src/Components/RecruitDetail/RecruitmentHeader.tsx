@@ -66,7 +66,7 @@ const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
         <div className="flex items-center">
           {/* Participation?.length !== travelPlan.maxParticipants */}
           <button
-            className={`btn btn-xs text-white ${travelPlan.status === "모집완료" ? "btn-success" : travelPlan.status === "투표중" ? "btn-error" : "bg-btn-closed"}`}
+            className={`btn btn-xs text-white ${travelPlan.status === "모집중" ? "btn-success" : travelPlan.status === "투표중" ? "btn-error" : "bg-btn-closed"}`}
           >
             {travelPlan.status}
           </button>
