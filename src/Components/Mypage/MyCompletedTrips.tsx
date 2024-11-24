@@ -4,7 +4,7 @@ import Rating from "./Rating";
 import { Participations } from "../../mocks/mockData";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { mappingCountry } from "../../Utils/mappingCountry";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 interface TravelPlan {
   postId: string;
@@ -16,6 +16,17 @@ interface TravelPlan {
   deadline: string;
   participation: Participations[];
   participationStatus: string;
+  isRatingAllowed: boolean;
+  ratingStatus: string;
+  participantsCount: number;
+}
+
+interface TravelPlanData {
+  data: TravelPlan;
+}
+
+interface TravelPlanDataData {
+  data: TravelPlanData;
 }
 
 interface participantion {
@@ -28,6 +39,8 @@ interface Participation {
   participationId: number;
   postId: number;
   ParticipationStatus: string;
+  ratingStatus: string;
+  userId: string;
 }
 
 const MyCompletedTrips = (): JSX.Element => {
@@ -38,101 +51,105 @@ const MyCompletedTrips = (): JSX.Element => {
     [],
   );
   const [participationUserId, setParticipationUserId] = useState<string[]>([]);
-  const [ratedPosts, setRatedPosts] = useState<string[]>([]);
-  const [participationStatusUpdated, setParticipationStatusUpdated] =
-    useState(false);
+  // const [participationPostId, setParticipationPostId] = useState<string[]>([]);
+  // const [ratedPosts, setRatedPosts] = useState<string[]>([]);
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const navigate = useNavigate();
 
   const fetchCompletedTrips = async () => {
     try {
-      const response = await fetchCall<{ post: TravelPlan[] }>(
-        "/api/v1/posts",
-        "get",
-      );
-      const completedTrips = response.data.data.content.filter(
-        (info: TravelPlan) => {
+      const response = await fetchCall<TravelPlan[]>("/api/v1/posts", "get");
+
+      const myParticipationPostIds = await fetchMyParticipation();
+
+      const completedTrips = response.data.data.content
+        .filter((info: TravelPlan) => {
           const travelEndDate = new Date(info.travelEndDate);
-          return travelEndDate < today;
-        },
-      );
+          return (
+            travelEndDate < today &&
+            myParticipationPostIds.some(
+              (participation: { postId: number }) =>
+                participation.postId === Number(info.postId),
+            )
+          );
+        })
+        .map((info: TravelPlan) => ({
+          ...info,
+          isRatingAllowed: true, // 기본값 설정
+        }));
 
-      const tripsWithUserParticipation = await Promise.all(
-        completedTrips.map(async (info: { postId: string }) => {
-          const isParticipant = await fetchParticipation(info.postId);
-          return isParticipant ? info : null;
-        }),
-      );
+      // 참여 중인 여행만 필터링
+      const filteredTrips: TravelPlan[] = [];
+      for (const trip of completedTrips) {
+        const participationInfo = myParticipationPostIds.find(
+          (participation: { postId: number }) =>
+            participation.postId === Number(trip.postId),
+        );
+        filteredTrips.push({
+          ...trip,
+          participantsCount: await fetchParticipation(trip.postId),
+          ratingStatus: participationInfo?.ratingStatus || "UNKNOWN",
+        });
+      }
 
-      // 참여중인 여행만 필터링하여 상태에 저장
-      setFilteredTravelInfos(
-        tripsWithUserParticipation.filter(Boolean) as TravelPlan[],
-      );
+      setFilteredTravelInfos(filteredTrips);
     } catch (error) {
       console.error("Error fetching participation data:", error);
     }
   };
 
-  const fetchParticipationStatus = async () => {
+  const fetchMyParticipation = async () => {
     try {
       const response = await fetchCall<Participation[]>(
-        "/api/v1/posts/participations",
+        `api/v1/posts/participations`,
         "get",
       );
-        console.log(response);
-      const participationData = response.data;
-        console.log(filteredTravelInfos);
-      // 여행 정보에 ParticipationStatus 추가
-      const updatedTrips = filteredTravelInfos.filter(trip => {
-        const participation = participationData.find(
-          (p: { postId: number }) => p.postId === Number(trip.postId),
-        );
-        return participation?.ParticipationStatus === "TRAVEL_FINISHED";
-      });
-      console.log(updatedTrips);
-      setFilteredTravelInfos(updatedTrips);
-      setParticipationStatusUpdated(true);
+      return response.data.data;
     } catch (error) {
       console.error("Error fetching participation data:", error);
     }
   };
-console.log(filteredTravelInfos);
-  const fetchParticipation = async (postId: string) => {
+
+  // 참여한 유저 목록 조회
+  const fetchParticipation = async (postId: string): Promise<boolean> => {
     try {
       const response = await fetchCall<participantion[]>(
         `/api/v1/posts/${postId}/participations`,
         "get",
       );
-      // console.log(response);
-      const userIds = response.data.map(
+
+      const userIds = response.data.data.map(
         (participation: { userId: string }) => participation.userId,
       );
-      if (userIds.includes(userId || "")) {
-        setParticipationUserId(userIds);
-        return true;
-      } else {
-        return false;
-      }
+
+      const otherUserIds = userIds.filter((id: string | null) => id !== userId);
+
+      setParticipationUserId(otherUserIds);
+
+      return userIds.length;
     } catch (error) {
       console.error("Error fetching profile data:", error);
+      return false;
     }
   };
 
   const handleRatingComplete = (postId: string) => {
-    setRatedPosts(prev => [...prev, postId]); // 평점 완료된 postId 추가
+    // setRatedPosts(prev => [...prev, postId]); // 평점 완료된 postId 추가
     setActiveModalIndex(null); // 모달 닫기
   };
 
   useEffect(() => {
-    fetchCompletedTrips(); // 초기 여행 데이터 가져오기
-  }, []);
+    const fetchData = async () => {
+      try {
+        await fetchCompletedTrips();
+      } catch (error) {
+        console.error("Error in fetchData:", error);
+      }
+    };
 
-  useEffect(() => {
-    if (!participationStatusUpdated && filteredTravelInfos.length > 0) {
-      fetchParticipationStatus(); // 상태 업데이트
-    }
-  }, [filteredTravelInfos, participationStatusUpdated]);
-console.log(filteredTravelInfos);
+    fetchData();
+  }, []); // 빈 배열로 설정하여 한 번만 실행
+  console.log(filteredTravelInfos);
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -159,7 +176,10 @@ console.log(filteredTravelInfos);
               <li key={info.postId} className="list-none">
                 <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">
                   <div className="flex justify-between">
-                    <h3 className="text-xl mt-2.5 ml-2.5">{info.title}</h3>
+                    <h3 className="text-xl mt-2.5 ml-2.5">
+                      {info.title}
+                      {info.isRatingAllowed}
+                    </h3>
                   </div>
                   <div className="flex items-center m-2.5 space-x-8 justify-between">
                     <div className="flex items-center space-x-4">
@@ -167,41 +187,47 @@ console.log(filteredTravelInfos);
                         <span className="truncate">{travelCountry}</span>
                       </div>
                       <span className="">
-                        참여인원 {info.maxParticipants}/{info.maxParticipants}
+                        참여인원 {info.participantsCount}/{info.maxParticipants}
                       </span>
                       <span className="">
                         {info.travelStartDate}({week[travelStartDay]}) ~{" "}
                         {info.travelEndDate}({week[travelEndDay]})
                       </span>
                     </div>
-                    <button
-                      className={`btn btn-sm rounded-md ${
-                        info.participationStatus === "JOIN"
-                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          : ""
-                      }`}
-                      onClick={() => navigate(`/recruitment/${info.postId}/review/write`)}
-                    >
-                      후기 작성
-                    </button>
-                    <button
-                      className={`btn btn-sm rounded-md ${
-                        info.participationStatus === "JOIN"
-                          ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          : ""
-                      }`}
-                      disabled={info.participationStatus === "JOIN"}
-                      onClick={async () => {
-                        const isParticipant = await fetchParticipation(
-                          info.postId,
-                        );
-                        if (isParticipant) {
-                          setActiveModalIndex(index);
+                    {info.ratingStatus === "평가완료" ||
+                    info.maxParticipants === 1 ? (
+                      <button
+                        className={`btn btn-sm rounded-md ${
+                          info.participationStatus === "JOIN"
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          navigate(`/recruitment/${info.postId}/review/write`)
                         }
-                      }}
-                    >
-                      평점 주기
-                    </button>
+                      >
+                        후기 작성
+                      </button>
+                    ) : (
+                      <button
+                        className={`btn btn-sm rounded-md ${
+                          !info.isRatingAllowed
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : ""
+                        }`}
+                        disabled={!info.isRatingAllowed}
+                        onClick={async () => {
+                          const isParticipant = await fetchParticipation(
+                            info.postId,
+                          );
+                          if (isParticipant) {
+                            setActiveModalIndex(index);
+                          }
+                        }}
+                      >
+                        평점 주기
+                      </button>
+                    )}
                   </div>
                 </div>
                 {activeModalIndex === index && (

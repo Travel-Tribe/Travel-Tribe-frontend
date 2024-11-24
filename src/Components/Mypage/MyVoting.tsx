@@ -19,9 +19,9 @@ interface TravelInfo {
   votingStartsId: number;
 }
 
-// interface VotingInfo extends TravelInfo {
-//   votingStartsId?: string;
-// }
+interface VotingInfo extends TravelInfo {
+  votingStartsId: number;
+}
 
 interface TravelPlanResponse {
   data: {
@@ -51,6 +51,7 @@ const MyVoting = (): JSX.Element => {
       return response?.data;
     } catch (error) {
       console.error("Fetching voting data failed:", error);
+      alert('투표가 시작되지 않았습니다.')
       return null;
     }
   };
@@ -77,7 +78,7 @@ const MyVoting = (): JSX.Element => {
           "get",
         );
         const allPosts: TravelInfo[] = allPostsResponse.data.content;
-
+        
         // Step 2: 참여 데이터 조회
         const participationResponse = await fetchCall<Participation[]>(
           "/api/v1/posts/participations",
@@ -98,9 +99,7 @@ const MyVoting = (): JSX.Element => {
         const validPosts: VotingInfo[] = [];
         for (const post of participatingPosts) {
           const votingData = await fetchVoting(post.postId);
-          console.log(votingData?.data);
           if (votingData?.data.votingStartsId) {
-            console.log(typeof votingData?.data.votingStartsId);
             validPosts.push({
               ...post,
               votingStatus: votingData?.data.votingStatus,
@@ -121,7 +120,7 @@ const MyVoting = (): JSX.Element => {
           // 조건: travelStartDate가 오늘 이후
           return travelStartDate >= today;
         });
-        console.log(filteredPlans);
+
         // 최종 결과 설정
         setTravelInfos(filteredPlans);
       } catch (error) {
@@ -148,7 +147,9 @@ const MyVoting = (): JSX.Element => {
         <span className="text-lg">{travelInfos.length}</span>
       </header>
       <ul
-        className={`mt-10 space-y-6 ${travelInfos.length > 5 ? "w-[680px] h-[660px] overflow-y-auto" : ""}`}
+        className={`mt-10 space-y-6 ${
+          travelInfos.length > 5 ? "w-[680px] h-[660px] overflow-y-auto" : ""
+        }`}
       >
         {travelInfos.map(info => {
           const startDay = info.travelStartDate
@@ -165,12 +166,9 @@ const MyVoting = (): JSX.Element => {
             <li key={info.postId} className="list-none">
               <div
                 className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg cursor-pointer"
-                onClick={async () => {
-                  // const isVoting = await fetchVoting(Number(info.postId));
-                  // console.log(isVoting);
-                  if (info.votingStatus == "STARTING") {
-                    // response.data가 true일 경우 Voting 열기
-                    handleOpenVoting(info.postId);
+                onClick={() => {
+                  if (info.votingStatus === "STARTING") {
+                    handleOpenVoting(info.postId); // 현재 투표 ID 설정
                   } else {
                     alert("투표를 시작할 수 없습니다."); // 실패 시 메시지 표시
                   }
@@ -189,9 +187,10 @@ const MyVoting = (): JSX.Element => {
                   </div>
                 </div>
               </div>
-              {openVotingId && (
+              {/* 조건부 렌더링: openVotingId가 현재 postId와 일치하는 경우에만 Voting 컴포넌트 렌더링 */}
+              {openVotingId === info.postId && (
                 <Voting
-                  isOpen={true}
+                  isOpen={openVotingId === info.postId}
                   onClose={handleCloseVoting}
                   title={info.title}
                   travelCountry={info.travelCountry}
