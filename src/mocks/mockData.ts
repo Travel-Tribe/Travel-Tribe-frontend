@@ -180,7 +180,7 @@ export interface TravelPlan {
   travelCountry: string;
   continent: string;
   region: string;
-  status: string;
+  status?: string;
   accommodationFee: number;
   airplaneFee: number;
   otherExpenses: number;
