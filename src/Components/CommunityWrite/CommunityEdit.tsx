@@ -3,6 +3,7 @@ import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
 import fetchCall from "../../Utils/apiFetch";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCommunityPostStore } from "../../store/communityPostStore";
+import { useQueryClient } from "react-query";
 
 interface AxiosResponse {
   data: {
@@ -21,6 +22,7 @@ interface AxiosResponse {
 
 const CommunityEdit = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { id } = useParams<{
     id: string;
   }>(); // URL에서 게시글 ID 가져오기
@@ -131,6 +133,7 @@ const CommunityEdit = () => {
 
       if (response) {
         resetForm();
+        queryClient.invalidateQueries(["communityData", id]);
         navigate(`/community/${id}`);
       }
     } catch (err) {
