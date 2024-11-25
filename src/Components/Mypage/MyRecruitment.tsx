@@ -51,9 +51,17 @@ const MyRecruitment = (): JSX.Element => {
           `/api/v1/posts`,
           "get",
         );
+        const participationResponse = await fetchCall<participantion[]>(
+          "/api/v1/posts/participations/by-join-joinready",
+          "get",
+        );
+        console.log(participationResponse);
         const today = new Date();
         today.setHours(0, 0, 0, 0); // 현재 날짜의 시간 부분을 초기화
 
+        const participatingPostIds = participationResponse.data.data.map(
+          (item: { postId: number }) => item.postId,
+        );
         // travelStartDate가 현재보다 미래이고, userId가 동일한 여행 계획만 필터링
         const filteredPlans = response.data.data.content.filter(
           (plan: TravelPlan) => {
@@ -66,7 +74,9 @@ const MyRecruitment = (): JSX.Element => {
             }
 
             return (
-              travelStartDate >= today && String(plan.userId) === String(userId)
+              travelStartDate >= today &&
+              participatingPostIds.includes(plan.postId) &&
+              String(plan.userId) === String(userId)
             );
           },
         );
@@ -79,7 +89,7 @@ const MyRecruitment = (): JSX.Element => {
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
-             
+
               return {
                 ...plan,
                 participantsCount: participants.data.data.length, // 참여 인원 수 추가
