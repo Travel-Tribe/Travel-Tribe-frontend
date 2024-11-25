@@ -40,11 +40,9 @@ const SubmitBtn = React.memo(() => {
         navigate(
           `/recruitment/${response.data.data.postId}/pay/${response.data.data.participationId}`,
         );
-      } else {
-        throw new Error("게시글 등록에 실패했습니다.");
       }
     } catch (error) {
-      alert(error.message);
+      alert(error.response?.data?.errors[0]?.errorMessage);
       throw new Error("게시글 등록에 실패했습니다.");
     } finally {
       setIsLoading(false);
@@ -64,6 +62,7 @@ const SubmitBtn = React.memo(() => {
         }),
       );
 
+      alert("글을 수정했습니다.");
       queryClient.invalidateQueries(["travelPlan", postId]);
       navigate(`/recruitment`);
     } catch (error) {

@@ -101,12 +101,12 @@ const Community = React.memo(
     );
 
     if (isError) {
-      console.error("에러", error);
-      return <>에러가 발생했습니다.</>;
+      console.error("에러", error.response?.data?.errors[0]?.errorMessage);
+      return <>{error.response?.data?.errors[0]?.errorMessage}</>;
     }
 
     const communities = data?.pages.flatMap(page => page.lists) || [];
-    console.log("커뮤니티 목록", communities);
+
     return (
       <div className="flex flex-wrap gap-[35px]">
         {communities &&
