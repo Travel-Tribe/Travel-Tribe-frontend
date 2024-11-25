@@ -61,14 +61,12 @@ const MyCompletedTrips = (): JSX.Element => {
       const response = await fetchCall<TravelPlan[]>("/api/v1/posts", "get");
       const myParticipationPostIds = await fetchMyParticipation();
       const myReviews = await fetchMyReview();
-      console.log(myReviews);
+      
       const completedTrips = response.data.data.content
         .filter((info: TravelPlan) => {
           const travelEndDate = new Date(info.travelEndDate);
 
           return (
-            // travelEndDate <= today &&
-            // info.status ===""
             myParticipationPostIds.some(
               (participation: { postId: number }) =>
                 participation.postId === Number(info.postId),
@@ -87,12 +85,12 @@ const MyCompletedTrips = (): JSX.Element => {
           (participation: { postId: number }) =>
             participation.postId === Number(trip.postId),
         );
-        console.log(userId);
+        
         const reviewStatus = myReviews.reviews.find(
           (participation: { userId: string | number }) =>
             String(participation.userId) === userId, // 타입 일치
         );
-        console.log(reviewStatus);
+        
         filteredTrips.push({
           ...trip,
           participantsCount: await fetchParticipation(trip.postId),
@@ -135,7 +133,7 @@ const MyCompletedTrips = (): JSX.Element => {
       const userIds = response.data.data.map(
         (participation: { userId: string }) => participation.userId,
       );
-      console.log(userIds);
+      
       const otherUserIds = userIds.filter((id: string | null) => id !== userId);
 
       setParticipationUserId(otherUserIds);
@@ -176,7 +174,7 @@ const MyCompletedTrips = (): JSX.Element => {
 
     fetchData();
   }, []); // 빈 배열로 설정하여 한 번만 실행
-  console.log(filteredTravelInfos);
+  
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">

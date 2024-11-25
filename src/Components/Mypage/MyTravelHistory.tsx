@@ -62,9 +62,9 @@ const MyTravelHistory: FC = () => {
             `/api/v1/posts/${review.postId}`,
             "get",
           );
-            console.log(travelResponse.data.data);
+            
           const travelData = travelResponse.data.data;
-          console.log(travelData);
+          
           return {
             ...review,
             travelStartDate: travelData?.travelStartDate,
@@ -77,7 +77,7 @@ const MyTravelHistory: FC = () => {
       console.error("Error fetching user review data:", error);
     }
   };
-console.log(travelInfos);
+
   useEffect(() => {
     fetchReviewInfos();
   }, []);

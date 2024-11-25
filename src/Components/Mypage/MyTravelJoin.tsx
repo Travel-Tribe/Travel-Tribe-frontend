@@ -54,7 +54,7 @@ const MyTravelJoin = () => {
           "get",
         );
         const allPosts = allPostsResponse.data.content;
-        console.log(allPosts);
+        
         // 참여 데이터 조회
         const participationResponse = await fetchCall<Participation[]>(
           "/api/v1/posts/participations/by-join-joinready",
@@ -68,7 +68,7 @@ const MyTravelJoin = () => {
         const participatingPostIds = participationResponse.data.data.map(
           (item: { postId: number }) => item.postId,
         );
-        console.log(participatingPostIds);
+        
         // 전체 모집글 중 조건에 맞는 글 필터링
         const filteredPlans = allPosts.filter(plan => {
           const travelStartDate = new Date(plan.travelStartDate);
@@ -136,7 +136,7 @@ const MyTravelJoin = () => {
       console.error("참여 취소 중 오류 발생:", error);
     }
   };
-  console.log(filteredPlans);
+  
   return (
     <>
       <section>
