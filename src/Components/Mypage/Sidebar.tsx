@@ -5,7 +5,6 @@ import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import profileImg from "../../assets/profileImg.webp";
 import { useProfileStore } from "../../store/profileStore";
-import { previewImg } from "../../Utils/postImgUrl";
 
 const Sidebar = (): JSX.Element => {
   const {

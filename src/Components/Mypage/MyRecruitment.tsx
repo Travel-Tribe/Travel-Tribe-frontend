@@ -79,7 +79,7 @@ const MyRecruitment = (): JSX.Element => {
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
-              console.log(participants);
+             
               return {
                 ...plan,
                 participantsCount: participants.data.data.length, // 참여 인원 수 추가
