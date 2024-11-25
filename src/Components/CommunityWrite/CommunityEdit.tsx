@@ -120,9 +120,7 @@ const CommunityEdit = () => {
         communityId: Number(id),
         title: formData.title,
         content: formData.content,
-        files: formData.files.map(file => ({
-          fileAddress: file.fileAddress,
-        })),
+        files: formData.files.map(file => file.fileAddress),
       };
 
       const response = await fetchCall(

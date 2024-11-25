@@ -45,11 +45,8 @@ export const useParticipation = () => {
       }
 
       return participationData.data.data.participationId;
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "참여 처리 중 오류가 발생했습니다.";
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.errors?.[0]?.errorMessage;
       alert(errorMessage);
       throw error;
     } finally {
