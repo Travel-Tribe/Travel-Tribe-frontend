@@ -16,6 +16,7 @@ interface TravelPlan {
   deadline: string;
   participantsCount: number;
   userId: string;
+  status: string;
 }
 
 interface TravelPlanResponse {
@@ -53,7 +54,7 @@ const MyTravelJoin = () => {
           "get",
         );
         const allPosts = allPostsResponse.data.content;
-
+        console.log(allPosts);
         // 참여 데이터 조회
         const participationResponse = await fetchCall<Participation[]>(
           "/api/v1/posts/participations",
@@ -86,7 +87,6 @@ const MyTravelJoin = () => {
           );
         });
 
-        console.log(filteredPlans);
         const plansWithParticipants = await Promise.all(
           filteredPlans.map(async (plan: TravelPlan) => {
             try {
@@ -130,12 +130,13 @@ const MyTravelJoin = () => {
         "delete",
       );
       setFilteredPlans(prev => prev.filter(plan => plan.postId !== postId));
+      alert("참여가 취소되었습니다.");
       console.log(response);
     } catch (error) {
       console.error("참여 취소 중 오류 발생:", error);
     }
   };
-
+  console.log(filteredPlans);
   return (
     <>
       <section>
@@ -150,8 +151,13 @@ const MyTravelJoin = () => {
           {filteredPlans.map((plan, index) => {
             const today: any = new Date();
             const deadlineDate: any = new Date(plan.deadline);
-            const diffTime = deadlineDate - today;
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const deadlineWith21Hours = new Date(
+              deadlineDate.getTime() + 21 * 60 * 60 * 1000,
+            ); // 마감 시간 + 21시간 (마감 날짜 기준 다음날 00시)
+
+            const diffDays = Math.ceil(
+              (deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+            );
 
             const travelStartDay = new Date(plan.travelStartDate).getDay();
             const travelEndDay = new Date(plan.travelEndDate).getDay();
@@ -167,9 +173,15 @@ const MyTravelJoin = () => {
                   <div className="flex justify-between mb-2">
                     <h3 className=" text-xl mt-2.5 ml-2.5">{plan.title}</h3>
                     <div className="flex items-center">
-                      <span className=" text-base ml-2.5 mt-2.5 mr-2.5">
-                        마감 {diffDays}일전
-                      </span>
+                      {today < deadlineWith21Hours ? (
+                        <span className="text-base mt-2.5 mr-2.5">
+                          마감 {diffDays}일 전
+                        </span>
+                      ) : (
+                        <span className="text-base mt-2.5 mr-2.5">
+                          모집 마감 완료
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="flex justify-between m-2.5">
@@ -188,15 +200,20 @@ const MyTravelJoin = () => {
                       </span>
                     </div>
                     <div className="flex space-x-2.5 items-center">
-                      {plan.participantsCount !== plan.maxParticipants ? (
-                        <div className="bg-white text-green-500  w-[60px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
+                      {plan.status === "모집중" ? (
+                        <div className="bg-white text-green-500 w-[60px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
                           모집중
                         </div>
-                      ) : (
-                        // <div className="bg-white border border-red-500 text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
+                      ) : plan.status === "모집완료" ? (
                         <div className="bg-white text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                          모집 완료
+                          모집완료
                         </div>
+                      ) : plan.status === "투표중" ? (
+                        <div className="bg-white text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
+                          투표중
+                        </div>
+                      ) : (
+                        ""
                       )}
                       <button
                         className="btn btn-xs btn-error text-white rounded-md text-center "
