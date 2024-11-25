@@ -51,22 +51,21 @@ const MyCompletedTrips = (): JSX.Element => {
     [],
   );
   const [participationUserId, setParticipationUserId] = useState<string[]>([]);
-  // const [participationPostId, setParticipationPostId] = useState<string[]>([]);
-  // const [ratedPosts, setRatedPosts] = useState<string[]>([]);
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const navigate = useNavigate();
 
   const fetchCompletedTrips = async () => {
     try {
       const response = await fetchCall<TravelPlan[]>("/api/v1/posts", "get");
-
+      
       const myParticipationPostIds = await fetchMyParticipation();
-
+      
       const completedTrips = response.data.data.content
         .filter((info: TravelPlan) => {
           const travelEndDate = new Date(info.travelEndDate);
+          console.log(travelEndDate);
           return (
-            travelEndDate < today &&
+            // travelEndDate <= today &&
             myParticipationPostIds.some(
               (participation: { postId: number }) =>
                 participation.postId === Number(info.postId),
@@ -77,7 +76,7 @@ const MyCompletedTrips = (): JSX.Element => {
           ...info,
           isRatingAllowed: true, // 기본값 설정
         }));
-
+        console.log(completedTrips);
       // 참여 중인 여행만 필터링
       const filteredTrips: TravelPlan[] = [];
       for (const trip of completedTrips) {
@@ -178,7 +177,6 @@ const MyCompletedTrips = (): JSX.Element => {
                   <div className="flex justify-between">
                     <h3 className="text-xl mt-2.5 ml-2.5">
                       {info.title}
-                      {info.isRatingAllowed}
                     </h3>
                   </div>
                   <div className="flex items-center m-2.5 space-x-8 justify-between">

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import fetchCall from "../../../Utils/apiFetch";
 import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../../../Hooks/useLocalStorage";
+import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
 
 interface EmailChangeModalProps {
   isOpen: boolean;
@@ -21,6 +23,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     isChecking: false,
     isAvailable: false,
   });
+  const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
   const resetFields = () => {
     setEmailInput("");
@@ -69,7 +72,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
         )}`,
         "get",
       );
-      console.log(response);
+
       const isDuplicate = response.data;
 
       if (!isDuplicate) {

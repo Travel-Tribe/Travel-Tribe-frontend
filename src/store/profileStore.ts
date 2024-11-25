@@ -70,8 +70,6 @@ export const useProfileStore = create<ProfileState>(set => ({
       const updatedData = { ...state.profileData, [key]: value };
       const age =
         key === "birth" ? calculateAge(value as string) : state.profileData.age;
-      console.log(age);
-      console.log("Profile Field Updated:", key, value, updatedData); // 로그 추가
       return { profileData: updatedData, age };
     }),
 
@@ -117,19 +115,19 @@ export const useProfileStore = create<ProfileState>(set => ({
     const profiles = await Promise.all(
       userIds.map(async userId => {
         try {
-          const profile = await fetchCall<{ data: { fileAddress: string } }>(
-            `/api/v1/users/profile`,
-            "get",
-          );
+          // const profile = await fetchCall<{ data: { fileAddress: string } }>(
+          //   `/api/v1/users/profile`,
+          //   "get",
+          // );
           const userData = await fetchCall<{
-            data: { data: { nickname: string } };
+            data: { data: { nickname: string; fileAddress: string } };
           }>(`/api/v1/users/${userId}`, "get");
-
+          console.log(userData);
           return {
             userId,
             profile: {
               nickname: userData.data.data.nickname,
-              fileAddress: profile.data.fileAddress,
+              fileAddress: userData.data.data.fileAddress,
             },
           };
         } catch {
