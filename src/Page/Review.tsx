@@ -109,12 +109,12 @@ const Review = React.memo(
     );
 
     if (isError) {
-      console.error("에러", error);
-      return <>에러가 발생했습니다.</>;
+      console.error("에러", error.response?.data?.errors[0]?.errorMessage);
+      return <>{error.response?.data?.errors[0]?.errorMessage}</>;
     }
 
     const reviews = data?.pages.flatMap(page => page.reviews) || [];
-    console.log("리뷰 글 목록", reviews);
+
     return (
       <div className="flex flex-wrap gap-[35px]">
         {reviews.map((review: ReviewTypes, index: number) => {
