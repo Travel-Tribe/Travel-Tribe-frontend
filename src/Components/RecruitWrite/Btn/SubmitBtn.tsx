@@ -5,42 +5,29 @@ import { useRecruitPostStore } from "../../../store/recruitPostStore";
 import { mappingCondition } from "../../../Utils/mappingCondition";
 import { mappingCountry } from "../../../Utils/mappingCountry";
 import { mappingContinent } from "../../../Utils/mappingContinent";
+import { useQueryClient } from "react-query";
 
 const SubmitBtn = React.memo(() => {
-  const { id } = useParams();
+  const { id: postId } = useParams();
   const postData = useRecruitPostStore(state => state.postData);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const handlePost = async () => {
     try {
       setIsLoading(true);
-      let response;
-      if (id) {
-        response = await fetchCall(
-          `/api/v1/posts/${id}`,
-          "put",
-          JSON.stringify({
-            ...postData,
-            limitSex: mappingCondition[postData.limitSex],
-            limitSmoke: mappingCondition[postData.limitSmoke],
-            travelCountry: mappingCountry(postData.travelCountry, "ko"),
-            continent: mappingContinent[postData.continent],
-          }),
-        );
-      } else {
-        response = await fetchCall(
-          "/api/v1/posts",
-          "post",
-          JSON.stringify({
-            ...postData,
-            limitSex: mappingCondition[postData.limitSex],
-            limitSmoke: mappingCondition[postData.limitSmoke],
-            travelCountry: mappingCountry(postData.travelCountry, "ko"),
-            continent: mappingContinent[postData.continent],
-          }),
-        );
-      }
+      const response = await fetchCall(
+        "/api/v1/posts",
+        "post",
+        JSON.stringify({
+          ...postData,
+          limitSex: mappingCondition[postData.limitSex],
+          limitSmoke: mappingCondition[postData.limitSmoke],
+          travelCountry: mappingCountry(postData.travelCountry, "ko"),
+          continent: mappingContinent[postData.continent],
+        }),
+      );
       console.log("등록하기 클릭 응답: ", response);
       console.log("결제정보 응답: ", response.data.data);
 
@@ -56,8 +43,32 @@ const SubmitBtn = React.memo(() => {
       } else {
         throw new Error("게시글 등록에 실패했습니다.");
       }
-    } catch {
+    } catch (error) {
+      alert(error.message);
       throw new Error("게시글 등록에 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handelEditPost = async () => {
+    try {
+      setIsLoading(true);
+      await fetchCall(
+        `/api/v1/posts/${postId}`,
+        "put",
+        JSON.stringify({
+          ...postData,
+          limitSex: mappingCondition[postData.limitSex],
+          limitSmoke: mappingCondition[postData.limitSmoke],
+        }),
+      );
+
+      queryClient.invalidateQueries(["travelPlan", postId]);
+      navigate(`/recruitment`);
+    } catch (error) {
+      alert(error.response?.data?.errors[0]?.errorMessage);
+      throw new Error(error.response?.data?.errors[0]?.errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -66,10 +77,10 @@ const SubmitBtn = React.memo(() => {
   return (
     <button
       className="btn w-[130px] h-[35px] btn-success text-white"
-      onClick={handlePost}
+      onClick={postId ? handelEditPost : handlePost}
       disabled={isLoading}
     >
-      {isLoading ? "처리 중..." : "등록하기"}
+      {isLoading ? "처리 중..." : postId ? "수정하기" : "등록하기"}
     </button>
   );
 });

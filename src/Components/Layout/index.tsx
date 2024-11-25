@@ -8,7 +8,8 @@ const Layout = () => {
   return (
     <div className="bg-custom-bg min-h-[100vh] h-[100%] pt-[30px]">
       {!hideHeaderRoutes.includes(location.pathname) &&
-        !location.pathname.startsWith("/mypage") && <Header />}
+        !location.pathname.startsWith("/mypage") &&
+        !location.pathname.startsWith("/recruitment/edit") && <Header />}
       <Outlet />
     </div>
   );

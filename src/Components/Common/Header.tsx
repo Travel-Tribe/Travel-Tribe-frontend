@@ -26,8 +26,6 @@ const Header = React.memo((): JSX.Element => {
       if (response.data.result === "SUCCESS") {
         localStorage.removeItem(STORAGE_KEYS.USER_ID);
         localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
-        document.cookie =
-          "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         if (typeof setToken === "function") {
           setToken(null);
         }
