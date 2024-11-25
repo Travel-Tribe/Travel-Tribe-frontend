@@ -30,7 +30,7 @@ const Rating: React.FC<RatingModalProps> = ({
           const rating = ratings[index];
           console.log("postId", postId);
           return fetchCall(`api/v1/posts/${postId}/rating`, "post", {
-            receiverId: userId,
+            receiverId: Number(userId),
             score: rating,
           });
         }),

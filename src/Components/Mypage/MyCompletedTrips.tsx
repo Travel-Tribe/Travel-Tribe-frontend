@@ -19,6 +19,7 @@ interface TravelPlan {
   isRatingAllowed: boolean;
   ratingStatus: string;
   participantsCount: number;
+  status: string;
 }
 
 interface TravelPlanData {
@@ -61,9 +62,10 @@ const MyCompletedTrips = (): JSX.Element => {
       const completedTrips = response.data.data.content
         .filter((info: TravelPlan) => {
           const travelEndDate = new Date(info.travelEndDate);
-          console.log(travelEndDate);
+          
           return (
             // travelEndDate <= today &&
+            // info.status ===""
             myParticipationPostIds.some(
               (participation: { postId: number }) =>
                 participation.postId === Number(info.postId),
@@ -98,9 +100,10 @@ const MyCompletedTrips = (): JSX.Element => {
   const fetchMyParticipation = async () => {
     try {
       const response = await fetchCall<Participation[]>(
-        `api/v1/posts/participations`,
+        `/api/v1/posts/participations/by-travelfinished`,
         "get",
       );
+      
       return response.data.data;
     } catch (error) {
       console.error("Error fetching participation data:", error);
@@ -118,7 +121,7 @@ const MyCompletedTrips = (): JSX.Element => {
       const userIds = response.data.data.map(
         (participation: { userId: string }) => participation.userId,
       );
-
+        console.log(userIds);
       const otherUserIds = userIds.filter((id: string | null) => id !== userId);
 
       setParticipationUserId(otherUserIds);
@@ -173,9 +176,7 @@ const MyCompletedTrips = (): JSX.Element => {
               <li key={info.postId} className="list-none">
                 <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">
                   <div className="flex justify-between">
-                    <h3 className="text-xl mt-2.5 ml-2.5">
-                      {info.title}
-                    </h3>
+                    <h3 className="text-xl mt-2.5 ml-2.5">{info.title}</h3>
                   </div>
                   <div className="flex items-center m-2.5 space-x-8 justify-between">
                     <div className="flex items-center space-x-4">

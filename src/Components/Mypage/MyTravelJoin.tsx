@@ -57,7 +57,7 @@ const MyTravelJoin = () => {
         console.log(allPosts);
         // 참여 데이터 조회
         const participationResponse = await fetchCall<Participation[]>(
-          "/api/v1/posts/participations",
+          "/api/v1/posts/participations/by-join-joinready",
           "get",
         );
 
