@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import fetchCall from "../Utils/apiFetch";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
+import { useAuthStore } from "../store/authStore";
 
 const schema = z.object({
   email: z
@@ -52,6 +53,8 @@ const SignIn = (): JSX.Element => {
     reValidateMode: "onSubmit", // 재검증도 제출 시에만
   });
 
+  const setAccessToken = useAuthStore(state => state.setAccessToken);
+
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
       const response = await fetchCall<LoginResponseHeaders>("/login", "post", {
@@ -68,13 +71,14 @@ const SignIn = (): JSX.Element => {
         console.log("로그인 성공:", response.data);
 
         // LocalStorage에 정보 저장
-        localStorage.setItem(STORAGE_KEYS.TOKEN, accessToken);
+        // localStorage.setItem(STORAGE_KEYS.TOKEN, accessToken);
+        setAccessToken(accessToken);
         localStorage.setItem(STORAGE_KEYS.USER_ID, String(responseData.id));
         localStorage.setItem(
           STORAGE_KEYS.PROFILE_CHECK,
           String(responseData.profileCheck),
         );
-
+        
         if (responseData?.profileCheck) {
           window.location.href = "/";
         } else {
