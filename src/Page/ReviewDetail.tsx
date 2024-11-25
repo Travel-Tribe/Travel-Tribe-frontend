@@ -19,7 +19,7 @@ const ReviewDetail = (): JSX.Element => {
     queryKey: ["reviewData", postId],
     queryFn: async () => {
       const response = await fetchCall(
-        `/api/v1/posts/${postId}/reviews/${reviewId}`,
+        `/api/v1/posts/${postId}/reviews/${reviewId}/view`,
         "get",
       );
       console.log("reviewData", response);
@@ -46,7 +46,7 @@ const ReviewDetail = (): JSX.Element => {
     console.error("에러", error);
     return <>에러 입니다.</>;
   }
-
+  console.log(data.userId, localStorage.getItem(STORAGE_KEYS.USER_ID));
   return (
     <div className="w-[1300px] mx-auto">
       <div className="w-[100%] min-x-[600px] mb-[10px]">
@@ -96,8 +96,8 @@ const ReviewDetail = (): JSX.Element => {
         <div className="mt-[10px]">작성일: {data.createDate}</div>
       </div>
       <div className="w-[100%] min-x-[600px] flex justify-between">
-        {data.userId === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
-          <>
+        {String(data.userId) === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
+          <div>
             <button
               className="btn bg-custom-blue text-white"
               onClick={() =>
@@ -112,7 +112,7 @@ const ReviewDetail = (): JSX.Element => {
             >
               삭제하기
             </button>
-          </>
+          </div>
         ) : (
           <div className="invisible ml-[10px]"></div>
         )}

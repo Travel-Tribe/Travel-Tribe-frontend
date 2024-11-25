@@ -30,7 +30,7 @@ const ReviewEdit = () => {
 
   // 리뷰 데이터 조회
   const { isLoading } = useQuery(
-    ["review", postId, id],
+    ["reviewData", postId, id],
     async () => {
       const response = await fetchCall<ApiResponse>(
         `/api/v1/posts/${postId}/reviews/${id}/view`,
@@ -71,7 +71,7 @@ const ReviewEdit = () => {
     {
       onSuccess: () => {
         // 캐시 무효화
-        queryClient.invalidateQueries(["review", postId, id]);
+        queryClient.invalidateQueries(["reviewData", postId]);
         // queryClient.invalidateQueries(["reviews"]); // 리뷰 목록도 함께 업데이트
         navigate(`/recruitment/${postId}/review/${id}`);
       },

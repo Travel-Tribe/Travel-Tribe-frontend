@@ -48,6 +48,7 @@ const MyVoting = (): JSX.Element => {
         `/api/v1/posts/${postId}/voting-starts`,
         "get",
       );
+      console.log(response);
       return response?.data;
     } catch (error) {
       console.error("Fetching voting data failed:", error);
@@ -94,10 +95,13 @@ const MyVoting = (): JSX.Element => {
         const participatingPosts = allPosts.filter(post =>
           participatingPostIds.includes(post.postId),
         );
-
+          console.log(participatingPosts);
+          const votingPosts = participatingPosts.filter(post => post.status === "투표중");
+          console.log(votingPosts);
         // Step 4: 투표가 생성된 post만 필터링
         const validPosts: VotingInfo[] = [];
-        for (const post of participatingPosts) {
+        for (const post of votingPosts) {
+          console.log(post.postId);
           const votingData = await fetchVoting(post.postId);
           if (votingData?.data.votingStartsId) {
             validPosts.push({

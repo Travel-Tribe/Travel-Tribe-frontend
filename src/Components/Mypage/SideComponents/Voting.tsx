@@ -60,6 +60,8 @@ const Voting: React.FC<VotingProps> = ({
         "post",
         { approval: selectedOption },
       );
+      alert("투표 완료");
+      onClose();
     } catch (error) {
       console.error("Error submitting votting:", error);
     }
