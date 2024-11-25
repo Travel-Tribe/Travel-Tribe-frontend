@@ -53,7 +53,7 @@ export const RecruitmentPost = React.memo(
                 ? "bg-btn-closed"
                 : plan.status !== "투표중"
                   ? "bg-custom-green"
-                  : "bg-custom-red"
+                  : "bg-error"
             } text-center`}
           >
             {plan.status}
@@ -77,7 +77,7 @@ export const ReviewPost = React.memo(
           key={review.postId}
           className="w-[300px] h-[290px] bg-white border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
         >
-          {review.files && (
+          {review?.files[0]?.fileAddress && (
             <img
               src={
                 import.meta.env.VITE_API_BASE_URL +
