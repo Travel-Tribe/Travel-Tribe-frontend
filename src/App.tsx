@@ -1,7 +1,9 @@
 import "./App.css";
+import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import Router from "./Router/routes";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { useAuthStore } from "./store/authStore";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,6 +16,14 @@ const queryClient = new QueryClient({
 });
 
 function App() {
+  const { accessToken, startTokenRefresh } = useAuthStore();
+
+  useEffect(() => {
+    if (accessToken) {
+      startTokenRefresh();
+    }
+  }, [accessToken, startTokenRefresh]);
+
   return (
     <>
       <QueryClientProvider client={queryClient}>
