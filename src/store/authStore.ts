@@ -40,7 +40,7 @@ export const useAuthStore = create<AuthState>(set => ({
       } catch (error) {
         console.error("토큰 재발급 실패:", error);
         set({ accessToken: null });
-        localStorage.removeItem(STORAGE_KEYS.TOKEN);
+        localStorage.clear();
         window.location.href = "/login"; // 로그아웃 처리
       }
     }, TOKEN_REFRESH_INTERVAL);
