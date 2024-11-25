@@ -46,7 +46,7 @@ const ReviewDetail = (): JSX.Element => {
     console.error("에러", error);
     return <>에러 입니다.</>;
   }
-
+  console.log(data.userId, localStorage.getItem(STORAGE_KEYS.USER_ID));
   return (
     <div className="w-[1300px] mx-auto">
       <div className="w-[100%] min-x-[600px] mb-[10px]">

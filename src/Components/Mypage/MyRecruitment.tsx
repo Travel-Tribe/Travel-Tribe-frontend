@@ -15,6 +15,7 @@ interface TravelPlan {
   deadline: string;
   participantsCount: number;
   userId: string;
+  status: string;
 }
 
 interface TravelPlanResponse {
@@ -78,6 +79,7 @@ const MyRecruitment = (): JSX.Element => {
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
+             
               return {
                 ...plan,
                 participantsCount: participants.data.data.length, // 참여 인원 수 추가
@@ -108,7 +110,7 @@ const MyRecruitment = (): JSX.Element => {
   const voting = async (postId: string) => {
     try {
       await fetchCall(`/api/v1/posts/${postId}/voting-starts`, "post");
-      alert("투표 올림")
+      alert("투표 올림");
     } catch (error) {
       console.error(`Error voting`, error);
     }
@@ -130,7 +132,7 @@ const MyRecruitment = (): JSX.Element => {
   const clickRecruitForm = () => {
     navigate("/recruitment/write");
   };
-  // console.log(recruitDataList);
+  console.log(recruitDataList);
   // console.log(typeof recruitDataList);
   return (
     <>
@@ -150,12 +152,17 @@ const MyRecruitment = (): JSX.Element => {
         <ul className="mt-5 space-y-6">
           {recruitDataList.map(plan => {
             const today: any = new Date();
+            console.log(today);
             const deadlineDate: any = new Date(plan.deadline);
+            console.log(deadlineDate);
+            const deadlineWith21Hours = new Date(
+              deadlineDate.getTime() + 21 * 60 * 60 * 1000,
+            ); // 마감 시간 + 21시간 (마감 날짜 기준 다음날 00시)
             const remainingDays = Math.ceil(
               (deadlineDate.getTime() - today.getTime()) /
                 (1000 * 60 * 60 * 24),
             );
-
+            console.log(remainingDays);
             const startDayOfWeek =
               week[new Date(plan.travelStartDate).getDay()];
             const endDayOfWeek = week[new Date(plan.travelEndDate).getDay()];
@@ -171,9 +178,15 @@ const MyRecruitment = (): JSX.Element => {
                 >
                   <div className="flex justify-between">
                     <h3 className="text-xl mt-2.5 ml-2.5">{plan.title}</h3>
-                    <span className="text-base mt-2.5 mr-2.5">
-                      마감 {remainingDays}일 전
-                    </span>
+                    {today < deadlineWith21Hours ? (
+                      <span className="text-base mt-2.5 mr-2.5">
+                        마감 {remainingDays}일 전
+                      </span>
+                    ) : (
+                      <span className="text-base mt-2.5 mr-2.5">
+                        모집 마감 완료
+                      </span>
+                    )}
                   </div>
                   <div className="flex justify-between ">
                     <div className="flex items-center m-2.5 space-x-8">
@@ -189,25 +202,35 @@ const MyRecruitment = (): JSX.Element => {
                       </span>
                     </div>
                     <div className="flex space-x-2.5 items-center m-2.5">
-                      {plan.participantsCount !== plan.maxParticipants ? (
+                      {plan.status === "모집중" ? (
                         <div className="bg-white text-green-500 w-[60px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
                           모집중
                         </div>
-                      ) : (
+                      ) : plan.status === "모집완료" ? (
                         <div className="bg-white text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                          모집 완료
+                          모집완료
                         </div>
+                      ) : plan.status === "투표중" ? (
+                        <div className="bg-white text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
+                          투표중
+                        </div>
+                      ) : (
+                        ""
                       )}
-                      <button
-                        className="btn btn-xs btn-error text-white rounded-md text-center  z-10"
-                        onClick={e => {
-                          e.stopPropagation();
-                          // fetchDeleteParticipation(plan.postId);
-                          voting(plan.postId);
-                        }}
-                      >
-                        취소하기
-                      </button>
+                      {plan.status === "모집완료" ? (
+                        <button
+                          className="btn btn-xs btn-error text-white rounded-md text-center  z-10"
+                          onClick={e => {
+                            e.stopPropagation();
+                            // fetchDeleteParticipation(plan.postId);
+                            voting(plan.postId);
+                          }}
+                        >
+                          취소하기
+                        </button>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </div>

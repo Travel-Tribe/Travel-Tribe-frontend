@@ -28,8 +28,9 @@ const Rating: React.FC<RatingModalProps> = ({
       await Promise.all(
         participants.map((userId, index) => {
           const rating = ratings[index];
+          console.log("postId", postId);
           return fetchCall(`api/v1/posts/${postId}/rating`, "post", {
-            receiverUserId: userId,
+            receiverId: userId,
             score: rating,
           });
         }),
