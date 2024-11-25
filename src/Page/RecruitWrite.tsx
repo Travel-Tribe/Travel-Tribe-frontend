@@ -9,7 +9,7 @@ const RecruitWrite = (): JSX.Element => {
         <RecruitForm />
       </div>
       <div className="bg-[#DEDEDE] w-[50%] min-w-[512px] overflow-y-scroll hidden lg:block">
-        {/* <Preview /> */}
+        <Preview />
       </div>
       <Btns />
     </div>

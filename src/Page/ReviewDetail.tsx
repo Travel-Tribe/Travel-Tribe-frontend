@@ -97,7 +97,7 @@ const ReviewDetail = (): JSX.Element => {
       </div>
       <div className="w-[100%] min-x-[600px] flex justify-between">
         {String(data.userId) === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
-          <>
+          <div>
             <button
               className="btn bg-custom-blue text-white"
               onClick={() =>
@@ -112,7 +112,7 @@ const ReviewDetail = (): JSX.Element => {
             >
               삭제하기
             </button>
-          </>
+          </div>
         ) : (
           <div className="invisible ml-[10px]"></div>
         )}

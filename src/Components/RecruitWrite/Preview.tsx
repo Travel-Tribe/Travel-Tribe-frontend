@@ -22,7 +22,7 @@ const Preview = React.memo((): JSX.Element => {
         <TripRules travelPlan={postData} />
       </div>
       <div className="mb-[10px]">
-        <TripItinerary travelPlan={postData} />
+        {/* <TripItinerary travelPlan={postData} /> */}
       </div>
     </div>
   );

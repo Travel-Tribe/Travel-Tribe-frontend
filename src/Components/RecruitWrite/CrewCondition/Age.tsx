@@ -6,11 +6,11 @@ const Age = React.memo((): JSX.Element => {
   const updateTravelData = useRecruitPostStore(state => state.updateTravelData);
   const limitMinAge = useRecruitPostStore(state => state.postData.limitMinAge);
   const limitMaxAge = useRecruitPostStore(state => state.postData.limitMaxAge);
-  const age = Number(useProfileStore(state => state.age)) || 1;
+  const age = Number(useProfileStore(state => state.age));
 
   useEffect(() => {
     updateTravelData("limitMinAge", age);
-  });
+  }, [updateTravelData, age]);
 
   return (
     <div className="flex items-center mb-2">

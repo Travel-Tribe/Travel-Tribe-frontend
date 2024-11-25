@@ -26,8 +26,6 @@ const Header = React.memo((): JSX.Element => {
       if (response.data.result === "SUCCESS") {
         localStorage.removeItem(STORAGE_KEYS.USER_ID);
         localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
-        document.cookie =
-          "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         if (typeof setToken === "function") {
           setToken(null);
         }
@@ -40,7 +38,7 @@ const Header = React.memo((): JSX.Element => {
 
   return (
     <div className="w-full h-10 mb-[30px]  max-w-[1347px] min-w-[540px] mx-auto">
-      <div className="container flex justify-between items-center">
+      <div className="container flex justify-between items-center mx-auto">
         <h1 className="text-4xl font-bold">
           <Link to={"/"}>여행족</Link>
         </h1>

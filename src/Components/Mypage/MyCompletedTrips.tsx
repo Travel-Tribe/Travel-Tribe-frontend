@@ -57,9 +57,7 @@ const MyCompletedTrips = (): JSX.Element => {
   const fetchCompletedTrips = async () => {
     try {
       const response = await fetchCall<TravelPlan[]>("/api/v1/posts", "get");
-      
       const myParticipationPostIds = await fetchMyParticipation();
-      
       const completedTrips = response.data.data.content
         .filter((info: TravelPlan) => {
           const travelEndDate = new Date(info.travelEndDate);
@@ -76,7 +74,7 @@ const MyCompletedTrips = (): JSX.Element => {
           ...info,
           isRatingAllowed: true, // 기본값 설정
         }));
-        console.log(completedTrips);
+
       // 참여 중인 여행만 필터링
       const filteredTrips: TravelPlan[] = [];
       for (const trip of completedTrips) {
