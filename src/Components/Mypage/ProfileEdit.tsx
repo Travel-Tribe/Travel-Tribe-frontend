@@ -127,8 +127,8 @@ const ProfileEdit = (): JSX.Element => {
   // 생년월일, 성별, 흡연 여부, MBTI 업데이트
   const handleBirthChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     updateProfileField("birth", event.target.value);
-  const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    updateProfileField("phone", event.target.value);
+  // const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+  //   updateProfileField("phone", event.target.value);
   const handleGenderChange = (gender: string) =>
     updateProfileField("gender", gender);
   const handleSmokingChange = (smoking: string) =>
@@ -142,14 +142,13 @@ const ProfileEdit = (): JSX.Element => {
   const profileUpdate = async () => {
     try {
       // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
-      const response = await fetchCall(`/api/v1/users/profile`, "patch", {
+      await fetchCall(`/api/v1/users/profile`, "patch", {
         ...filteredProfileData,
         // fileAddress: encodedFileAddress,
         gender: profileData.gender === "남자" ? "MALE" : "FEMALE", // URL-safe 인코딩된 fileAddress 추가
         smoking: profileData.smoking === "흡연자" ? "YES" : "NO", // URL-safe 인코딩된 fileAddress 추가
       });
 
-      console.log(response);
       await fetchCall(`/api/v1/users/info`, "patch", {
         nickname: profileData.nickname,
         phone: profileData.phone,
@@ -177,7 +176,7 @@ const ProfileEdit = (): JSX.Element => {
         error === "",
     );
   }, [profileData, error]);
-  console.log(profileData);
+
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -234,7 +233,7 @@ const ProfileEdit = (): JSX.Element => {
               <p className="text-green-500 text-xs mt-1">{success}</p>
             )}
             <div className="form-control w-full">
-              <label htmlFor="signUp-phone" className="label">
+              {/* <label htmlFor="signUp-phone" className="label">
                 <span className="label-text">전화번호</span>
                 <button
                   className="btn btn-xs bg-custom-pink text-white hover:bg-custom-pink-hover"
@@ -252,7 +251,7 @@ const ProfileEdit = (): JSX.Element => {
                 className="input input-bordered w-full"
                 value={profileData.phone}
                 onChange={handlePhoneChange}
-              />
+              /> */}
             </div>
           </div>
         </div>
@@ -280,7 +279,7 @@ const ProfileEdit = (): JSX.Element => {
           <label className="text-gray-700 text-lg mb-2 block">생년월일</label>
           <input
             type="date"
-            className="w-25 border border-black rounded p-2 text-sm cursor-pointer"
+            className="w-[140px] border rounded-lg p-1 text-base cursor-pointer border-custom-green focus:outline-none focus:ring-2 focus:ring-custom-green"
             value={profileData.birth}
             onChange={handleBirthChange}
           />

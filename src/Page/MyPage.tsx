@@ -5,13 +5,12 @@ const MyPage = (): JSX.Element => {
   return (
     <>
       <div className="min-h-screen bg-custom-bg">
-      <div className="flex max-w-[1240px] mx-auto px-5">
+        <div className="flex min-w-[900px] max-w-[1240px] mx-auto px-5">
           {/* 사이드바 */}
           <Sidebar />
 
           <Outlet />
           {/* 메인 섹션 */}
-        
         </div>
       </div>
     </>
