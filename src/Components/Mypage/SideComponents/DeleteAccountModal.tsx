@@ -20,6 +20,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   const clickDeleteAccount = async () => {
     try {
       await fetchCall(`/api/v1/users`, "delete");
+      alert("탈퇴되었습니다.")
       setToken(null);
       navigate("/");
     } catch (error) {
