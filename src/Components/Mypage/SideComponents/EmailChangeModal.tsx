@@ -181,7 +181,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
           <button
             className={`px-4 py-2 rounded ${
               isCodeSent && inputCode
-                ? "bg-green-200 text-white"
+                ? "custom-teal-green text-white"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
             }`}
             onClick={handleEmailChange}

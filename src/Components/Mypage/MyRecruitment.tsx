@@ -51,9 +51,17 @@ const MyRecruitment = (): JSX.Element => {
           `/api/v1/posts`,
           "get",
         );
+        const participationResponse = await fetchCall<participantion[]>(
+          "/api/v1/posts/participations/by-join-joinready",
+          "get",
+        );
+        
         const today = new Date();
         today.setHours(0, 0, 0, 0); // 현재 날짜의 시간 부분을 초기화
 
+        const participatingPostIds = participationResponse.data.data.map(
+          (item: { postId: number }) => item.postId,
+        );
         // travelStartDate가 현재보다 미래이고, userId가 동일한 여행 계획만 필터링
         const filteredPlans = response.data.data.content.filter(
           (plan: TravelPlan) => {
@@ -66,7 +74,9 @@ const MyRecruitment = (): JSX.Element => {
             }
 
             return (
-              travelStartDate >= today && String(plan.userId) === String(userId)
+              travelStartDate >= today &&
+              participatingPostIds.includes(plan.postId) &&
+              String(plan.userId) === String(userId)
             );
           },
         );
@@ -79,7 +89,7 @@ const MyRecruitment = (): JSX.Element => {
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
-             
+
               return {
                 ...plan,
                 participantsCount: participants.data.data.length, // 참여 인원 수 추가
@@ -116,24 +126,10 @@ const MyRecruitment = (): JSX.Element => {
     }
   };
 
-  const fetchDeleteParticipation = async (postId: string) => {
-    try {
-      await fetchCall(`/api/v1/posts/${postId}/participations`, "delete");
-      setRecruitDataList(prev => prev.filter(plan => plan.postId !== postId)); // Update state to remove the deleted item
-      console.log(`Participation for postId ${postId} deleted successfully.`);
-    } catch (error) {
-      console.error(
-        `Error deleting participation for postId ${postId}:`,
-        error,
-      );
-    }
-  };
-
   const clickRecruitForm = () => {
     navigate("/recruitment/write");
   };
-  console.log(recruitDataList);
-  // console.log(typeof recruitDataList);
+
   return (
     <>
       <section>
