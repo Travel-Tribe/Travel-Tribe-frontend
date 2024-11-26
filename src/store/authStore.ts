@@ -20,13 +20,12 @@ export const useAuthStore = create<AuthState>(set => ({
   },
   startTokenRefresh: () => {
     const TOKEN_REFRESH_INTERVAL = 29 * 60 * 1000; // 29분
-
     setInterval(async () => {
       try {
+        localStorage.removeItem(STORAGE_KEYS.TOKEN);
         const response = await fetchCall<{
           headers: { access: string };
         }>("/api/v1/users/reissue", "post");
-
         const newAccessToken = response.headers.access;
         if (newAccessToken) {
           set({ accessToken: newAccessToken });
