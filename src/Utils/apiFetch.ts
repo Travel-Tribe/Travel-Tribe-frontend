@@ -39,7 +39,7 @@ export default async function fetchCall<T>(
   responseType?: "json" | "blob",
 ): Promise<T> {
   const token = localStorage.getItem(STORAGE_KEYS.TOKEN); // 최신 토큰 가져오기
-  console.log(token);
+  
   const config: AxiosRequestConfig = {
     method,
     url,
