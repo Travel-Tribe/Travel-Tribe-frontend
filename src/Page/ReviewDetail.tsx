@@ -27,16 +27,18 @@ const ReviewDetail = (): JSX.Element => {
     },
   });
 
-  const deleteReview = useCallback(async () => {
+  const deleteReview = async () => {
     const response = await fetchCall(
       `/api/v1/posts/${postId}/reviews/${reviewId}`,
       "delete",
     );
-    if (response.state === 200) {
+
+    if (response.data.result === "SUCCESS") {
       queryClient.invalidateQueries("reviewData");
       alert(`${data.title}이 삭제되었습니다.`);
+      navigate("/review");
     }
-  }, []);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
