@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import fetchCall from "../Utils/apiFetch";
 import { useQuery, useQueryClient } from "react-query";
@@ -44,11 +44,11 @@ const ReviewDetail = (): JSX.Element => {
   }
 
   return (
-    <div className="w-[1300px] mx-auto">
-      <div className="w-[100%] min-x-[600px] mb-[10px]">
+    <div className="max-w-[1000px] min-w-[740px] mx-auto">
+      <div className="mb-[10px]">
         <p className="text-[18px] font-bold mb-[5px]">{data.title}</p>
       </div>
-      <div className="w-[100%] min-x-[600px] mb-[10px] px-[15px] py-[20px] border bg-white radius-10px">
+      <div className="mb-[10px] px-[15px] py-[20px] border bg-white radius-10px">
         <div className="mb-[20px] whitespace-pre-line">{data.content}</div>
         <div className="flex gap-[10px] items-center overScroll-x-scroll">
           {data?.files?.map((file: { fileName: string }, index: number) => (
@@ -69,13 +69,13 @@ const ReviewDetail = (): JSX.Element => {
         {String(data.userId) === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
           <div className="gap-[10px]">
             <button
-              className="btn bg-custom-blue text-white"
+              className="btn btn-sm btn-warning mr-[10px] text-white"
               onClick={() => navigate(`/community/edit/${id}`)}
             >
               수정하기
             </button>
             <button
-              className="btn bg-custom-red text-white"
+              className="btn btn-sm btn-error text-white"
               onClick={deleteCommunities}
             >
               삭제하기
@@ -84,7 +84,9 @@ const ReviewDetail = (): JSX.Element => {
         ) : (
           <div className="invisible ml-[10px]"></div>
         )}
-        <button className="btn bg-custom-green text-white">목록으로</button>
+        <Link to={"/community"} className="btn btn-sm btn-success text-white">
+          목록으로
+        </Link>
       </div>
     </div>
   );

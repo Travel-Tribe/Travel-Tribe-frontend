@@ -16,7 +16,7 @@ const Age = React.memo((): JSX.Element => {
     <div className="flex items-center mb-2">
       <p className="text-[18px] mr-2">나이:</p>
       <select
-        className="select select-sm w-[60px] text-[16px] border border-gray-300 rounded-sm px-2 mr-[5px]"
+        className="select select-sm w-[60px] text-[16px] border border-gray-300 px-2 mr-[5px]"
         value={limitMinAge}
         onChange={e => updateTravelData("limitMinAge", Number(e.target.value))}
       >

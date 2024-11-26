@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Person from "../assets/icons/person.svg";
 import Calendar from "../assets/icons/Calendar.svg";
 import MapPin from "../assets/icons/Map pin.svg";
@@ -48,10 +48,10 @@ const ReviewDetail = (): JSX.Element => {
   }
 
   return (
-    <div className="w-[1300px] mx-auto">
-      <div className="w-[100%] min-x-[600px] mb-[10px]">
+    <div className="max-w-[1000px] min-w-[740px] mx-auto">
+      <div className="mb-[10px]">
         <p className="text-[18px] font-bold mb-[5px]">{data.title}</p>
-        <div className="w-[100%] min-x-[600px] flex items-center">
+        <div className="flex items-center">
           <>
             <img
               src={Person}
@@ -78,7 +78,7 @@ const ReviewDetail = (): JSX.Element => {
           </>
         </div>
       </div>
-      <div className="w-[100%] min-x-[600px] mb-[10px] px-[15px] py-[20px] border bg-white radius-10px">
+      <div className="mb-[10px] px-[15px] py-[20px] border rounded-[10px]">
         <div className="mb-[20px] whitespace-pre-line">{data.contents}</div>
         <div className="flex gap-[10px] items-center overScroll-x-scroll">
           {data.files?.map((file: { fileAddress: string }) => (
@@ -95,11 +95,11 @@ const ReviewDetail = (): JSX.Element => {
         </div>
         <div className="mt-[10px]">작성일: {data.createDate}</div>
       </div>
-      <div className="w-[100%] min-x-[600px] flex justify-between">
+      <div className="flex justify-between">
         {String(data.userId) === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
           <div>
             <button
-              className="btn bg-custom-blue text-white"
+              className="btn btn-sm btn-warning text-white mr-[10px]"
               onClick={() =>
                 navigate(`/recruitment/${postId}/review/edit/${reviewId}`)
               }
@@ -107,7 +107,7 @@ const ReviewDetail = (): JSX.Element => {
               수정하기
             </button>
             <button
-              className="btn bg-custom-red text-white"
+              className="btn btn-sm btn-error text-white"
               onClick={deleteReview}
             >
               삭제하기
@@ -116,7 +116,9 @@ const ReviewDetail = (): JSX.Element => {
         ) : (
           <div className="invisible ml-[10px]"></div>
         )}
-        <button className="btn bg-custom-green text-white">목록으로</button>
+        <Link to={"/review"} className="btn btn-sm btn-success text-white">
+          목록으로
+        </Link>
       </div>
     </div>
   );

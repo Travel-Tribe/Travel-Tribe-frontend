@@ -11,7 +11,7 @@ const TitleInput = React.memo(() => {
       <input
         type="text"
         placeholder="제목을 입력해주세요."
-        className="w-[400px] h-[32px] px-2 truncate border border-gray-300 rounded-sm"
+        className="input w-[400px] h-[32px] px-2 truncate border border-gray-300"
         value={title}
         onChange={e => updateTravelData("title", e.target.value)}
       />

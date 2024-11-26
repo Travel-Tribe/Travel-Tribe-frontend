@@ -24,7 +24,7 @@ export const communityHandlers = [
 
     return HttpResponse.json(
       {
-        data: CommunityData.filter(
+        data: CommunityData.find(
           ({ communityId }) => communityId === Number(params.id),
         ),
       },
