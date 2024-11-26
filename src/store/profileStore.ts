@@ -61,7 +61,6 @@ export const useProfileStore = create<ProfileState>(set => ({
       const updatedData = { ...state.profileData, ...data };
       const age = updatedData.birth ? calculateAge(updatedData.birth) : null;
 
-      console.log("Profile Data Updated:", updatedData); // 로그 추가
       return { profileData: updatedData, age };
     }),
   // 특정 속성 하나만 업데이트 할 때 사용
@@ -83,7 +82,7 @@ export const useProfileStore = create<ProfileState>(set => ({
       const userResponse = await fetchCall<{
         data: { data: { nickname: string } };
       }>(`/api/v1/users`, "get");
-      console.log(userResponse);
+      
       const {
         id,
         userId: _,
@@ -93,7 +92,7 @@ export const useProfileStore = create<ProfileState>(set => ({
       const age = filteredProfileData.birth
         ? calculateAge(filteredProfileData.birth)
         : null;
-      console.log(age);
+      
       set(state => ({
         profileData: {
           // 서버 연동 시 .data 추가
@@ -122,7 +121,7 @@ export const useProfileStore = create<ProfileState>(set => ({
           const userData = await fetchCall<{
             data: { data: { nickname: string; fileAddress: string } };
           }>(`/api/v1/users/${userId}`, "get");
-          console.log(userData);
+         
           return {
             userId,
             profile: {
@@ -138,7 +137,7 @@ export const useProfileStore = create<ProfileState>(set => ({
         }
       }),
     );
-    console.log(profiles);
+    
     const profileMap = profiles.reduce(
       (acc, { userId, profile }) => {
         acc[userId] = profile;
