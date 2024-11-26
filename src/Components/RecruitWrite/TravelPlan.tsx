@@ -148,7 +148,7 @@ const TravelPlan = React.memo((): JSX.Element => {
               </div>
             ))}
             <button
-              className="btn btn-block h-[18px] bg-custom-green text-white"
+              className="btn btn-block h-[18px] btn-success text-white"
               onClick={() => handleAddDaySchedule(dayIndex)}
             >
               추가하기
