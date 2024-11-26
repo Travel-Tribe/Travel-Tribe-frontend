@@ -31,27 +31,28 @@ export const useAuthStore = create<AuthState>(set => ({
 
     // 새로운 Interval 설정
     intervalId = window.setInterval(async () => {
-      try {
-        const response = await fetchCall<{
-          headers: { access: string };
-        }>("/api/v1/users/reissue", "post");
-
-        const newAccessToken = response.headers.access;
-
-        if (newAccessToken) {
-          set({ accessToken: newAccessToken });
-          localStorage.setItem(STORAGE_KEYS.TOKEN, newAccessToken);
-        } else {
-          console.error("토큰이 응답에 포함되지 않았습니다.");
-          set({ accessToken: null });
+      setInterval(async () => {
+        try {
           localStorage.removeItem(STORAGE_KEYS.TOKEN);
+          const response = await fetchCall<{
+            headers: { access: string };
+          }>("/api/v1/users/reissue", "post");
+          const newAccessToken = response.headers.access;
+
+          if (newAccessToken) {
+            set({ accessToken: newAccessToken });
+            localStorage.setItem(STORAGE_KEYS.TOKEN, newAccessToken);
+          } else {
+            console.error("토큰이 응답에 포함되지 않았습니다.");
+            set({ accessToken: null });
+            localStorage.removeItem(STORAGE_KEYS.TOKEN);
+          }
+        } catch (error) {
+          console.error("토큰 재발급 실패:", error);
+          // 로그아웃 처리 로직 추가 가능
+          localStorage.clear();
+          window.location.href = "/signIn";
         }
-      } catch (error) {
-        console.error("토큰 재발급 실패:", error);
-        // 로그아웃 처리 로직 추가 가능
-        localStorage.clear();
-        window.location.href = "/signIn";
-      }
     }, TOKEN_REFRESH_INTERVAL);
   },
   stopTokenRefresh: () => {
