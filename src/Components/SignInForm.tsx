@@ -78,7 +78,7 @@ const SignIn = (): JSX.Element => {
           STORAGE_KEYS.PROFILE_CHECK,
           String(responseData.profileCheck),
         );
-        
+
         if (responseData?.profileCheck) {
           window.location.href = "/";
         } else {
@@ -160,7 +160,7 @@ const SignIn = (): JSX.Element => {
 
       <button
         type="submit"
-        className="btn bg-custom-green hover:bg-custom-green-hover text-white w-full"
+        className="btn btn-success text-white w-full"
         disabled={isSubmitting}
       >
         로그인

@@ -285,8 +285,9 @@ const SignUp = (): JSX.Element => {
         <label htmlFor="signUp-phone" className="label">
           <span className="label-text">전화번호</span>
           <button
-            className="btn btn-xs bg-custom-pink text-white hover:bg-custom-pink-hover"
+            className="btn btn-xs btn-error text-white"
             onClick={() => {}}
+            disabled={!watch("phone")}
           >
             인증하기
           </button>

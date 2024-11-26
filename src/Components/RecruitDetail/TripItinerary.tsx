@@ -64,7 +64,7 @@ export default function TripItinerary({ travelPlan }: TripItineraryProps) {
   console.log("플랜:", travelPlan);
 
   return (
-    <div className="h-[1100px]">
+    <div className="h-[1074px]">
       <div className="card bg-base-100 border h-full">
         <div className="card-body p-0 h-full">
           {/* Header */}

@@ -7,7 +7,7 @@ interface UserProfile {
   gender: string;
   ratingAvg: number | null;
   count: string;
-  profile: string;
+  fileAddress: string;
 }
 
 interface UserData {
@@ -55,11 +55,17 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
       <div className="card-body">
         <div className="flex items-center gap-3">
           <div className="avatar placeholder">
-            {userData?.profile ? (
-              <img
-                src={userData.profile}
-                alt={`${userData.nickname}의 프로필`}
-              />
+            {userData?.fileAddress ? (
+              <div className="w-12 h-12">
+                <img
+                  src={
+                    import.meta.env.VITE_API_BASE_URL +
+                    `/api/v1/file/preview?fileUrl=${userData.fileAddress}`
+                  }
+                  alt={`${userData.nickname}의 프로필`}
+                  className="w-full h-full object-cover rounded-full"
+                />
+              </div>
             ) : (
               <div className="bg-neutral text-neutral-content w-12 h-12 flex items-center justify-center rounded-full">
                 <span className="text-xs">사진</span>

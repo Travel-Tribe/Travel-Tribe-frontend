@@ -9,8 +9,7 @@ interface TravelDetailsProps {
 
 export default function TripDetails({ travelPlan }: TravelDetailsProps) {
   const travelCountry = travelPlan?.travelCountry
-    ? 
-      travelPlan?.travelCountry
+    ? travelPlan?.travelCountry
     : "";
 
   return (
@@ -26,7 +25,7 @@ export default function TripDetails({ travelPlan }: TravelDetailsProps) {
               <div className="flex flex-col mt-2">
                 <span className="text-sm text-gray-500">여행 지역</span>
                 <span className="text-sm">
-                  {travelCountry} - {travelPlan?.region}
+                  {mappingCountry(travelCountry, "en")} - {travelPlan?.region}
                 </span>
               </div>
               <div className="flex flex-col mt-2">
