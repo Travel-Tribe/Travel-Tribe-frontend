@@ -142,7 +142,7 @@ const HomeLayout = () => {
           location.pathname === "/recruitment" && (
             <Link
               to={`/recruitment/write`}
-              className="btn btn-sm !h-[32px] bg-custom-green hover:bg-custom-green-hover text-white"
+              className="btn btn-sm !h-[32px] btn-success text-white"
             >
               모집 글 작성
             </Link>
