@@ -12,9 +12,11 @@ const userSchema = z.object({
 type UserEmailValues = z.infer<typeof userSchema>;
 
 interface ApiResponse {
-  result: "SUCCESS" | "FAIL";
-  errors: null | string;
-  data: null | string;
+  data: {
+    result: "SUCCESS" | "FAIL";
+    errors: null | string;
+    data: null | string;
+  };
 }
 
 const FindForm = () => {
@@ -26,6 +28,7 @@ const FindForm = () => {
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
+    clearErrors,
   } = useForm<UserEmailValues>({
     resolver: zodResolver(userSchema),
   });
@@ -38,12 +41,14 @@ const FindForm = () => {
         data,
       );
 
-      if (response.result === "SUCCESS") {
+      console.log(response);
+
+      if (response.data.result === "SUCCESS") {
         setSuccess(true);
-      } else if (response.errors) {
+      } else if (response.data.errors) {
         setError("root", {
           type: "manual",
-          message: response.errors,
+          message: response.data.errors,
         });
       }
     } catch (error) {
@@ -84,7 +89,11 @@ const FindForm = () => {
           placeholder="이메일을 입력하세요"
           autoComplete="email"
           className="input input-bordered w-full"
-          {...register("email")}
+          {...register("email", {
+            onChange: () => {
+              clearErrors("root"); // 입력 변경 시 root 에러 메시지 제거
+            },
+          })}
         />
         <span className="text-error text-xs h-1 mt-1">
           {errors.email?.message || errors.root?.message}
