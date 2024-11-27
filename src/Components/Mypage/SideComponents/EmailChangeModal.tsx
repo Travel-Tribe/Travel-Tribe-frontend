@@ -161,7 +161,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
         {success && <p className="text-green-500 text-xs mb-4">{success}</p>}
 
         <button
-          className="text-sm bg-gray-200 px-2 py-1 rounded w-full mb-4"
+          className={`btn btn-sm text-sm bg-gray-200 px-2 py-1 rounded w-full mb-4 ${validationStatus.isAvailable || isCodeSent ? "" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
           onClick={sendVerificationCode}
           disabled={!validationStatus.isAvailable || isCodeSent}
         >
@@ -171,7 +171,11 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
         <input
           type="text"
           placeholder="인증번호 입력"
-          className="w-full border rounded p-2 mb-4"
+          className={`w-full border rounded p-2 mb-4 ${
+            isCodeSent
+              ? "custom-teal-green text-white"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+          }`}
           value={inputCode}
           onChange={handleCodeInput}
           disabled={!isCodeSent}
@@ -181,7 +185,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
           <button
             className={`px-4 py-2 rounded ${
               isCodeSent && inputCode
-                ? "custom-teal-green text-white"
+                ? "btn bg-custom-teal-green text-white"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
             }`}
             onClick={handleEmailChange}
@@ -191,7 +195,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
           </button>
           <button
             onClick={onClose}
-            className="bg-gray-200 text-gray-600 px-4 py-2 rounded"
+            className="btn btn-md bg-gray-200 text-gray-600 px-4 py-2 rounded"
           >
             취소
           </button>

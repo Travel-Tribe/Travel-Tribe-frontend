@@ -40,6 +40,18 @@ const MyTravelJoin = () => {
 
   const [filteredPlans, setFilteredPlans] = useState<TravelPlan[]>([]);
 
+  const statusStyles = {
+    모집중: "bg-custom-green",
+    모집완료: "bg-btn-closed",
+    투표중: "bg-error",
+  };
+
+  const statusText = {
+    모집중: "모집중",
+    모집완료: "모집완료",
+    투표중: "투표중",
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -54,7 +66,7 @@ const MyTravelJoin = () => {
           "get",
         );
         const allPosts = allPostsResponse.data.content;
-        
+
         // 참여 데이터 조회
         const participationResponse = await fetchCall<Participation[]>(
           "/api/v1/posts/participations/by-join-joinready",
@@ -68,7 +80,7 @@ const MyTravelJoin = () => {
         const participatingPostIds = participationResponse.data.data.map(
           (item: { postId: number }) => item.postId,
         );
-        
+
         // 전체 모집글 중 조건에 맞는 글 필터링
         const filteredPlans = allPosts.filter(plan => {
           const travelStartDate = new Date(plan.travelStartDate);
@@ -136,7 +148,7 @@ const MyTravelJoin = () => {
       console.error("참여 취소 중 오류 발생:", error);
     }
   };
-  
+
   return (
     <>
       <section>
@@ -156,7 +168,8 @@ const MyTravelJoin = () => {
             ); // 마감 시간 + 21시간 (마감 날짜 기준 다음날 00시)
 
             const diffDays = Math.ceil(
-              (deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+              (deadlineDate.getTime() - today.getTime()) /
+                (1000 * 60 * 60 * 24),
             );
 
             const travelStartDay = new Date(plan.travelStartDate).getDay();
@@ -200,21 +213,13 @@ const MyTravelJoin = () => {
                       </span>
                     </div>
                     <div className="flex space-x-2.5 items-center">
-                      {plan.status === "모집중" ? (
-                        <div className="bg-white text-green-500 w-[60px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                          모집중
-                        </div>
-                      ) : plan.status === "모집완료" ? (
-                        <div className="bg-white text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                          모집완료
-                        </div>
-                      ) : plan.status === "투표중" ? (
-                        <div className="bg-white text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                          투표중
-                        </div>
-                      ) : (
-                        ""
-                      )}
+                      {statusStyles[plan.status] ? (
+                      <div
+                        className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${statusStyles[plan.status]}`}
+                      >
+                        {statusText[plan.status]}
+                      </div>
+                      ) : null}
                       <button
                         className="btn btn-xs btn-error text-white rounded-md text-center "
                         onClick={e => {

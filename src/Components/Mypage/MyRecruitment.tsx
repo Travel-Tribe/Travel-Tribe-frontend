@@ -39,6 +39,18 @@ const MyRecruitment = (): JSX.Element => {
 
   const [recruitDataList, setRecruitDataList] = useState<TravelPlan[]>([]);
 
+  const statusStyles = {
+    모집중: "bg-custom-green",
+    모집완료: "bg-btn-closed",
+    투표중: "bg-error",
+  };
+
+  const statusText = {
+    모집중: "모집중",
+    모집완료: "모집완료",
+    투표중: "투표중",
+  };
+
   useEffect(() => {
     const fetchMyRecruitData = async () => {
       try {
@@ -55,7 +67,7 @@ const MyRecruitment = (): JSX.Element => {
           "/api/v1/posts/participations/by-join-joinready",
           "get",
         );
-        
+
         const today = new Date();
         today.setHours(0, 0, 0, 0); // 현재 날짜의 시간 부분을 초기화
 
@@ -120,7 +132,7 @@ const MyRecruitment = (): JSX.Element => {
   const voting = async (postId: string) => {
     try {
       await fetchCall(`/api/v1/posts/${postId}/voting-starts`, "post");
-      alert("투표 올림");
+      alert("투표가 등록되었습니다.");
     } catch (error) {
       console.error(`Error voting`, error);
     }
@@ -198,21 +210,13 @@ const MyRecruitment = (): JSX.Element => {
                       </span>
                     </div>
                     <div className="flex space-x-2.5 items-center m-2.5">
-                      {plan.status === "모집중" ? (
-                        <div className="bg-white text-green-500 w-[60px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                          모집중
+                      {statusStyles[plan.status] ? (
+                        <div
+                          className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${statusStyles[plan.status]}`}
+                        >
+                          {statusText[plan.status]}
                         </div>
-                      ) : plan.status === "모집완료" ? (
-                        <div className="bg-white text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                          모집완료
-                        </div>
-                      ) : plan.status === "투표중" ? (
-                        <div className="bg-white text-red-500 w-[62px] h-6 rounded-lg text-center text-xs flex items-center justify-center">
-                          투표중
-                        </div>
-                      ) : (
-                        ""
-                      )}
+                      ) : null}
                       {plan.status === "모집완료" ? (
                         <button
                           className="btn btn-xs btn-error text-white rounded-md text-center  z-10"

@@ -80,9 +80,9 @@ export const useProfileStore = create<ProfileState>(set => ({
       );
 
       const userResponse = await fetchCall<{
-        data: { data: { nickname: string } };
+        data: { data: { nickname: string; phone: string } };
       }>(`/api/v1/users`, "get");
-      
+
       const {
         id,
         userId: _,
@@ -92,12 +92,13 @@ export const useProfileStore = create<ProfileState>(set => ({
       const age = filteredProfileData.birth
         ? calculateAge(filteredProfileData.birth)
         : null;
-      
+
       set(state => ({
         profileData: {
           // 서버 연동 시 .data 추가
           ...filteredProfileData,
           nickname: userResponse.data.data.nickname,
+          phone: userResponse.data.data.phone,
         },
         age,
       }));
@@ -121,7 +122,7 @@ export const useProfileStore = create<ProfileState>(set => ({
           const userData = await fetchCall<{
             data: { data: { nickname: string; fileAddress: string } };
           }>(`/api/v1/users/${userId}`, "get");
-         
+
           return {
             userId,
             profile: {
@@ -137,7 +138,7 @@ export const useProfileStore = create<ProfileState>(set => ({
         }
       }),
     );
-    
+
     const profileMap = profiles.reduce(
       (acc, { userId, profile }) => {
         acc[userId] = profile;
