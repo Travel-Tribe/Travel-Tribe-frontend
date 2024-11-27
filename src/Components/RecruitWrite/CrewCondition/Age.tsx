@@ -28,7 +28,7 @@ const Age = React.memo((): JSX.Element => {
       </select>
       ~
       <select
-        className="select select-sm w-[60px] text-[16px] border border-gray-300 rounded-sm px-2 ml-[5px]"
+        className="select select-sm w-[60px] text-[16px] border border-gray-300 px-2 ml-[5px]"
         value={limitMaxAge}
         onChange={e => updateTravelData("limitMaxAge", Number(e.target.value))}
       >

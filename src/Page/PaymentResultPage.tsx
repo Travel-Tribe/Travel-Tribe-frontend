@@ -127,7 +127,7 @@ export default function PaymentResultPage() {
               >
                 {paymentStatus.isSuccess ? "결제 완료" : "결제 실패"}
               </h2>
-              <p className="text-white mt-2">
+              <p className="text-black mt-2">
                 {paymentStatus.isSuccess
                   ? "결제가 성공적으로 완료되었습니다!"
                   : "결제가 취소되었거나 실패했습니다."}
@@ -147,7 +147,7 @@ export default function PaymentResultPage() {
                 <button
                   onClick={() => navigate("/recruitment")}
                   className={`btn ${
-                    paymentStatus.isSuccess ? "btn-success" : "btn-ghost"
+                    paymentStatus.isSuccess ? "btn-white" : "btn-ghost"
                   } hover:bg-success/90 transition-colors duration-200`}
                 >
                   여행 목록으로 이동
