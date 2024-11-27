@@ -20,6 +20,7 @@ interface TravelPlan {
   ratingStatus: string;
   participantsCount: number;
   status: string;
+  reviewStatus: boolean;
 }
 
 interface TravelPlanData {
@@ -59,13 +60,13 @@ const MyCompletedTrips = (): JSX.Element => {
     try {
       const response = await fetchCall<TravelPlan[]>("/api/v1/posts", "get");
       const myParticipationPostIds = await fetchMyParticipation();
+      const myReviews = await fetchMyReview();
+      
       const completedTrips = response.data.data.content
         .filter((info: TravelPlan) => {
           const travelEndDate = new Date(info.travelEndDate);
-          
+
           return (
-            // travelEndDate <= today &&
-            // info.status ===""
             myParticipationPostIds.some(
               (participation: { postId: number }) =>
                 participation.postId === Number(info.postId),
@@ -84,16 +85,25 @@ const MyCompletedTrips = (): JSX.Element => {
           (participation: { postId: number }) =>
             participation.postId === Number(trip.postId),
         );
+        
+        const reviewStatus = myReviews.reviews.find(
+          (participation: { userId: string | number }) =>
+            String(participation.userId) === userId, // 타입 일치
+        );
+        
         filteredTrips.push({
           ...trip,
           participantsCount: await fetchParticipation(trip.postId),
           ratingStatus: participationInfo?.ratingStatus || "UNKNOWN",
+          reviewStatus: reviewStatus ? true : false, // true 또는 false
         });
       }
 
       setFilteredTravelInfos(filteredTrips);
     } catch (error) {
       console.error("Error fetching participation data:", error);
+      alert(error.response?.data?.errors[0]?.errorMessage); // 백엔드가 보낸 메시지 출력
+      throw new Error(error.response?.data?.errors[0]?.errorMessage);
     }
   };
 
@@ -103,10 +113,12 @@ const MyCompletedTrips = (): JSX.Element => {
         `/api/v1/posts/participations/by-travelfinished`,
         "get",
       );
-      
+
       return response.data.data;
     } catch (error) {
       console.error("Error fetching participation data:", error);
+      alert(error.response?.data?.errors[0]?.errorMessage); // 백엔드가 보낸 메시지 출력
+      throw new Error(error.response?.data?.errors[0]?.errorMessage);
     }
   };
 
@@ -121,7 +133,7 @@ const MyCompletedTrips = (): JSX.Element => {
       const userIds = response.data.data.map(
         (participation: { userId: string }) => participation.userId,
       );
-        console.log(userIds);
+      
       const otherUserIds = userIds.filter((id: string | null) => id !== userId);
 
       setParticipationUserId(otherUserIds);
@@ -130,6 +142,19 @@ const MyCompletedTrips = (): JSX.Element => {
     } catch (error) {
       console.error("Error fetching profile data:", error);
       return false;
+    }
+  };
+
+  const fetchMyReview = async () => {
+    try {
+      const response = await fetchCall<Participation[]>(
+        `/api/v1/reviews`,
+        "get",
+      );
+
+      return response.data.data;
+    } catch (error) {
+      console.error("Error fetching participation data:", error);
     }
   };
 
@@ -149,7 +174,7 @@ const MyCompletedTrips = (): JSX.Element => {
 
     fetchData();
   }, []); // 빈 배열로 설정하여 한 번만 실행
-  console.log(filteredTravelInfos);
+  
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -191,21 +216,8 @@ const MyCompletedTrips = (): JSX.Element => {
                         {info.travelEndDate}({week[travelEndDay]})
                       </span>
                     </div>
-                    {info.ratingStatus === "평가완료" ||
-                    info.maxParticipants === 1 ? (
-                      <button
-                        className={`btn btn-sm rounded-md ${
-                          info.participationStatus === "JOIN"
-                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            : ""
-                        }`}
-                        onClick={() =>
-                          navigate(`/recruitment/${info.postId}/review/write`)
-                        }
-                      >
-                        후기 작성
-                      </button>
-                    ) : (
+                    {info.ratingStatus === "평가미완료" &&
+                    info.maxParticipants !== 1 ? (
                       <button
                         className={`btn btn-sm rounded-md ${
                           !info.isRatingAllowed
@@ -224,6 +236,22 @@ const MyCompletedTrips = (): JSX.Element => {
                       >
                         평점 주기
                       </button>
+                    ) : (info.ratingStatus === "평가완료" && !info.reviewStatus) || 
+                    (info.maxParticipants === 1 && !info.reviewStatus) ? (
+                      <button
+                        className={`btn btn-sm rounded-md ${
+                          info.participationStatus === "JOIN"
+                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                            : ""
+                        }`}
+                        onClick={() =>
+                          navigate(`/recruitment/${info.postId}/review/write`)
+                        }
+                      >
+                        후기 작성
+                      </button>
+                    ) : (
+                      ""
                     )}
                   </div>
                 </div>

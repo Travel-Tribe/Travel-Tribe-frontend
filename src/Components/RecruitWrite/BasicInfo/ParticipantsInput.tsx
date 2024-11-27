@@ -11,7 +11,7 @@ const ParticipantsInput = React.memo(() => {
     <div className="flex items-center mb-2">
       <p className="text-[18px] mr-2">모집인원:</p>
       <select
-        className="select select-sm focus:outline-custom-green w-[60px] text-[16px] border border-gray-300 rounded-sm px-2"
+        className="select select-sm focus:outline-custom-green w-[60px] text-[16px] border border-gray-300 px-2"
         value={maxParticipants}
         onChange={e =>
           updateTravelData("maxParticipants", parseInt(e.target.value))

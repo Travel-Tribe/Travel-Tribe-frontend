@@ -9,7 +9,7 @@ const Smoke = React.memo((): JSX.Element => {
     <div className="flex items-center mb-2">
       <p className="text-[18px] mr-2">흡연 여부:</p>
       <select
-        className="select select-sm  w-[100px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
+        className="select select-sm  w-[100px] text-[16px] border border-gray-300 mr-1 px-2"
         onChange={e => updateTravelData("limitSmoke", e.target.value)}
         value={limitSmoke}
       >

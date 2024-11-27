@@ -14,7 +14,7 @@ export const RecruitmentPost = React.memo(
         <Link
           to={`/recruitment/${plan.postId}`}
           key={plan.userId}
-          className="w-[300px] h-[290px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0 bg-white"
+          className="w-[300px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0 bg-white"
         >
           {plan.days[0]?.dayDetails[0]?.fileAddress && (
             <img
@@ -53,7 +53,7 @@ export const RecruitmentPost = React.memo(
                 ? "bg-btn-closed"
                 : plan.status !== "투표중"
                   ? "bg-custom-green"
-                  : "bg-custom-red"
+                  : "bg-error"
             } text-center`}
           >
             {plan.status}
@@ -75,9 +75,9 @@ export const ReviewPost = React.memo(
         <Link
           to={`/recruitment/${review.postId}/review/${review.reviewId}`}
           key={review.postId}
-          className="w-[300px] h-[290px] bg-white border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
+          className="w-[300px] bg-white border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start"
         >
-          {review.files && (
+          {review?.files[0]?.fileAddress && (
             <img
               src={
                 import.meta.env.VITE_API_BASE_URL +
@@ -97,12 +97,7 @@ export const ReviewPost = React.memo(
             </p>
             <p className="text-[12px] truncate">여행 지역: {review.region}</p>
           </div>
-
-          <div className="w-full border-t bc-[#DEDEDE]" />
         </Link>
-        <div className="w-full h-[30px] bg-white flex justify-between items-center px-[25px] border rounded-bl-lg rounded-br-lg border-t-0">
-          <Link to={"#"} className="text-[12px]"></Link>
-        </div>
       </div>
     );
   },
@@ -119,7 +114,7 @@ export const CommunityPost = React.memo(
         <Link
           to={`/community/${community.communityId}`}
           key={community.communityId}
-          className="w-[300px] h-[290px] bg-white border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0"
+          className="w-[300px] bg-white border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start"
         >
           {community?.files[0] && (
             <img
@@ -139,12 +134,7 @@ export const CommunityPost = React.memo(
               작성 날짜: {community.createdAt}
             </p>
           </div>
-
-          <div className="w-full border-t bc-[#DEDEDE]" />
         </Link>
-        <div className="w-full h-[30px] bg-white flex justify-between items-center px-[25px] border rounded-bl-lg rounded-br-lg border-t-0">
-          <Link to={"#"} className="text-[12px]"></Link>
-        </div>
       </div>
     );
   },

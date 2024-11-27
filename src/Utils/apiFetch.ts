@@ -1,8 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 
-const API_TOKEN = localStorage.getItem(STORAGE_KEYS.TOKEN);
-
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL, //import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
@@ -11,14 +9,13 @@ const axiosInstance = axios.create({
 // 요청 인터셉터 추가
 axiosInstance.interceptors.request.use(
   config => {
-    // 요청 헤더에 인증 토큰 추가
-    if (API_TOKEN) config.headers.access = `${API_TOKEN}`;
+    const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+    if (token) {
+      config.headers?.set("access", token);
+    }
     return config;
   },
-  error => {
-    // 요청 에러 처리
-    return Promise.reject(error);
-  },
+  error => Promise.reject(error),
 );
 
 // 응답 인터셉터 추가
@@ -41,25 +38,20 @@ export default async function fetchCall<T>(
   data?: any,
   responseType?: "json" | "blob",
 ): Promise<T> {
+  const token = localStorage.getItem(STORAGE_KEYS.TOKEN); // 최신 토큰 가져오기
+  
   const config: AxiosRequestConfig = {
     method,
     url,
     ...(data && { data }),
-    responseType: responseType || "json", // data가 있을 경우에만 data 속성 추가
+    responseType: responseType || "json",
+    headers: {
+      ...(data instanceof FormData
+        ? { "Content-Type": "multipart/form-data" }
+        : { "Content-Type": "application/json" }),
+      ...(token ? { access: token } : {}), // access 헤더 추가
+    },
   };
-
-  // Content-Type 설정
-  if (data instanceof FormData) {
-    config.headers = {
-      ...config.headers,
-      "Content-Type": "multipart/form-data",
-    };
-  } else {
-    config.headers = {
-      ...config.headers,
-      "Content-Type": "application/json",
-    };
-  }
 
   return axiosInstance(config);
 }

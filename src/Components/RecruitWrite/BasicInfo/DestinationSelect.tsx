@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
 import { COUNTRY_DATA } from "../../../Constants/COUNTRY_DATA";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
+import { mappingCountry } from "../../../Utils/mappingCountry";
+import { mappingContinent } from "../../../Utils/mappingContinent";
 
 const DestinationSelect = React.memo(() => {
   const { updateTravelData, postData } = useRecruitPostStore();
@@ -12,14 +14,15 @@ const DestinationSelect = React.memo(() => {
   }, [continent]);
 
   useEffect(() => {
-    if (postData.continent) setContinent(postData.continent);
-    if (postData.travelCountry) setCountry(postData.travelCountry);
+    if (postData.continent) setContinent(mappingContinent[postData.continent]);
+    if (postData.travelCountry)
+      setCountry(mappingCountry(postData.travelCountry, "en"));
   }, [postData.continent, postData.travelCountry]);
 
   const handleContinentChange = useCallback(
     (selectedContinent: string) => {
       setContinent(selectedContinent);
-      updateTravelData("continent", selectedContinent);
+      updateTravelData("continent", mappingContinent[selectedContinent]);
     },
     [updateTravelData],
   );
@@ -27,7 +30,7 @@ const DestinationSelect = React.memo(() => {
   const handleCountryChange = useCallback(
     (selectedCountry: string) => {
       setCountry(selectedCountry);
-      updateTravelData("travelCountry", selectedCountry);
+      updateTravelData("travelCountry", mappingCountry(selectedCountry, "ko"));
     },
     [updateTravelData],
   );
@@ -36,7 +39,7 @@ const DestinationSelect = React.memo(() => {
     <div className="flex items-center mb-2">
       <p className="text-[18px] mr-2">여행지:</p>
       <select
-        className="select select-sm focus:outline-custom-green w-[120px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
+        className="select select-sm focus:outline-custom-green w-[120px] text-[16px] border border-gray-300 mr-1 px-2"
         value={continent}
         onChange={e => handleContinentChange(e.target.value)}
       >
@@ -49,7 +52,7 @@ const DestinationSelect = React.memo(() => {
       </select>
 
       <select
-        className="select select-sm focus:outline-custom-green w-[120px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
+        className="select select-sm focus:outline-custom-green w-[120px] text-[16px] border border-gray-300 mr-1 px-2"
         value={country}
         onChange={e => handleCountryChange(e.target.value)}
       >

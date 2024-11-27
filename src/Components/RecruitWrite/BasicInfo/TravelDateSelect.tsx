@@ -49,7 +49,7 @@ const TravelDateSelect = React.memo(() => {
     }
     return days.map(day => (
       <option key={day.day} value={day.day}>
-        {day.day} ({day.dayOfWeek})
+        {day.day}({day.dayOfWeek})
       </option>
     ));
   }, []);
@@ -73,7 +73,7 @@ const TravelDateSelect = React.memo(() => {
       <div className="flex items-center mb-2">
         <p className="text-[18px] mr-2">여행 시작 날짜:</p>
         <select
-          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mr-1 px-2"
           value={travelStartDate.split("-")[0]}
           onChange={e =>
             updateTravelData(
@@ -92,7 +92,7 @@ const TravelDateSelect = React.memo(() => {
         </select>
         년
         <select
-          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mx-1 px-2"
           value={Number(travelStartDate.split("-")[1])}
           onChange={e =>
             updateTravelData(
@@ -107,7 +107,7 @@ const TravelDateSelect = React.memo(() => {
         </select>
         월
         <select
-          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mx-1 px-2"
           value={Number(travelStartDate.split("-")[2])}
           onChange={e =>
             updateTravelData(
@@ -129,7 +129,7 @@ const TravelDateSelect = React.memo(() => {
       <div className="flex items-center mb-2">
         <p className="text-[18px] mr-2">여행 종료 날짜:</p>
         <select
-          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mr-1 px-2"
           value={travelEndDate.split("-")[0]}
           onChange={e =>
             updateTravelData(
@@ -148,7 +148,7 @@ const TravelDateSelect = React.memo(() => {
         </select>
         년
         <select
-          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mx-1 px-2"
           value={Number(travelEndDate.split("-")[1])}
           onChange={e =>
             updateTravelData(
@@ -167,7 +167,7 @@ const TravelDateSelect = React.memo(() => {
         </select>
         월
         <select
-          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mx-1 px-2"
           value={Number(travelEndDate.split("-")[2])}
           onChange={e =>
             updateTravelData(
@@ -189,7 +189,7 @@ const TravelDateSelect = React.memo(() => {
       <div className="flex items-center mb-2">
         <p className="text-[18px] mr-2">모집 마감 날짜:</p>
         <select
-          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mr-1 px-2"
           value={deadline.split("-")[0]}
           onChange={e =>
             updateTravelData(
@@ -210,7 +210,7 @@ const TravelDateSelect = React.memo(() => {
         </select>
         년
         <select
-          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mx-1 px-2"
           value={Number(deadline.split("-")[1])}
           onChange={e =>
             updateTravelData(
@@ -229,7 +229,7 @@ const TravelDateSelect = React.memo(() => {
         </select>
         월
         <select
-          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 rounded-sm mx-1 px-2"
+          className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mx-1 px-2"
           value={Number(deadline.split("-")[2])}
           onChange={e =>
             updateTravelData(

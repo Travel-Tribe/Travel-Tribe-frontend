@@ -9,7 +9,7 @@ interface TravelDetailsProps {
 
 export default function TripDetails({ travelPlan }: TravelDetailsProps) {
   const travelCountry = travelPlan?.travelCountry
-    ? travelPlan?.travelCountry
+    ? mappingCountry(travelPlan?.travelCountry, "en")
     : "";
 
   return (

@@ -5,7 +5,7 @@ import RecruitForm from "../Components/RecruitWrite/RecruitForm";
 const RecruitWrite = (): JSX.Element => {
   return (
     <div className="flex overflow-hidden h-[100vh]">
-      <div className="w-[50%] min-w-[600px] max-w-[50%]">
+      <div className="w-[50%] min-w-[600px] max-w-[50%] pl-[20px] mx-auto">
         <RecruitForm />
       </div>
       <div className="bg-[#DEDEDE] w-[50%] min-w-[512px] overflow-y-scroll hidden lg:block">
