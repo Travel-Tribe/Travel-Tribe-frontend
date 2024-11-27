@@ -75,7 +75,7 @@ export const ReviewPost = React.memo(
         <Link
           to={`/recruitment/${review.postId}/review/${review.reviewId}`}
           key={review.postId}
-          className="w-[300px] bg-white border rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg overflow-hidden flex flex-col items-start"
+          className="w-[300px] bg-white border rounded-lg overflow-hidden flex flex-col items-start"
         >
           {review?.files[0]?.fileAddress && (
             <img
@@ -114,7 +114,7 @@ export const CommunityPost = React.memo(
         <Link
           to={`/community/${community.communityId}`}
           key={community.communityId}
-          className="w-[300px] bg-white border rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg overflow-hidden flex flex-col items-start"
+          className="w-[300px] bg-white border rounded-lg overflow-hidden flex flex-col items-start"
         >
           {community?.files[0] && (
             <img

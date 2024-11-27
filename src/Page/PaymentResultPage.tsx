@@ -127,7 +127,7 @@ export default function PaymentResultPage() {
               >
                 {paymentStatus.isSuccess ? "결제 완료" : "결제 실패"}
               </h2>
-              <p className="text-black mt-2">
+              <p className="text-gray mt-2">
                 {paymentStatus.isSuccess
                   ? "결제가 성공적으로 완료되었습니다!"
                   : "결제가 취소되었거나 실패했습니다."}
