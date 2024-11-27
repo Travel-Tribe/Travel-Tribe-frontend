@@ -36,7 +36,7 @@ const DestinationSelect = React.memo(() => {
     <div className="flex items-center mb-2">
       <p className="text-[18px] mr-2">여행지:</p>
       <select
-        className="select select-sm focus:outline-custom-green w-[120px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
+        className="select select-sm focus:outline-custom-green w-[120px] text-[16px] border border-gray-300 mr-1 px-2"
         value={continent}
         onChange={e => handleContinentChange(e.target.value)}
       >
@@ -49,7 +49,7 @@ const DestinationSelect = React.memo(() => {
       </select>
 
       <select
-        className="select select-sm focus:outline-custom-green w-[120px] text-[16px] border border-gray-300 rounded-sm mr-1 px-2"
+        className="select select-sm focus:outline-custom-green w-[120px] text-[16px] border border-gray-300 mr-1 px-2"
         value={country}
         onChange={e => handleCountryChange(e.target.value)}
       >

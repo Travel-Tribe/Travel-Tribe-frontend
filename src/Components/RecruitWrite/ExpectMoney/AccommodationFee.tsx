@@ -13,7 +13,7 @@ const AccommodationFee = React.memo((): JSX.Element => {
       <input
         type="text"
         value={accommodationFee}
-        className="border border-gray-300 rounded-sm w-[200px] px-2 text-[16px]"
+        className="input w-[200px] h-[24px] border border-gray-300 px-2 text-[16px]"
         onChange={e =>
           updateTravelData("accommodationFee", Number(e.target.value))
         }

@@ -9,7 +9,7 @@ const Gender = React.memo((): JSX.Element => {
     <div className="flex items-center mb-2">
       <p className="text-[18px] mr-2">성별 :</p>
       <select
-        className="select select-sm  w-[80px] text-[16px] border border-gray-300 rounded-sm px-2"
+        className="select select-sm  w-[80px] text-[16px] border border-gray-300 px-2"
         onChange={e => updateTravelData("limitSex", e.target.value)}
         value={limitSex}
       >
