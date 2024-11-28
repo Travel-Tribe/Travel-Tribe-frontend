@@ -93,10 +93,7 @@ const SignIn = (): JSX.Element => {
       // 에러 응답 처리
       setError("root", {
         type: "manual",
-        message:
-          error instanceof Error
-            ? "이메일 또는 비밀번호가 올바르지 않습니다."
-            : "이메일 또는 비밀번호가 올바르지 않습니다.",
+        message: "이메일 또는 비밀번호가 올바르지 않습니다.",
       });
     }
   };
