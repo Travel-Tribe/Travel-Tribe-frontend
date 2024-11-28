@@ -113,18 +113,18 @@ const Rating: React.FC<RatingModalProps> = ({
             );
           })}
         </div>
-        <button
-          className="mt-6 btn border border-custom-green bg-white w-full hover:bg-custom-green hover:text-white"
-          onClick={() => {
-            console.log("평점이 저장되었습니다:", ratings);
-            alert("평점이 저장되었습니다.");
-            onClose();
-            handleRatingSubmit();
-          }}
-        >
-          평점 주기
-        </button>
       </div>
+      <button
+        className="mt-6 btn border border-custom-green bg-white w-full hover:bg-custom-green hover:text-white"
+        onClick={() => {
+          console.log("평점이 저장되었습니다:", ratings);
+          alert("평점이 저장되었습니다.");
+          onClose();
+          handleRatingSubmit();
+        }}
+      >
+        평점 주기
+      </button>
     </div>
   );
 };
