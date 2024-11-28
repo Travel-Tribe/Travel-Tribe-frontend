@@ -22,7 +22,7 @@ const ReviewDetail = (): JSX.Element => {
     },
   });
 
-  const deleteCommunities = useCallback(async () => {
+  const deleteCommunities = async () => {
     const response = await fetchCall<{ state: number }>(
       `/api/v1/communities/${id}`,
       "delete",
@@ -32,7 +32,7 @@ const ReviewDetail = (): JSX.Element => {
       queryClient.invalidateQueries("communityData");
       navigate(`/community`);
     }
-  }, []);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
