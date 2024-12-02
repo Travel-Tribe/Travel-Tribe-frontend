@@ -173,7 +173,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
           placeholder="인증번호 입력"
           className={`w-full border rounded p-2 mb-4 ${
             isCodeSent
-              ? "custom-teal-green text-white"
+              ? ""
               : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
           value={inputCode}
