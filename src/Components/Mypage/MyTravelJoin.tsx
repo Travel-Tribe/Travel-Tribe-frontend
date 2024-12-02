@@ -214,21 +214,25 @@ const MyTravelJoin = () => {
                     </div>
                     <div className="flex space-x-2.5 items-center">
                       {statusStyles[plan.status] ? (
-                      <div
-                        className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${statusStyles[plan.status]}`}
-                      >
-                        {statusText[plan.status]}
-                      </div>
+                        <div
+                          className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${statusStyles[plan.status]}`}
+                        >
+                          {statusText[plan.status]}
+                        </div>
                       ) : null}
-                      <button
-                        className="btn btn-xs btn-error text-white rounded-md text-center "
-                        onClick={e => {
-                          e.stopPropagation();
-                          deleteParticipation(plan.postId);
-                        }}
-                      >
-                        취소하기
-                      </button>
+                      {plan.status === "투표중" ? (
+                        ""
+                      ) : (
+                        <button
+                          className="btn btn-xs btn-error text-white rounded-md text-center "
+                          onClick={e => {
+                            e.stopPropagation();
+                            deleteParticipation(plan.postId);
+                          }}
+                        >
+                          취소하기
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

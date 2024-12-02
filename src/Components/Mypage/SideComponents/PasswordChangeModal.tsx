@@ -141,7 +141,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
               type="button"
               className={`px-4 py-2 rounded ${
                 isValidNewPassword && !isSameAsCurrent && isMatchingPasswords
-                  ? "custom-teal-green text-white"
+                  ? "btn bg-custom-teal-green text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
               disabled={
