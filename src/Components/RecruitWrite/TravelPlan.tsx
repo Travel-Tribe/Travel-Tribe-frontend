@@ -125,11 +125,11 @@ const TravelPlan = React.memo((): JSX.Element => {
                 </div>
                 <div className="flex items-center ml-[15px] mb-[30px]">
                   <p className="text-[16px] w-[70px]">이미지:</p>
-                  <div className="relative">
+                  <div>
                     <input
                       type="file"
                       accept=".png, .jpeg, .jpg"
-                      className="w-[300px] h-[24px] leading-[24px] text-[12px] bg-white border border-gray-300 rounded-md text-gray-700 text-center cursor-pointer"
+                      className="file-input file-input-bordered file-input-sm file-input-success w-[300px] max-w-xs"
                       onChange={async e => {
                         const file = e.target.files?.[0];
                         if (!file) return;

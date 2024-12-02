@@ -6,7 +6,6 @@ export const reviewHandlers = [
   http.get(
     "/api/v1/posts/:postId/reviews/:reviewId/view",
     async ({ params }) => {
-      const postId = params.postId;
       const reviewId = params.reviewId;
       console.log("후기 글 불러오기");
       return HttpResponse.json(
@@ -18,33 +17,24 @@ export const reviewHandlers = [
   // 후기 목록 조회
   http.get("/api/v1/reviews", async ({ request }) => {
     const url = new URL(request.url);
-    const title = url.searchParams.get("title");
-    const content = url.searchParams.get("content");
-    const continent = url.searchParams.get("continent");
-    const country = url.searchParams.get("country");
-    const userId = url.searchParams.get("userId");
-    const responseData = ReviewData.filter(review => {
-      return (
-        (title ? review.title.includes(title) : true) &&
-        (content ? review.contents.includes(content) : true) &&
-        (continent ? review.continent === continent : true) &&
-        (country ? review.country === country : true) &&
-        (userId ? review.userId === Number(userId) : true)
-      );
-    }).map(review => ({
-      userId: review.userId,
-      postId: review.postId,
-      reviewId: review.reviewId,
-      continent: review.continent,
-      country: review.country,
-      region: review.region,
-      title: review.title,
-      contents: review.contents,
-      fileAddress: review.files[0]?.fileAddress || null,
-    }));
-    console.log("responseData", responseData);
+    const page = parseInt(url.searchParams.get("page") || "0", 10);
+    const limit = 8;
+    const start = page * limit;
+    const end = start + limit;
+
+    console.log("responseData");
+
     return HttpResponse.json(
-      { data: { reviews: responseData } },
+      {
+        data: {
+          reviews: ReviewData.slice(start, end),
+          pageNumber: page, // 예: 0
+          pageSize: 8, // 예: 8
+          totalElements: ReviewData.length, // 예: 1
+          totalPages: Math.ceil(ReviewData.length / 8), // 예: 1
+          last: Math.ceil(ReviewData.length / 8) === Number(page), // 예: true
+        },
+      },
       { status: 201 },
     );
   }),

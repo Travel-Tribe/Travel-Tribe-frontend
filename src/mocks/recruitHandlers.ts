@@ -7,12 +7,14 @@ export const recruitHandlers = [
     console.log("모집 글 목록 불러오기");
     return HttpResponse.json(
       {
-        data: { content: RecruitMockData },
-        pageNumber: params.num, // 예: 0
-        pageSize: 8, // 예: 8
-        totalElements: RecruitMockData.length, // 예: 1
-        totalPages: Math.ceil(RecruitMockData.length / 8), // 예: 1
-        last: Math.ceil(RecruitMockData.length / 8) === Number(params.num), // 예: true
+        data: {
+          content: RecruitMockData,
+          pageNumber: params.num, // 예: 0
+          pageSize: 8, // 예: 8
+          totalElements: RecruitMockData.length, // 예: 1
+          totalPages: Math.ceil(RecruitMockData.length / 8), // 예: 1
+          last: Math.ceil(RecruitMockData.length / 8) === Number(params.num), // 예: true
+        },
       },
       { status: 201 },
     );

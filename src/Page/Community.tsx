@@ -73,6 +73,7 @@ const Community = React.memo(
       queryFn: fetchRecruitData,
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = allPages.length;
+        console.log(nextPage, lastPage.totalPages);
         return nextPage < lastPage.totalPages ? nextPage : undefined;
       },
       keepPreviousData: true,
@@ -108,7 +109,7 @@ const Community = React.memo(
     const communities = data?.pages.flatMap(page => page.lists) || [];
 
     return (
-      <div className="flex flex-wrap gap-[35px]">
+      <div className="grid grid-cols-2 gap-[20px] w-full min-w-[700px]">
         {communities &&
           communities.map((community: CommunityListProps, index: number) => {
             const isLastElement = index === communities.length - 1;
