@@ -39,7 +39,7 @@ const MyProfile = (): JSX.Element => {
     const loadProfileData = async () => {
       try {
         if (profileCheck === "false") {
-          navigate("/mypage/myProfileEdit");
+          navigate("/mypage/profileCreate");
         } else if (userId) {
           await fetchProfileData(userId);
         }
