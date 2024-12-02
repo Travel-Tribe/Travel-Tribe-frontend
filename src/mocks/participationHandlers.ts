@@ -59,13 +59,29 @@ export const participationHandlers = [
     const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
     const response = ParticipationsData.filter(
-      participation =>
-        String(participation.userId) === String(userId) 
-        // &&participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
+      participation => String(participation.userId) === String(userId),
+      // &&participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
     ).map(participation => ({
       participationId: participation.participationId,
       postId: participation.postId,
       ParticipationStatus: participation.ParticipationStatus,
+    }));
+
+    console.log("Participations found:", response);
+    return HttpResponse.json(response, { status: 200 });
+  }),
+
+  http.get("/api/v1/posts/participations/by-travelfinished", async () => {
+    const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+
+    const response = ParticipationsData.filter(
+      participation => String(participation.userId) === String(userId),
+      // &&participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
+    ).map(participation => ({
+      participationId: participation.participationId,
+      postId: participation.postId,
+      ParticipationStatus: participation.ParticipationStatus,
+      ratingStatus: participation.RatingStatus,
     }));
 
     console.log("Participations found:", response);
