@@ -9,19 +9,6 @@ import fetchCall from "../Utils/apiFetch";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import { useAuthStore } from "../store/authStore";
 
-const schema = z.object({
-  email: z
-    .string()
-    .min(1, { message: "이메일을 입력해 주세요" })
-    .email({ message: "올바른 이메일 형식이 아닙니다" }),
-  password: z
-    .string()
-    .min(1, { message: "비밀번호를 입력해 주세요" })
-    .min(8, { message: "비밀번호는 8자 이상이어야 합니다" }),
-});
-
-type Inputs = z.infer<typeof schema>;
-
 interface LoginResponse {
   result: "SUCCESS" | "FAIL";
   errors: null | string;
@@ -38,6 +25,19 @@ interface LoginResponseHeaders {
   };
   data: LoginResponse;
 }
+
+const schema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "이메일을 입력해 주세요" })
+    .email({ message: "올바른 이메일 형식이 아닙니다" }),
+  password: z
+    .string()
+    .min(1, { message: "비밀번호를 입력해 주세요" })
+    .min(8, { message: "비밀번호는 8자 이상이어야 합니다" }),
+});
+
+type Inputs = z.infer<typeof schema>;
 
 const SignIn = (): JSX.Element => {
   const [showPassword, setShowPassword] = useState(false);
@@ -87,17 +87,21 @@ const SignIn = (): JSX.Element => {
       } else {
         throw new Error("로그인에 실패했습니다");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("로그인 중 에러 발생:", error);
 
       // 에러 응답 처리
-      setError("root", {
-        type: "manual",
-        message:
-          error instanceof Error
-            ? "이메일 또는 비밀번호가 올바르지 않습니다."
-            : "이메일 또는 비밀번호가 올바르지 않습니다.",
-      });
+      if (error.response?.status === 403) {
+        setError("root", {
+          type: "manual",
+          message: "탈퇴한 회원입니다.",
+        });
+      } else {
+        setError("root", {
+          type: "manual",
+          message: "이메일 또는 비밀번호가 올바르지 않습니다.",
+        });
+      }
     }
   };
 
