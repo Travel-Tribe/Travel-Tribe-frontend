@@ -147,8 +147,8 @@ export default function PaymentResultPage() {
                 <button
                   onClick={() => navigate("/recruitment")}
                   className={`btn ${
-                    paymentStatus.isSuccess ? "btn-success" : "btn-ghost"
-                  } hover:bg-success/90 transition-colors duration-200 text-white`}
+                    paymentStatus.isSuccess ? "btn-white" : "btn-ghost"
+                  } hover:bg-success/90 transition-colors duration-200`}
                 >
                   여행 목록으로 이동
                 </button>

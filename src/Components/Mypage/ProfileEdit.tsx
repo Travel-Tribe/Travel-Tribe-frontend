@@ -145,7 +145,7 @@ const ProfileEdit = (): JSX.Element => {
       await fetchCall(`/api/v1/users/profile`, "patch", {
         ...filteredProfileData,
         // fileAddress: encodedFileAddress,
-        gender: profileData.gender === "남자" ? "MALE" : "FEMALE", // URL-safe 인코딩된 fileAddress 추가
+        gender: profileData.gender === "MALE" ? "MALE" : "FEMALE", // URL-safe 인코딩된 fileAddress 추가
         smoking: profileData.smoking === "흡연자" ? "YES" : "NO", // URL-safe 인코딩된 fileAddress 추가
       });
 
@@ -176,7 +176,7 @@ const ProfileEdit = (): JSX.Element => {
         error === "",
     );
   }, [profileData, error]);
-
+console.log(profileData);
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">

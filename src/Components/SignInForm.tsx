@@ -71,8 +71,8 @@ const SignIn = (): JSX.Element => {
         console.log("로그인 성공:", response.data);
 
         // LocalStorage에 정보 저장
-        // localStorage.setItem(STORAGE_KEYS.TOKEN, accessToken);
-        setAccessToken(accessToken);
+        localStorage.setItem(STORAGE_KEYS.TOKEN, accessToken);
+        // setAccessToken(accessToken);
         localStorage.setItem(STORAGE_KEYS.USER_ID, String(responseData.id));
         localStorage.setItem(
           STORAGE_KEYS.PROFILE_CHECK,

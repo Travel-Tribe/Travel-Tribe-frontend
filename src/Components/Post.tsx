@@ -110,23 +110,13 @@ interface CommunityPostProps {
 export const CommunityPost = React.memo(
   ({ community }: CommunityPostProps): JSX.Element => {
     return (
-      <div className="mb-[20px]">
+      <div className="h-[100px] relative">
         <Link
           to={`/community/${community.communityId}`}
           key={community.communityId}
-          className="w-[300px] bg-white border rounded-lg overflow-hidden flex flex-col items-start"
+          className="bg-white border rounded-lg h-[100px] flex"
         >
-          {community?.files[0] && (
-            <img
-              src={
-                import.meta.env.VITE_API_BASE_URL +
-                `/api/v1/file/preview?fileUrl=${community.files[0].fileName}`
-              }
-              alt={community.title}
-              className="w-[300px] h-[150px] object-cover"
-            />
-          )}
-          <div className="pl-[25px] max-w-[250px] mb-[20px]">
+          <div className="pl-[25px]">
             <p className="text-[16px] truncate mb-[10px] mt-[10px]">
               {community.title}
             </p>
@@ -134,6 +124,16 @@ export const CommunityPost = React.memo(
               작성 날짜: {community.createdAt}
             </p>
           </div>
+          {community?.files[0] && (
+            <img
+              src={
+                import.meta.env.VITE_API_BASE_URL +
+                `/api/v1/file/preview?fileUrl=${community.files[0].fileName}`
+              }
+              alt={community.title}
+              className="w-[200px] h-[100px] object-cover absolute top-0 right-0"
+            />
+          )}
         </Link>
       </div>
     );

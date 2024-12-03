@@ -2,17 +2,24 @@ import { http, HttpResponse } from "msw";
 import { CommunityListProps, CommunityData } from "./mockData";
 
 export const communityHandlers = [
-  http.get("/api/v1/communities", async ({ params }) => {
-    console.log("커뮤니티 글 목록");
+  http.get("/api/v1/communities", async ({ request }) => {
+    const url = new URL(request.url);
+    const page = parseInt(url.searchParams.get("page") || "0", 10);
+    const limit = 8;
+    const start = page * limit;
+    const end = start + limit;
+    console.log("커뮤니티 글 목록", page, start, end);
 
     return HttpResponse.json(
       {
-        data: { content: CommunityData },
-        pageNumber: params.num, // 예: 0
-        pageSize: 8, // 예: 8
-        totalElements: CommunityData.length, // 예: 1
-        totalPages: Math.ceil(CommunityData.length / 8), // 예: 1
-        last: Math.ceil(CommunityData.length / 8) === Number(params.num), // 예: true
+        data: {
+          content: CommunityData.slice(start, end),
+          pageNumber: page, // 예: 0
+          pageSize: 8, // 예: 8
+          totalElements: CommunityData.length, // 예: 1
+          totalPages: Math.ceil(CommunityData.length / 8), // 예: 1
+          last: Math.ceil(CommunityData.length / 8) === Number(page), // 예: true
+        },
       },
       {
         status: 201,
