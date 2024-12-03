@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="footer fixed bottom-0 bg-neutral text-neutral-content p-10">
+    <footer className="footer bg-neutral text-neutral-content p-10 mt-auto">
       <nav>
         <h6 className="footer-title">Frontend</h6>
         <a className="link link-hover">고재모</a>

@@ -7,11 +7,13 @@ const Layout = () => {
   const hideHeaderRoutes = ["/signIn", "/signUp", "/recruitment/write"];
 
   return (
-    <div className="bg-custom-bg min-h-[100vh] h-[100%]">
+    <div className="bg-custom-bg flex flex-col min-h-screen">
       {!hideHeaderRoutes.includes(location.pathname) &&
         !location.pathname.startsWith("/mypage") &&
         !location.pathname.startsWith("/recruitment/edit") && <Header />}
-      <Outlet />
+      <main className="flex-1">
+        <Outlet />
+      </main>
       <Footer />
     </div>
   );
