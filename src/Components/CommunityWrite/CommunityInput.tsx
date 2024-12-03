@@ -1,15 +1,24 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
 import fetchCall from "../../Utils/apiFetch";
 import { useNavigate } from "react-router-dom";
 import { useCommunityPostStore } from "../../store/communityPostStore";
 import { useQueryClient } from "react-query";
+import Modal from "../Common/Modal";
 
 const CommunityInput = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { formData, setFormData, resetForm, isSubmitting, setIsSubmitting } =
     useCommunityPostStore();
+
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  const handleSuccessModalClose = () => {
+    setShowModal(false);
+    navigate("/community");
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -36,7 +45,8 @@ const CommunityInput = () => {
       setFormData({ files: [...formData.files, ...uploadedFiles] });
     } catch (error) {
       console.error("파일 업로드 중 오류 발생:", error);
-      alert("파일 업로드에 실패했습니다.");
+      setModalMessage("파일 업로드에 실패했습니다.");
+      setShowModal(true);
     }
   };
 
@@ -56,12 +66,14 @@ const CommunityInput = () => {
     e.preventDefault();
 
     if (!formData.title.trim()) {
-      alert("제목을 입력해주세요");
+      setModalMessage("제목을 입력해주세요");
+      setShowModal(true);
       return;
     }
 
     if (!formData.content.trim()) {
-      alert("내용을 입력해주세요");
+      setModalMessage("내용을 입력해주세요");
+      setShowModal(true);
       return;
     }
 
@@ -85,11 +97,13 @@ const CommunityInput = () => {
       if (response) {
         queryClient.invalidateQueries("communityData");
         resetForm();
-        navigate(`/community`);
+        setModalMessage("게시글이 성공적으로 등록되었습니다.");
+        setShowModal(true);
       }
     } catch (err) {
       console.error("게시글 등록 중 오류:", err);
-      alert("게시글 등록에 실패했습니다.");
+      setModalMessage("게시글 등록에 실패했습니다.");
+      setShowModal(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -107,93 +121,104 @@ const CommunityInput = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <div className="card bg-base-100 shadow-xl">
-        <div className="card-body">
-          <h2 className="card-title text-2xl mb-6">커뮤니티 글쓰기</h2>
+    <>
+      <div className="max-w-2xl mx-auto p-4">
+        <div className="card bg-base-100 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title text-2xl mb-6">커뮤니티 글쓰기</h2>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text">제목</span>
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder="제목을 입력하세요"
-                className="input input-bordered w-full"
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">제목</span>
+                </label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  placeholder="제목을 입력하세요"
+                  className="input input-bordered w-full"
+                />
+              </div>
 
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text">내용</span>
-              </label>
-              <textarea
-                name="content"
-                value={formData.content}
-                onChange={handleInputChange}
-                placeholder="내용을 입력해주세요"
-                className="textarea textarea-bordered h-32"
-              />
-            </div>
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">내용</span>
+                </label>
+                <textarea
+                  name="content"
+                  value={formData.content}
+                  onChange={handleInputChange}
+                  placeholder="내용을 입력해주세요"
+                  className="textarea textarea-bordered h-32"
+                />
+              </div>
 
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text">사진 첨부</span>
-              </label>
-              <input
-                type="file"
-                onChange={handleFileChange}
-                multiple
-                accept="image/*"
-                className="file-input file-input-bordered w-full"
-              />
-              {formData.files.length > 0 && (
-                <div className="grid grid-cols-3 gap-2 mt-2">
-                  {formData.files.map((file, index) => (
-                    <div key={index} className="relative">
-                      <img
-                        src={file.previewAddress || file.fileAddress}
-                        alt={`Preview ${index + 1}`}
-                        className="w-full h-24 object-cover rounded"
-                      />
-                      <button
-                        type="button"
-                        className="btn btn-circle btn-xs absolute top-1 right-1"
-                        onClick={() => removeFile(index)}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text">사진 첨부</span>
+                </label>
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  multiple
+                  accept="image/*"
+                  className="file-input file-input-bordered w-full"
+                />
+                {formData.files.length > 0 && (
+                  <div className="grid grid-cols-3 gap-2 mt-2">
+                    {formData.files.map((file, index) => (
+                      <div key={index} className="relative">
+                        <img
+                          src={file.previewAddress || file.fileAddress}
+                          alt={`Preview ${index + 1}`}
+                          className="w-full h-24 object-cover rounded"
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-circle btn-xs absolute top-1 right-1"
+                          onClick={() => removeFile(index)}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-            <div className="flex gap-4 mt-6">
-              <button
-                type="submit"
-                className={`btn btn-success flex-1 text-white ${isSubmitting ? "loading" : ""}`}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "등록 중..." : "글 등록하기"}
-              </button>
-              <button
-                type="button"
-                className="btn btn-outline"
-                onClick={handleReset}
-                disabled={isSubmitting}
-              >
-                초기화
-              </button>
-            </div>
-          </form>
+              <div className="flex gap-4 mt-6">
+                <button
+                  type="submit"
+                  className={`btn btn-success flex-1 text-white ${isSubmitting ? "loading" : ""}`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "등록 중..." : "글 등록하기"}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={handleReset}
+                  disabled={isSubmitting}
+                >
+                  초기화
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+      <Modal
+        isOpen={showModal}
+        onClose={
+          modalMessage === "게시글이 성공적으로 등록되었습니다."
+            ? handleSuccessModalClose
+            : () => setShowModal(false)
+        }
+        message={modalMessage}
+      />
+    </>
   );
 };
 
