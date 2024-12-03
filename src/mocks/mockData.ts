@@ -202,10 +202,10 @@ export const RecruitMockData: TravelPlan[] = [
   {
     postId: 1,
     userId: 1,
-    status: "모집 완료",
+    status: "모집중",
     title: "도쿄 미식 여행",
-    travelStartDate: "2023-04-01",
-    travelEndDate: "2023-04-03",
+    travelStartDate: "2025-01-01",
+    travelEndDate: "2025-04-03",
     maxParticipants: 6,
     travelCountry: "JP",
     continent: "ASIA",
@@ -217,7 +217,7 @@ export const RecruitMockData: TravelPlan[] = [
     limitMinAge: 20,
     limitSex: "무관",
     limitSmoke: "무관",
-    deadline: "2023-3-25",
+    deadline: "2024-12-30",
     days: [
       {
         dayDetails: [

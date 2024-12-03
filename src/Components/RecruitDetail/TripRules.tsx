@@ -1,5 +1,5 @@
+import { AiOutlineWarning } from "react-icons/ai";
 import { TravelPlan } from "../../mocks/mockData";
-import Warning from "../../assets/icons/warning.svg";
 
 interface TripRulesProps {
   travelPlan?: TravelPlan;
@@ -11,7 +11,7 @@ export default function TripRules({ travelPlan }: TripRulesProps) {
       <div className="card-body">
         <div>
           <div className="flex items-center mb-4">
-            <img src={Warning} alt="warning icon" />
+            <AiOutlineWarning className="w-6 h-6" />
             <h2 className="card-title ml-2">참여 조건</h2>
           </div>
           <div className="flex justify-between items-start w-full">

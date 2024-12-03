@@ -1,5 +1,5 @@
 import { TravelPlan } from "../../mocks/mockData";
-import Money from "../../assets/icons/attach_money.svg";
+import { LuDollarSign } from "react-icons/lu";
 
 interface TripCostProps {
   travelPlan?: TravelPlan;
@@ -20,7 +20,7 @@ export default function TripCost({ travelPlan }: TripCostProps) {
       <div className="card-body">
         <div>
           <div className="flex items-center mb-4">
-            <img src={Money} alt="money icon" />
+            <LuDollarSign className="w-6 h-6" />
             <h2 className="card-title ml-2">예상 비용</h2>
           </div>
           <div>
