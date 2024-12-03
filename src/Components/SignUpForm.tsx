@@ -43,7 +43,9 @@ interface ValidationStatus {
 interface ApiResponse {
   result: "SUCCESS" | "FAIL";
   errors: null | string;
-  data: boolean | string;
+  data: {
+    data: boolean;
+  };
 }
 
 // Axios 응답 타입 (필요한 필드만 포함)
