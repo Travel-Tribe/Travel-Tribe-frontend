@@ -5,7 +5,6 @@ import MapPin from "../assets/icons/Map pin.svg";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import fetchCall from "../Utils/apiFetch";
 import { useQuery, useQueryClient } from "react-query";
-import { useCallback } from "react";
 
 const ReviewDetail = (): JSX.Element => {
   const { reviewId, postId } = useParams<{
@@ -50,9 +49,9 @@ const ReviewDetail = (): JSX.Element => {
   }
 
   return (
-    <div className="max-w-[1000px] min-w-[740px] mx-auto">
+    <div className="container mx-auto px-4 pb-8">
       <div className="mb-[10px]">
-        <p className="text-[18px] font-bold mb-[5px]">{data.title}</p>
+        <p className="text-lg font-bold mb-[5px]">{data.title}</p>
         <div className="flex items-center">
           <>
             <img
@@ -80,7 +79,7 @@ const ReviewDetail = (): JSX.Element => {
           </>
         </div>
       </div>
-      <div className="mb-[10px] px-[15px] py-[20px] border rounded-[10px]">
+      <div className="mb-[10px] px-[15px] py-[20px] border rounded-xl">
         <div className="mb-[20px] whitespace-pre-line">{data.contents}</div>
         <div className="flex gap-[10px] items-center overScroll-x-scroll">
           {data.files?.map((file: { fileAddress: string }) => (

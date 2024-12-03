@@ -44,11 +44,11 @@ const ReviewDetail = (): JSX.Element => {
   }
 
   return (
-    <div className="max-w-[1000px] min-w-[740px] mx-auto">
+    <div className="container mx-auto px-4 pb-8">
       <div className="mb-[10px]">
         <p className="text-[18px] font-bold mb-[5px]">{data.title}</p>
       </div>
-      <div className="mb-[10px] px-[15px] py-[20px] border bg-white radius-10px">
+      <div className="mb-[10px] px-[15px] py-[20px] border rounded-xl bg-white">
         <div className="mb-[20px] whitespace-pre-line">{data.content}</div>
         <div className="flex gap-[10px] items-center overScroll-x-scroll">
           {data?.files?.map((file: { fileName: string }, index: number) => (
