@@ -1,19 +1,16 @@
-/** */
-// 유저 관련 //
-/** */
+import {
+  CommunityType,
+  EmailCodeType,
+  ParticipationType,
+  PaymentType,
+  ReviewType,
+  TravelPlanType,
+  UserProfileType,
+  UserType,
+  VotingType,
+} from "../type/types";
 
-interface User {
-  userId: number;
-  username: string;
-  password: string;
-  email: string;
-  nickname: string;
-  phone: string;
-  profileCheck: boolean;
-  mbti: string;
-}
-
-export const UserMockData: User[] = [
+export const UserMockData: UserType[] = [
   {
     userId: 1,
     username: "testUser",
@@ -66,21 +63,7 @@ export const UserMockData: User[] = [
   },
 ];
 
-interface UserProfile {
-  id: number;
-  userId: number;
-  introduction: string;
-  mbti: string;
-  smoking: string;
-  gender: string;
-  birth: string;
-  ratingAvg: null | number;
-  fileAddress: string;
-  langAbilities: string[];
-  visitedCountries: string[];
-}
-
-export const UserProfileData: { [key: string]: UserProfile } = {
+export const UserProfileData: { [key: string]: UserProfileType } = {
   "1": {
     id: 1,
     userId: 1,
@@ -141,64 +124,12 @@ export const DuplicateMockData = {
   phone: ["123-456-7890"],
 };
 
-interface EmailCode {
-  email: string;
-  code: string;
-}
-
-export const EmailChangeMockData: EmailCode = {
+export const EmailChangeMockData: EmailCodeType = {
   email: "t@t.com",
   code: "670127",
 };
 
-/** */
-// 모집 글 관련 //
-/** */
-
-// 상세 일정 정보
-export interface DayDetail {
-  title: string;
-  description: string;
-  fileAddress: string | File;
-}
-
-// 방문 장소 정보
-interface ItineraryVisit {
-  latitude: number;
-  longitude: number;
-  orderNumber: number;
-}
-
-// 하루 일정 정보
-interface Day {
-  dayDetails: DayDetail[];
-  itineraryVisits: ItineraryVisit[];
-}
-
-// 여행 계획 정보
-export interface TravelPlan {
-  postId?: number;
-  userId?: number;
-  title: string;
-  travelStartDate: string; // "YYYY-MM-DD"
-  travelEndDate: string; // "YYYY-MM-DD"
-  maxParticipants: number;
-  travelCountry: string;
-  continent: string;
-  region: string;
-  status?: string;
-  accommodationFee: number;
-  airplaneFee: number;
-  otherExpenses: number;
-  limitMaxAge: number;
-  limitMinAge: number;
-  limitSex: string;
-  limitSmoke: string;
-  deadline: string; // "YYYY-MM-DD"
-  days: Day[];
-}
-
-export const RecruitMockData: TravelPlan[] = [
+export const RecruitMockData: TravelPlanType[] = [
   {
     postId: 1,
     userId: 1,
@@ -341,33 +272,7 @@ export const RecruitMockData: TravelPlan[] = [
   },
 ];
 
-/** */
-// 리뷰 글 관련 //
-/** */
-
-export interface ReviewTypes {
-  userId: number;
-  postId: string;
-  reviewId: string;
-  continent: string;
-  country: string;
-  region: string;
-  title: string;
-  contents: string;
-  files: File[];
-  nickname: string;
-  travelStartDate: string;
-  travelEndDate: string;
-  createDate: string;
-  participants: string;
-}
-
-interface File {
-  fileAddress: string;
-  previewAddress?: string;
-}
-
-export const ReviewData: ReviewTypes[] = [
+export const ReviewData: ReviewType[] = [
   {
     postId: "1",
     reviewId: "1",
@@ -620,17 +525,7 @@ export const ReviewData: ReviewTypes[] = [
   },
 ];
 
-/** */
-// 참가하기 관련 //
-/** */
-
-export interface Participation {
-  participationId: number;
-  postId: number;
-  userId: string;
-}
-
-export const ParticipationsData: Participation[] = [
+export const ParticipationsData: ParticipationType[] = [
   {
     participationId: 1,
     postId: 1,
@@ -648,20 +543,7 @@ export const ParticipationsData: Participation[] = [
   },
 ];
 
-/** */
-// 결제 데이터 관련 //
-/** */
-
-// 결제 데이터 인터페이스
-export interface Payment {
-  depositId: string;
-  postId: number;
-  participationId: number;
-  userId: string;
-  amount: number;
-}
-
-export const PaymentsData: Payment[] = [
+export const PaymentsData: PaymentType[] = [
   {
     depositId: "T1234567890",
     postId: 1,
@@ -690,35 +572,13 @@ export const kakaoPayReadyResponse = {
   next_redirect_pc_url: "https://payment-demo.kakaopay.com/online",
 };
 
-export interface voting {
-  postId: string;
-  votingStartsId: number;
-  votingStatus: string;
-}
-
-export const votingStarts: voting = {
+export const votingStarts: VotingType = {
   postId: "5",
   votingStartsId: 1,
   votingStatus: "STARTING",
 };
 
-/** */
-// 커뮤니티 글 관련 //
-/** */
-
-export interface CommunityListProps {
-  communityId: number;
-  userId: number;
-  title: string;
-  content: string;
-  continent: string;
-  country: string;
-  region: string;
-  createdAt: string;
-  files: [{ fileName: string }];
-}
-
-export const CommunityData: CommunityListProps[] = [
+export const CommunityData: CommunityType[] = [
   {
     communityId: 1,
     userId: 1,
