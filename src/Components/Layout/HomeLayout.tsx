@@ -65,7 +65,7 @@ const HomeLayout = () => {
   };
 
   return (
-    <div className="max-w-[1347px] min-w-[740px] w-full mx-auto px-[20px] gap-[50px]">
+    <div className="container mx-auto px-4 pb-8">
       <div className="flex space-x-4 mb-[30px]">
         <Link
           to={"/recruitment"}
