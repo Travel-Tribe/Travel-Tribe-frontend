@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../Common/Header";
+import Footer from "../Common/Footer";
 
 const Layout = () => {
   const location = useLocation();
@@ -11,6 +12,7 @@ const Layout = () => {
         !location.pathname.startsWith("/mypage") &&
         !location.pathname.startsWith("/recruitment/edit") && <Header />}
       <Outlet />
+      <Footer />
     </div>
   );
 };

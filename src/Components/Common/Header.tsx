@@ -37,7 +37,7 @@ const Header = React.memo((): JSX.Element => {
   };
 
   return (
-    <div className="w-full h-10 max-w-[1347px] min-w-[740px] my-[30px] mx-auto">
+    <div className="container min-w-[320px] md:min-w-[740px] mx-auto px-4 py-8">
       <div className="w-full flex justify-between items-center">
         <h1 className="text-4xl font-bold">
           <Link to={"/"}>여행족</Link>

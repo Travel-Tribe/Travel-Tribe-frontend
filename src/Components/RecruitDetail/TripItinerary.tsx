@@ -1,4 +1,4 @@
-import { TravelPlan } from "../../mocks/mockData";
+import { DayDetail, TravelPlan } from "../../mocks/mockData";
 import Schedule from "../../assets/icons/schedule.svg";
 import DayMap from "./TripMap/DayMap";
 
@@ -15,12 +15,7 @@ const DayHeader = ({ dayIndex, date }: { dayIndex: number; date: string }) => (
   </div>
 );
 
-const DayScheduleCard = ({
-  detail,
-}: {
-  detail: { title: string; description: string; fileAddress: string };
-  index: number;
-}) => (
+const DayScheduleCard = ({ detail }: { detail: DayDetail; index: number }) => (
   <div>
     <div className="flex items-center gap-2">
       <h3 className="font-semibold">{detail.title}</h3>

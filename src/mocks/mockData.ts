@@ -10,6 +10,7 @@ interface User {
   nickname: string;
   phone: string;
   profileCheck: boolean;
+  mbti: string;
 }
 
 export const UserMockData: User[] = [
@@ -21,6 +22,7 @@ export const UserMockData: User[] = [
     nickname: "tester",
     phone: "123-456-7890",
     profileCheck: true,
+    mbti: "ISTJ",
   },
   {
     userId: 2,
@@ -30,6 +32,7 @@ export const UserMockData: User[] = [
     nickname: "tester2",
     phone: "123-456-7891",
     profileCheck: false,
+    mbti: "INFJ",
   },
   {
     userId: 3,
@@ -39,6 +42,7 @@ export const UserMockData: User[] = [
     nickname: "tester3",
     phone: "123-456-7892",
     profileCheck: true,
+    mbti: "ENTP",
   },
   {
     userId: 4,
@@ -48,6 +52,7 @@ export const UserMockData: User[] = [
     nickname: "tester4",
     phone: "123-456-7893",
     profileCheck: true,
+    mbti: "ISTP",
   },
   {
     userId: 5,
@@ -57,6 +62,7 @@ export const UserMockData: User[] = [
     nickname: "tester5",
     phone: "123-456-7894",
     profileCheck: true,
+    mbti: "ISFP",
   },
 ];
 
@@ -150,7 +156,7 @@ export const EmailChangeMockData: EmailCode = {
 /** */
 
 // 상세 일정 정보
-interface DayDetail {
+export interface DayDetail {
   title: string;
   description: string;
   fileAddress: string | File;
@@ -209,8 +215,8 @@ export const RecruitMockData: TravelPlan[] = [
     airplaneFee: 400000,
     limitMaxAge: 60,
     limitMinAge: 20,
-    limitSex: "UNRELATED",
-    limitSmoke: "NO",
+    limitSex: "무관",
+    limitSmoke: "무관",
     deadline: "2023-3-25",
     days: [
       {
@@ -618,115 +624,27 @@ export const ReviewData: ReviewTypes[] = [
 // 참가하기 관련 //
 /** */
 
-export interface Participations {
+export interface Participation {
   participationId: number;
   postId: number;
   userId: string;
-  ParticipationStatus: string;
-  DepositStatus: string;
-  RatingStatus: string;
-  depositReturnDate: Date | null;
 }
 
-export const ParticipationsData: Participations[] = [
+export const ParticipationsData: Participation[] = [
   {
     participationId: 1,
     postId: 1,
     userId: "1",
-    ParticipationStatus: "JOIN",
-    DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "평가미완료",
-    depositReturnDate: null,
   },
   {
     participationId: 2,
-    postId: 2,
-    userId: "3",
-    ParticipationStatus: "TRAVEL_FINISHED",
-    DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: new Date("2023-04-14"),
+    postId: 1,
+    userId: "2",
   },
   {
     participationId: 3,
-    postId: 2,
-    userId: "4",
-    ParticipationStatus: "TRAVEL_FINISHED",
-    DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: new Date("2023-04-14"),
-  },
-  {
-    participationId: 4,
-    postId: 2,
-    userId: "5",
-    ParticipationStatus: "TRAVEL_FINISHED",
-    DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: new Date("2023-04-14"),
-  },
-  {
-    participationId: 5,
     postId: 1,
     userId: "3",
-    ParticipationStatus: "JOIN",
-    DepositStatus: "UNPAID",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: new Date("2023-04-14"),
-  },
-  {
-    participationId: 6,
-    postId: 3,
-    userId: "1",
-    ParticipationStatus: "TRAVEL_FINISHED",
-    DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: null,
-  },
-  {
-    participationId: 7,
-    postId: 3,
-    userId: "4",
-    ParticipationStatus: "TRAVEL_FINISHED",
-    DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: null,
-  },
-  {
-    participationId: 8,
-    postId: 4,
-    userId: "1",
-    ParticipationStatus: "JOIN",
-    DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: null,
-  },
-  {
-    participationId: 9,
-    postId: 4,
-    userId: "3",
-    ParticipationStatus: "JOIN",
-    DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: null,
-  },
-  {
-    participationId: 10,
-    postId: 5,
-    userId: "3",
-    ParticipationStatus: "JOIN",
-    DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: null,
-  },
-  {
-    participationId: 11,
-    postId: 5,
-    userId: "1",
-    ParticipationStatus: "JOIN",
-    DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "NOT_RATED",
-    depositReturnDate: null,
   },
 ];
 

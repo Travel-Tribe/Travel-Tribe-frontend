@@ -129,6 +129,7 @@ export const userHandlers = [
               nickname: users.nickname,
               phone: users.phone,
               email: users.email,
+              mbti: users.mbti,
             },
           },
           { status: 201 },
