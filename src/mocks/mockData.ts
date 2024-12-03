@@ -635,7 +635,7 @@ export const ParticipationsData: Participations[] = [
     userId: "1",
     ParticipationStatus: "JOIN",
     DepositStatus: "DEPOSIT_PAID",
-    RatingStatus: "NOT_RATED",
+    RatingStatus: "평가미완료",
     depositReturnDate: null,
   },
   {

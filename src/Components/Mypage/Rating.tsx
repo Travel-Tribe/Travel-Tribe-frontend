@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import fetchCall from "../../Utils/apiFetch";
 import { useProfileStore } from "../../store/profileStore";
 import profileImg from "../../assets/profileImg.webp";
+import { FaStar, FaRegStarHalf } from "react-icons/fa";
 
 interface RatingModalProps {
   isOpen: boolean;
@@ -19,8 +20,7 @@ const Rating: React.FC<RatingModalProps> = ({
   onRatingComplete,
 }): JSX.Element | null => {
   const [ratings, setRatings] = useState<number[]>([]);
-  const { userProfiles, fetchParticipantsProfiles, fetchProfileData } =
-    useProfileStore();
+  const { userProfiles, fetchParticipantsProfiles } = useProfileStore();
 
   const handleRatingSubmit = async () => {
     try {
@@ -53,6 +53,84 @@ const Rating: React.FC<RatingModalProps> = ({
     const newRatings = [...ratings];
     newRatings[index] = value;
     setRatings(newRatings);
+  };
+
+  const handleStarClick = (
+    index: number,
+    starIndex: number,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const { left, width } = event.currentTarget.getBoundingClientRect();
+    const clickPosition = event.clientX - left;
+    const isHalf = clickPosition < width / 2; // 클릭 위치가 별의 왼쪽인지 확인
+    const newRating = starIndex + (isHalf ? 0.5 : 1);
+    console.log(
+      `Clicked star ${starIndex + 1}, position: ${
+        isHalf ? "left (half)" : "right (full)"
+      }`,
+    );
+    handleRatingChange(index, newRating);
+  };
+  const renderStars = (rating: number, index: number) => {
+    console.log(rating);
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      const isFull = i + 1 <= rating;
+      const isHalf = i + 0.5 === rating;
+
+      stars.push(
+        <div
+          key={i}
+          className="relative cursor-pointer"
+          style={{
+            display: "inline-block",
+            position: "relative",
+            width: "24px",
+            height: "24px",
+          }}
+          onClick={event => handleStarClick(index, i, event)}
+        >
+          {/* 기본 회색 별 */}
+          <FaStar
+            className="text-gray-300"
+            style={{
+              width: "24px",
+              height: "24px",
+            }}
+          />
+
+          {/* 왼쪽 반쪽 노란색 별 */}
+          {isHalf && (
+            <FaStar
+              className="text-yellow-500"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "24px",
+                height: "24px",
+                clipPath: "polygon(0 0, 50% 0, 50% 100%, 0 100%)",
+              }}
+            />
+          )}
+
+          {/* 전체 노란색 별 */}
+          {isFull && (
+            <FaStar
+              className="text-yellow-500"
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "24px",
+                height: "24px",
+              }}
+            />
+          )}
+        </div>,
+      );
+    }
+    return stars;
   };
 
   if (!isOpen) return null;
@@ -97,7 +175,7 @@ const Rating: React.FC<RatingModalProps> = ({
                 </div>
                 <div className="flex items-center">
                   <span className="text-gray-700 mr-2.5">평점</span>
-                  <input
+                  {/* <input
                     type="number"
                     value={rating}
                     min={0}
@@ -107,24 +185,25 @@ const Rating: React.FC<RatingModalProps> = ({
                       handleRatingChange(index, parseFloat(e.target.value))
                     }
                     className="w-16 border border-gray-300 rounded p-1 text-center"
-                  />
+                  /> */}
+                  {renderStars(rating, index)}
                 </div>
               </div>
             );
           })}
         </div>
+        <button
+          className="mt-6 btn border border-custom-green bg-white w-full hover:bg-custom-green hover:text-white"
+          onClick={() => {
+            console.log("평점이 저장되었습니다:", ratings);
+            alert("평점이 저장되었습니다.");
+            onClose();
+            handleRatingSubmit();
+          }}
+        >
+          평점 주기
+        </button>
       </div>
-      <button
-        className="mt-6 btn border border-custom-green bg-white w-full hover:bg-custom-green hover:text-white"
-        onClick={() => {
-          console.log("평점이 저장되었습니다:", ratings);
-          alert("평점이 저장되었습니다.");
-          onClose();
-          handleRatingSubmit();
-        }}
-      >
-        평점 주기
-      </button>
     </div>
   );
 };
