@@ -37,7 +37,7 @@ const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
         throw new Error("포스트 ID가 없습니다.");
       }
       const response = await fetchCall<ApiResponse>(
-        `api/v1/posts/${postId}/participations`,
+        `/api/v1/posts/${postId}/participations`,
         "get",
       );
 
@@ -70,9 +70,6 @@ const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
           >
             {travelPlan.status}
           </button>
-          {/* //   <button className="btn btn-xs bg-btn-closed hover:bg-slate-600 text-white">
-          //     모집종료
-          //   </button> */}
           <span className="ml-3 text-sm text-center">
             모집마감: {travelPlan.deadline}
           </span>

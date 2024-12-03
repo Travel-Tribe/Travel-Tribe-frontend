@@ -8,6 +8,7 @@ interface UserProfile {
   ratingAvg: number | null;
   count: string;
   fileAddress: string;
+  mbti: string;
 }
 
 interface UserData {
@@ -34,7 +35,7 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
         throw new Error("호스트 ID가 없습니다.");
       }
       const response = await fetchCall<UseResponse>(
-        `api/v1/users/${userId}`,
+        `/api/v1/users/${userId}`,
         "get",
       );
 
@@ -78,6 +79,7 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
               <span className="text-sm text-center ml-3">
                 성별 {userData?.gender === "MALE" ? "남" : "여"}
               </span>
+              <span className="text-sm text-center ml-3">{userData?.mbti}</span>
             </div>
             <div>
               <span className="text-sm text-center">
