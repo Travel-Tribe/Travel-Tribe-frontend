@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useRef } from "react";
-import fetchCall from "../Utils/apiFetch";
-import { ReviewTypes } from "../mocks/mockData";
-import { mappingContinent } from "../Utils/mappingContinent";
-import { mappingCountry } from "../Utils/mappingCountry";
-import { useInfiniteQuery } from "react-query";
-import { ReviewPost } from "../Components/Post";
+import React, { useEffect } from "react";
 import { useReviewPostStore } from "../store/reviewPostStore";
+import { getFilterParams } from "../Utils/getFilterParams";
+import { ItemType, useInfiniteFetch } from "../Hooks/useInfinityFetch";
+import { ErrorType, ReviewType } from "../type/types";
+import { AxiosError } from "axios";
+import { ReviewPost } from "../Components/Post/ReviewPost";
 
 interface ReviewProps {
   selectedContinent?: string;
@@ -23,102 +22,49 @@ const Review = React.memo(
   }: ReviewProps): JSX.Element => {
     const { resetForm } = useReviewPostStore();
 
-    const getFilterParams = () => {
-      const filters: Record<string, string> = {
-        title: search || "",
-        content: city || "",
-        continent:
-          selectedContinent && selectedContinent !== "선택"
-            ? mappingContinent[selectedContinent]
-            : "",
-        country:
-          selectedCountry !== "선택" && selectedContinent !== "기타"
-            ? mappingCountry(selectedCountry, "ko")
-            : "",
-      };
-
-      // 빈 값 필터 제거
-      const params = new URLSearchParams();
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value) params.append(key, value);
-      });
-
-      return "&" + params.toString();
-    };
-
-    const fetchRecruitData = async ({ pageParam = 0 }) => {
-      const response = await fetchCall<{
-        data: {
-          data: { reviews: ReviewTypes[]; totalPages: number };
-        };
-      }>(`/api/v1/reviews?page=${pageParam}${getFilterParams()}`, "get");
-      return {
-        totalPages: response.data.data.totalPages,
-        reviews: response.data.data.reviews,
-      };
-    };
-
-    const {
-      data,
-      fetchNextPage,
-      hasNextPage,
-      isFetchingNextPage,
-      isLoading,
-      isError,
-      error,
-    } = useInfiniteQuery({
-      queryKey: [
-        "reviewData",
-        search,
-        city,
-        selectedContinent,
-        selectedCountry,
-      ],
-      queryFn: fetchRecruitData,
-      getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allPages.length;
-        return nextPage < lastPage.totalPages ? nextPage : undefined;
-      },
-      keepPreviousData: true,
-    });
-
     useEffect(() => {
       resetForm();
+      window.scrollTo(0, 0);
     }, [resetForm]);
 
-    const observer = useRef<IntersectionObserver | null>(null);
-
-    const lastElementRef = useCallback(
-      (node: HTMLDivElement | null) => {
-        if (isLoading || !hasNextPage) return;
-
-        if (observer.current) observer.current.disconnect();
-
-        observer.current = new IntersectionObserver(
-          entries => {
-            if (entries[0].isIntersecting) {
-              fetchNextPage();
-            }
-          },
-          { threshold: 0.8 },
-        );
-
-        if (node) observer.current.observe(node);
-      },
-      [fetchNextPage, hasNextPage, isLoading],
+    const filters = getFilterParams(
+      search,
+      city,
+      selectedContinent,
+      selectedCountry,
     );
 
+    const { data, isError, error, lastElementRef, isFetchingNextPage } =
+      useInfiniteFetch({
+        endpoint: "/api/v1/reviews",
+        filters,
+      });
+
     if (isError) {
-      console.error("에러", error.response?.data?.errors[0]?.errorMessage);
-      return <>{error.response?.data?.errors[0]?.errorMessage}</>;
+      console.error(
+        "에러",
+        (error as AxiosError<ErrorType>).response?.data?.errors[0]
+          ?.errorMessage,
+      );
+      return (
+        <>
+          {
+            (error as AxiosError<ErrorType>).response?.data?.errors[0]
+              ?.errorMessage
+          }
+        </>
+      );
     }
 
-    const reviews = data?.pages.flatMap(page => page.reviews) || [];
-    console.log(reviews);
+    // 타입 가드 함수
+    const isReviewType = (item: ItemType | undefined): item is ReviewType => {
+      return item !== undefined && (item as ReviewType).reviewId !== undefined;
+    };
+
     return (
-      <div className="flex flex-wrap gap-[35px]">
-        {reviews.map((review: ReviewTypes, index: number) => {
-          const isLastElement = index === reviews.length - 1;
+      <div className="post-flex-container">
+        {data.filter(isReviewType).map((review: ReviewType, index: number) => {
+          const isLastElement = index === data.length - 1;
           return (
             <div
               ref={isLastElement ? lastElementRef : null}
