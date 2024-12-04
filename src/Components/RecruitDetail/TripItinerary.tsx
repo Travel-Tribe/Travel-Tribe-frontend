@@ -1,6 +1,6 @@
 import { DayDetail, TravelPlan } from "../../mocks/mockData";
-import Schedule from "../../assets/icons/schedule.svg";
 import DayMap from "./TripMap/DayMap";
+import { IoTimeOutline } from "react-icons/io5";
 
 interface TripItineraryProps {
   travelPlan?: TravelPlan;
@@ -65,7 +65,7 @@ export default function TripItinerary({ travelPlan }: TripItineraryProps) {
           {/* Header */}
           <div className="border-b p-8">
             <div className="flex items-center gap-2">
-              <img src={Schedule} alt="schedule icon" className="w-6 h-6" />
+              <IoTimeOutline className="w-6 h-6" />
               <h2 className="card-title">여행 일정</h2>
             </div>
           </div>

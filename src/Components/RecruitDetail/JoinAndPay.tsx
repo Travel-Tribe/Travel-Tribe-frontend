@@ -1,7 +1,11 @@
-import Check from "../../assets/icons/check.svg";
-import Back from "../../assets/icons/arrow_back.svg";
 import { usePaymentFlow } from "../../Hooks/usePaymentFlow";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  FaArrowLeft,
+  FaCheck,
+  FaCheckCircle,
+  FaMoneyCheck,
+} from "react-icons/fa";
 
 export default function JoinAndPay() {
   const navigate = useNavigate();
@@ -44,18 +48,7 @@ export default function JoinAndPay() {
           <div className="p-6 space-y-6">
             <div className="bg-base-200 rounded-lg p-4 space-y-2">
               <div className="flex items-center gap-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-success"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <FaCheckCircle className="text-success" />
                 <p className="font-medium">
                   {parsedParticipationId
                     ? "게시글 등록을 위한 보증금이 필요합니다"
@@ -63,18 +56,7 @@ export default function JoinAndPay() {
                 </p>
               </div>
               <div className="flex items-center gap-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 text-warning"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <FaMoneyCheck className="text-warning" />
                 <p className="font-medium">카카오페이로 결제가 진행됩니다</p>
               </div>
             </div>
@@ -85,7 +67,7 @@ export default function JoinAndPay() {
                 disabled={loading}
                 className="btn btn-success text-white hover:bg-success/90 transition-colors duration-200"
               >
-                <img src={Check} alt="check icon" />
+                <FaCheck className="w-4 h-4" />
                 {loading
                   ? "처리중..."
                   : parsedParticipationId
@@ -97,7 +79,7 @@ export default function JoinAndPay() {
                 onClick={handleBack}
                 className="btn btn-ghost hover:bg-gray-100 transition-colors duration-200"
               >
-                <img src={Back} alt="arrow-back icon" />
+                <FaArrowLeft className="w-4 h-4" />
                 돌아가기
               </button>
             </div>

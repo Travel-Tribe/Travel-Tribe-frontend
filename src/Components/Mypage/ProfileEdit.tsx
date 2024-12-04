@@ -176,7 +176,7 @@ const ProfileEdit = (): JSX.Element => {
         error === "",
     );
   }, [profileData, error]);
-console.log(profileData);
+  console.log(profileData);
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -197,9 +197,7 @@ console.log(profileData);
               alt="Profile"
             />
             <label htmlFor="file">
-              <div className="mt-2 px-4 py-1 bg-gray-300 text-gray-700 text-sm rounded-md cursor-pointer">
-                프로필 변경
-              </div>
+              <div className="mt-2 btn btn-sm btn-active">프로필 변경</div>
             </label>
             <input
               type="file"
@@ -216,12 +214,12 @@ console.log(profileData);
               <input
                 type="text"
                 placeholder="Nickname"
-                className="border border-gray-300 rounded px-2 py-1 text-sm w-60"
+                className="text-sm w-60 input input-sm input-bordered"
                 value={profileData.nickname}
                 onChange={handleNicknameChange}
               />
               <button
-                className={`px-3 py-1 ${!profileData.nickname ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-gray-300 text-gray-700"} text-sm rounded-md`}
+                className={`btn btn-sm ${!profileData.nickname ? "btn-disabled" : "btn-active"}`}
                 onClick={handleNicknameDuplicate}
                 disabled={!profileData.nickname || validationStatus.isChecking}
               >
@@ -262,7 +260,7 @@ console.log(profileData);
             자기소개 글
           </label>
           <textarea
-            className="w-full border border-gray-300 rounded p-2 text-sm resize-none"
+            className="w-full text-sm resize-none textarea textarea-bordered"
             placeholder="여기서 자기소개 수정 가능합니다."
             maxLength={150}
             value={profileData.introduction}
@@ -299,7 +297,7 @@ console.log(profileData);
                     profileData.gender === "MALE"
                   }
                   onChange={() => handleGenderChange("MALE")}
-                  className="mr-2"
+                  className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 남자
               </label>
@@ -313,7 +311,7 @@ console.log(profileData);
                     profileData.gender === "FEMALE"
                   }
                   onChange={() => handleGenderChange("FEMALE")}
-                  className="mr-2"
+                  className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 여자
               </label>
@@ -336,7 +334,7 @@ console.log(profileData);
                     profileData.smoking === "YES"
                   }
                   onChange={() => handleSmokingChange("YES")}
-                  className="mr-2"
+                  className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 흡연
               </label>
@@ -350,7 +348,7 @@ console.log(profileData);
                     profileData.smoking === "NO"
                   }
                   onChange={() => handleSmokingChange("NO")}
-                  className="mr-2"
+                  className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 비흡연
               </label>
@@ -406,7 +404,7 @@ console.log(profileData);
       </form>
 
       <button
-        className={`w-full mt-8 py-2 text-xl rounded-md ${formValid ? "bg-custom-green text-white" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}
+        className={`w-full mt-8 btn ${formValid ? "btn-success text-white" : "btn-disabled"}`}
         onClick={handleUpdateProfile}
         disabled={!formValid}
       >

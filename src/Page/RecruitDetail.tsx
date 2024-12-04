@@ -118,7 +118,11 @@ const RecruitDetail = (): JSX.Element => {
           >
             목록으로
           </button>
-          <JoinBtn postId={postId} status={travelPlan?.status} />
+          <JoinBtn
+            postId={postId}
+            userId={travelPlan?.userId}
+            status={travelPlan?.status}
+          />
         </div>
       </div>
     </div>

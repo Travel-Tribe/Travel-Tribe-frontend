@@ -10,8 +10,7 @@ import CountryName from "./SideComponents/CountryName";
 import MyLang from "./SideComponents/MyLang";
 
 const MyProfile = (): JSX.Element => {
-  const { profileData, fetchProfileData, age } =
-    useProfileStore();
+  const { profileData, fetchProfileData, age } = useProfileStore();
   const mbtiColors: { [key: string]: string } = {
     ISTJ: "bg-istj",
     ISFJ: "bg-isfj",
@@ -104,7 +103,7 @@ const MyProfile = (): JSX.Element => {
         <MyLang lang={profileData.langAbilities} />
         <CountryName countries={profileData.visitedCountries} />
         <button
-          className="w-full btn border border-custom-teal-green text-custom-teal-green bg-white hover:text-white hover:bg-custom-teal-green hover:border-none"
+          className="w-full btn btn-outline btn-success hover:!text-white"
           onClick={() => navigate("/mypage/myProfileEdit")}
         >
           프로필 수정

@@ -1,6 +1,4 @@
 import { useState } from "react";
-import EyeIcon from "../assets/icons/visibility.svg";
-import EyeOffIcon from "../assets/icons/visibility_off.svg";
 import { Link } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +6,7 @@ import { z } from "zod";
 import fetchCall from "../Utils/apiFetch";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import { useAuthStore } from "../store/authStore";
+import { LuEye, LuEyeOff } from "react-icons/lu";
 
 interface LoginResponse {
   result: "SUCCESS" | "FAIL";
@@ -53,7 +52,7 @@ const SignIn = (): JSX.Element => {
     reValidateMode: "onSubmit", // 재검증도 제출 시에만
   });
 
-  const setAccessToken = useAuthStore(state => state.setAccessToken);
+  useAuthStore(state => state.setAccessToken);
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
     try {
@@ -144,10 +143,11 @@ const SignIn = (): JSX.Element => {
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-2 btn-sm btn-circle"
           >
-            <img
-              src={showPassword ? EyeIcon : EyeOffIcon}
-              alt={showPassword ? "비밀번호 숨기기" : "비밀번호 보기"}
-            />
+            {showPassword ? (
+              <LuEye className="w-5 h-5" />
+            ) : (
+              <LuEyeOff className="w-5 h-5" />
+            )}
           </button>
         </div>
       </div>

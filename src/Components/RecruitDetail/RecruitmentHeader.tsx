@@ -1,9 +1,9 @@
 import { useQuery } from "react-query";
-import Calendar from "../../assets/icons/date_range.svg";
-import Group from "../../assets/icons/group.svg";
 import { TravelPlan } from "../../mocks/mockData";
 import fetchCall from "../../Utils/apiFetch";
 import { useParams } from "react-router-dom";
+import { LuCalendarDays } from "react-icons/lu";
+import { MdOutlinePeople } from "react-icons/md";
 
 interface RecruitmentHeaderProps {
   travelPlan?: TravelPlan;
@@ -77,13 +77,13 @@ const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
         <h2 className="card-title text-2xl mt-2">{travelPlan.title}</h2>
         <div className="flex flex-wrap gap-4 mt-0.5 font-medium">
           <div className="flex">
-            <img src={Group} />
+            <MdOutlinePeople className="w-6 h-6" />
             <span className="whitespace-nowrap">
               {Participation?.length}/{travelPlan.maxParticipants}명
             </span>
           </div>
-          <div className="flex">
-            <img src={Calendar} />
+          <div className="flex items-center">
+            <LuCalendarDays className="w-5 h-5" />
             <span>
               {formatDate(travelPlan.travelStartDate)} ~
               {formatDate(travelPlan.travelEndDate)}

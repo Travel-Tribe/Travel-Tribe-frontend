@@ -1,4 +1,4 @@
-import Location from "../../assets/icons/location.svg";
+import { LuMapPin } from "react-icons/lu";
 import { TravelPlan } from "../../mocks/mockData";
 import { mappingCountry } from "../../Utils/mappingCountry";
 import CountryMap from "./TripMap/CountryMap";
@@ -17,7 +17,7 @@ export default function TripDetails({ travelPlan }: TravelDetailsProps) {
       <div className="card-body">
         <div>
           <div className="flex items-center mb-4">
-            <img src={Location} alt="location icon" />
+            <LuMapPin className="w-6 h-6" />
             <h2 className="card-title ml-2">여행 정보</h2>
           </div>
           <div className="flex justify-between items-start w-full">
