@@ -1,9 +1,9 @@
-import { DayDetail, TravelPlan } from "../../mocks/mockData";
+import { DayDetailType, TravelPlanType } from "../../type/types";
 import DayMap from "./TripMap/DayMap";
 import { IoTimeOutline } from "react-icons/io5";
 
 interface TripItineraryProps {
-  travelPlan?: TravelPlan;
+  travelPlan?: TravelPlanType;
 }
 
 const DayHeader = ({ dayIndex, date }: { dayIndex: number; date: string }) => (
@@ -15,7 +15,12 @@ const DayHeader = ({ dayIndex, date }: { dayIndex: number; date: string }) => (
   </div>
 );
 
-const DayScheduleCard = ({ detail }: { detail: DayDetail; index: number }) => (
+const DayScheduleCard = ({
+  detail,
+}: {
+  detail: DayDetailType;
+  index: number;
+}) => (
   <div>
     <div className="flex items-center gap-2">
       <h3 className="font-semibold">{detail.title}</h3>

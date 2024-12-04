@@ -2,16 +2,18 @@ import { useQuery } from "react-query";
 import { useReviewPostStore } from "../../store/reviewPostStore";
 import fetchCall from "../../Utils/apiFetch";
 import { mappingCountry } from "../../Utils/mappingCountry";
+import { TravelPlanType } from "../../type/types";
 
-interface TravelPlan {
-  postId: number;
-  continent: string;
-  travelCountry: string;
-  region: string;
-  travelStartDate: string;
-  travelEndDate: string;
-  maxParticipants: string;
-}
+type TravelPlan = Pick<
+  TravelPlanType,
+  | "postId"
+  | "continent"
+  | "travelCountry"
+  | "region"
+  | "travelStartDate"
+  | "travelEndDate"
+  | "maxParticipants"
+>;
 
 interface PostInfoProps {
   postId: string;

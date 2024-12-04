@@ -8,13 +8,13 @@ import {
   TripItinerary,
 } from "../Components/RecruitDetail";
 import { useQuery } from "react-query";
-import { TravelPlan } from "../mocks/mockData";
 import fetchCall from "../Utils/apiFetch";
 import EditBtn from "../Components/RecruitDetail/Buttons/EditBtn";
 import JoinBtn from "../Components/RecruitDetail/Buttons/JoinBtn";
+import { TravelPlanType } from "../type/types";
 
 interface postProps {
-  data: TravelPlan;
+  data: TravelPlanType;
 }
 
 interface postResponse {
@@ -32,7 +32,7 @@ const RecruitDetail = (): JSX.Element => {
     data: travelPlan,
     isLoading,
     error,
-  } = useQuery<TravelPlan>({
+  } = useQuery<TravelPlanType>({
     queryKey: ["travelPlan", postId],
     queryFn: async () => {
       const response = await fetchCall<postResponse>(

@@ -142,7 +142,7 @@ export interface CommunityType {
   country: string;
   region: string;
   createdAt: string;
-  files: [{ fileName: string }];
+  files: [{ fileName: string; communityId: number }];
 }
 
 export interface ErrorDetail {

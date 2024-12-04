@@ -1,12 +1,12 @@
 import { useQuery } from "react-query";
-import { TravelPlan } from "../../mocks/mockData";
 import fetchCall from "../../Utils/apiFetch";
 import { useParams } from "react-router-dom";
 import { LuCalendarDays } from "react-icons/lu";
 import { MdOutlinePeople } from "react-icons/md";
+import { TravelPlanType } from "../../type/types";
 
 interface RecruitmentHeaderProps {
-  travelPlan?: TravelPlan;
+  travelPlan?: TravelPlanType;
 }
 
 interface Participation {

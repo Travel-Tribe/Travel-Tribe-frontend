@@ -1,10 +1,10 @@
 import { LuMapPin } from "react-icons/lu";
-import { TravelPlan } from "../../mocks/mockData";
 import { mappingCountry } from "../../Utils/mappingCountry";
 import CountryMap from "./TripMap/CountryMap";
+import { TravelPlanType } from "../../type/types";
 
 interface TravelDetailsProps {
-  travelPlan?: TravelPlan;
+  travelPlan?: TravelPlanType;
 }
 
 export default function TripDetails({ travelPlan }: TravelDetailsProps) {

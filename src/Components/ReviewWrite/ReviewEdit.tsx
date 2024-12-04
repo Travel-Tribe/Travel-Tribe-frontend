@@ -6,15 +6,12 @@ import RecruitInfo from "./RecruitInfo";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
 import Modal from "../Common/Modal";
+import { FileType, ReviewType } from "../../type/types";
 
-interface ReviewData {
-  title: string;
-  contents: string;
-  files: { fileAddress: string }[];
-  continent: string;
-  country: string;
-  region: string;
-}
+type ReviewData = Pick<
+  ReviewType,
+  "title" | "contents" | "files" | "continent" | "country" | "region"
+>;
 
 interface ApiResponse {
   data: {
@@ -129,7 +126,7 @@ const ReviewEdit = () => {
   // 언마운트될 때 클린업 함수 실행
   useEffect(() => {
     return () => {
-      formData.files.forEach(file => {
+      formData.files.forEach((file: FileType) => {
         if (file.previewAddress) {
           URL.revokeObjectURL(file.previewAddress);
         }
@@ -139,7 +136,7 @@ const ReviewEdit = () => {
 
   const removeFile = (index: number) => {
     setFormData({
-      files: formData.files.filter((_, i) => i !== index),
+      files: formData.files.filter((_: unknown, i: number) => i !== index),
     });
   };
 
@@ -167,7 +164,7 @@ const ReviewEdit = () => {
       region: formData.region,
       title: formData.title,
       contents: formData.contents,
-      files: formData.files.map(file => ({
+      files: formData.files.map((file: FileType) => ({
         fileAddress: file.fileAddress,
       })),
     };
@@ -229,7 +226,7 @@ const ReviewEdit = () => {
                 />
                 {formData.files.length > 0 && (
                   <div className="grid grid-cols-3 gap-2 mt-2">
-                    {formData.files.map((file, index) => (
+                    {formData.files.map((file: FileType, index: number) => (
                       <div key={index} className="relative">
                         <img
                           src={file.previewAddress || file.fileAddress}
