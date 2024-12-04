@@ -362,6 +362,7 @@ const ProfileEdit = (): JSX.Element => {
           <SelectBox
             options={[...MBTI]}
             selectedValue={profileData.mbti}
+            initialText="MBTI"
             onSelect={handleMbtiChange}
           />
         </div>

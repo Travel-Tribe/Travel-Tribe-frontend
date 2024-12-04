@@ -3,11 +3,17 @@ import React, { useRef } from "react";
 interface SelectBoxProps {
   options: string[];
   selectedValue?: string;
+  initialText?: string;
   onSelect: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const SelectBox = React.memo(
-  ({ options, onSelect, selectedValue }: SelectBoxProps): JSX.Element => {
+  ({
+    options,
+    onSelect,
+    selectedValue,
+    initialText,
+  }: SelectBoxProps): JSX.Element => {
     const selectRef = useRef<HTMLSelectElement>(null);
 
     const handleFocus = () => {
@@ -22,7 +28,7 @@ const SelectBox = React.memo(
         onFocus={handleFocus}
         value={selectedValue}
       >
-        <option value="선택">선택</option>
+        <option value="선택">{initialText}</option>
         {options?.map(option => (
           <option
             key={option}
