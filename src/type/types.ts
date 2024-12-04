@@ -21,6 +21,7 @@ export interface UserProfileType {
   fileAddress: string;
   langAbilities: string[];
   visitedCountries: string[];
+  age: number | null;
 }
 
 export interface EmailCodeType {
