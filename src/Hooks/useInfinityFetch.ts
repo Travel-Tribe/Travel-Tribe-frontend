@@ -3,16 +3,15 @@ import { useRef, useCallback } from "react";
 import fetchCall from "../Utils/apiFetch";
 import { CommunityType, TravelPlanType, ReviewType } from "../type/types";
 
-interface FetchParams {
+interface FetchType {
   endpoint: string;
   filters: Record<string, string>;
 }
 
 export type ItemType = CommunityType | TravelPlanType | ReviewType;
 
-export const useInfiniteFetch = ({ endpoint, filters }: FetchParams) => {
-  console.log(endpoint, filters);
-  const fetchFunction = async ({ pageParam = 0 }) => {
+export const useInfiniteFetch = ({ endpoint, filters }: FetchType) => {
+  const fetchPostList = async ({ pageParam = 0 }) => {
     const params = new URLSearchParams(filters).toString();
     const response = await fetchCall<{
       data: {
@@ -23,10 +22,9 @@ export const useInfiniteFetch = ({ endpoint, filters }: FetchParams) => {
         };
       };
     }>(`${endpoint}?page=${pageParam}&${params}`, "get");
-    console.log(response.data.data);
     return {
       totalPages: response.data.data.totalPages,
-      items: response.data.data.content || response.data.data.reviews,
+      lists: response.data.data.content || response.data.data.reviews,
     };
   };
 
@@ -40,7 +38,7 @@ export const useInfiniteFetch = ({ endpoint, filters }: FetchParams) => {
     error,
   } = useInfiniteQuery({
     queryKey: [endpoint, filters],
-    queryFn: fetchFunction,
+    queryFn: fetchPostList,
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = allPages.length;
       return nextPage < lastPage.totalPages ? nextPage : undefined;
@@ -71,7 +69,7 @@ export const useInfiniteFetch = ({ endpoint, filters }: FetchParams) => {
   );
 
   return {
-    data: data?.pages.flatMap(page => page.items) || [],
+    data: data?.pages.flatMap(page => page.lists) || [],
     isLoading,
     isError,
     error,
