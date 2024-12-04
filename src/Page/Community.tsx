@@ -1,10 +1,9 @@
-import React, { useCallback, useRef } from "react";
-import { mappingContinent } from "../Utils/mappingContinent";
-import { mappingCountry } from "../Utils/mappingCountry";
-import fetchCall from "../Utils/apiFetch";
-import { useInfiniteQuery } from "react-query";
-import { CommunityListProps } from "../mocks/mockData";
-import { CommunityPost } from "../Components/Post";
+import React, { useEffect } from "react";
+import { getFilterParams } from "../Utils/getFilterParams";
+import { CommunityType, ErrorType } from "../type/types";
+import { ItemType, useInfiniteFetch } from "../Hooks/useInfinityFetch";
+import { AxiosError } from "axios";
+import { CommunityPost } from "../Components/Post/CommunityPost";
 
 interface CommunityProps {
   selectedContinent?: string;
@@ -20,108 +19,64 @@ const Community = React.memo(
     city,
     search,
   }: CommunityProps): JSX.Element => {
-    const getFilterParams = () => {
-      const filters: Record<string, string> = {
-        title: search || "",
-        content: city || "",
-        continent:
-          selectedContinent && selectedContinent !== "선택"
-            ? mappingContinent[selectedContinent]
-            : "",
-        country:
-          selectedCountry !== "선택" && selectedContinent !== "기타"
-            ? mappingCountry(selectedCountry, "ko")
-            : "",
-      };
-      // 빈 값 필터 제거
-      const params = new URLSearchParams();
-      Object.entries(filters).forEach(([key, value]) => {
-        if (value) params.append(key, value);
-      });
-
-      return "&" + params.toString();
-    };
-
-    const fetchRecruitData = async ({ pageParam = 0 }) => {
-      const response = await fetchCall<{
-        data: {
-          data: { content: []; totalPages: number };
-        };
-      }>(`/api/v1/communities?page=${pageParam}${getFilterParams()}`, "get");
-      return {
-        totalPages: response.data.data.totalPages,
-        lists: response.data.data.content,
-      };
-    };
-
-    const {
-      data,
-      fetchNextPage,
-      hasNextPage,
-      isFetchingNextPage,
-      isLoading,
-      isError,
-      error,
-    } = useInfiniteQuery({
-      queryKey: [
-        "communityData",
-        search,
-        city,
-        selectedContinent,
-        selectedCountry,
-      ],
-      queryFn: fetchRecruitData,
-      getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allPages.length;
-        console.log(nextPage, lastPage.totalPages);
-        return nextPage < lastPage.totalPages ? nextPage : undefined;
-      },
-      keepPreviousData: true,
-    });
-
-    const observer = useRef<IntersectionObserver | null>(null);
-
-    const lastElementRef = useCallback(
-      (node: HTMLDivElement | null) => {
-        if (isLoading || !hasNextPage) return;
-
-        if (observer.current) observer.current.disconnect();
-
-        observer.current = new IntersectionObserver(
-          entries => {
-            if (entries[0].isIntersecting) {
-              fetchNextPage();
-            }
-          },
-          { threshold: 0.8 },
-        );
-
-        if (node) observer.current.observe(node);
-      },
-      [fetchNextPage, hasNextPage, isLoading],
+    const filters = getFilterParams(
+      search,
+      city,
+      selectedContinent,
+      selectedCountry,
     );
 
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, []);
+
+    const { data, isError, error, lastElementRef, isFetchingNextPage } =
+      useInfiniteFetch({
+        endpoint: "/api/v1/communities",
+        filters,
+      });
+
     if (isError) {
-      console.error("에러", error.response?.data?.errors[0]?.errorMessage);
-      return <>{error.response?.data?.errors[0]?.errorMessage}</>;
+      console.error(
+        "에러",
+        (error as AxiosError<ErrorType>).response?.data?.errors[0]
+          ?.errorMessage,
+      );
+      return (
+        <>
+          {
+            (error as AxiosError<ErrorType>).response?.data?.errors[0]
+              ?.errorMessage
+          }
+        </>
+      );
     }
 
-    const communities = data?.pages.flatMap(page => page.lists) || [];
+    // 타입 가드 함수
+    const isCommunityType = (
+      item: ItemType | undefined,
+    ): item is CommunityType => {
+      return (
+        item !== undefined && (item as CommunityType).communityId !== undefined
+      );
+    };
 
     return (
-      <div className="grid grid-cols-2 gap-[20px] w-full min-w-[700px]">
-        {communities &&
-          communities.map((community: CommunityListProps, index: number) => {
-            const isLastElement = index === communities.length - 1;
-            return (
-              <div
-                ref={isLastElement ? lastElementRef : null}
-                key={community.communityId}
-              >
-                <CommunityPost community={community} />
-              </div>
-            );
-          })}
+      <div className="post-grid-container">
+        {data &&
+          data
+            .filter(isCommunityType)
+            .map((community: CommunityType, index: number) => {
+              const isLastElement = index === data.length - 1;
+              return (
+                <div
+                  ref={isLastElement ? lastElementRef : null}
+                  key={community.communityId}
+                >
+                  <CommunityPost community={community} />
+                </div>
+              );
+            })}
 
         {isFetchingNextPage && <div>Loading more...</div>}
       </div>

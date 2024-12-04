@@ -46,8 +46,8 @@ export interface ItineraryVisitType {
 
 // 하루 일정 정보
 export interface DayType {
-  dayDetails: DayDetail[];
-  itineraryVisits: ItineraryVisit[];
+  dayDetails: DayDetailType[];
+  itineraryVisits: ItineraryVisitType[];
 }
 
 // 여행 계획 정보
@@ -70,7 +70,12 @@ export interface TravelPlanType {
   limitSex: string;
   limitSmoke: string;
   deadline: string; // "YYYY-MM-DD"
-  days: Day[];
+  days: DayType[];
+}
+
+export interface FileType {
+  fileAddress: string;
+  previewAddress?: string;
 }
 
 export interface ReviewType {
@@ -82,17 +87,12 @@ export interface ReviewType {
   region: string;
   title: string;
   contents: string;
-  files: File[];
+  files: FileType[];
   nickname: string;
   travelStartDate: string;
   travelEndDate: string;
   createDate: string;
   participants: string;
-}
-
-export interface FileType {
-  fileAddress: string;
-  previewAddress?: string;
 }
 
 /** */
@@ -142,4 +142,12 @@ export interface CommunityType {
   region: string;
   createdAt: string;
   files: [{ fileName: string }];
+}
+
+export interface ErrorDetail {
+  errorMessage: string;
+}
+
+export interface ErrorType {
+  errors: ErrorDetail[];
 }
