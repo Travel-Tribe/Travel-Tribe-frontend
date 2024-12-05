@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 
-const ProfileRequiredRoutes = () => {
+const ProfileRequiredLayout = () => {
   const profileCheck = localStorage.getItem("ProfileCheck");
 
   return profileCheck === "true" ? (
@@ -14,4 +14,4 @@ const ProfileRequiredRoutes = () => {
   );
 };
 
-export default ProfileRequiredRoutes;
+export default ProfileRequiredLayout;

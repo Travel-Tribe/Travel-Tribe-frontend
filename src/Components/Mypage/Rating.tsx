@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import fetchCall from "../../Utils/apiFetch";
 import { useProfileStore } from "../../store/profileStore";
-import profileImg from "../../assets/profileImg.webp";
+import profileImg from "../../assets/profile-img.webp";
 import { FaStar, FaRegStarHalf } from "react-icons/fa";
 
 interface RatingModalProps {

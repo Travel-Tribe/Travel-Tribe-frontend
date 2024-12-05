@@ -6,10 +6,10 @@ import ProfileEdit from "../Components/Mypage/ProfileEdit";
 import MyCompletedTrips from "../Components/Mypage/MyCompletedTrips";
 import MyTravelHistory from "../Components/Mypage/MyTravelHistory";
 import MyAccountSettings from "../Components/Mypage/MyAccountSettings";
-import PrivateRoutes from "../Components/Layout/PrivateRoutes";
-import PublicOnlyRoutes from "../Components/Layout/PublicOnlyRoutes";
+import PrivateLayout from "../Components/Layout/PrivateLayout";
+import PublicOnlyLayout from "../Components/Layout/PublicOnlyLayout.tsx";
 import Layout from "../Components/Layout";
-import ProfileRequiredRoutes from "../Components/Layout/ProfileRequiredRoutes";
+import ProfileRequiredLayout from "../Components/Layout/ProfileRequiredLayout";
 import HomeLayout from "../Components/Layout/HomeLayout";
 import ReviewDetail from "../Page/ReviewDetail";
 import ProfileCreate from "../Components/Mypage/ProfileCreate";
@@ -38,7 +38,7 @@ const Router = (): JSX.Element => {
     <Suspense fallback={""}>
       <Routes>
         {/* 공개 전용 라우트 - 로그인하지 않은 사용자만 접근 가능 */}
-        <Route element={<PublicOnlyRoutes />}>
+        <Route element={<PublicOnlyLayout />}>
           <Route path="/signIn" element={<SignIn />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/find" element={<Find />} />
@@ -47,10 +47,10 @@ const Router = (): JSX.Element => {
         {/* Layout으로 감싸진 모든 페이지 */}
         <Route element={<Layout />}>
           {/* 로그인 필요한 라우트 */}
-          <Route element={<PrivateRoutes />}>
+          <Route element={<PrivateLayout />}>
             {/* 프로필 필수 라우트 */}
             {/* 결제 관련 */}
-            <Route element={<ProfileRequiredRoutes />}>
+            <Route element={<ProfileRequiredLayout />}>
               <Route
                 path="/recruitment/:postId/pay"
                 element={<PaymentPage />}

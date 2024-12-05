@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import useLocalStorage from "../../Hooks/useLocalStorage";
 import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
-import profileImg from "../../assets/profileImg.webp";
+import profileImg from "../../assets/profile-img.webp";
 import { useProfileStore } from "../../store/profileStore";
 
 const Sidebar = (): JSX.Element => {

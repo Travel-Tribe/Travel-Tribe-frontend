@@ -292,7 +292,7 @@ export const ReviewData: ReviewType[] = [
       { fileAddress: "/images/gangneung1.jpg" },
       { fileAddress: "/images/gangneung2.jpg" },
     ],
-    userId: 2,
+    userId: 3,
     nickname: "tester1",
     travelStartDate: "2022-01-01",
     travelEndDate: "2022-01-03",
