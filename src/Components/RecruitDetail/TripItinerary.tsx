@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { DayDetailType, TravelPlanType } from "../../type/types";
 import DayMap from "./TripMap/DayMap";
 import { IoTimeOutline } from "react-icons/io5";
@@ -20,24 +21,42 @@ const DayScheduleCard = ({
 }: {
   detail: DayDetailType;
   index: number;
-}) => (
-  <div>
-    <div className="flex items-center gap-2">
-      <h3 className="font-semibold">{detail.title}</h3>
+}) => {
+  const [imageError, setImageError] = useState(false);
+  const isDevelopment = import.meta.env.DEV;
+
+  // 이미지 URL을 결정하는 함수
+  const getImageUrl = () => {
+    if (imageError) {
+      return "../../assets/default image.jpeg";
+    }
+    if (isDevelopment) {
+      return detail.fileAddress; // 개발 환경에서는 링크 직접 사용
+    }
+    return `${import.meta.env.VITE_API_BASE_URL}/api/v1/file/preview?fileUrl=${detail.fileAddress}`;
+  };
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  return (
+    <div>
+      <div className="flex items-center gap-2">
+        <h3 className="font-semibold">{detail.title}</h3>
+      </div>
+      <figure className="my-4">
+        <img
+          src={getImageUrl()}
+          alt={detail.title}
+          className="rounded-xl mr-2 w-full h-60 object-cover"
+          onError={handleImageError}
+        />
+      </figure>
+      <p className="text-base-content/70 text-sm">{detail.description}</p>
     </div>
-    <figure className="my-4">
-      <img
-        src={
-          import.meta.env.VITE_API_BASE_URL +
-          `/api/v1/file/preview?fileUrl=${detail.fileAddress}`
-        }
-        alt={detail.title}
-        className="rounded-xl mr-2 w-full h-60 object-cover"
-      />
-    </figure>
-    <p className="text-base-content/70 text-sm">{detail.description}</p>
-  </div>
-);
+  );
+};
 
 export default function TripItinerary({ travelPlan }: TripItineraryProps) {
   const formatDate = (startDate: string, dayIndex: number) => {
