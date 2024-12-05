@@ -2,6 +2,7 @@ import { useState } from "react";
 import { DayDetailType, TravelPlanType } from "../../type/types";
 import DayMap from "./TripMap/DayMap";
 import { IoTimeOutline } from "react-icons/io5";
+import defaultImage from "../../assets/default-image.jpeg";
 
 interface TripItineraryProps {
   travelPlan?: TravelPlanType;
@@ -28,7 +29,7 @@ const DayScheduleCard = ({
   // 이미지 URL을 결정하는 함수
   const getImageUrl = () => {
     if (imageError) {
-      return "../../assets/default image.jpeg";
+      return defaultImage;
     }
     if (isDevelopment) {
       return detail.fileAddress; // 개발 환경에서는 링크 직접 사용
