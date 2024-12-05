@@ -7,6 +7,7 @@ export interface UserType {
   phone: string;
   profileCheck: boolean;
   mbti: string;
+  fileAddress: string;
 }
 
 export interface UserProfileType {
@@ -19,9 +20,11 @@ export interface UserProfileType {
   birth: string;
   ratingAvg: null | number;
   fileAddress: string;
-  langAbilities: string[];
-  visitedCountries: string[];
+  langAbilities: string[] | undefined;
+  visitedCountries: string[] | undefined;
   age: number | null;
+  nickname: string;
+  phone: string;
 }
 
 export interface EmailCodeType {

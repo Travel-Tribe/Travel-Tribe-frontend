@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { useProfileStore } from "../../store/profileStore";
+import { useUserProfile, useUserBasicInfo } from "../../Hooks/userQueries";
 
 import MyRecruitment from "./MyRecruitment";
 import MyTravelJoin from "./MyTravelJoin";
@@ -10,7 +11,31 @@ import CountryName from "./SideComponents/CountryName";
 import MyLang from "./SideComponents/MyLang";
 
 const MyProfile = (): JSX.Element => {
-  const { profileData, fetchProfileData, age } = useProfileStore();
+  const {
+    profileData,
+    setProfileData,
+    setAge,
+    age,
+    nickname,
+    phone,
+    initializeBasicInfo,
+  } = useProfileStore();
+  const navigate = useNavigate();
+  const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+  const profileCheck = localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK);
+
+  const {
+    data: userProfile,
+    isLoading: isProfileLoading,
+    isError: isProfileError,
+  } = useUserProfile(userId!);
+
+  const {
+    data: userBasicInfo,
+    isLoading: isBasicInfoLoading,
+    isError: isBasicInfoError,
+  } = useUserBasicInfo();
+
   const mbtiColors: { [key: string]: string } = {
     ISTJ: "bg-istj",
     ISFJ: "bg-isfj",
@@ -30,26 +55,37 @@ const MyProfile = (): JSX.Element => {
     ENTJ: "bg-entj",
   };
 
-  const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
-  const profileCheck = localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK);
-  const navigate = useNavigate();
-
   useEffect(() => {
-    const loadProfileData = async () => {
-      try {
-        if (profileCheck === "false") {
-          navigate("/mypage/profileCreate");
-        } else if (userId) {
-          await fetchProfileData(userId);
-        }
-      } catch (error) {
-        console.error("Error loading profile data:", error);
+    if (profileCheck === "false") {
+      navigate("/mypage/profileCreate");
+    } else if (userProfile) {
+      setProfileData(userProfile);
+      
+      if (userProfile.birth) {
+        setAge(userProfile.birth);
       }
-    };
+      if (userBasicInfo) {
+        initializeBasicInfo(userBasicInfo); // nickname과 phone 초기화
+      }
+    }
+  }, [
+    profileCheck,
+    userProfile,
+    userBasicInfo,
+    navigate,
+    setProfileData,
+    setAge,
+    initializeBasicInfo,
+  ]);
 
-    loadProfileData();
-  }, [profileCheck, navigate, userId, profileData.birth]);
-  // console.log(profileData);
+  if (isProfileLoading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (isProfileError) {
+    return <div>프로필 데이터를 가져오는 중 오류가 발생했습니다.</div>;
+  }
+
   return (
     <main className="ml-[60px] py-5">
       {/* Profile Card */}
@@ -60,14 +96,13 @@ const MyProfile = (): JSX.Element => {
               className="w-16 h-16 rounded-full"
               src={
                 profileData.fileAddress
-                  ? import.meta.env.VITE_API_BASE_URL +
-                    `/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
+                  ? `${import.meta.env.VITE_API_BASE_URL}/api/v1/file/preview?fileUrl=${profileData.fileAddress}`
                   : profileImg
               }
             />
             <div className="ml-5">
               <span className="block text-lg font-bold">
-                <span className="mr-1">{profileData.nickname}</span>님
+                <span className="mr-1">{nickname}</span>님
               </span>
               <div className="flex items-center space-x-5">
                 <span>{age}세</span>

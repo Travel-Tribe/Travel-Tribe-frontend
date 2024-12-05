@@ -15,7 +15,7 @@ const ProfileCreate = (): JSX.Element | null => {
   const profileCheck =
     localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) == "true";
 
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const [formValid, setFormValid] = useState(false);
 
   const navigate = useNavigate();
@@ -84,7 +84,7 @@ const ProfileCreate = (): JSX.Element | null => {
   const handleUpdateProfile = async () => {
     try {
       const { nickname, phone, ...filteredProfileData } = profileData;
-      const response = await fetchCall(`/api/v1/users/profile`, "post", {
+      await fetchCall(`/api/v1/users/profile`, "post", {
         ...filteredProfileData,
       });
       localStorage.setItem("ProfileCheck", "true");
@@ -101,10 +101,9 @@ const ProfileCreate = (): JSX.Element | null => {
       profileData.birth.trim() !== "" &&
         profileData.gender.trim() !== "" &&
         profileData.smoking.trim() !== "" &&
-        profileData.mbti.trim() !== "" &&
-        error === "",
+        profileData.mbti.trim() !== "",
     );
-  }, [profileData, error]);
+  }, [profileData]);
 
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
