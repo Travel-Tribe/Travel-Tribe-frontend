@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import profileImg from "../../assets/profileImg.webp";
 import { useNavigate } from "react-router-dom";
-import fetchCall from "../../Utils/apiFetch";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
@@ -9,13 +8,26 @@ import SelectBox from "../Common/SelectBox";
 import { MBTI } from "../../Constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
 import { postImgUrl } from "../../Utils/postImgUrl";
+import {
+  useUserProfile,
+} from "../../Hooks/userQueries";
+import {
+  checkNicknameDuplicate,
+  updateProfileData,
+  updateUserInfo,
+} from "../../apis/user";
 
 const ProfileEdit = (): JSX.Element => {
-  const { profileData, setProfileData, updateProfileField, fetchProfileData } =
-    useProfileStore();
+  const {
+    profileData,
+    nickname,
+    phone,
+    setProfileData,
+    updateProfileField,
+    setNickname,
+    setAge,
+  } = useProfileStore();
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
-  const profileCheck =
-    localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) === "true";
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -27,6 +39,20 @@ const ProfileEdit = (): JSX.Element => {
 
   const navigate = useNavigate();
   const animatedComponents = makeAnimated();
+
+  // react-query hooks
+  const { data: userProfile, isLoading } = useUserProfile(userId!);
+
+  useEffect(() => {
+    if (!userId || isLoading) return;
+
+    if (userProfile) {
+      setProfileData(userProfile);
+      if (userProfile.birth) {
+        setAge(userProfile.birth);
+      }
+    }
+  }, [userId, isLoading, userProfile, setProfileData, setNickname, setAge]);
 
   const handleVisitedCountriesChange = (newValue: unknown) => {
     if (Array.isArray(newValue)) {
@@ -48,41 +74,23 @@ const ProfileEdit = (): JSX.Element => {
     }
   };
 
-  // 프로필 데이터 불러오기
-  useEffect(() => {
-    if (!userId) {
-      console.error("USER_ID가 null입니다.");
-      return;
-    }
-    const previewImg = async (fileAddress: string) => {
-      await fetchProfileData(userId);
-      const fileAddressPreview =
-        (await previewImg(profileData.fileAddress)) ?? "";
-      updateProfileField("fileAddressPreview", fileAddressPreview);
-    };
-  }, [userId, profileCheck]);
-
-  // 프로필 이미지 파일 선택 시 처리
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
     if (file) {
       try {
-        // 이미지 업로드 및 URL 생성
         const imgUrl = await postImgUrl(file);
-        // 상태 업데이트
-        updateProfileField("fileAddress", imgUrl); // 최종 이미지 URL
+        updateProfileField("fileAddress", imgUrl);
       } catch (error) {
         console.error("Error uploading file:", error);
       }
     }
   };
 
-  // 닉네임 유효성 검사 및 중복 체크
   const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    updateProfileField("nickname", value);
+    setNickname(value);
     setError(
       /[!@#$%^&*(),.?":{}|<>]/.test(value)
         ? "특수문자를 사용할 수 없습니다."
@@ -99,24 +107,21 @@ const ProfileEdit = (): JSX.Element => {
     setSuccess("");
 
     try {
-      const response = await fetchCall<{ data: boolean }>(
-        `/api/v1/users/duplicate?type=nickname&query=${encodeURIComponent(profileData.nickname)}`,
-        "get",
-      );
-      console.log(response);
-      if (!response.data) {
-        setError("이미 사용 중인 닉네임입니다");
+      const isAvailable = await checkNicknameDuplicate(nickname);
+      if (isAvailable) {
+        setError("이미 사용 중인 닉네임입니다.");
         setValidationStatus({ isChecking: false, isAvailable: false });
       } else {
-        setSuccess("사용 가능한 닉네임입니다");
+        setSuccess("사용 가능한 닉네임입니다.");
         setValidationStatus({ isChecking: false, isAvailable: true });
       }
     } catch (error) {
-      console.error("Error duplicate nickname:", error);
+      console.error("Error checking nickname:", error);
+      setError("닉네임 확인 중 오류가 발생했습니다.");
+      setValidationStatus({ isChecking: false, isAvailable: false });
     }
   };
 
-  // 자기소개 업데이트
   const handleMyInfoChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
@@ -124,58 +129,49 @@ const ProfileEdit = (): JSX.Element => {
     updateProfileField("introduction", value);
   };
 
-  // 생년월일, 성별, 흡연 여부, MBTI 업데이트
-  const handleBirthChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const handleBirthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     updateProfileField("birth", event.target.value);
-  // const handlePhoneChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-  //   updateProfileField("phone", event.target.value);
-  const handleGenderChange = (gender: string) =>
+  };
+
+  const handleGenderChange = (gender: string) => {
     updateProfileField("gender", gender);
-  const handleSmokingChange = (smoking: string) =>
+  };
+
+  const handleSmokingChange = (smoking: string) => {
     updateProfileField("smoking", smoking);
-  const handleMbtiChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
+  };
+
+  const handleMbtiChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     updateProfileField("mbti", event.target.value);
+  };
 
-  const { nickname, phone, ratingAvg, ...filteredProfileData } = profileData;
+  // const { ratingAvg, ...filteredProfileData } = profileData;
 
-  // 프로필 업데이트
-  const profileUpdate = async () => {
+  const handleUpdateProfile = async () => {
     try {
-      // 동시에 두 업데이트가 진행되어야해서 묶어서 처리
-      await fetchCall(`/api/v1/users/profile`, "patch", {
-        ...filteredProfileData,
-        // fileAddress: encodedFileAddress,
-        gender: profileData.gender === "MALE" ? "MALE" : "FEMALE", // URL-safe 인코딩된 fileAddress 추가
-        smoking: profileData.smoking === "흡연자" ? "YES" : "NO", // URL-safe 인코딩된 fileAddress 추가
-      });
-
-      await fetchCall(`/api/v1/users/info`, "patch", {
-        nickname: profileData.nickname,
-        phone: profileData.phone,
-      });
+      console.log(profileData);
+      await updateProfileData(profileData);
+      await updateUserInfo({ nickname, phone });
+      navigate("/mypage");
     } catch (error) {
-      console.error("Error updating profile data:", error);
+      console.error("Error updating profile:", error);
     }
   };
 
-  // 프로필 저장
-  const handleUpdateProfile = async () => {
-    await profileUpdate();
-    // alert("변경완료");
-    navigate("/mypage");
-  };
-
-  // 폼 유효성 검사
   useEffect(() => {
     setFormValid(
-      profileData.nickname.trim() !== "" &&
-        profileData.birth.trim() !== "" &&
-        profileData.gender.trim() !== "" &&
-        profileData.smoking.trim() !== "" &&
-        profileData.mbti.trim() !== "" &&
+      nickname.trim() !== "" &&
+        profileData.birth?.trim() !== "" &&
+        profileData.gender?.trim() !== "" &&
+        profileData.smoking?.trim() !== "" &&
+        profileData.mbti?.trim() !== "" &&
         error === "",
     );
-  }, [profileData, error]);
+  }, [nickname, profileData, error]);
+
+  if (isLoading) {
+    return <div>로딩 중...</div>;
+  }
   console.log(profileData);
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
@@ -215,13 +211,13 @@ const ProfileEdit = (): JSX.Element => {
                 type="text"
                 placeholder="Nickname"
                 className="text-sm w-60 input input-sm input-bordered"
-                value={profileData.nickname}
+                value={nickname || ""}
                 onChange={handleNicknameChange}
               />
               <button
-                className={`btn btn-sm ${!profileData.nickname ? "btn-disabled" : "btn-active"}`}
+                className={`btn btn-sm ${!nickname ? "btn-disabled" : "btn-active"}`}
                 onClick={handleNicknameDuplicate}
-                disabled={!profileData.nickname || validationStatus.isChecking}
+                disabled={!nickname || validationStatus.isChecking}
               >
                 {validationStatus.isChecking ? "확인 중..." : "중복 검사"}
               </button>
@@ -230,27 +226,7 @@ const ProfileEdit = (): JSX.Element => {
             {success && (
               <p className="text-green-500 text-xs mt-1">{success}</p>
             )}
-            <div className="form-control w-full">
-              {/* <label htmlFor="signUp-phone" className="label">
-                <span className="label-text">전화번호</span>
-                <button
-                  className="btn btn-xs bg-custom-pink text-white hover:bg-custom-pink-hover"
-                  onClick={() => {}}
-                >
-                  인증하기
-                </button>
-              </label>
-              <input
-                id="signUp-phone"
-                type="tel"
-                autoComplete="tel"
-                placeholder="예시: 010-1234-5678 ('-' 포함하여 입력)"
-                maxLength={13}
-                className="input input-bordered w-full"
-                value={profileData.phone}
-                onChange={handlePhoneChange}
-              /> */}
-            </div>
+            <div className="form-control w-full"></div>
           </div>
         </div>
 
@@ -268,7 +244,7 @@ const ProfileEdit = (): JSX.Element => {
             rows={4}
           />
           <div className="text-gray-500 text-sm text-right mt-1">
-            {profileData.introduction.length}/150 자
+            {profileData.introduction !== undefined ? profileData.introduction.length : 0}/150 자
           </div>
         </div>
 

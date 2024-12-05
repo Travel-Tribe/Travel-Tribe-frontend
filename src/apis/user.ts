@@ -48,3 +48,27 @@ export const fetchParticipantsProfiles = async (userIds: string[]) => {
     {} as { [key: string]: { nickname: string; fileAddress: string } },
   );
 };
+
+// 프로필 데이터 업데이트
+export const updateProfileData = async (data: Partial<UserProfileType>) => {
+  const response = await fetchCall(`/api/v1/users/profile`, "patch", data);
+  return response;
+};
+
+// 사용자 기본 정보 업데이트 (닉네임, 전화번호)
+export const updateUserInfo = async (basicInfo: {
+  nickname: string;
+  phone: string;
+}) => {
+  const response = await fetchCall(`/api/v1/users/info`, "patch", basicInfo);
+  return response.data;
+};
+
+// 닉네임 중복 검사 API 호출
+export const checkNicknameDuplicate = async (nickname: string) => {
+  const response = await fetchCall<{ data: boolean }>(
+    `/api/v1/users/duplicate?type=nickname&query=${encodeURIComponent(nickname)}`,
+    "get",
+  );
+  return response.data; // true: 사용 가능, false: 중복
+};

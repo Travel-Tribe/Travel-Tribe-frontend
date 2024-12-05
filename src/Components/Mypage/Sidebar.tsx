@@ -7,15 +7,10 @@ import profileImg from "../../assets/profileImg.webp";
 import { useProfileStore } from "../../store/profileStore";
 
 const Sidebar = (): JSX.Element => {
-  const {
-    profileData,
-    fetchProfileData,
-    updateProfileField,
-    resetProfileData,
-  } = useProfileStore();
-
+  const { profileData, setNickname, nickname, resetProfileData } =
+    useProfileStore();
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID) || "";
-  const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
+  const [setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
   const [selected, setSelected] = useState("내 프로필");
   const location = useLocation();
@@ -25,7 +20,8 @@ const Sidebar = (): JSX.Element => {
 
     try {
       // 프로필 데이터 가져오기
-      await fetchProfileData(userId);
+      // await fetchProfileData(userId);
+      setNickname(nickname);
     } catch (error) {
       console.error("Error loading profile data:", error);
     }
@@ -77,7 +73,7 @@ const Sidebar = (): JSX.Element => {
           }
         />
         <span className="w-[320px] h-8 mt-3 font-bold text-2xl overflow-y-hidden text-center">
-          {profileData.nickname || "닉네임"}
+          {nickname || "닉네임"}
         </span>
       </div>
       <nav className="font-semibold space-y-8 pt-4">
