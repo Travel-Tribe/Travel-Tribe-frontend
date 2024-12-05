@@ -1,7 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Person from "../assets/icons/person.svg";
-import Calendar from "../assets/icons/Calendar.svg";
-import MapPin from "../assets/icons/Map pin.svg";
+import { FaRegUser, FaRegCalendarAlt } from "react-icons/fa";
+import { MdOutlinePinDrop } from "react-icons/md";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import fetchCall from "../Utils/apiFetch";
 import { useQuery, useQueryClient } from "react-query";
@@ -54,27 +53,15 @@ const ReviewDetail = (): JSX.Element => {
         <p className="text-lg font-bold mb-[5px]">{data.title}</p>
         <div className="flex items-center">
           <>
-            <img
-              src={Person}
-              alt="사람 아이콘"
-              className="w-[16px] h-[16px] mr-[5px]"
-            />
+            <FaRegUser className="w-[16px] h-[16px] mr-[5px]" />
             {data.nickname}
           </>
           <>
-            <img
-              src={Calendar}
-              alt="사람 아이콘"
-              className="w-[16px] h-[16px] ml-[10px] mr-[5px]"
-            />
+            <FaRegCalendarAlt className="w-[16px] h-[16px] ml-[10px] mr-[5px]" />
             {data.travelStartDate} ~ {data.travelEndDate}
           </>
           <>
-            <img
-              src={MapPin}
-              alt="사람 아이콘"
-              className="w-[16px] h-[16px] ml-[10px] mr-[5px]"
-            />
+            <MdOutlinePinDrop className="w-[16px] h-[16px] ml-[10px] mr-[5px]" />
             {data.region}
           </>
         </div>
