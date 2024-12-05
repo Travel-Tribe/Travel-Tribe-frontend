@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import profileImg from "../../assets/profileImg.webp";
+import profileImg from "../../assets/profile-img.webp";
 import { useNavigate } from "react-router-dom";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
@@ -8,9 +8,7 @@ import SelectBox from "../Common/SelectBox";
 import { MBTI } from "../../Constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
 import { postImgUrl } from "../../Utils/postImgUrl";
-import {
-  useUserProfile,
-} from "../../Hooks/userQueries";
+import { useUserProfile } from "../../Hooks/userQueries";
 import {
   checkNicknameDuplicate,
   updateProfileData,
@@ -244,7 +242,10 @@ const ProfileEdit = (): JSX.Element => {
             rows={4}
           />
           <div className="text-gray-500 text-sm text-right mt-1">
-            {profileData.introduction !== undefined ? profileData.introduction.length : 0}/150 자
+            {profileData.introduction !== undefined
+              ? profileData.introduction.length
+              : 0}
+            /150 자
           </div>
         </div>
 

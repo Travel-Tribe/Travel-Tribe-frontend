@@ -6,7 +6,7 @@ import { useUserProfile, useUserBasicInfo } from "../../Hooks/userQueries";
 
 import MyRecruitment from "./MyRecruitment";
 import MyTravelJoin from "./MyTravelJoin";
-import profileImg from "../../assets/profileImg.webp";
+import profileImg from "../../assets/profile-img.webp";
 import CountryName from "./SideComponents/CountryName";
 import MyLang from "./SideComponents/MyLang";
 
@@ -60,7 +60,7 @@ const MyProfile = (): JSX.Element => {
       navigate("/mypage/profileCreate");
     } else if (userProfile) {
       setProfileData(userProfile);
-      
+
       if (userProfile.birth) {
         setAge(userProfile.birth);
       }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import profileImg from "../../assets/profileImg.webp";
+import profileImg from "../../assets/profile-img.webp";
 import { useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
 import makeAnimated from "react-select/animated";
