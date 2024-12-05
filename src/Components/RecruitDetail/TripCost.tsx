@@ -1,12 +1,12 @@
-import { TravelPlan } from "../../mocks/mockData";
 import { LuDollarSign } from "react-icons/lu";
+import { TravelPlanType } from "../../type/types";
 
 interface TripCostProps {
-  travelPlan?: TravelPlan;
+  travelPlan?: TravelPlanType;
 }
 
 export default function TripCost({ travelPlan }: TripCostProps) {
-  const totalCost = (travelPlan: TravelPlan | undefined) => {
+  const totalCost = (travelPlan: TravelPlanType | undefined) => {
     if (!travelPlan) return 0;
     return (
       travelPlan.accommodationFee +

@@ -4,6 +4,7 @@ import { useReviewPostStore } from "../../store/reviewPostStore";
 import fetchCall from "../../Utils/apiFetch";
 import RecruitInfo from "./RecruitInfo";
 import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
+import { FileType } from "../../type/types";
 
 const ReviewInput = () => {
   // TODO: 실제 구현 시 useParams()로 변경
@@ -46,7 +47,7 @@ const ReviewInput = () => {
   // 언마운트될 때 클린업 함수 실행
   useEffect(() => {
     return () => {
-      formData.files.forEach(file => {
+      formData.files.forEach((file: FileType) => {
         if (file.previewAddress) {
           URL.revokeObjectURL(file.previewAddress);
         }
@@ -56,7 +57,7 @@ const ReviewInput = () => {
 
   const removeFile = (index: number) => {
     setFormData({
-      files: formData.files.filter((_, i) => i !== index),
+      files: formData.files.filter((_: unknown, i: number) => i !== index),
     });
   };
 
@@ -83,7 +84,7 @@ const ReviewInput = () => {
         region: formData.region,
         title: formData.title,
         contents: formData.contents,
-        files: formData.files.map(file => ({
+        files: formData.files.map((file: FileType) => ({
           fileAddress: file.fileAddress,
         })),
       };
@@ -110,7 +111,7 @@ const ReviewInput = () => {
 
   const handleReset = () => {
     // URL 객체들 해제
-    formData.files.forEach(file => {
+    formData.files.forEach((file: { previewAddress: string }) => {
       if (file.previewAddress) {
         URL.revokeObjectURL(file.previewAddress);
       }
@@ -173,7 +174,7 @@ const ReviewInput = () => {
               />
               {formData.files.length > 0 && (
                 <div className="grid grid-cols-3 gap-2 mt-2">
-                  {formData.files.map((file, index) => (
+                  {formData.files.map((file: FileType, index: number) => (
                     <div key={index} className="relative">
                       <img
                         src={file.previewAddress || file.fileAddress}

@@ -36,7 +36,7 @@ export interface EmailCodeType {
 export interface DayDetailType {
   title: string;
   description: string;
-  fileAddress: string | File;
+  fileAddress: string;
 }
 
 export interface ItineraryVisitType {
@@ -142,7 +142,7 @@ export interface CommunityType {
   country: string;
   region: string;
   createdAt: string;
-  files: [{ fileName: string }];
+  files: [{ fileName: string; communityId: number }];
 }
 
 export interface ErrorDetail {

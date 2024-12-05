@@ -25,6 +25,12 @@ interface LoginResponseHeaders {
   data: LoginResponse;
 }
 
+type ApiErrorResponse = {
+  response?: {
+    status: number;
+  };
+};
+
 const schema = z.object({
   email: z
     .string()
@@ -86,21 +92,15 @@ const SignIn = (): JSX.Element => {
       } else {
         throw new Error("로그인에 실패했습니다");
       }
-    } catch (error: any) {
-      console.error("로그인 중 에러 발생:", error);
-
-      // 에러 응답 처리
-      if (error.response?.status === 403) {
-        setError("root", {
-          type: "manual",
-          message: "탈퇴한 회원입니다.",
-        });
-      } else {
-        setError("root", {
-          type: "manual",
-          message: "이메일 또는 비밀번호가 올바르지 않습니다.",
-        });
-      }
+    } catch (error) {
+      const apiError = error as ApiErrorResponse;
+      setError("root", {
+        type: "manual",
+        message:
+          apiError.response?.status === 403
+            ? "탈퇴한 회원입니다."
+            : "이메일 또는 비밀번호가 올바르지 않습니다.",
+      });
     }
   };
 

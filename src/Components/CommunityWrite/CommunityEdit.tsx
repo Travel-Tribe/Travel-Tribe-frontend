@@ -4,19 +4,11 @@ import fetchCall from "../../Utils/apiFetch";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCommunityPostStore } from "../../store/communityPostStore";
 import { useQueryClient } from "react-query";
+import { CommunityType } from "../../type/types";
 
 interface AxiosResponse {
   data: {
-    data: {
-      communityId: number;
-      userId: string;
-      title: string;
-      content: string;
-      files: Array<{
-        communityId: number;
-        fileName: string;
-      }>;
-    };
+    data: CommunityType;
   };
 }
 

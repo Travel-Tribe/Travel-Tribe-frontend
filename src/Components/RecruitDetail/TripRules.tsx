@@ -1,8 +1,8 @@
 import { AiOutlineWarning } from "react-icons/ai";
-import { TravelPlan } from "../../mocks/mockData";
+import { TravelPlanType } from "../../type/types";
 
 interface TripRulesProps {
-  travelPlan?: TravelPlan;
+  travelPlan?: TravelPlanType;
 }
 
 export default function TripRules({ travelPlan }: TripRulesProps) {

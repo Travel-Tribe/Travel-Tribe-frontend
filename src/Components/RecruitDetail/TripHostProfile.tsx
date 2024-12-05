@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
-import { TravelPlan } from "../../mocks/mockData";
 import fetchCall from "../../Utils/apiFetch";
+import { TravelPlanType } from "../../type/types";
 
 interface UserProfile {
   nickname: string;
@@ -19,7 +19,7 @@ interface UseResponse {
   data: UserData;
 }
 interface TripHostProfileProps {
-  travelPlan?: TravelPlan;
+  travelPlan?: TravelPlanType;
 }
 
 export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
