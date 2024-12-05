@@ -1,13 +1,13 @@
 import { create } from "zustand";
-import { TravelPlan } from "../mocks/mockData";
+import { TravelPlanType } from "../type/types";
 
 interface RecruitPostType {
-  postData: TravelPlan;
+  postData: TravelPlanType;
   updateTravelData: (
-    key: keyof TravelPlan,
+    key: keyof TravelPlanType,
     value: number | string | unknown[] | void,
   ) => void;
-  setTravelData: (data: TravelPlan) => void;
+  setTravelData: (data: TravelPlanType) => void;
   clearTravelData: () => void;
 }
 
@@ -30,7 +30,10 @@ export const useRecruitPostStore = create<RecruitPostType>(set => ({
     limitSmoke: "무관",
     days: [],
   },
-  updateTravelData: (key: string, value: any) =>
+  updateTravelData: (
+    key: string | number | symbol,
+    value: number | string | void | unknown[],
+  ) =>
     set(state => ({
       postData: {
         ...state.postData,
