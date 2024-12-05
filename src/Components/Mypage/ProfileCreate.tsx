@@ -236,6 +236,7 @@ const ProfileCreate = (): JSX.Element | null => {
           <SelectBox
             options={[...MBTI]}
             selectedValue={profileData.mbti}
+            initialText="MBTI"
             onSelect={handleMbtiChange}
           />
         </div>

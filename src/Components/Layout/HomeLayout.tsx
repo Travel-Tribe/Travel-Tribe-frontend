@@ -107,11 +107,13 @@ const HomeLayout = () => {
         <SelectBox
           options={Object.keys(COUNTRY_DATA)}
           selectedValue={selectedContinent}
+          initialText="대륙"
           onSelect={e => handleContinentChange(e)}
         />
         <SelectBox
           options={COUNTRY_DATA[selectedContinent]}
           selectedValue={selectedCountry}
+          initialText="국가"
           onSelect={e => handleCountryChange(e)}
         />
         <input
@@ -125,6 +127,7 @@ const HomeLayout = () => {
           <SelectBox
             options={[...MBTI]}
             selectedValue={mbti}
+            initialText="MBTI"
             onSelect={e => handleMbti(e)}
           />
         )}
