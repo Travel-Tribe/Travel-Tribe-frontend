@@ -4,6 +4,8 @@ import fetchCall from "../../../Utils/apiFetch";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 import { mappingCondition } from "../../../Utils/mappingCondition";
 import { useQueryClient } from "react-query";
+import { mappingContinent } from "../../../Utils/mappingContinent";
+import { mappingCountry } from "../../../Utils/mappingCountry";
 
 const SubmitBtn = React.memo(() => {
   const { id: postId } = useParams();
@@ -22,6 +24,8 @@ const SubmitBtn = React.memo(() => {
           ...postData,
           limitSex: mappingCondition[postData.limitSex],
           limitSmoke: mappingCondition[postData.limitSmoke],
+          continent: mappingContinent[postData.continent],
+          travelCountry: mappingCountry(postData.travelCountry, "ko"),
         }),
       );
       console.log("등록하기 클릭 응답: ", response);
@@ -55,6 +59,8 @@ const SubmitBtn = React.memo(() => {
           ...postData,
           limitSex: mappingCondition[postData.limitSex],
           limitSmoke: mappingCondition[postData.limitSmoke],
+          continent: mappingContinent[postData.continent],
+          travelCountry: mappingCountry(postData.travelCountry, "ko"),
         }),
       );
 

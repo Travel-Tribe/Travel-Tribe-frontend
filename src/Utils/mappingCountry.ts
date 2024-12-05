@@ -1,4 +1,4 @@
-const list = {
+const list = Object.freeze({
   AD: ["안도라", "Andorra"],
   AE: ["아랍 에미리트", "United Arab Emirates"],
   AF: ["아프가니스탄", "Afghanistan"],
@@ -251,7 +251,7 @@ const list = {
   ZA: ["남아프리카 공화국", "South Africa"],
   ZM: ["잠비아", "Zambia"],
   ZW: ["짐바브웨", "Zimbabwe"],
-};
+});
 
 export const mappingCountry = (
   str: string | undefined = undefined,

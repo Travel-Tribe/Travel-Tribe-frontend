@@ -1,17 +1,12 @@
 import { LuMapPin } from "react-icons/lu";
-import { TravelPlan } from "../../mocks/mockData";
-import { mappingCountry } from "../../Utils/mappingCountry";
 import CountryMap from "./TripMap/CountryMap";
+import { TravelPlanType } from "../../type/types";
 
-interface TravelDetailsProps {
-  travelPlan?: TravelPlan;
-}
-
-export default function TripDetails({ travelPlan }: TravelDetailsProps) {
-  const travelCountry = travelPlan?.travelCountry
-    ? mappingCountry(travelPlan?.travelCountry, "en")
-    : "";
-
+export default function TripDetails({
+  travelPlan,
+}: {
+  travelPlan?: TravelPlanType;
+}) {
   return (
     <div className="card bg-base-100 border">
       <div className="card-body">
@@ -25,7 +20,7 @@ export default function TripDetails({ travelPlan }: TravelDetailsProps) {
               <div className="flex flex-col mt-2">
                 <span className="text-sm text-gray-500">여행 지역</span>
                 <span className="text-sm">
-                  {travelCountry} - {travelPlan?.region}
+                  {travelPlan?.travelCountry} - {travelPlan?.region}
                 </span>
               </div>
               <div className="flex flex-col mt-2">
@@ -36,7 +31,9 @@ export default function TripDetails({ travelPlan }: TravelDetailsProps) {
               </div>
             </div>
             <div className="w-60 h-40 rounded-xl overflow-hidden">
-              {travelCountry && <CountryMap country={travelCountry} />}
+              {travelPlan?.travelCountry && (
+                <CountryMap country={travelPlan?.travelCountry} />
+              )}
             </div>
           </div>
         </div>
