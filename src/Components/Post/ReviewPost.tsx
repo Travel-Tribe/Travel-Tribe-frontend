@@ -45,12 +45,13 @@ export const ReviewPost = React.memo(
               여행 국가: {mappingCountry(review.country, "en")}
             </p>
             <p className="text-[12px] truncate">여행 지역: {review.region}</p>
+            <p className="text-[12px] truncate">MBTI: {review.mbti}</p>
           </div>
           <div className="w-full border-t bc-[#DEDEDE]" />
         </Link>
         <div className="w-full h-[30px] flex items-center bg-white pl-[25px] border rounded-bl-lg rounded-br-lg border-t-0">
           <img
-            className="w-[12px] h-[12px] mr-[5px] radius-full"
+            className="w-[14px] h-[14px] mr-[5px] radius-full"
             src={userImg}
             alt="프로필 이미지"
             onError={handleUserImageError}
