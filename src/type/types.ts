@@ -84,8 +84,8 @@ export interface FileType {
 
 export interface ReviewType {
   userId: number;
-  postId: string;
-  reviewId: string;
+  postId: number;
+  reviewId: number;
   continent: string;
   country: string;
   region: string;
@@ -96,7 +96,8 @@ export interface ReviewType {
   travelStartDate: string;
   travelEndDate: string;
   createDate: string;
-  participants: string;
+  mbti: string;
+  profileFileAddress: string;
 }
 
 /** */

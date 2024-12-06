@@ -4,6 +4,10 @@ import { MdOutlinePinDrop } from "react-icons/md";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import fetchCall from "../Utils/apiFetch";
 import { useQuery, useQueryClient } from "react-query";
+import { ErrorType, ReviewType } from "../type/types";
+import { AxiosError } from "axios";
+import { useState } from "react";
+import Modal from "../Components/Common/Modal";
 
 const ReviewDetail = (): JSX.Element => {
   const { reviewId, postId } = useParams<{
@@ -12,29 +16,36 @@ const ReviewDetail = (): JSX.Element => {
   }>();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["reviewData", postId],
     queryFn: async () => {
-      const response = await fetchCall(
-        `/api/v1/posts/${postId}/reviews/${reviewId}/view`,
-        "get",
-      );
+      const response = await fetchCall<{
+        data: {
+          data: ReviewType;
+        };
+      }>(`/api/v1/posts/${postId}/reviews/${reviewId}/view`, "get");
       console.log("reviewData", response);
       return response.data.data;
     },
   });
 
   const deleteReview = async () => {
-    const response = await fetchCall(
-      `/api/v1/posts/${postId}/reviews/${reviewId}`,
-      "delete",
-    );
+    const response = await fetchCall<{
+      data: {
+        result: string;
+      };
+    }>(`/api/v1/posts/${postId}/reviews/${reviewId}`, "delete");
 
     if (response.data.result === "SUCCESS") {
       queryClient.invalidateQueries("reviewData");
-      alert(`${data.title}이 삭제되었습니다.`);
-      navigate("/review");
+      setModalMessage(`삭제되었습니다.`);
+      setShowModal(true);
+    } else {
+      setModalMessage("오류가 발생했습니다.");
+      setShowModal(true);
     }
   };
 
@@ -43,33 +54,43 @@ const ReviewDetail = (): JSX.Element => {
   }
 
   if (isError) {
-    console.error("에러", error.response?.data?.errors[0]?.errorMessage);
-    return <>{error.response?.data?.errors[0]?.errorMessage}</>;
+    console.error(
+      "에러",
+      (error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage,
+    );
+    return (
+      <>
+        {
+          (error as AxiosError<ErrorType>).response?.data?.errors[0]
+            ?.errorMessage
+        }
+      </>
+    );
   }
 
   return (
     <div className="container mx-auto px-4 pb-8">
       <div className="mb-[10px]">
-        <p className="text-lg font-bold mb-[5px]">{data.title}</p>
+        <p className="text-lg font-bold mb-[5px]">{data?.title}</p>
         <div className="flex items-center">
           <>
             <FaRegUser className="w-[16px] h-[16px] mr-[5px]" />
-            {data.nickname}
+            {data?.nickname}
           </>
           <>
             <FaRegCalendarAlt className="w-[16px] h-[16px] ml-[10px] mr-[5px]" />
-            {data.travelStartDate} ~ {data.travelEndDate}
+            {data?.travelStartDate} ~ {data?.travelEndDate}
           </>
           <>
             <MdOutlinePinDrop className="w-[16px] h-[16px] ml-[10px] mr-[5px]" />
-            {data.region}
+            {data?.region}
           </>
         </div>
       </div>
       <div className="mb-[10px] px-[15px] py-[20px] border rounded-xl">
-        <div className="mb-[20px] whitespace-pre-line">{data.contents}</div>
+        <div className="mb-[20px] whitespace-pre-line">{data?.contents}</div>
         <div className="flex gap-[10px] items-center overScroll-x-scroll">
-          {data.files?.map((file: { fileAddress: string }) => (
+          {data?.files?.map((file: { fileAddress: string }) => (
             <img
               key={file.fileAddress}
               src={
@@ -81,10 +102,10 @@ const ReviewDetail = (): JSX.Element => {
             />
           ))}
         </div>
-        <div className="mt-[10px]">작성일: {data.createDate}</div>
+        <div className="mt-[10px]">작성일: {data?.createDate}</div>
       </div>
       <div className="flex justify-between">
-        {String(data.userId) === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
+        {String(data?.userId) === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
           <div>
             <button
               className="btn btn-sm btn-warning text-white mr-[10px]"
@@ -108,6 +129,18 @@ const ReviewDetail = (): JSX.Element => {
           목록으로
         </Link>
       </div>
+      <Modal
+        isOpen={showModal}
+        onClose={
+          modalMessage === "삭제되었습니다."
+            ? () => {
+                setShowModal(false);
+                navigate("/review");
+              }
+            : () => setShowModal(false)
+        }
+        message={modalMessage}
+      />
     </div>
   );
 };
