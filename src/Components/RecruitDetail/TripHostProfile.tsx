@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import fetchCall from "../../Utils/apiFetch";
 import { TravelPlanType } from "../../type/types";
+import profileImage from "../../assets/profile-img.webp";
 
 interface UserProfile {
   nickname: string;
@@ -68,8 +69,8 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
                 />
               </div>
             ) : (
-              <div className="bg-neutral text-neutral-content w-12 h-12 flex items-center justify-center rounded-full">
-                <span className="text-xs">사진</span>
+              <div className="w-12 h-12 flex items-center justify-center rounded-full">
+                <img src={profileImage} alt="기본 프로필" />
               </div>
             )}
           </div>
