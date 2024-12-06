@@ -274,37 +274,12 @@ export const RecruitMockData: TravelPlanType[] = [
 
 export const ReviewData: ReviewType[] = [
   {
-    postId: "1",
-    reviewId: "1",
-    continent: "ASIA",
-    country: "KR",
-    region: "강릉",
-    participants: "4",
-    title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
-    files: [
-      { fileAddress: "/images/gangneung1.jpg" },
-      { fileAddress: "/images/gangneung2.jpg" },
-    ],
     userId: 3,
-    nickname: "tester1",
-    travelStartDate: "2022-01-01",
-    travelEndDate: "2022-01-03",
-    createDate: "2022-01-04",
-  },
-  {
-    postId: "1",
-    reviewId: "2",
+    postId: 1,
+    reviewId: 1,
     continent: "ASIA",
     country: "KR",
     region: "강릉",
-    participants: "4",
     title: "1박 2일 뚜벅이 강릉 여행 후기",
     contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
       강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
@@ -317,211 +292,12 @@ export const ReviewData: ReviewType[] = [
       { fileAddress: "/images/gangneung1.jpg" },
       { fileAddress: "/images/gangneung2.jpg" },
     ],
-    userId: 1,
+    travelStartDate: "2024-01-01",
+    travelEndDate: "2024-01-02",
+    createDate: "2024-01-10",
     nickname: "tester1",
-    travelStartDate: "2022-01-01",
-    travelEndDate: "2022-01-03",
-    createDate: "2022-01-04",
-  },
-  {
-    postId: "1",
-    reviewId: "3",
-    continent: "ASIA",
-    country: "KR",
-    region: "강릉",
-    participants: "4",
-    title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
-    files: [
-      { fileAddress: "/images/gangneung1.jpg" },
-      { fileAddress: "/images/gangneung2.jpg" },
-    ],
-    userId: 1,
-    nickname: "tester1",
-    travelStartDate: "2022-01-01",
-    travelEndDate: "2022-01-03",
-    createDate: "2022-01-04",
-  },
-  {
-    postId: "5",
-    reviewId: "4",
-    continent: "ASIA",
-    country: "KR",
-    region: "강릉",
-    participants: "4",
-    title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
-    files: [
-      { fileAddress: "/images/gangneung1.jpg" },
-      { fileAddress: "/images/gangneung2.jpg" },
-    ],
-    userId: 3,
-    nickname: "tester1",
-    travelStartDate: "2022-01-01",
-    travelEndDate: "2022-01-03",
-    createDate: "2022-01-04",
-  },
-  {
-    postId: "5",
-    reviewId: "5",
-    continent: "ASIA",
-    country: "KR",
-    region: "강릉",
-    participants: "4",
-    title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
-    files: [
-      { fileAddress: "/images/gangneung1.jpg" },
-      { fileAddress: "/images/gangneung2.jpg" },
-    ],
-    userId: 2,
-    nickname: "tester1",
-    travelStartDate: "2022-01-01",
-    travelEndDate: "2022-01-03",
-    createDate: "2022-01-04",
-  },
-  {
-    postId: "6",
-    reviewId: "6",
-    continent: "ASIA",
-    country: "KR",
-    region: "강릉",
-    participants: "4",
-    title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
-    files: [
-      { fileAddress: "/images/gangneung1.jpg" },
-      { fileAddress: "/images/gangneung2.jpg" },
-    ],
-    userId: 4,
-    nickname: "tester1",
-    travelStartDate: "2022-01-01",
-    travelEndDate: "2022-01-03",
-    createDate: "2022-01-04",
-  },
-  {
-    postId: "7",
-    reviewId: "7",
-    continent: "ASIA",
-    country: "KR",
-    region: "강릉",
-    participants: "4",
-    title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
-    files: [
-      { fileAddress: "/images/gangneung1.jpg" },
-      { fileAddress: "/images/gangneung2.jpg" },
-    ],
-    userId: 1,
-    nickname: "tester1",
-    travelStartDate: "2022-01-01",
-    travelEndDate: "2022-01-03",
-    createDate: "2022-01-04",
-  },
-  {
-    postId: "8",
-    reviewId: "8",
-    continent: "ASIA",
-    country: "KR",
-    region: "강릉",
-    participants: "4",
-    title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
-    files: [
-      { fileAddress: "/images/gangneung1.jpg" },
-      { fileAddress: "/images/gangneung2.jpg" },
-    ],
-    userId: 1,
-    nickname: "tester1",
-    travelStartDate: "2022-01-01",
-    travelEndDate: "2022-01-03",
-    createDate: "2022-01-04",
-  },
-  {
-    postId: "9",
-    reviewId: "9",
-    continent: "ASIA",
-    country: "KR",
-    region: "강릉",
-    participants: "4",
-    title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
-    files: [
-      { fileAddress: "/images/gangneung1.jpg" },
-      { fileAddress: "/images/gangneung2.jpg" },
-    ],
-    userId: 1,
-    nickname: "tester1",
-    travelStartDate: "2022-01-01",
-    travelEndDate: "2022-01-03",
-    createDate: "2022-01-04",
-  },
-  {
-    postId: "10",
-    reviewId: "10",
-    continent: "ASIA",
-    country: "KR",
-    region: "강릉",
-    participants: "4",
-    title: "1박 2일 뚜벅이 강릉 여행 후기",
-    contents: `강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다. 
-      강릉에서의 멋진 여행을 즐겼습니다. 바다도 보고 맛있는 음식도 먹고 좋은 시간이었습니다.`,
-    files: [
-      { fileAddress: "/images/gangneung1.jpg" },
-      { fileAddress: "/images/gangneung2.jpg" },
-    ],
-    userId: 1,
-    nickname: "tester1",
-    travelStartDate: "2022-01-01",
-    travelEndDate: "2022-01-03",
-    createDate: "2022-01-04",
+    mbti: "ISTJ",
+    profileFileAddress: "",
   },
 ];
 
