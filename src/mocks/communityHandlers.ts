@@ -1,5 +1,6 @@
 import { http, HttpResponse } from "msw";
-import { CommunityListProps, CommunityData } from "./mockData";
+import { CommunityData } from "./mockData";
+import { CommunityType } from "../type/types";
 
 export const communityHandlers = [
   http.get("/api/v1/communities", async ({ request }) => {
@@ -63,7 +64,7 @@ export const communityHandlers = [
 
   http.put("/api/v1/communities/:id", async ({ request, params }) => {
     console.log("커뮤니티 글 수정");
-    const newPostData = (await request.json()) as CommunityListProps;
+    const newPostData = (await request.json()) as CommunityType;
     const replaceIndex = CommunityData.reduce((indexes, cur, index) => {
       if (cur.communityId === Number(params.id)) {
         indexes.push(index);
@@ -82,7 +83,7 @@ export const communityHandlers = [
   }),
 
   http.post("/api/v1/communities", async ({ request }) => {
-    const newData = (await request.json()) as CommunityListProps;
+    const newData = (await request.json()) as CommunityType;
 
     CommunityData.push(newData);
     console.log("커뮤니티 글 등록", newData);

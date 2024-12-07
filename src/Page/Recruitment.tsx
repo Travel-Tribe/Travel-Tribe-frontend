@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useRecruitPostStore } from "../store/recruitPostStore";
-import { useProfileStore } from "../store/profileStore";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import { getFilterParams } from "../Utils/getFilterParams";
 import { ItemType, useInfiniteFetch } from "../Hooks/useInfinityFetch";
 import { ErrorType, TravelPlanType } from "../type/types";
 import { AxiosError } from "axios";
 import { RecruitmentPost } from "../Components/Post/RecruitmentPost";
+import { fetchUserProfile } from "../apis/user";
 
 interface RecruitmentProps {
   selectedContinent?: string;
@@ -25,7 +25,6 @@ const Recruitment = React.memo(
     mbti,
   }: RecruitmentProps): JSX.Element => {
     const { clearTravelData } = useRecruitPostStore();
-    const { fetchProfileData } = useProfileStore();
     const filters = getFilterParams(
       search,
       city,
@@ -45,12 +44,12 @@ const Recruitment = React.memo(
       const initialize = async () => {
         const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
         if (userId) {
-          await fetchProfileData(userId);
+          await fetchUserProfile(userId);
         }
       };
       initialize();
       window.scrollTo(0, 0);
-    }, [clearTravelData, fetchProfileData]);
+    }, [clearTravelData]);
 
     if (isError) {
       console.error(
