@@ -20,6 +20,7 @@ export const UserMockData: UserType[] = [
     phone: "123-456-7890",
     profileCheck: true,
     mbti: "ISTJ",
+    fileAddress: "",
   },
   {
     userId: 2,
@@ -30,6 +31,7 @@ export const UserMockData: UserType[] = [
     phone: "123-456-7891",
     profileCheck: false,
     mbti: "INFJ",
+    fileAddress: "",
   },
   {
     userId: 3,
@@ -40,6 +42,7 @@ export const UserMockData: UserType[] = [
     phone: "123-456-7892",
     profileCheck: true,
     mbti: "ENTP",
+    fileAddress: "",
   },
   {
     userId: 4,
@@ -50,6 +53,7 @@ export const UserMockData: UserType[] = [
     phone: "123-456-7893",
     profileCheck: true,
     mbti: "ISTP",
+    fileAddress: "",
   },
   {
     userId: 5,
@@ -60,6 +64,7 @@ export const UserMockData: UserType[] = [
     phone: "123-456-7894",
     profileCheck: true,
     mbti: "ISFP",
+    fileAddress: "",
   },
 ];
 
