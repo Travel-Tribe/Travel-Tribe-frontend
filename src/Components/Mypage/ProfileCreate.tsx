@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import profileImg from "../../assets/profile-img.webp";
 import { useNavigate } from "react-router-dom";
-import fetchCall from "../../Utils/apiFetch";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
@@ -9,15 +8,13 @@ import SelectBox from "../Common/SelectBox";
 import { MBTI } from "../../Constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
 import { postImgUrl } from "../../Utils/postImgUrl";
+import { createProfileData } from "../../apis/user";
 
 const ProfileCreate = (): JSX.Element | null => {
   const { profileData, setProfileData, updateProfileField } = useProfileStore();
   const profileCheck =
     localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) == "true";
-
-  // const [error, setError] = useState("");
   const [formValid, setFormValid] = useState(false);
-
   const navigate = useNavigate();
   const animatedComponents = makeAnimated();
 
@@ -83,10 +80,7 @@ const ProfileCreate = (): JSX.Element | null => {
   // 프로필 저장
   const handleUpdateProfile = async () => {
     try {
-      const { nickname, phone, ...filteredProfileData } = profileData;
-      await fetchCall(`/api/v1/users/profile`, "post", {
-        ...filteredProfileData,
-      });
+      createProfileData();
       localStorage.setItem("ProfileCheck", "true");
       alert("프로필 생성 완료");
       navigate("/mypage");
@@ -98,13 +92,13 @@ const ProfileCreate = (): JSX.Element | null => {
   // 폼 유효성 검사
   useEffect(() => {
     setFormValid(
-      profileData.birth.trim() !== "" &&
-        profileData.gender.trim() !== "" &&
-        profileData.smoking.trim() !== "" &&
-        profileData.mbti.trim() !== "",
+      profileData.birth?.trim() !== "" &&
+        profileData.gender?.trim() !== "" &&
+        profileData.smoking?.trim() !== "" &&
+        profileData.mbti?.trim() !== "",
     );
   }, [profileData]);
-
+  console.log(profileData);
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -153,7 +147,10 @@ const ProfileCreate = (): JSX.Element | null => {
             rows={4}
           />
           <div className="text-gray-500 text-sm text-right mt-1">
-            {profileData.introduction.length}/150 자
+            {profileData.introduction !== undefined
+              ? profileData.introduction.length
+              : 0}
+            /150 자
           </div>
         </div>
 
@@ -163,7 +160,7 @@ const ProfileCreate = (): JSX.Element | null => {
           <input
             type="date"
             className="w-25 border border-black rounded p-2 text-sm cursor-pointer"
-            value={profileData.birth}
+            value={profileData.birth || ""}
             onChange={handleBirthChange}
           />
         </div>
@@ -176,10 +173,13 @@ const ProfileCreate = (): JSX.Element | null => {
                 <input
                   type="radio"
                   name="gender"
-                  value="MALE"
-                  checked={profileData.gender === "MALE"}
-                  onChange={() => handleGenderChange("MALE")}
-                  className="mr-2"
+                  value="남자"
+                  checked={
+                    profileData.gender === "남자" ||
+                    profileData.gender === "MALE"
+                  }
+                  onChange={() => handleGenderChange("남자")}
+                  className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 남자
               </label>
@@ -187,10 +187,13 @@ const ProfileCreate = (): JSX.Element | null => {
                 <input
                   type="radio"
                   name="gender"
-                  value="FEMALE"
-                  checked={profileData.gender === "FEMALE"}
-                  onChange={() => handleGenderChange("FEMALE")}
-                  className="mr-2"
+                  value="여자"
+                  checked={
+                    profileData.gender === "여자" ||
+                    profileData.gender === "FEMALE"
+                  }
+                  onChange={() => handleGenderChange("여자")}
+                  className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 여자
               </label>
@@ -207,10 +210,13 @@ const ProfileCreate = (): JSX.Element | null => {
                 <input
                   type="radio"
                   name="smoking"
-                  value="YES"
-                  checked={profileData.smoking === "YES"}
-                  onChange={() => handleSmokingChange("YES")}
-                  className="mr-2"
+                  value="흡연"
+                  checked={
+                    profileData.smoking === "흡연" ||
+                    profileData.smoking === "YES"
+                  }
+                  onChange={() => handleSmokingChange("흡연")}
+                  className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 흡연
               </label>
@@ -218,10 +224,13 @@ const ProfileCreate = (): JSX.Element | null => {
                 <input
                   type="radio"
                   name="smoking"
-                  value="NO"
-                  checked={profileData.smoking === "NO"}
-                  onChange={() => handleSmokingChange("NO")}
-                  className="mr-2"
+                  value="비흡연"
+                  checked={
+                    profileData.smoking === "비흡연" ||
+                    profileData.smoking === "NO"
+                  }
+                  onChange={() => handleSmokingChange("비흡연")}
+                  className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 비흡연
               </label>
@@ -248,7 +257,7 @@ const ProfileCreate = (): JSX.Element | null => {
           <CreatableSelect
             isMulti
             components={animatedComponents}
-            value={profileData.visitedCountries.map(country => ({
+            value={profileData.visitedCountries?.map(country => ({
               label: country,
               value: country,
             }))}
@@ -266,7 +275,7 @@ const ProfileCreate = (): JSX.Element | null => {
           <CreatableSelect
             isMulti
             components={animatedComponents}
-            value={profileData.langAbilities.map(lang => ({
+            value={profileData.langAbilities?.map(lang => ({
               label: lang,
               value: lang,
             }))}
