@@ -17,7 +17,7 @@ export interface UserProfileType {
   mbti: string;
   smoking: string;
   gender: string;
-  birth: string | undefined;
+  birth: string;
   ratingAvg: null | number;
   fileAddress: string;
   langAbilities: string[] | undefined;
