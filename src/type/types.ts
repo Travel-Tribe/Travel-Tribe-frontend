@@ -17,7 +17,7 @@ export interface UserProfileType {
   mbti: string;
   smoking: string;
   gender: string;
-  birth: string;
+  birth: string | undefined;
   ratingAvg: null | number;
   fileAddress: string;
   langAbilities: string[] | undefined;
@@ -107,6 +107,8 @@ export interface ParticipationType {
   participationId: number;
   postId: number;
   userId: string;
+  ParticipationStatus: string;
+  ratingStatus: string;
 }
 
 /** */
