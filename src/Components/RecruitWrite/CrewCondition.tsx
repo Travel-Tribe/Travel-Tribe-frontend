@@ -26,7 +26,7 @@ const CrewCondition = React.memo((): JSX.Element => {
       updateTravelData("limitSex", userProfile.gender);
       updateTravelData("limitSmoke", userProfile.smoking);
     }
-  }, []);
+  }, [updateTravelData, userProfile]);
 
   if (isProfileError) {
     console.error(
