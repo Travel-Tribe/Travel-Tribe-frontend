@@ -3,7 +3,7 @@ import { COUNTRY_DATA } from "../../../Constants/COUNTRY_DATA";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const DestinationSelect = React.memo(() => {
-  const { postData } = useRecruitPostStore();
+  const { postData, updateTravelData } = useRecruitPostStore();
   const [continent, setContinent] = useState<string>("선택");
   const [country, setCountry] = useState<string>("선택");
 
@@ -16,13 +16,21 @@ const DestinationSelect = React.memo(() => {
     if (postData.travelCountry) setCountry(postData.travelCountry);
   }, [postData.continent, postData.travelCountry]);
 
-  const handleContinentChange = useCallback((selectedContinent: string) => {
-    setContinent(selectedContinent);
-  }, []);
+  const handleContinentChange = useCallback(
+    (selectedContinent: string) => {
+      setContinent(selectedContinent);
+      updateTravelData("continent", selectedContinent);
+    },
+    [updateTravelData],
+  );
 
-  const handleCountryChange = useCallback((selectedCountry: string) => {
-    setCountry(selectedCountry);
-  }, []);
+  const handleCountryChange = useCallback(
+    (selectedCountry: string) => {
+      setCountry(selectedCountry);
+      updateTravelData("travelCountry", selectedCountry);
+    },
+    [updateTravelData],
+  );
 
   return (
     <div className="flex items-center mb-2">

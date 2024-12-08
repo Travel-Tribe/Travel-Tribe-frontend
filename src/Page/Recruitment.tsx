@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
 import { useRecruitPostStore } from "../store/recruitPostStore";
-import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import { getFilterParams } from "../Utils/getFilterParams";
 import { ItemType, useInfiniteFetch } from "../Hooks/useInfinityFetch";
 import { ErrorType, TravelPlanType } from "../type/types";
 import { AxiosError } from "axios";
 import { RecruitmentPost } from "../Components/Post/RecruitmentPost";
-import { fetchUserProfile } from "../apis/user";
 
 interface RecruitmentProps {
   selectedContinent?: string;
@@ -41,13 +39,6 @@ const Recruitment = React.memo(
 
     useEffect(() => {
       clearTravelData();
-      const initialize = async () => {
-        const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
-        if (userId) {
-          await fetchUserProfile(userId);
-        }
-      };
-      initialize();
       window.scrollTo(0, 0);
     }, [clearTravelData]);
 

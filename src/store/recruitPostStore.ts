@@ -29,6 +29,9 @@ export const useRecruitPostStore = create<RecruitPostType>(set => ({
     limitSex: "무관",
     limitSmoke: "무관",
     days: [],
+    mbti: "",
+    nickname: "",
+    profileFileAddress: "",
   },
   updateTravelData: (
     key: string | number | symbol,
@@ -60,6 +63,9 @@ export const useRecruitPostStore = create<RecruitPostType>(set => ({
         limitSex: "무관",
         limitSmoke: "무관",
         days: [],
+        mbti: "",
+        nickname: "",
+        profileFileAddress: "",
       },
     }),
 }));
