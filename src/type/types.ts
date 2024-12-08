@@ -74,6 +74,9 @@ export interface TravelPlanType {
   limitSex: string;
   limitSmoke: string;
   deadline: string; // "YYYY-MM-DD"
+  nickname: string;
+  mbti: string;
+  profileFileAddress: string;
   days: DayType[];
 }
 
@@ -140,13 +143,14 @@ export interface VotingType {
 export interface CommunityType {
   communityId: number;
   userId: number;
+  nickname: string;
   title: string;
   content: string;
   continent: string;
   country: string;
   region: string;
   createdAt: string;
-  files: [{ fileName: string; communityId: number }];
+  files: [{ fileName: string }];
 }
 
 export interface ErrorDetail {

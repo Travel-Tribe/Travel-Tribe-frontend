@@ -1,16 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
-import { useProfileStore } from "../../../store/profileStore";
 
 const Age = React.memo((): JSX.Element => {
   const updateTravelData = useRecruitPostStore(state => state.updateTravelData);
   const limitMinAge = useRecruitPostStore(state => state.postData.limitMinAge);
   const limitMaxAge = useRecruitPostStore(state => state.postData.limitMaxAge);
-  const age = Number(useProfileStore(state => state.age));
-
-  useEffect(() => {
-    updateTravelData("limitMinAge", age);
-  }, [updateTravelData, age]);
 
   return (
     <div className="flex items-center mb-2">
@@ -20,9 +14,9 @@ const Age = React.memo((): JSX.Element => {
         value={limitMinAge}
         onChange={e => updateTravelData("limitMinAge", Number(e.target.value))}
       >
-        {[...Array(99 - age)].map((_, i) => (
-          <option key={i + age} value={i + age}>
-            {i + age}
+        {[...Array(99)].map((_, i) => (
+          <option key={i} value={i}>
+            {i}
           </option>
         ))}
       </select>

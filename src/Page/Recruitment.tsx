@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import { useRecruitPostStore } from "../store/recruitPostStore";
-import { useProfileStore } from "../store/profileStore";
-import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import { getFilterParams } from "../Utils/getFilterParams";
 import { ItemType, useInfiniteFetch } from "../Hooks/useInfinityFetch";
 import { ErrorType, TravelPlanType } from "../type/types";
@@ -25,7 +23,6 @@ const Recruitment = React.memo(
     mbti,
   }: RecruitmentProps): JSX.Element => {
     const { clearTravelData } = useRecruitPostStore();
-    const { fetchProfileData } = useProfileStore();
     const filters = getFilterParams(
       search,
       city,
@@ -42,15 +39,8 @@ const Recruitment = React.memo(
 
     useEffect(() => {
       clearTravelData();
-      const initialize = async () => {
-        const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
-        if (userId) {
-          await fetchProfileData(userId);
-        }
-      };
-      initialize();
       window.scrollTo(0, 0);
-    }, [clearTravelData, fetchProfileData]);
+    }, [clearTravelData]);
 
     if (isError) {
       console.error(

@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { CommunityType } from "../../type/types";
 import { Link } from "react-router-dom";
 
 export const CommunityPost = React.memo(
   ({ community }: { community: CommunityType }): JSX.Element => {
+    const [imgSrc, setImgSrc] = useState(
+      import.meta.env.VITE_API_BASE_URL +
+        `/api/v1/file/preview?fileUrl=${community.files[0].fileName}`,
+    );
+
+    const handleDefaultImageError = () => {
+      setImgSrc("/../src/assets/default-image.jpeg"); // 기본 이미지로 변경
+    };
+
     return (
       <div className="h-[100px] relative">
         <Link
@@ -18,17 +27,14 @@ export const CommunityPost = React.memo(
             <p className="text-[12px] truncate">
               작성 날짜: {community.createdAt}
             </p>
+            <p className="text-[12px] truncate">작성자: {community.nickname}</p>
           </div>
-          {community?.files[0] && (
-            <img
-              src={
-                import.meta.env.VITE_API_BASE_URL +
-                `/api/v1/file/preview?fileUrl=${community.files[0].fileName}`
-              }
-              alt={community.title}
-              className="w-[200px] h-[100px] object-cover absolute top-0 right-0"
-            />
-          )}
+          <img
+            src={imgSrc}
+            alt={community.title}
+            className="w-[200px] h-[100px] object-cover absolute top-0 right-0"
+            onError={handleDefaultImageError}
+          />
         </Link>
       </div>
     );

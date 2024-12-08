@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useMemo } from "react";
-import { useLoadScript, Libraries } from "@react-google-maps/api";
-import { useRecruitPostStore } from "../../store/recruitPostStore";
+import React, { useState, useCallback } from "react";
+import { useRecruitPostStore } from "../../../store/recruitPostStore";
+import { useGoogleMaps } from "../../../Hooks/useGoogleMaps";
 
 interface SpecificLocationSearchProps {
   placeName: string;
@@ -30,15 +30,15 @@ const SpecificLocationSearch = React.memo(
   }: SpecificLocationSearchProps): JSX.Element => {
     const { postData } = useRecruitPostStore();
     const [options, setOptions] = useState<
-      { name: string; address: string; lat: number; lng: number }[]
+      {
+        name: string | undefined;
+        address: string;
+        lat: number | undefined;
+        lng: number | undefined;
+      }[]
     >([]);
 
-    const libraries: Libraries = useMemo(() => ["places", "geometry"], []);
-
-    const { isLoaded, loadError } = useLoadScript({
-      googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY ?? "",
-      libraries,
-    });
+    const { isLoaded, loadError } = useGoogleMaps();
 
     const getCoordinatesFromLocation = useCallback(async () => {
       if (!isLoaded) return null;
@@ -110,8 +110,10 @@ const SpecificLocationSearch = React.memo(
 
     const handleOptionSelect = (selectedIndex: number) => {
       const selectedOption = options[selectedIndex];
-      onPlaceSelected(dayIndex, destIndex, "latitude", selectedOption.lat);
-      onPlaceSelected(dayIndex, destIndex, "longitude", selectedOption.lng);
+      if (selectedOption.lat !== undefined)
+        onPlaceSelected(dayIndex, destIndex, "latitude", selectedOption.lat);
+      if (selectedOption.lng !== undefined)
+        onPlaceSelected(dayIndex, destIndex, "longitude", selectedOption.lng);
 
       setOptions([]);
     };

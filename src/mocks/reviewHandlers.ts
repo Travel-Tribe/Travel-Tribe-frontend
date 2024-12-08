@@ -23,7 +23,7 @@ export const reviewHandlers = [
     const start = page * limit;
     const end = start + limit;
 
-    console.log("responseData");
+    console.log("후기 목록 조회");
 
     return HttpResponse.json(
       {
