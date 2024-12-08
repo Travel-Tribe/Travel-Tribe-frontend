@@ -108,6 +108,8 @@ export interface ParticipationType {
   participationId: number;
   postId: number;
   userId: string;
+  ParticipationStatus: string;
+  ratingStatus: string;
 }
 
 /** */

@@ -3,6 +3,7 @@ import fetchCall from "../../Utils/apiFetch";
 import { useProfileStore } from "../../store/profileStore";
 import profileImg from "../../assets/profile-img.webp";
 import { FaStar, FaRegStarHalf } from "react-icons/fa";
+import { useParticipantsProfiles } from "../../Hooks/userQueries";
 
 interface RatingModalProps {
   isOpen: boolean;
@@ -20,8 +21,9 @@ const Rating: React.FC<RatingModalProps> = ({
   onRatingComplete,
 }): JSX.Element | null => {
   const [ratings, setRatings] = useState<number[]>([]);
-  const { userProfiles, fetchParticipantsProfiles } = useProfileStore();
-
+  const { data: userProfiles, isLoading } =
+    useParticipantsProfiles(participants);
+  console.log(userProfiles);
   const handleRatingSubmit = async () => {
     try {
       // 각 userId와 평점을 서버로 전송
@@ -46,7 +48,6 @@ const Rating: React.FC<RatingModalProps> = ({
 
   useEffect(() => {
     setRatings(Array(participants.length).fill(0.0));
-    fetchParticipantsProfiles(participants);
   }, [participants]);
 
   const handleRatingChange = (index: number, value: number) => {
@@ -151,7 +152,7 @@ const Rating: React.FC<RatingModalProps> = ({
         <div className="space-y-4">
           {ratings.map((rating, index) => {
             const userId = participants[index];
-            const profile = userProfiles[userId] || {
+            const profile = userProfiles?.[userId] || {
               nickname: "Unknown",
               fileAddress: profileImg,
             };

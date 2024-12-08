@@ -268,12 +268,12 @@ const ProfileEdit = (): JSX.Element => {
                 <input
                   type="radio"
                   name="gender"
-                  value="MALE"
+                  value="남자"
                   checked={
                     profileData.gender === "남자" ||
                     profileData.gender === "MALE"
                   }
-                  onChange={() => handleGenderChange("MALE")}
+                  onChange={() => handleGenderChange("남자")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 남자
@@ -282,12 +282,12 @@ const ProfileEdit = (): JSX.Element => {
                 <input
                   type="radio"
                   name="gender"
-                  value="FEMALE"
+                  value="여자"
                   checked={
                     profileData.gender === "여자" ||
                     profileData.gender === "FEMALE"
                   }
-                  onChange={() => handleGenderChange("FEMALE")}
+                  onChange={() => handleGenderChange("여자")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 여자
@@ -305,12 +305,12 @@ const ProfileEdit = (): JSX.Element => {
                 <input
                   type="radio"
                   name="smoking"
-                  value="YES"
+                  value="흡연"
                   checked={
-                    profileData.smoking === "흡연자" ||
+                    profileData.smoking === "흡연" ||
                     profileData.smoking === "YES"
                   }
-                  onChange={() => handleSmokingChange("YES")}
+                  onChange={() => handleSmokingChange("흡연")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 흡연
@@ -319,12 +319,12 @@ const ProfileEdit = (): JSX.Element => {
                 <input
                   type="radio"
                   name="smoking"
-                  value="NO"
+                  value="비흡연"
                   checked={
-                    profileData.smoking === "비흡연자" ||
+                    profileData.smoking === "비흡연" ||
                     profileData.smoking === "NO"
                   }
-                  onChange={() => handleSmokingChange("NO")}
+                  onChange={() => handleSmokingChange("비흡연")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 비흡연
@@ -352,7 +352,7 @@ const ProfileEdit = (): JSX.Element => {
           <CreatableSelect
             isMulti
             components={animatedComponents}
-            value={profileData.visitedCountries.map(country => ({
+            value={profileData.visitedCountries?.map(country => ({
               label: country,
               value: country,
             }))}
@@ -370,7 +370,7 @@ const ProfileEdit = (): JSX.Element => {
           <CreatableSelect
             isMulti
             components={animatedComponents}
-            value={profileData.langAbilities.map(lang => ({
+            value={profileData.langAbilities?.map(lang => ({
               label: lang,
               value: lang,
             }))}

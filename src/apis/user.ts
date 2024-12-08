@@ -1,5 +1,6 @@
 import fetchCall from "../Utils/apiFetch";
 import { UserProfileType } from "../type/types";
+import { useProfileStore } from "../store/profileStore";
 
 // 단일 사용자 프로필 가져오기
 export const fetchUserProfile = async (userId: string) => {
@@ -51,8 +52,7 @@ export const fetchParticipantsProfiles = async (userIds: string[]) => {
 
 // 프로필 데이터 업데이트
 export const updateProfileData = async (data: Partial<UserProfileType>) => {
-  const response = await fetchCall(`/api/v1/users/profile`, "patch", data);
-  return response;
+  await fetchCall(`/api/v1/users/profile`, "patch", data);
 };
 
 // 사용자 기본 정보 업데이트 (닉네임, 전화번호)
@@ -60,8 +60,9 @@ export const updateUserInfo = async (basicInfo: {
   nickname: string;
   phone: string;
 }) => {
-  const response = await fetchCall(`/api/v1/users/info`, "patch", basicInfo);
-  return response.data;
+  // const response =
+  await fetchCall(`/api/v1/users/info`, "patch", basicInfo);
+  // return response.data;
 };
 
 // 닉네임 중복 검사 API 호출
@@ -71,4 +72,15 @@ export const checkNicknameDuplicate = async (nickname: string) => {
     "get",
   );
   return response.data; // true: 사용 가능, false: 중복
+};
+
+export const createProfileData = async () => {
+  const { profileData } = useProfileStore();
+  await fetchCall(`/api/v1/users/profile`, "post", {
+    ...profileData,
+  });
+};
+
+export const createVoting = async (postId: string) => {
+  await fetchCall(`/api/v1/posts/${postId}/voting-starts`, "post");
 };
