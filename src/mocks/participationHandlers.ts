@@ -75,8 +75,8 @@ export const participationHandlers = [
     const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
     const response = ParticipationsData.filter(
-      participation => String(participation.userId) === String(userId),
-      // && participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
+      participation => String(participation.userId) === String(userId)
+      && participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
     ).map(participation => ({
       participationId: participation.participationId,
       postId: participation.postId,

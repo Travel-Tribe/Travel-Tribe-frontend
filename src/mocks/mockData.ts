@@ -535,16 +535,22 @@ export const ParticipationsData: ParticipationType[] = [
     participationId: 1,
     postId: 1,
     userId: "1",
+    ParticipationStatus: "TRAVEL_FINISHED",
+    ratingStatus: "평가미완료",
   },
   {
     participationId: 2,
     postId: 1,
     userId: "2",
+    ParticipationStatus: "TRAVEL_FINISHED",
+    ratingStatus: "평가미완료",
   },
   {
     participationId: 3,
     postId: 1,
     userId: "3",
+    ParticipationStatus: "TRAVEL_FINISHED",
+    ratingStatus: "평가미완료",
   },
 ];
 
