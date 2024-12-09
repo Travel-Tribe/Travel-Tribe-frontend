@@ -1,5 +1,6 @@
 import { http, HttpResponse } from "msw";
-import { RecruitMockData, TravelPlan } from "./mockData";
+import { RecruitMockData } from "./mockData";
+import { TravelPlanType } from "../type/types";
 
 export const recruitHandlers = [
   // 모집 글 목록 불러오기
@@ -63,7 +64,7 @@ export const recruitHandlers = [
   http.put("/api/v1/posts/:postId", async ({ request, params }) => {
     console.log("모집 글 수정");
     const postId = params.postId;
-    const newPostData = (await request.json()) as TravelPlan;
+    const newPostData = (await request.json()) as TravelPlanType;
     const replaceIndex = RecruitMockData.reduce((indexes, plan, index) => {
       if (plan.title === postId) {
         indexes.push(index);
@@ -83,7 +84,7 @@ export const recruitHandlers = [
 
   // 모집 글 등록
   http.post("/api/v1/posts", async ({ request }) => {
-    const newData = (await request.json()) as TravelPlan;
+    const newData = (await request.json()) as TravelPlanType;
 
     RecruitMockData.push(newData);
     console.log("모집 글 등록", newData);

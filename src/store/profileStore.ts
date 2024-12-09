@@ -28,7 +28,7 @@ export const useProfileStore = create<LocalProfileState>(set => ({
     set(state => ({
       profileData: { ...state.profileData, ...data },
     })),
-   
+
   updateProfileField: (key, value) =>
     set(state => {
       const updatedData = { ...state.profileData, [key]: value };
@@ -45,7 +45,7 @@ export const useProfileStore = create<LocalProfileState>(set => ({
       age: birth ? calculateAge(birth) : null,
     })),
 
-    initializeBasicInfo: ({ nickname, phone }) =>
+  initializeBasicInfo: ({ nickname, phone }) =>
     set(() => ({
       nickname,
       phone,

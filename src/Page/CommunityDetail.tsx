@@ -2,8 +2,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import fetchCall from "../Utils/apiFetch";
 import { useQuery, useQueryClient } from "react-query";
-import { useCallback } from "react";
-import { CommunityListProps } from "../mocks/mockData";
+import { CommunityType, ErrorType } from "../type/types";
+import { AxiosError } from "axios";
 
 const ReviewDetail = (): JSX.Element => {
   const { id } = useParams<{
@@ -16,7 +16,7 @@ const ReviewDetail = (): JSX.Element => {
     queryKey: ["communityData", id],
     queryFn: async () => {
       const response = await fetchCall<{
-        data: { data: CommunityListProps };
+        data: { data: CommunityType };
       }>(`/api/v1/communities/${id}`, "get");
       return response.data.data;
     },
@@ -28,7 +28,7 @@ const ReviewDetail = (): JSX.Element => {
       "delete",
     );
     if (response.state === 200) {
-      alert(`${data.title}이 삭제되었습니다.`);
+      alert(`${data?.title}이 삭제되었습니다.`);
       queryClient.invalidateQueries("communityData");
       navigate(`/community`);
     }
@@ -39,17 +39,27 @@ const ReviewDetail = (): JSX.Element => {
   }
 
   if (isError) {
-    console.error("에러", error.response?.data?.errors[0]?.errorMessage);
-    return <>{error.response?.data?.errors[0]?.errorMessage}</>;
+    console.error(
+      "에러",
+      (error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage,
+    );
+    return (
+      <>
+        {
+          (error as AxiosError<ErrorType>).response?.data?.errors[0]
+            ?.errorMessage
+        }
+      </>
+    );
   }
 
   return (
     <div className="container mx-auto px-4 pb-8">
       <div className="mb-[10px]">
-        <p className="text-[18px] font-bold mb-[5px]">{data.title}</p>
+        <p className="text-[18px] font-bold mb-[5px]">{data?.title}</p>
       </div>
       <div className="mb-[10px] px-[15px] py-[20px] border rounded-xl bg-white">
-        <div className="mb-[20px] whitespace-pre-line">{data.content}</div>
+        <div className="mb-[20px] whitespace-pre-line">{data?.content}</div>
         <div className="flex gap-[10px] items-center overScroll-x-scroll">
           {data?.files?.map((file: { fileName: string }, index: number) => (
             <img
@@ -63,10 +73,10 @@ const ReviewDetail = (): JSX.Element => {
             />
           ))}
         </div>
-        <div className="mt-[10px]">작성일: {data.createdAt}</div>
+        <div className="mt-[10px]">작성일: {data?.createdAt}</div>
       </div>
       <div className="w-[100%] min-x-[600px] flex justify-between">
-        {String(data.userId) === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
+        {String(data?.userId) === localStorage.getItem(STORAGE_KEYS.USER_ID) ? (
           <div className="gap-[10px]">
             <button
               className="btn btn-sm btn-warning mr-[10px] text-white"
