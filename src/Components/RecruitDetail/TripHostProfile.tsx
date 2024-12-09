@@ -1,52 +1,23 @@
 import { useQuery } from "react-query";
-import fetchCall from "../../Utils/apiFetch";
-import { TravelPlanType } from "../../type/types";
+import { AuthorProfileType, TravelPlanType } from "../../type/types";
 import profileImage from "../../assets/profile-img.webp";
+import { getUserProfile } from "../../apis/participation";
 
-interface UserProfile {
-  nickname: string;
-  gender: string;
-  ratingAvg: number | null;
-  count: string;
-  fileAddress: string;
-  mbti: string;
-}
-
-interface UserData {
-  data: UserProfile;
-}
-
-interface UseResponse {
-  data: UserData;
-}
 interface TripHostProfileProps {
   travelPlan?: TravelPlanType;
 }
 
 export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
-  const userId = travelPlan?.userId;
+  const userId = travelPlan?.userId?.toString();
+
   const {
     data: userData,
     isLoading,
     error,
-  } = useQuery<UserProfile>({
+  } = useQuery<AuthorProfileType>({
     queryKey: ["user", userId],
-    queryFn: async () => {
-      if (!userId) {
-        throw new Error("호스트 ID가 없습니다.");
-      }
-      const response = await fetchCall<UseResponse>(
-        `/api/v1/users/${userId}`,
-        "get",
-      );
-
-      console.log("유저:", response);
-      if (!response.data.data) {
-        throw new Error("사용자 데이터를 받아올 수 없습니다.");
-      }
-      return response.data.data;
-    },
-    // enabled: Boolean(travelPlan?.userId),
+    queryFn: async () => getUserProfile(userId!),
+    enabled: Boolean(userId),
   });
 
   if (isLoading) return <div>로딩중...</div>;

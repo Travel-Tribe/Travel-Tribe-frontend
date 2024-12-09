@@ -27,6 +27,15 @@ export interface UserProfileType {
   phone: string;
 }
 
+export interface AuthorProfileType {
+  nickname: string;
+  gender: string;
+  ratingAvg: number | null;
+  count: string;
+  fileAddress: string;
+  mbti: string;
+}
+
 export interface EmailCodeType {
   email: string;
   code: string;
@@ -161,4 +170,10 @@ export interface ErrorDetail {
 
 export interface ErrorType {
   errors: ErrorDetail[];
+}
+
+export interface ApiResponse<T> {
+  data: {
+    data: T;
+  };
 }
