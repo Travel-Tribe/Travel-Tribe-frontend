@@ -46,11 +46,16 @@ const TravelDay = React.memo((): JSX.Element => {
   return (
     <>
       {days.map((day: DayType, dayIndex: number) => (
-        <div key={dayIndex} className="w-[600px] mb-[30px]">
-          <p className="text-[18px] mb-[10px]">
+        <div
+          key={dayIndex}
+          tabIndex={dayIndex}
+          className="collapse collapse-arrow w-[600px] mb-[30px]"
+        >
+          <input type="checkbox" />
+          <p className="collapse-title text-[18px] mb-[10px]">
             {`${postData.travelStartDate.split("-")[0]}-${postData.travelStartDate.split("-")[1].padStart(2, "0")}-${String(Number(postData.travelStartDate.split("-")[2]) + dayIndex).padStart(2, "0")} (DAY-${dayIndex + 1})`}
           </p>
-          <div className="w-[400px] border">
+          <div className="collapse-content w-[400px] border">
             <DayDetail
               day={day}
               dayIndex={dayIndex}

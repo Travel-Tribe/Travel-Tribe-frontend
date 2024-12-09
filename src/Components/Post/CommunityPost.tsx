@@ -6,7 +6,7 @@ export const CommunityPost = React.memo(
   ({ community }: { community: CommunityType }): JSX.Element => {
     const [imgSrc, setImgSrc] = useState(
       import.meta.env.VITE_API_BASE_URL +
-        `/api/v1/file/preview?fileUrl=${community.files[0].fileName}`,
+        `/api/v1/file/preview?fileUrl=${community.files[0]?.fileName}`,
     );
 
     const handleDefaultImageError = () => {
