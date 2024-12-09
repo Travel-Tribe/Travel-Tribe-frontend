@@ -1,9 +1,5 @@
 import { http, HttpResponse } from "msw";
-import {
-  UserMockData,
-  DuplicateMockData,
-  EmailChangeMockData,
-} from "./mockData.js";
+import { UserMockData, DuplicateMockData } from "./mockData.js";
 
 export const userHandlers = [
   // 회원가입
