@@ -9,7 +9,7 @@ export const communityHandlers = [
     const limit = 8;
     const start = page * limit;
     const end = start + limit;
-    console.log("커뮤니티 글 목록", page, start, end);
+    console.log("커뮤니티 글 목록");
 
     return HttpResponse.json(
       {
