@@ -17,7 +17,6 @@ const MyProfile = (): JSX.Element => {
     setAge,
     age,
     nickname,
-    phone,
     initializeBasicInfo,
   } = useProfileStore();
   const navigate = useNavigate();
@@ -61,7 +60,7 @@ const MyProfile = (): JSX.Element => {
     } else if (userProfile) {
       setProfileData(userProfile);
 
-      if (userProfile.birth) {
+      if (!age && userProfile.birth) {
         setAge(userProfile.birth);
       }
       if (userBasicInfo) {
@@ -76,16 +75,18 @@ const MyProfile = (): JSX.Element => {
     setProfileData,
     setAge,
     initializeBasicInfo,
+    age,
   ]);
 
-  if (isProfileLoading) {
+  if (isProfileLoading || isBasicInfoLoading) {
     return <div>로딩 중...</div>;
   }
 
-  if (isProfileError) {
+  if (isProfileError || isBasicInfoError) {
     return <div>프로필 데이터를 가져오는 중 오류가 발생했습니다.</div>;
   }
-
+  console.log(profileData.birth);
+  console.log(age);
   return (
     <main className="ml-[60px] py-5">
       {/* Profile Card */}
@@ -114,7 +115,7 @@ const MyProfile = (): JSX.Element => {
                   </span>
                 </span>
                 <span>
-                  {profileData.smoking === "흡연자" ? "흡연" : "비흡연"}
+                  {profileData.smoking === "흡연" ? "흡연" : "비흡연"}
                 </span>
               </div>
             </div>

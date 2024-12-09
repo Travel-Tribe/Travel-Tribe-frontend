@@ -55,23 +55,40 @@ export const participationHandlers = [
     );
   }),
 
-  http.get("/api/v1/posts/participations", async () => {
+  // http.get("/api/v1/posts/participations", async () => {
+  //   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+
+  //   const response = ParticipationsData.filter(
+  //     participation => String(participation.userId) === String(userId),
+  //     // &&participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
+  //   ).map(participation => ({
+  //     participationId: participation.participationId,
+  //     postId: participation.postId,
+  //     ParticipationStatus: participation.ParticipationStatus,
+  //   }));
+
+  //   console.log("Participations found:", response);
+  //   return HttpResponse.json(response, { status: 200 });
+  // }),
+
+  http.get("/api/v1/posts/participations/by-travelfinished", async () => {
     const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
     const response = ParticipationsData.filter(
-      participation => String(participation.userId) === String(userId),
-      // &&participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
+      participation => String(participation.userId) === String(userId)
+      && participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
     ).map(participation => ({
       participationId: participation.participationId,
       postId: participation.postId,
       ParticipationStatus: participation.ParticipationStatus,
+      ratingStatus: participation.ratingStatus,
     }));
 
     console.log("Participations found:", response);
     return HttpResponse.json(response, { status: 200 });
   }),
 
-  http.get("/api/v1/posts/participations/by-travelfinished", async () => {
+  http.get("/api/v1/posts/participations/by-join-joinready", async () => {
     const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
     const response = ParticipationsData.filter(
@@ -81,7 +98,7 @@ export const participationHandlers = [
       participationId: participation.participationId,
       postId: participation.postId,
       ParticipationStatus: participation.ParticipationStatus,
-      ratingStatus: participation.RatingStatus,
+      ratingStatus: participation.ratingStatus,
     }));
 
     console.log("Participations found:", response);
