@@ -1,14 +1,14 @@
 import fetchCall from "../Utils/apiFetch";
 import { UserProfileType } from "../type/types";
-import { useProfileStore } from "../store/profileStore";
 
 // 단일 사용자 프로필 가져오기
 export const fetchUserProfile = async (userId: string) => {
-  const response = await fetchCall<{ data: UserProfileType }>(
+  const response = await fetchCall<{ data: { data: UserProfileType } }>(
     `/api/v1/users/${userId}/profile`,
     "get",
   );
-  return response.data; // 필요한 데이터만 반환
+  console.log(response);
+  return response.data.data; // 필요한 데이터만 반환
 };
 
 // 사용자 기본 정보 가져오기 (닉네임, 전화번호)
@@ -65,22 +65,42 @@ export const updateUserInfo = async (basicInfo: {
   // return response.data;
 };
 
-// 닉네임 중복 검사 API 호출
-export const checkNicknameDuplicate = async (nickname: string) => {
+// 닉네임,이메일 중복 검사 API 호출
+export const checkDuplicate = async (
+  type: "nickname" | "email",
+  query: string,
+) => {
   const response = await fetchCall<{ data: boolean }>(
-    `/api/v1/users/duplicate?type=nickname&query=${encodeURIComponent(nickname)}`,
+    `/api/v1/users/duplicate?type=${type}&query=${encodeURIComponent(query)}`,
     "get",
   );
   return response.data; // true: 사용 가능, false: 중복
 };
 
-export const createProfileData = async () => {
-  const { profileData } = useProfileStore();
+export const createProfileData = async (
+  profileData: Partial<UserProfileType>,
+) => {
+  console.log(profileData);
   await fetchCall(`/api/v1/users/profile`, "post", {
     ...profileData,
   });
+  return true;
 };
 
 export const createVoting = async (postId: string) => {
   await fetchCall(`/api/v1/posts/${postId}/voting-starts`, "post");
+};
+
+export const deleteAccount = async () => {
+  await fetchCall(`/api/v1/users`, "delete");
+};
+
+export const changePassword = async (
+  currentPassword: string,
+  newPassword: string,
+) => {
+  await fetchCall(`/api/v1/users/password`, "patch", {
+    password: currentPassword,
+    newPassword,
+  });
 };
