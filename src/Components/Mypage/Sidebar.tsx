@@ -6,6 +6,17 @@ import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import profileImg from "../../assets/profile-img.webp";
 import { useProfileStore } from "../../store/profileStore";
 
+interface ApiResponse {
+  result: "SUCCESS" | "FAIL";
+  errors: null | string;
+  data: boolean | string;
+}
+
+// Axios 응답 타입 (필요한 필드만 포함)
+interface AxiosResponse {
+  data: ApiResponse;
+}
+
 const Sidebar = (): JSX.Element => {
   const { profileData, setNickname, nickname, resetProfileData } =
     useProfileStore();
@@ -29,14 +40,18 @@ const Sidebar = (): JSX.Element => {
 
   const onClickLogout = async () => {
     try {
-      await fetchCall("/logout", "post");
-      localStorage.removeItem(STORAGE_KEYS.USER_ID);
-      localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
-      document.cookie =
-        "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      setToken(null);
-      resetProfileData();
-      navigate("/");
+      const response = await fetchCall<AxiosResponse>("/logout", "post");
+
+      if (response.data.result === "SUCCESS") {
+        localStorage.removeItem(STORAGE_KEYS.USER_ID);
+        localStorage.removeItem(STORAGE_KEYS.PROFILE_CHECK);
+        localStorage.removeItem(STORAGE_KEYS.TOKEN);
+        if (typeof setToken === "function") {
+          setToken(null);
+        }
+        resetProfileData();
+        navigate("/");
+      }
     } catch (error) {
       console.error("POST 요청에 실패했습니다:", error);
     }
