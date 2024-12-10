@@ -12,6 +12,7 @@ import fetchCall from "../Utils/apiFetch";
 import EditBtn from "../Components/RecruitDetail/Buttons/EditBtn";
 import JoinBtn from "../Components/RecruitDetail/Buttons/JoinBtn";
 import { TravelPlanType } from "../type/types";
+import { ERROR } from "../Constants/message";
 
 interface postProps {
   data: TravelPlanType;
@@ -43,7 +44,7 @@ const RecruitDetail = (): JSX.Element => {
       if (response.data.data) {
         return response.data.data;
       }
-      throw new Error("모집글을 찾을 수 없습니다.");
+      throw new Error(ERROR.LOAD_POST);
     },
     enabled: Boolean(postId),
   });
@@ -65,9 +66,7 @@ const RecruitDetail = (): JSX.Element => {
       <div className="alert alert-error max-w-md">
         <h3 className="font-bold">오류 발생!</h3>
         <div className="text-sm">
-          {error instanceof Error
-            ? error.message
-            : "여행 계획을 불러오는 중 오류가 발생했습니다."}
+          {error instanceof Error ? error.message : ERROR.DEFAULT}
         </div>
       </div>
       <button

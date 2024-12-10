@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import fetchCall from "../Utils/apiFetch";
+import { ERROR } from "../Constants/message";
 
 interface ParticipationResponse {
   data: {
@@ -41,7 +42,7 @@ export const useParticipation = () => {
       );
 
       if (!participationData?.data.data.participationId) {
-        throw new Error("참여 신청 처리 중 오류가 발생했습니다.");
+        throw new Error(ERROR.PARTICIPATION);
       }
 
       return participationData.data.data.participationId;
@@ -76,15 +77,13 @@ export const usePayment = () => {
       );
 
       if (!paymentReadyData?.data?.data.nextRedirectPcUrl) {
-        throw new Error("결제 정보를 불러오는데 실패했습니다.");
+        throw new Error(ERROR.PAY_LOAD_FAIL);
       }
 
       return paymentReadyData.data.data.nextRedirectPcUrl;
     } catch (error) {
       const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "결제 처리 중 오류가 발생했습니다.";
+        error instanceof Error ? error.message : ERROR.DEFAULT;
       alert(errorMessage);
       throw error;
     } finally {
@@ -98,7 +97,7 @@ export const usePayment = () => {
       setLoading(true);
       try {
         if (!depositId) {
-          throw new Error("결제 정보를 찾을 수 없습니다.");
+          throw new Error(ERROR.PAY_INFO_FAIL);
         }
 
         const response = await fetchCall<PaymentApprovalResponse>(
@@ -113,7 +112,7 @@ export const usePayment = () => {
         if (response?.data.result === "SUCCESS") {
           return true;
         } else {
-          throw new Error("결제 승인에 실패했습니다.");
+          throw new Error(ERROR.PAY_APPROVE_FAIL);
         }
       } catch (error) {
         console.error("Payment approval error:", error);
