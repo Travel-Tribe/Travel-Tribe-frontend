@@ -7,6 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
 import Modal from "../Common/Modal";
 import { FileType, ReviewType } from "../../type/types";
+import { ERROR, SUCCESS, VALIDATION } from "../../Constants/message";
 
 type ReviewData = Pick<
   ReviewType,
@@ -58,7 +59,7 @@ const ReviewEdit = () => {
       },
       onError: error => {
         console.error("Error fetching review:", error);
-        setModalMessage("리뷰 데이터를 불러오는데 실패했습니다.");
+        setModalMessage(ERROR.DEFAULT);
         setShowModal(true);
         navigate("/review");
       },
@@ -79,12 +80,12 @@ const ReviewEdit = () => {
         // 캐시 무효화
         queryClient.invalidateQueries(["reviewData", postId]);
         // queryClient.invalidateQueries(["reviews"]); // 리뷰 목록도 함께 업데이트
-        setModalMessage("리뷰가 성공적으로 수정되었습니다.");
+        setModalMessage(SUCCESS.EDIT_REVIEW);
         setShowModal(true);
       },
       onError: error => {
         console.error("Error updating review:", error);
-        setModalMessage("리뷰 수정에 실패했습니다.");
+        setModalMessage(ERROR.DEFAULT);
         setShowModal(true);
       },
       onSettled: () => {
@@ -118,7 +119,7 @@ const ReviewEdit = () => {
       setFormData({ files: [...formData.files, ...uploadedFiles] });
     } catch (error) {
       console.error("파일 업로드 중 오류 발생:", error);
-      setModalMessage("파일 업로드에 실패했습니다.");
+      setModalMessage(ERROR.DEFAULT);
       setShowModal(true);
     }
   };
@@ -145,13 +146,13 @@ const ReviewEdit = () => {
     if (!postId || !id) return;
 
     if (!formData.title.trim()) {
-      setModalMessage("제목을 입력해주세요");
+      setModalMessage(VALIDATION.EMPTY_TITLE);
       setShowModal(true);
       return;
     }
 
     if (!formData.contents.trim()) {
-      setModalMessage("내용을 입력해주세요");
+      setModalMessage(VALIDATION.EMPTY_CONTENT);
       setShowModal(true);
       return;
     }
@@ -274,7 +275,7 @@ const ReviewEdit = () => {
       <Modal
         isOpen={showModal}
         onClose={
-          modalMessage === "리뷰가 성공적으로 수정되었습니다."
+          modalMessage === SUCCESS.EDIT_REVIEW
             ? handleSuccessModalClose
             : () => setShowModal(false)
         }

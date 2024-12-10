@@ -1,6 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { usePayment } from "../Hooks/usePayment";
+import { ERROR, SUCCESS } from "../Constants/message";
 
 type PaymentStatus = {
   isSuccess: boolean;
@@ -129,8 +130,8 @@ export default function PaymentResultPage() {
               </h2>
               <p className="text-gray mt-2">
                 {paymentStatus.isSuccess
-                  ? "결제가 성공적으로 완료되었습니다!"
-                  : "결제가 취소되었거나 실패했습니다."}
+                  ? SUCCESS.PAY_APPROVE_SUCCESS
+                  : ERROR.PAY_APPROVE_FAIL}
               </p>
             </div>
 
