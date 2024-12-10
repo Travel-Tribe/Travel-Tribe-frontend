@@ -6,8 +6,8 @@ export interface UserType {
   nickname: string;
   phone: string;
   profileCheck: boolean;
-  mbti: string;
-  fileAddress: string;
+  mbti?: string;
+  fileAddress?: string;
 }
 
 export interface UserProfileType {
