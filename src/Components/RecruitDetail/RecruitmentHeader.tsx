@@ -1,24 +1,12 @@
 import { useQuery } from "react-query";
-import fetchCall from "../../Utils/apiFetch";
 import { useParams } from "react-router-dom";
 import { LuCalendarDays } from "react-icons/lu";
 import { MdOutlinePeople } from "react-icons/md";
 import { TravelPlanType } from "../../type/types";
+import { getParticipations } from "../../apis/participation";
 
 interface RecruitmentHeaderProps {
   travelPlan?: TravelPlanType;
-}
-
-interface Participation {
-  participationId: number;
-  postId: number;
-  userId: string;
-}
-
-interface ApiResponse {
-  data: {
-    data: Participation[];
-  };
 }
 
 const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
@@ -32,21 +20,7 @@ const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
     error,
   } = useQuery({
     queryKey: ["participations", postId],
-    queryFn: async () => {
-      if (!postId) {
-        throw new Error("포스트 ID가 없습니다.");
-      }
-      const response = await fetchCall<ApiResponse>(
-        `/api/v1/posts/${postId}/participations`,
-        "get",
-      );
-
-      console.log("참여자:", response);
-      if (!response.data.data) {
-        throw new Error("사용자 데이터를 받아올 수 없습니다.");
-      }
-      return response.data.data;
-    },
+    queryFn: async () => getParticipations(postId!),
     enabled: Boolean(travelPlan?.userId),
   });
 

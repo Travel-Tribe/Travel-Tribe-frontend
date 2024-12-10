@@ -6,8 +6,8 @@ export interface UserType {
   nickname: string;
   phone: string;
   profileCheck: boolean;
-  mbti: string;
-  fileAddress: string;
+  mbti?: string;
+  fileAddress?: string;
 }
 
 export interface UserProfileType {
@@ -25,6 +25,15 @@ export interface UserProfileType {
   age: number | null;
   nickname: string;
   phone: string;
+}
+
+export interface AuthorProfileType {
+  nickname: string;
+  gender: string;
+  ratingAvg: number | null;
+  count: string;
+  fileAddress: string;
+  mbti: string;
 }
 
 export interface EmailCodeType {
@@ -161,4 +170,10 @@ export interface ErrorDetail {
 
 export interface ErrorType {
   errors: ErrorDetail[];
+}
+
+export interface ApiResponse<T> {
+  data: {
+    data: T;
+  };
 }

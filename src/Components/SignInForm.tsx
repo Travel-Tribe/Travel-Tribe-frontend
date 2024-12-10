@@ -7,6 +7,7 @@ import fetchCall from "../Utils/apiFetch";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import { useAuthStore } from "../store/authStore";
 import { LuEye, LuEyeOff } from "react-icons/lu";
+import { ERROR, VALIDATION } from "../Constants/message";
 
 interface LoginResponse {
   result: "SUCCESS" | "FAIL";
@@ -34,12 +35,12 @@ type ApiErrorResponse = {
 const schema = z.object({
   email: z
     .string()
-    .min(1, { message: "이메일을 입력해 주세요" })
-    .email({ message: "올바른 이메일 형식이 아닙니다" }),
+    .min(1, { message: VALIDATION.EMPTY_EMAIL })
+    .email({ message: VALIDATION.INVALID_EMAIL }),
   password: z
     .string()
-    .min(1, { message: "비밀번호를 입력해 주세요" })
-    .min(8, { message: "비밀번호는 8자 이상이어야 합니다" }),
+    .min(1, { message: VALIDATION.EMPTY_PASSWORD })
+    .min(8, { message: VALIDATION.INVALID_PASSWORD }),
 });
 
 type Inputs = z.infer<typeof schema>;
@@ -99,7 +100,7 @@ const SignIn = (): JSX.Element => {
         message:
           apiError.response?.status === 403
             ? "탈퇴한 회원입니다."
-            : "이메일 또는 비밀번호가 올바르지 않습니다.",
+            : ERROR.SIGNIN,
       });
     }
   };

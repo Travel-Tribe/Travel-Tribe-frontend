@@ -5,31 +5,32 @@ import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import fetchCall from "../Utils/apiFetch";
 import Modal from "./Common/Modal";
+import { ERROR, SUCCESS, VALIDATION } from "../Constants/message";
 
 const schema = z
   .object({
-    email: z.string().email({ message: "올바른 이메일 형식이 아닙니다" }),
+    email: z.string().email({ message: VALIDATION.INVALID_EMAIL }),
     password: z
       .string()
-      .min(8, { message: "비밀번호는 8자 이상이어야 합니다" })
+      .min(8, { message: VALIDATION.INVALID_PASSWORD_UNDER_EIGHT })
       .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])/, {
-        message: "비밀번호는 영문, 숫자, 특수문자를 포함해야 합니다",
+        message: VALIDATION.INVALID_PASSWORD,
       }),
     passwordConfirm: z.string(),
-    username: z.string().min(2, { message: "이름은 2자 이상이어야 합니다" }),
+    username: z.string().min(2, { message: VALIDATION.INVALID_NAME }),
     phone: z.string().regex(/^01([0|1|6|7|8|9])-([0-9]{3,4})-([0-9]{4})$/, {
-      message: "올바른 전화번호 형식이 아닙니다",
+      message: VALIDATION.INVALID_PHONE,
     }),
     nickname: z
       .string()
-      .min(2, { message: "닉네임은 2자 이상이어야 합니다" })
-      .max(10, { message: "닉네임은 10자 이하여야 합니다" })
+      .min(2, { message: VALIDATION.INVALID_NICKNAME_UNDER_TWO })
+      .max(10, { message: VALIDATION.INVALID_NICKNAME_OVER_TEN })
       .regex(/^[가-힣a-zA-Z0-9]+$/, {
-        message: "닉네임은 한글, 영문, 숫자만 사용 가능합니다",
+        message: VALIDATION.INVALID_NICKNAME,
       }),
   })
   .refine(data => data.password === data.passwordConfirm, {
-    message: "비밀번호가 일치하지 않습니다",
+    message: ERROR.NOT_SAME_PASSWORD,
     path: ["passwordConfirm"],
   });
 
@@ -151,7 +152,7 @@ const SignUp = (): JSX.Element => {
       console.error("중복 검사 중 에러 발생:", error);
       setError(type, {
         type: "manual",
-        message: "중복 확인 중 오류가 발생했습니다",
+        message: ERROR.DEFAULT,
       });
       setValidationStatus(prev => ({
         ...prev,
@@ -164,9 +165,7 @@ const SignUp = (): JSX.Element => {
     // 모든 필수 검증이 완료되었는지 확인
     const { email, nickname } = validationStatus;
     if (!email.isAvailable || !nickname.isAvailable) {
-      setModalMessage(
-        "이메일 중복 검사와 닉네임 중복 검사를 모두 완료해주세요.",
-      );
+      setModalMessage(ERROR.NOT);
       setShowModal(true);
       return;
     }
@@ -191,16 +190,14 @@ const SignUp = (): JSX.Element => {
       console.log("회원가입", response);
 
       if (response.data.result === "SUCCESS") {
-        setModalMessage("회원가입이 완료되었습니다.");
+        setModalMessage(SUCCESS.SIGNUP);
         setShowModal(true);
       } else {
-        throw new Error(
-          response.data.errors || "회원가입 처리 중 문제가 발생했습니다.",
-        );
+        throw new Error(ERROR.SIGNUP);
       }
     } catch (error) {
       console.error("회원가입 중 에러 발생:", error);
-      setModalMessage("회원가입 중 오류가 발생했습니다.");
+      setModalMessage(ERROR.DEFAULT);
       setShowModal(true);
     }
 
@@ -378,7 +375,7 @@ const SignUp = (): JSX.Element => {
       <Modal
         isOpen={showModal}
         onClose={
-          modalMessage === "회원가입이 완료되었습니다."
+          modalMessage === SUCCESS.SIGNUP
             ? handleSuccessModalClose
             : () => setShowModal(false)
         }

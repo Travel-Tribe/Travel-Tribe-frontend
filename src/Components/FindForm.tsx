@@ -4,9 +4,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import fetchCall from "../Utils/apiFetch";
 import { useNavigate } from "react-router-dom";
+import { ERROR, VALIDATION } from "../Constants/message";
 
 const userSchema = z.object({
-  email: z.string().email("올바른 이메일 형식이 아닙니다"),
+  email: z.string().email(VALIDATION.INVALID_EMAIL),
 });
 
 type UserEmailValues = z.infer<typeof userSchema>;
@@ -48,14 +49,14 @@ const FindForm = () => {
       } else if (response.data.errors) {
         setError("root", {
           type: "manual",
-          message: response.data.errors,
+          message: ERROR.FIND_PASSWORD,
         });
       }
     } catch (error) {
       console.error(error);
       setError("root", {
         type: "manual",
-        message: "입력하신 정보와 일치하는 계정을 찾을 수 없습니다.",
+        message: ERROR.DEFAULT,
       });
     }
   };
