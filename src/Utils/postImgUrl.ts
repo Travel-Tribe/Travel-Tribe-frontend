@@ -13,7 +13,7 @@ export const postImgUrl = async (file: File) => {
 };
 
 export const previewImg = async (imgUrl: string) => {
-  const previewResponse = await fetchCall<Blob>(
+  const previewResponse = await fetchCall<{ data: Blob }>(
     `/api/v1/file/preview?fileUrl=${imgUrl}`,
     "get",
     undefined,

@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQueryClient } from "react-query";
+import { AxiosError } from "axios";
 import fetchCall from "../../../Utils/apiFetch";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
-import { mappingCondition } from "../../../Utils/mappingCondition";
-import { useQueryClient } from "react-query";
-import { mappingContinent } from "../../../Utils/mappingContinent";
+import { CREW_CONDITION } from "../../../Constants/CREW_CONDITION";
+import { getContinentName } from "../../../Utils/getContinentName";
 import { mappingCountry } from "../../../Utils/mappingCountry";
+import { ErrorType } from "../../../type/types";
+import { ERROR } from "../../../Constants/MESSAGE";
 
 const SubmitBtn = React.memo(() => {
   const { id: postId } = useParams();
@@ -17,14 +20,22 @@ const SubmitBtn = React.memo(() => {
   const handlePost = async () => {
     try {
       setIsLoading(true);
-      const response = await fetchCall(
+      const response = await fetchCall<{
+        data: {
+          data: {
+            postId: string;
+            participationId: string;
+          };
+        };
+        status: number;
+      }>(
         "/api/v1/posts",
         "post",
         JSON.stringify({
           ...postData,
-          limitSex: mappingCondition[postData.limitSex],
-          limitSmoke: mappingCondition[postData.limitSmoke],
-          continent: mappingContinent[postData.continent],
+          limitSex: CREW_CONDITION[postData.limitSex],
+          limitSmoke: CREW_CONDITION[postData.limitSmoke],
+          continent: getContinentName(postData.continent),
           travelCountry: mappingCountry(postData.travelCountry, "ko"),
         }),
       );
@@ -42,8 +53,14 @@ const SubmitBtn = React.memo(() => {
         );
       }
     } catch (error) {
-      alert(error.response?.data?.errors[0]?.errorMessage);
-      throw new Error("게시글 등록에 실패했습니다.");
+      alert(
+        `${ERROR.POST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      );
+      throw new Error(
+        (
+          error as AxiosError<ErrorType>
+        ).response?.data?.errors[0]?.errorMessage,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -57,9 +74,9 @@ const SubmitBtn = React.memo(() => {
         "put",
         JSON.stringify({
           ...postData,
-          limitSex: mappingCondition[postData.limitSex],
-          limitSmoke: mappingCondition[postData.limitSmoke],
-          continent: mappingContinent[postData.continent],
+          limitSex: CREW_CONDITION[postData.limitSex],
+          limitSmoke: CREW_CONDITION[postData.limitSmoke],
+          continent: getContinentName(postData.continent),
           travelCountry: mappingCountry(postData.travelCountry, "ko"),
         }),
       );
@@ -68,8 +85,14 @@ const SubmitBtn = React.memo(() => {
       queryClient.invalidateQueries(["travelPlan", postId]);
       navigate(`/recruitment`);
     } catch (error) {
-      alert(error.response?.data?.errors[0]?.errorMessage);
-      throw new Error(error.response?.data?.errors[0]?.errorMessage);
+      alert(
+        `${ERROR.POST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      );
+      throw new Error(
+        (
+          error as AxiosError<ErrorType>
+        ).response?.data?.errors[0]?.errorMessage,
+      );
     } finally {
       setIsLoading(false);
     }

@@ -6,8 +6,7 @@ export const calculateAge = (birthDateString: string): number => {
     today.getMonth() < birthDate.getMonth() ||
     (today.getMonth() === birthDate.getMonth() &&
       today.getDate() < birthDate.getDate())
-  ) {
+  )
     age -= 1;
-  }
   return age;
 };

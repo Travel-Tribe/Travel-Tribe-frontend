@@ -1,5 +1,5 @@
 import { http, HttpResponse } from "msw";
-import { ParticipationsData } from "./mockData";
+import { ParticipationData } from "./mockData";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 
 export const participationHandlers = [
@@ -7,7 +7,7 @@ export const participationHandlers = [
   http.get("/api/v1/posts/:postId/participations", async ({ params }) => {
     const { postId } = params;
 
-    const response = ParticipationsData.filter(
+    const response = ParticipationData.filter(
       participation => participation.postId.toString() === postId,
     ).map(participation => ({
       participationId: participation.participationId,
@@ -22,7 +22,7 @@ export const participationHandlers = [
   http.post("/api/v1/posts/:postId/participations", async ({ params }) => {
     console.log("MSW: Creating new participation");
 
-    const currentParticipationId = ParticipationsData.length + 1;
+    const currentParticipationId = ParticipationData.length + 1;
     const postId = Number(params.postId);
 
     // const response = (await request.json()) as {
@@ -39,8 +39,8 @@ export const participationHandlers = [
       depositReturnDate: null,
     };
 
-    // 생성된 참여 데이터를 ParticipationsData 배열에 추가
-    ParticipationsData.push(newParticipation);
+    // 생성된 참여 데이터를 ParticipationData 배열에 추가
+    ParticipationData.push(newParticipation);
     console.log("New participation created:", newParticipation);
     return HttpResponse.json({ data: newParticipation }, { status: 201 });
   }),
@@ -74,14 +74,15 @@ export const participationHandlers = [
   http.get("/api/v1/posts/participations/by-travelfinished", async () => {
     const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
-    const response = ParticipationsData.filter(
-      participation => String(participation.userId) === String(userId)
-      && participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
+    const response = ParticipationData.filter(
+      participation =>
+        String(participation.userId) === String(userId) &&
+        participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
     ).map(participation => ({
       participationId: participation.participationId,
       postId: participation.postId,
       ParticipationStatus: participation.ParticipationStatus,
-      ratingStatus: participation.ratingStatus,
+      ratingStatus: participation.RatingStatus,
     }));
 
     console.log("Participations found:", response);
@@ -91,14 +92,14 @@ export const participationHandlers = [
   http.get("/api/v1/posts/participations/by-join-joinready", async () => {
     const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
-    const response = ParticipationsData.filter(
+    const response = ParticipationData.filter(
       participation => String(participation.userId) === String(userId),
       // &&participation.ParticipationStatus === "TRAVEL_FINISHED", // 타입 일치 비교
     ).map(participation => ({
       participationId: participation.participationId,
       postId: participation.postId,
       ParticipationStatus: participation.ParticipationStatus,
-      ratingStatus: participation.ratingStatus,
+      ratingStatus: participation.RatingStatus,
     }));
 
     console.log("Participations found:", response);

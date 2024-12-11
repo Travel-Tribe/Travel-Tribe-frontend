@@ -12,7 +12,7 @@ import fetchCall from "../Utils/apiFetch";
 import EditBtn from "../Components/RecruitDetail/Buttons/EditBtn";
 import JoinBtn from "../Components/RecruitDetail/Buttons/JoinBtn";
 import { TravelPlanType } from "../type/types";
-import { ERROR } from "../Constants/message";
+import { ERROR } from "../Constants/MESSAGE";
 
 interface postProps {
   data: TravelPlanType;

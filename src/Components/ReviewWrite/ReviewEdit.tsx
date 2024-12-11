@@ -7,7 +7,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
 import Modal from "../Common/Modal";
 import { FileType, ReviewType } from "../../type/types";
-import { ERROR, SUCCESS, VALIDATION } from "../../Constants/message";
+import { ERROR, SUCCESS, VALIDATION } from "../../Constants/MESSAGE";
 
 type ReviewData = Pick<
   ReviewType,
