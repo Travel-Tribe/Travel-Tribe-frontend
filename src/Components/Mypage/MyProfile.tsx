@@ -107,12 +107,7 @@ const MyProfile = (): JSX.Element => {
               </span>
               <div className="flex items-center space-x-5">
                 <span>{age}세</span>
-                <span>
-                  {profileData.gender === "남자" ||
-                  profileData.gender === "MALE"
-                    ? "남자"
-                    : "여자"}
-                </span>
+                <span>{profileData.gender === "남자" ? "남자" : "여자"}</span>
                 <span className="flex items-center">
                   ⭐{" "}
                   <span className="ml-1">
@@ -120,10 +115,7 @@ const MyProfile = (): JSX.Element => {
                   </span>
                 </span>
                 <span>
-                  {profileData.smoking === "흡연자" ||
-                  profileData.smoking === "YES"
-                    ? "흡연"
-                    : "비흡연"}
+                  {profileData.smoking === "흡연" ? "흡연" : "비흡연"}
                 </span>
               </div>
             </div>

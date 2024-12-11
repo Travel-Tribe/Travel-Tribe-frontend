@@ -3,34 +3,12 @@ import { Link } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import fetchCall from "../Utils/apiFetch";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import { useAuthStore } from "../store/authStore";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { ERROR, VALIDATION } from "../Constants/MESSAGE";
-
-interface LoginResponse {
-  result: "SUCCESS" | "FAIL";
-  errors: null | string;
-  data: {
-    id: number;
-    profileCheck: boolean;
-    access: string;
-  };
-}
-
-interface LoginResponseHeaders {
-  headers: {
-    access: string;
-  };
-  data: LoginResponse;
-}
-
-type ApiErrorResponse = {
-  response?: {
-    status: number;
-  };
-};
+import { ERROR, VALIDATION } from "../Constants/message";
+import { ApiErrorResponse } from "../type/types";
+import { authApi } from "../apis/auth";
 
 const schema = z.object({
   email: z
@@ -43,7 +21,7 @@ const schema = z.object({
     .min(8, { message: VALIDATION.INVALID_PASSWORD }),
 });
 
-type Inputs = z.infer<typeof schema>;
+export type SignInInputs = z.infer<typeof schema>;
 
 const SignIn = (): JSX.Element => {
   const [showPassword, setShowPassword] = useState(false);
@@ -53,7 +31,7 @@ const SignIn = (): JSX.Element => {
     handleSubmit,
     setError,
     formState: { errors, isSubmitting },
-  } = useForm<Inputs>({
+  } = useForm<SignInInputs>({
     resolver: zodResolver(schema),
     mode: "onSubmit", // 제출 시에만 유효성 검사
     reValidateMode: "onSubmit", // 재검증도 제출 시에만
@@ -61,12 +39,9 @@ const SignIn = (): JSX.Element => {
 
   useAuthStore(state => state.setAccessToken);
 
-  const onSubmit: SubmitHandler<Inputs> = async data => {
+  const onSubmit: SubmitHandler<SignInInputs> = async data => {
     try {
-      const response = await fetchCall<LoginResponseHeaders>("/login", "post", {
-        email: data.email,
-        password: data.password,
-      });
+      const response = await authApi.login(data);
 
       // 응답 데이터 처리
       // header 정보 불러오기 여기를 response 찍어보고 수정하기

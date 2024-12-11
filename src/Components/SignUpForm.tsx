@@ -5,7 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import fetchCall from "../Utils/apiFetch";
 import Modal from "./Common/Modal";
-import { ERROR, SUCCESS, VALIDATION } from "../Constants/MESSAGE";
+import { ERROR, SUCCESS, VALIDATION } from "../Constants/message";
+import { authApi } from "../apis/auth";
 
 const schema = z
   .object({
@@ -34,7 +35,7 @@ const schema = z
     path: ["passwordConfirm"],
   });
 
-type Inputs = z.infer<typeof schema>;
+export type SignUpInputs = z.infer<typeof schema>;
 
 interface ValidationStatus {
   isChecked: boolean;
@@ -42,17 +43,12 @@ interface ValidationStatus {
   isChecking: boolean;
 }
 
-interface ApiResponse {
+export interface DuplicateResponse {
   result: "SUCCESS" | "FAIL";
   errors: null | string;
   data: {
     data: boolean;
   };
-}
-
-// Axios 응답 타입 (필요한 필드만 포함)
-interface AxiosResponse {
-  data: ApiResponse;
 }
 
 const SignUp = (): JSX.Element => {
@@ -82,7 +78,7 @@ const SignUp = (): JSX.Element => {
     setError,
     clearErrors,
     formState: { errors, isSubmitting },
-  } = useForm<Inputs>({
+  } = useForm<SignUpInputs>({
     resolver: zodResolver(schema),
     mode: "onChange", // 실시간 검사
   });
@@ -117,7 +113,7 @@ const SignUp = (): JSX.Element => {
     }));
 
     try {
-      const response = await fetchCall<ApiResponse>(
+      const response = await fetchCall<DuplicateResponse>(
         `/api/v1/users/duplicate?type=${type}&query=${encodeURIComponent(value)}`,
         "get",
       );
@@ -161,7 +157,7 @@ const SignUp = (): JSX.Element => {
     }
   };
 
-  const onSubmit: SubmitHandler<Inputs> = async data => {
+  const onSubmit: SubmitHandler<SignUpInputs> = async data => {
     // 모든 필수 검증이 완료되었는지 확인
     const { email, nickname } = validationStatus;
     if (!email.isAvailable || !nickname.isAvailable) {
@@ -170,22 +166,9 @@ const SignUp = (): JSX.Element => {
       return;
     }
 
-    // 필요한 필드만 선택하여 새 객체 생성
-    const submitData = {
-      email: data.email,
-      password: data.password,
-      username: data.username,
-      phone: data.phone,
-      nickname: data.nickname,
-    };
-
     // TODO: 실제 회원가입 API 호출
     try {
-      const response = await fetchCall<AxiosResponse>(
-        "/api/v1/users",
-        "post",
-        submitData,
-      );
+      const response = await authApi.signUp(data);
 
       console.log("회원가입", response);
 

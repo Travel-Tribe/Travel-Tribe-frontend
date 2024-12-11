@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../../Hooks/useLocalStorage";
+import fetchCall from "../../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
-import { deleteAccount } from "../../../apis/user";
 
 interface DeleteAccountModalProps {
   isOpen: boolean;
@@ -13,17 +13,15 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
+  
+  const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
 
   const clickDeleteAccount = async () => {
     try {
-      deleteAccount();
-      alert("탈퇴되었습니다.");
-      if (typeof setToken === "function") {
-        setToken(null);
-      }
-      localStorage.removeItem(STORAGE_KEYS.TOKEN);
+      await fetchCall(`/api/v1/users`, "delete");
+      alert("탈퇴되었습니다.")
+      setToken(null);
       navigate("/");
     } catch (error) {
       console.error("delete 요청에 실패했습니다:", error);

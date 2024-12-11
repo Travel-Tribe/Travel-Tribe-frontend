@@ -10,7 +10,7 @@ import { useProfileStore } from "../../store/profileStore";
 import { postImgUrl } from "../../Utils/postImgUrl";
 import { useUserProfile } from "../../Hooks/userQueries";
 import {
-  checkDuplicate,
+  checkNicknameDuplicate,
   updateProfileData,
   updateUserInfo,
 } from "../../apis/user";
@@ -105,8 +105,8 @@ const ProfileEdit = (): JSX.Element => {
     setSuccess("");
 
     try {
-      const isAvailable = await checkDuplicate("nickname", nickname);
-      if (!isAvailable) {
+      const isAvailable = await checkNicknameDuplicate(nickname);
+      if (isAvailable) {
         setError("이미 사용 중인 닉네임입니다.");
         setValidationStatus({ isChecking: false, isAvailable: false });
       } else {
@@ -273,7 +273,7 @@ const ProfileEdit = (): JSX.Element => {
                     profileData.gender === "남자" ||
                     profileData.gender === "MALE"
                   }
-                  onChange={() => handleGenderChange("MALE")}
+                  onChange={() => handleGenderChange("남자")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 남자
@@ -287,7 +287,7 @@ const ProfileEdit = (): JSX.Element => {
                     profileData.gender === "여자" ||
                     profileData.gender === "FEMALE"
                   }
-                  onChange={() => handleGenderChange("FEMALE")}
+                  onChange={() => handleGenderChange("여자")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 여자
@@ -307,10 +307,10 @@ const ProfileEdit = (): JSX.Element => {
                   name="smoking"
                   value="흡연"
                   checked={
-                    profileData.smoking === "흡연자" ||
+                    profileData.smoking === "흡연" ||
                     profileData.smoking === "YES"
                   }
-                  onChange={() => handleSmokingChange("YES")}
+                  onChange={() => handleSmokingChange("흡연")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 흡연
@@ -321,10 +321,10 @@ const ProfileEdit = (): JSX.Element => {
                   name="smoking"
                   value="비흡연"
                   checked={
-                    profileData.smoking === "비흡연자" ||
+                    profileData.smoking === "비흡연" ||
                     profileData.smoking === "NO"
                   }
-                  onChange={() => handleSmokingChange("NO")}
+                  onChange={() => handleSmokingChange("비흡연")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 비흡연

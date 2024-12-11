@@ -1,24 +1,17 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import fetchCall from "../Utils/apiFetch";
+
 import { useNavigate } from "react-router-dom";
-import { ERROR, VALIDATION } from "../Constants/MESSAGE";
+import { ERROR, VALIDATION } from "../Constants/message";
+import { authApi } from "../apis/auth";
+import { z } from "zod";
 
 const userSchema = z.object({
   email: z.string().email(VALIDATION.INVALID_EMAIL),
 });
 
-type UserEmailValues = z.infer<typeof userSchema>;
-
-interface ApiResponse {
-  data: {
-    result: "SUCCESS" | "FAIL";
-    errors: null | string;
-    data: null | string;
-  };
-}
+export type UserEmailValues = z.infer<typeof userSchema>;
 
 const FindForm = () => {
   const navigate = useNavigate();
@@ -36,17 +29,13 @@ const FindForm = () => {
 
   const onSubmit = async (data: UserEmailValues) => {
     try {
-      const response = await fetchCall<ApiResponse>(
-        "/api/v1/users/reset-password",
-        "post",
-        data,
-      );
+      const response = await authApi.resetPassword(data);
 
       console.log(response);
 
       if (response.data.result === "SUCCESS") {
         setSuccess(true);
-      } else if (response.data.errors) {
+      } else {
         setError("root", {
           type: "manual",
           message: ERROR.FIND_PASSWORD,
