@@ -85,8 +85,7 @@ const MyProfile = (): JSX.Element => {
   if (isProfileError || isBasicInfoError) {
     return <div>프로필 데이터를 가져오는 중 오류가 발생했습니다.</div>;
   }
-  console.log(profileData.birth);
-  console.log(age);
+
   return (
     <main className="ml-[60px] py-5">
       {/* Profile Card */}
@@ -107,7 +106,12 @@ const MyProfile = (): JSX.Element => {
               </span>
               <div className="flex items-center space-x-5">
                 <span>{age}세</span>
-                <span>{profileData.gender === "남자" ? "남자" : "여자"}</span>
+                <span>
+                  {profileData.gender === "남자" ||
+                  profileData.gender === "MALE"
+                    ? "남자"
+                    : "여자"}
+                </span>
                 <span className="flex items-center">
                   ⭐{" "}
                   <span className="ml-1">
@@ -115,7 +119,10 @@ const MyProfile = (): JSX.Element => {
                   </span>
                 </span>
                 <span>
-                  {profileData.smoking === "흡연" ? "흡연" : "비흡연"}
+                  {profileData.smoking === "흡연자" ||
+                  profileData.smoking === "YES"
+                    ? "흡연"
+                    : "비흡연"}
                 </span>
               </div>
             </div>

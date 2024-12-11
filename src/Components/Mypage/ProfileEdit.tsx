@@ -10,7 +10,7 @@ import { useProfileStore } from "../../store/profileStore";
 import { postImgUrl } from "../../Utils/postImgUrl";
 import { useUserProfile } from "../../Hooks/userQueries";
 import {
-  checkNicknameDuplicate,
+  checkDuplicate,
   updateProfileData,
   updateUserInfo,
 } from "../../apis/user";
@@ -105,8 +105,8 @@ const ProfileEdit = (): JSX.Element => {
     setSuccess("");
 
     try {
-      const isAvailable = await checkNicknameDuplicate(nickname);
-      if (isAvailable) {
+      const isAvailable = await checkDuplicate("nickname", nickname);
+      if (!isAvailable) {
         setError("이미 사용 중인 닉네임입니다.");
         setValidationStatus({ isChecking: false, isAvailable: false });
       } else {
@@ -147,10 +147,16 @@ const ProfileEdit = (): JSX.Element => {
 
   const handleUpdateProfile = async () => {
     try {
-      console.log(profileData);
+      profileData.gender = profileData.gender === "남자" ? "MALE" : "FEMALE";
+      profileData.smoking = profileData.smoking === "흡연자" ? "YES" : "NO";
+
       await updateProfileData(profileData);
       await updateUserInfo({ nickname, phone });
-      navigate("/mypage");
+      setProfileData(profileData);
+      navigate("/mypage", { replace: true });
+
+      // 새 데이터를 강제로 리패칭
+      window.location.reload();
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -170,7 +176,7 @@ const ProfileEdit = (): JSX.Element => {
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
-  console.log(profileData);
+
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -273,7 +279,7 @@ const ProfileEdit = (): JSX.Element => {
                     profileData.gender === "남자" ||
                     profileData.gender === "MALE"
                   }
-                  onChange={() => handleGenderChange("남자")}
+                  onChange={() => handleGenderChange("MALE")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 남자
@@ -287,7 +293,7 @@ const ProfileEdit = (): JSX.Element => {
                     profileData.gender === "여자" ||
                     profileData.gender === "FEMALE"
                   }
-                  onChange={() => handleGenderChange("여자")}
+                  onChange={() => handleGenderChange("FEMALE")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 여자
@@ -307,10 +313,10 @@ const ProfileEdit = (): JSX.Element => {
                   name="smoking"
                   value="흡연"
                   checked={
-                    profileData.smoking === "흡연" ||
+                    profileData.smoking === "흡연자" ||
                     profileData.smoking === "YES"
                   }
-                  onChange={() => handleSmokingChange("흡연")}
+                  onChange={() => handleSmokingChange("YES")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 흡연
@@ -321,10 +327,10 @@ const ProfileEdit = (): JSX.Element => {
                   name="smoking"
                   value="비흡연"
                   checked={
-                    profileData.smoking === "비흡연" ||
+                    profileData.smoking === "비흡연자" ||
                     profileData.smoking === "NO"
                   }
-                  onChange={() => handleSmokingChange("비흡연")}
+                  onChange={() => handleSmokingChange("NO")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 비흡연
