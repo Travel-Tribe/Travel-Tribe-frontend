@@ -8,7 +8,10 @@ export const profileHandlers = [
   http.get("/api/v1/users/:userId/profile", async ({ params }) => {
     console.log("프로필 불러오기");
     const userId = params.userId;
-    return HttpResponse.json(UserProfileData[userId], { status: 201 });
+    return HttpResponse.json(
+      { data: UserProfileData[userId] },
+      { status: 201 },
+    );
   }),
 
   // 프로필 생성
