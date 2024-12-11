@@ -147,10 +147,16 @@ const ProfileEdit = (): JSX.Element => {
 
   const handleUpdateProfile = async () => {
     try {
-      console.log(profileData);
+      profileData.gender = profileData.gender === "남자" ? "MALE" : "FEMALE";
+      profileData.smoking = profileData.smoking === "흡연자" ? "YES" : "NO";
+
       await updateProfileData(profileData);
       await updateUserInfo({ nickname, phone });
-      navigate("/mypage");
+      setProfileData(profileData);
+      navigate("/mypage", { replace: true });
+
+      // 새 데이터를 강제로 리패칭
+      window.location.reload();
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -170,7 +176,7 @@ const ProfileEdit = (): JSX.Element => {
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
-  console.log(profileData);
+
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">

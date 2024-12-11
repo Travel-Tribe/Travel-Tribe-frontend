@@ -85,8 +85,7 @@ const MyProfile = (): JSX.Element => {
   if (isProfileError || isBasicInfoError) {
     return <div>프로필 데이터를 가져오는 중 오류가 발생했습니다.</div>;
   }
-  console.log(profileData.birth);
-  console.log(age);
+
   return (
     <main className="ml-[60px] py-5">
       {/* Profile Card */}

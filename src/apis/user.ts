@@ -7,7 +7,6 @@ export const fetchUserProfile = async (userId: string) => {
     `/api/v1/users/${userId}/profile`,
     "get",
   );
-  console.log(response);
   return response.data.data; // 필요한 데이터만 반환
 };
 
