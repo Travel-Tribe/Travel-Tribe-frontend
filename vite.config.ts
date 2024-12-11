@@ -10,5 +10,4 @@ export default defineConfig({
   optimizeDeps: {
     include: ["msw"],
   },
-  base: "/",
 });
