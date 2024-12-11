@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import fetchCall from "../../../Utils/apiFetch";
+import { changePassword } from "../../../apis/user";
 
 interface PasswordChangeModalProps {
   isOpen: boolean;
@@ -40,10 +40,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
   const handlePasswordUpdate = async () => {
     if (!userId) return;
     try {
-      await fetchCall(`/api/v1/users/password`, "patch", {
-        password: currentPassword,
-        newPassword,
-      });
+      changePassword(currentPassword, newPassword);
       alert("비밀번호가 성공적으로 변경되었습니다.");
       onClose();
     } catch (error) {
