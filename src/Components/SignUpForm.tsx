@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import fetchCall from "../Utils/apiFetch";
 import Modal from "./Common/Modal";
-import { ERROR, SUCCESS, VALIDATION } from "../Constants/message";
+import { ERROR, SUCCESS, VALIDATION } from "../Constants/MESSAGE";
 
 const schema = z
   .object({

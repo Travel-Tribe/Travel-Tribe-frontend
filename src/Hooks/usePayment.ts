@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import fetchCall from "../Utils/apiFetch";
-import { ERROR } from "../Constants/message";
+import { ERROR } from "../Constants/MESSAGE";
 
 interface ParticipationResponse {
   data: {

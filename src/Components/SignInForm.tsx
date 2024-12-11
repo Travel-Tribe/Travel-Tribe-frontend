@@ -7,7 +7,7 @@ import fetchCall from "../Utils/apiFetch";
 import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
 import { useAuthStore } from "../store/authStore";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { ERROR, VALIDATION } from "../Constants/message";
+import { ERROR, VALIDATION } from "../Constants/MESSAGE";
 
 interface LoginResponse {
   result: "SUCCESS" | "FAIL";

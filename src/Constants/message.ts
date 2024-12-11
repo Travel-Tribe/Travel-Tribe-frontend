@@ -3,7 +3,7 @@ export const DUPLICATION: { [key: string]: string } = Object.freeze({
   FAIL_EMAIL: "이미 사용 중인 email입니다.", // 아이디 중복
   FAIL_PHONE: "이미 사용 중인 전화번호입니다.", // 전화번호 중복
   FAIL_NICKNAME: "이미 사용 중인 닉네임입니다.", // 닉네임 중복
-  PASS: "", // 통과
+  PASS: "사용가능합니다.", // 통과
 });
 
 export const VALIDATION: { [key: string]: string } = Object.freeze({
@@ -30,11 +30,11 @@ export const ERROR: { [key: string]: string } = Object.freeze({
   SIGNIN: "이메일 또는 비밀번호가 올바르지 않습니다.", // 로그인 에러
   SIGNUP: "회원가입 처리 중 문제가 발생했습니다.", // 회원가입 에러
   REQUIRED_PROFILE: "프로필 작성이 필요한 서비스입니다.",
-  POST: "", // 글 등록 에러
+  POST: "글 등록에 실패했습니다.", // 글 등록 에러
   EDIT_PROFILE: "", // 프로필 수정 에러
   ACCESS_TOKEN: "", // 토큰 에러
 
-  LOAD_POST_LIST: "", // 글 목록 불러오기 에러
+  LOAD_POST_LIST: "Post를 불러오는데 실패했습니다.", // 글 목록 불러오기 에러
   LOAD_POST: "게시글을 찾을 수 없습니다.", // 포스트 불러오기 에러
   LOAD_MY_POST: "", // 내가 작성한 글 불러오기 에러
   LOAD_MY_PARTICIPATION_LIST: "", // 내 참여 목록 불러오기 에러
@@ -48,7 +48,7 @@ export const ERROR: { [key: string]: string } = Object.freeze({
 
   WRITING: "", // 글 작성 에러
 
-  CANCLE_MEMBERSHIP: "", // 회원 탈퇴 에러
+  CANCEL_MEMBERSHIP: "", // 회원 탈퇴 에러
 
   CHANGE_PASSWORD: "", // 비밀번호 변경 에러
   CHANGE_EMAIL: "", // 이메일 변경 에러
@@ -74,7 +74,7 @@ export const SUCCESS: { [key: string]: string } = Object.freeze({
 
   PAY_APPROVE_SUCCESS: "결제가 성공적으로 완료되었습니다!",
 
-  CANCLE_MEMBERSHIP: "", // 회원 탈퇴 성공
+  CANCEL_MEMBERSHIP: "", // 회원 탈퇴 성공
   CHANGE_EMAIL: "", // 이메일 변경 성공
   CHANGE_PASSWORD: "", // 비밀번호 변경 성공
   FIND_EMAIL: "", // 아이디 찾기 성공

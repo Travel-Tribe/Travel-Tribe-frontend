@@ -4,7 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import fetchCall from "../Utils/apiFetch";
 import { useNavigate } from "react-router-dom";
-import { ERROR, VALIDATION } from "../Constants/message";
+import { ERROR, VALIDATION } from "../Constants/MESSAGE";
 
 const userSchema = z.object({
   email: z.string().email(VALIDATION.INVALID_EMAIL),

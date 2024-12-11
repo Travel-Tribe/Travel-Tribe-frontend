@@ -22,9 +22,9 @@ export interface UserProfileType {
   fileAddress: string;
   langAbilities: string[] | undefined;
   visitedCountries: string[] | undefined;
-  age: number | null;
-  nickname: string;
-  phone: string;
+  age?: number | null;
+  nickname?: string;
+  phone?: string;
 }
 
 export interface AuthorProfileType {
@@ -95,9 +95,9 @@ export interface FileType {
 }
 
 export interface ReviewType {
-  userId: number;
-  postId: number;
-  reviewId: number;
+  userId?: number;
+  postId?: number;
+  reviewId?: number;
   continent: string;
   country: string;
   region: string;
@@ -108,8 +108,8 @@ export interface ReviewType {
   travelStartDate: string;
   travelEndDate: string;
   createDate: string;
-  mbti: string;
-  profileFileAddress: string;
+  mbti?: string;
+  profileFileAddress?: string;
 }
 
 /** */
@@ -121,7 +121,7 @@ export interface ParticipationType {
   postId: number;
   userId: string;
   ParticipationStatus: string;
-  ratingStatus: string;
+  RatingStatus: string;
 }
 
 /** */

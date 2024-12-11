@@ -1,9 +1,9 @@
 import { persist } from "zustand/middleware";
-import { ReviewTypes } from "../mocks/mockData";
 import { create } from "zustand";
+import { ReviewType } from "../type/types";
 
 type ReviewFormData = Omit<
-  ReviewTypes,
+  ReviewType,
   "postId" | "reviewId" | "userId" | "nickname" | "createDate"
 >;
 
@@ -21,7 +21,6 @@ const initialState: ReviewFormData = {
   region: "",
   title: "",
   contents: "",
-  participants: "",
   travelStartDate: "",
   travelEndDate: "",
   files: [],

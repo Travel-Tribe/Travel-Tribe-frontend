@@ -1,4 +1,4 @@
-import { mappingContinent } from "./mappingContinent";
+import { getContinentName } from "./getContinentName";
 import { mappingCountry } from "./mappingCountry";
 
 export const getFilterParams = (
@@ -8,12 +8,18 @@ export const getFilterParams = (
   selectedCountry: string | undefined,
   mbti?: string | undefined,
 ) => {
-  const filters: Record<string, string> = {
+  const filters: {
+    title: string;
+    content: string;
+    continent: string | undefined;
+    country: string | undefined;
+    mbti: string | undefined;
+  } = {
     title: search || "",
     content: city || "",
     continent:
       selectedContinent && selectedContinent !== "선택"
-        ? mappingContinent[selectedContinent]
+        ? getContinentName(selectedContinent)
         : "",
     country:
       selectedCountry !== "선택" && selectedContinent !== "기타"
@@ -22,12 +28,10 @@ export const getFilterParams = (
     mbti: mbti !== "선택" ? mbti : "",
   };
 
-  // 빈 값 필터 제거
   const params = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
     if (value) params.append(key, value);
   });
 
   return Object.fromEntries(params);
-  // return "&" + params.toString();
 };

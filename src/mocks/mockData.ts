@@ -44,28 +44,6 @@ export const UserMockData: UserType[] = [
     mbti: "ENTP",
     fileAddress: "",
   },
-  {
-    userId: 4,
-    username: "testUser4",
-    password: "password123",
-    email: "test4@example.com",
-    nickname: "tester4",
-    phone: "123-456-7893",
-    profileCheck: true,
-    mbti: "ISTP",
-    fileAddress: "",
-  },
-  {
-    userId: 5,
-    username: "testUser5",
-    password: "password123",
-    email: "test5@example.com",
-    nickname: "tester5",
-    phone: "123-456-7894",
-    profileCheck: true,
-    mbti: "ISFP",
-    fileAddress: "",
-  },
 ];
 
 export const UserProfileData: { [key: string]: UserProfileType } = {
@@ -124,9 +102,9 @@ export const UserProfileData: { [key: string]: UserProfileType } = {
 };
 
 export const DuplicateMockData = {
-  email: ["test@example.com"],
-  nickname: ["tester"],
-  phone: ["123-456-7890"],
+  email: ["test@example.com", "test2@example.com", "test3@example.com"],
+  nickname: ["tester", "tester2", "tester3"],
+  phone: ["123-456-7890", "123-456-7891", "123-456-7892"],
 };
 
 export const EmailChangeMockData: EmailCodeType = {
@@ -309,27 +287,27 @@ export const ReviewData: ReviewType[] = [
   },
 ];
 
-export const ParticipationsData: ParticipationType[] = [
+export const ParticipationData: ParticipationType[] = [
   {
     participationId: 1,
     postId: 1,
     userId: "1",
     ParticipationStatus: "TRAVEL_FINISHED",
-    ratingStatus: "평가미완료",
+    RatingStatus: "평가미완료",
   },
   {
     participationId: 2,
     postId: 1,
     userId: "2",
     ParticipationStatus: "TRAVEL_FINISHED",
-    ratingStatus: "평가미완료",
+    RatingStatus: "평가미완료",
   },
   {
     participationId: 3,
     postId: 1,
     userId: "3",
     ParticipationStatus: "TRAVEL_FINISHED",
-    ratingStatus: "평가미완료",
+    RatingStatus: "평가미완료",
   },
 ];
 
