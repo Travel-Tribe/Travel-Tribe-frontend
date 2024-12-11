@@ -1,3 +1,9 @@
+export interface LoginData {
+  id: number;
+  profileCheck: boolean;
+  access: string;
+}
+
 export interface UserType {
   userId: number;
   username: string;
@@ -175,5 +181,13 @@ export interface ErrorType {
 export interface ApiResponse<T> {
   data: {
     data: T;
+    result: "SUCCESS" | "FAIL";
+    errors: null | string;
   };
 }
+
+export type ApiErrorResponse = {
+  response?: {
+    status: number;
+  };
+};

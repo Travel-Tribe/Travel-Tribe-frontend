@@ -3,7 +3,6 @@ import fetchCall from "../../../Utils/apiFetch";
 import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../../Hooks/useLocalStorage";
 import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
-import { checkDuplicate } from "../../../apis/user";
 
 interface EmailChangeModalProps {
   isOpen: boolean;
@@ -24,7 +23,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     isChecking: false,
     isAvailable: false,
   });
-  const [setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
+  const [token, setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
   const resetFields = () => {
     setEmailInput("");
@@ -67,7 +66,14 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     setError("");
     setSuccess("");
     try {
-      const isDuplicate = checkDuplicate("email", emailInput);
+      const response = await fetchCall(
+        `/api/v1/users/duplicate?type=email&query=${encodeURIComponent(
+          emailInput,
+        )}`,
+        "get",
+      );
+
+      const isDuplicate = response.data;
 
       if (!isDuplicate) {
         setError("이미 사용 중인 이메일입니다");
@@ -108,10 +114,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
         code: inputCode,
       });
       alert("이메일이 성공적으로 변경되었습니다.");
-      if (typeof setToken === "function") {
-        setToken(null);
-      }
-      localStorage.removeItem(STORAGE_KEYS.TOKEN);
+      setToken(null);
       navigate("/signIn");
       onClose();
     } catch (error) {
@@ -169,7 +172,9 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
           type="text"
           placeholder="인증번호 입력"
           className={`w-full border rounded p-2 mb-4 ${
-            isCodeSent ? "" : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            isCodeSent
+              ? ""
+              : "bg-gray-300 text-gray-500 cursor-not-allowed"
           }`}
           value={inputCode}
           onChange={handleCodeInput}

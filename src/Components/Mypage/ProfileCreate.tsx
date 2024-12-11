@@ -80,12 +80,10 @@ const ProfileCreate = (): JSX.Element | null => {
   // 프로필 저장
   const handleUpdateProfile = async () => {
     try {
-      const bool = createProfileData(profileData);
-      if (await bool) {
-        localStorage.setItem("ProfileCheck", "true");
-        alert("프로필 생성 완료");
-        navigate("/mypage");
-      }
+      createProfileData();
+      localStorage.setItem("ProfileCheck", "true");
+      alert("프로필 생성 완료");
+      navigate("/mypage");
     } catch (error) {
       console.error("Error updating profile:", error);
     }
@@ -180,7 +178,7 @@ const ProfileCreate = (): JSX.Element | null => {
                     profileData.gender === "남자" ||
                     profileData.gender === "MALE"
                   }
-                  onChange={() => handleGenderChange("MALE")}
+                  onChange={() => handleGenderChange("남자")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 남자
@@ -194,7 +192,7 @@ const ProfileCreate = (): JSX.Element | null => {
                     profileData.gender === "여자" ||
                     profileData.gender === "FEMALE"
                   }
-                  onChange={() => handleGenderChange("FEMALE")}
+                  onChange={() => handleGenderChange("여자")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 여자
@@ -217,7 +215,7 @@ const ProfileCreate = (): JSX.Element | null => {
                     profileData.smoking === "흡연" ||
                     profileData.smoking === "YES"
                   }
-                  onChange={() => handleSmokingChange("YES")}
+                  onChange={() => handleSmokingChange("흡연")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 흡연
@@ -231,7 +229,7 @@ const ProfileCreate = (): JSX.Element | null => {
                     profileData.smoking === "비흡연" ||
                     profileData.smoking === "NO"
                   }
-                  onChange={() => handleSmokingChange("NO")}
+                  onChange={() => handleSmokingChange("비흡연")}
                   className="mr-2 radio radio-xs radio-success"
                 />{" "}
                 비흡연
