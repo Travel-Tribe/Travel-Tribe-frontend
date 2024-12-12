@@ -114,15 +114,6 @@ const RecruitmentHeader = ({ travelPlan }: RecruitmentHeaderProps) => {
                     alt={`${participant.nickname}의 프로필`}
                     className="w-12 h-12 rounded-full object-cover"
                   />
-                  {/* <img
-                    src={
-                      import.meta.env.VITE_API_BASE_URL +
-                        `/api/v1/file/preview?fileUrl=${participant.profileFile}` ||
-                      "/src/assets/profile-img.webp"
-                    }
-                    alt={`${participant.nickname}의 프로필`}
-                    className="w-12 h-12 rounded-full object-cover"
-                  /> */}
                   <div>
                     <div className="font-medium">{participant.nickname}</div>
                     <div className="text-sm text-gray-500">
