@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
-import fetchCall from "../Utils/apiFetch";
+import fetchCall from "../apis/fetchCall";
 import Modal from "./Common/Modal";
-import { ERROR, SUCCESS, VALIDATION } from "../Constants/message";
+import { ERROR, SUCCESS, VALIDATION } from "../constants/MESSAGE";
 import { authApi } from "../apis/auth";
 
 const schema = z

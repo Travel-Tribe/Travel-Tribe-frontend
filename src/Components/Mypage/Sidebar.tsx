@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import useLocalStorage from "../../Hooks/useLocalStorage";
-import fetchCall from "../../Utils/apiFetch";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import fetchCall from "../../apis/fetchCall";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import profileImg from "../../assets/profile-img.webp";
 import { useProfileStore } from "../../store/profileStore";
 

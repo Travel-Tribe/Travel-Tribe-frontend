@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { AxiosError } from "axios";
-import fetchCall from "../../../Utils/apiFetch";
+import fetchCall from "../../../apis/fetchCall";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
-import { CREW_CONDITION } from "../../../Constants/CREW_CONDITION";
-import { getContinentName } from "../../../Utils/getContinentName";
-import { mappingCountry } from "../../../Utils/mappingCountry";
+import { CREW_CONDITION } from "../../../constants/CREW_CONDITION";
+import { getContinentName } from "../../../utils/getContinentName";
+import { mappingCountry } from "../../../utils/mappingCountry";
 import { ErrorType } from "../../../type/types";
-import { ERROR } from "../../../Constants/MESSAGE";
+import { ERROR } from "../../../constants/MESSAGE";
 
 const SubmitBtn = React.memo(() => {
   const { id: postId } = useParams();

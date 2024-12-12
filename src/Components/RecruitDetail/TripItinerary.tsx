@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { DayDetailType, TravelPlanType } from "../../type/types";
-import DayMap from "./TripMap/DayMap";
 import { IoTimeOutline } from "react-icons/io5";
 import defaultImage from "../../assets/default-image.jpeg";
+import DayMap from "./TripMap/DayMap";
 
 interface TripItineraryProps {
   travelPlan?: TravelPlanType;
@@ -24,16 +24,13 @@ const DayScheduleCard = ({
   index: number;
 }) => {
   const [imageError, setImageError] = useState(false);
-  const isDevelopment = import.meta.env.DEV;
 
   // 이미지 URL을 결정하는 함수
   const getImageUrl = () => {
     if (imageError) {
       return defaultImage;
     }
-    if (isDevelopment) {
-      return detail.fileAddress; // 개발 환경에서는 링크 직접 사용
-    }
+
     return `${import.meta.env.VITE_API_BASE_URL}/api/v1/file/preview?fileUrl=${detail.fileAddress}`;
   };
 

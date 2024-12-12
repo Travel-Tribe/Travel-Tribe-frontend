@@ -1,8 +1,8 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useLocalStorage from "../../Hooks/useLocalStorage";
-import fetchCall from "../../Utils/apiFetch";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import useLocalStorage from "../../hooks/useLocalStorage";
+import fetchCall from "../../apis/fetchCall";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 
 interface ApiResponse {
   result: "SUCCESS" | "FAIL";

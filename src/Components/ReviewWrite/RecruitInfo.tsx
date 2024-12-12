@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { useReviewPostStore } from "../../store/reviewPostStore";
-import fetchCall from "../../Utils/apiFetch";
-import { mappingCountry } from "../../Utils/mappingCountry";
+import fetchCall from "../../apis/fetchCall";
+import { mappingCountry } from "../../utils/mappingCountry";
 import { TravelPlanType } from "../../type/types";
 
 type TravelPlan = Pick<

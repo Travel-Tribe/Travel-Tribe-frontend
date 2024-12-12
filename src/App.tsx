@@ -1,7 +1,7 @@
 import "./App.css";
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
-import Router from "./Router/routes";
+import Router from "./router/routes";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { useAuthStore } from "./store/authStore";
 
