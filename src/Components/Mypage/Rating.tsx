@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import fetchCall from "../../Utils/apiFetch";
-import { useProfileStore } from "../../store/profileStore";
 import profileImg from "../../assets/profile-img.webp";
-import { FaStar, FaRegStarHalf } from "react-icons/fa";
+import { FaStar } from "react-icons/fa";
 import { useParticipantsProfiles } from "../../Hooks/userQueries";
 
 interface RatingModalProps {
@@ -21,7 +20,7 @@ const Rating: React.FC<RatingModalProps> = ({
   onRatingComplete,
 }): JSX.Element | null => {
   const [ratings, setRatings] = useState<number[]>([]);
-  const { data: userProfiles, isLoading } =
+  const { data: userProfiles } =
     useParticipantsProfiles(participants);
   console.log(userProfiles);
   const handleRatingSubmit = async () => {
