@@ -58,7 +58,7 @@ const MyCompletedTrips = (): JSX.Element => {
     try {
       const response = await fetchCall<TravelPlan[]>("/api/v1/posts", "get");
       const myParticipationPostIds = await fetchMyParticipation();
-      console.log(myParticipationPostIds);
+
       const myReviews = await fetchMyReview();
       
       const completedTrips = response.data.data.content
@@ -101,7 +101,7 @@ const MyCompletedTrips = (): JSX.Element => {
       setFilteredTravelInfos(filteredTrips);
     } catch (error) {
       console.error("Error fetching participation data:", error);
-      alert(error.response?.data?.errors[0]?.errorMessage); // 백엔드가 보낸 메시지 출력
+      // alert(error.response?.data?.errors[0]?.errorMessage); // 백엔드가 보낸 메시지 출력
       throw new Error(error.response?.data?.errors[0]?.errorMessage);
     }
   };
@@ -112,8 +112,7 @@ const MyCompletedTrips = (): JSX.Element => {
         `/api/v1/posts/participations/by-travelfinished`,
         "get",
       );
-        console.log(response.data);
-      return response.data;
+      return response.data.data;
     } catch (error) {
       console.error("Error fetching participation data:", error);
       alert(error.response?.data?.errors[0]?.errorMessage); // 백엔드가 보낸 메시지 출력
@@ -172,7 +171,7 @@ const MyCompletedTrips = (): JSX.Element => {
 
     fetchData();
   }, []); // 빈 배열로 설정하여 한 번만 실행
-  console.log(filteredTravelInfos);
+
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -192,8 +191,8 @@ const MyCompletedTrips = (): JSX.Element => {
           {filteredTravelInfos.map((info, index) => {
             const travelStartDay = new Date(info.travelStartDate).getDay();
             const travelEndDay = new Date(info.travelEndDate).getDay();
-            // const travelCountry =
-            //   mappingCountry(info.travelCountry, "en") || info.travelCountry;
+            const travelCountry =
+              mappingCountry(info.travelCountry, "en") || info.travelCountry;
 
             return (
               <li key={info.postId} className="list-none">
@@ -204,7 +203,7 @@ const MyCompletedTrips = (): JSX.Element => {
                   <div className="flex items-center m-2.5 space-x-8 justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
-                        {/* <span className="truncate">{travelCountry}</span> */}
+                        <span className="truncate">{travelCountry}</span>
                       </div>
                       <span className="">
                         참여인원 {info.participantsCount}/{info.maxParticipants}

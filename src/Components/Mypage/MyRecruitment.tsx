@@ -7,7 +7,6 @@ import { createVoting } from "../../apis/user";
 
 interface ExtendedTravelPlanType extends TravelPlanType {
   participantsCount: number;
-  status: string;
 }
 
 interface TravelPlanResponse {
@@ -59,19 +58,19 @@ const MyRecruitment = (): JSX.Element => {
           `/api/v1/posts`,
           "get",
         );
-        console.log(response);
+
         const participationResponse = await fetchCall<participantion[]>(
           "/api/v1/posts/participations/by-join-joinready",
           "get",
         );
-        console.log(participationResponse.data);
+
         const today = new Date();
         today.setHours(0, 0, 0, 0); // 현재 날짜의 시간 부분을 초기화
 
         const participatingPostIds = participationResponse.data.data.map(
           (item: { postId: number }) => item.postId,
         );
-        console.log(participatingPostIds);
+
         // travelStartDate가 현재보다 미래이고, userId가 동일한 여행 계획만 필터링
         const filteredPlans = response.data.data.content.filter(
           (plan: TravelPlanType) => {
@@ -99,7 +98,7 @@ const MyRecruitment = (): JSX.Element => {
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
-                console.log(participants);
+
               return {
                 ...plan,
                 participantsCount: participants.data.data.length, // 참여 인원 수 추가
@@ -116,7 +115,7 @@ const MyRecruitment = (): JSX.Element => {
             }
           }),
         );
-          console.log(plansWithParticipants);
+
         // 최종 데이터를 상태에 저장
         setRecruitDataList(plansWithParticipants);
       } catch (error) {
@@ -139,7 +138,7 @@ const MyRecruitment = (): JSX.Element => {
   const clickRecruitForm = () => {
     navigate("/recruitment/write");
   };
-  console.log(recruitDataList);
+
   return (
     <>
       <section>

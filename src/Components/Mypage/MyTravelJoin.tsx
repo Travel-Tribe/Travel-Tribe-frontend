@@ -3,20 +3,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { mappingCountry } from "../../Utils/mappingCountry";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import {TravelPlanType, ApiResponse} from '../../type/types';
 
-interface TravelPlan {
-  postId: number;
-  id: string;
-  title: string;
-  travelStartDate: string;
-  travelEndDate: string;
-  maxParticipants: number;
-  travelCountry: string;
-  continent: string;
-  deadline: string;
+interface TravelPlan extends TravelPlanType {
   participantsCount: number;
-  userId: string;
-  status: string;
 }
 
 interface TravelPlanResponse {
@@ -66,13 +56,13 @@ const MyTravelJoin = () => {
           "get",
         );
         const allPosts = allPostsResponse.data.content;
-
+          
         // 참여 데이터 조회
         const participationResponse = await fetchCall<Participation[]>(
           "/api/v1/posts/participations/by-join-joinready",
           "get",
         );
-
+          
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -98,7 +88,7 @@ const MyTravelJoin = () => {
             String(plan.userId) !== userId
           );
         });
-
+        
         const plansWithParticipants = await Promise.all(
           filteredPlans.map(async (plan: TravelPlan) => {
             try {
@@ -138,7 +128,7 @@ const MyTravelJoin = () => {
   const deleteParticipation = async (postId: number) => {
     try {
       const response = await fetchCall(
-        `api/v1/posts/${postId}/participations`,
+        `/api/v1/posts/${postId}/participations`,
         "delete",
       );
       setFilteredPlans(prev => prev.filter(plan => plan.postId !== postId));
@@ -213,11 +203,11 @@ const MyTravelJoin = () => {
                       </span>
                     </div>
                     <div className="flex space-x-2.5 items-center">
-                      {statusStyles[plan.status] ? (
+                      {statusStyles[plan.status ?? ""] ? (
                         <div
                           className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${statusStyles[plan.status]}`}
                         >
-                          {statusText[plan.status]}
+                          {statusText[plan.status ?? ""]}
                         </div>
                       ) : null}
                       {plan.status === "투표중" ? (
@@ -227,7 +217,7 @@ const MyTravelJoin = () => {
                           className="btn btn-xs btn-error text-white rounded-md text-center "
                           onClick={e => {
                             e.stopPropagation();
-                            deleteParticipation(plan.postId);
+                            deleteParticipation(plan.postId ?? 0);
                           }}
                         >
                           취소하기
