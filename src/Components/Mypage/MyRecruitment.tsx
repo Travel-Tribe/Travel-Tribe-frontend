@@ -2,28 +2,18 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
 import { mappingCountry } from "../../Utils/mappingCountry";
-import { TravelPlanType } from "../../type/types";
+import { TravelPlanType, ApiResponse,ParticipationType } from "../../type/types";
 import { createVoting } from "../../apis/user";
 
 interface ExtendedTravelPlanType extends TravelPlanType {
   participantsCount: number;
 }
 
-interface TravelPlanResponse {
-  data: {
-    data: {
-      content: TravelPlanType;
-    };
-  };
-}
+type TravelPlanResponse = ApiResponse<{
+  content: TravelPlanType[];
+}>;
 
-interface participantion {
-  participationId: number;
-  postId: number;
-  userId: string;
-  ParticipationStatus: string;
-  ratingStatus: string;
-}
+type ParticipationResponse = ApiResponse<ParticipationType[]>;
 
 const MyRecruitment = (): JSX.Element => {
   const navigate = useNavigate();
@@ -59,7 +49,7 @@ const MyRecruitment = (): JSX.Element => {
           "get",
         );
 
-        const participationResponse = await fetchCall<participantion[]>(
+        const participationResponse = await fetchCall<ParticipationResponse>(
           "/api/v1/posts/participations/by-join-joinready",
           "get",
         );
@@ -84,7 +74,7 @@ const MyRecruitment = (): JSX.Element => {
 
             return (
               travelStartDate >= today &&
-              participatingPostIds.includes(plan.postId) &&
+              participatingPostIds.includes(plan.postId ?? 0) &&
               String(plan.userId) === String(userId)
             );
           },
@@ -94,7 +84,7 @@ const MyRecruitment = (): JSX.Element => {
         const plansWithParticipants = await Promise.all(
           filteredPlans.map(async (plan: TravelPlanType) => {
             try {
-              const participants = await fetchCall<participantion[]>(
+              const participants = await fetchCall<ParticipationResponse>(
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
