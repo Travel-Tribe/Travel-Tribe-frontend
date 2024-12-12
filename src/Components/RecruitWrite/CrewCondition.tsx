@@ -22,10 +22,10 @@ const CrewCondition = React.memo((): JSX.Element => {
 
   useEffect(() => {
     console.log(userProfile);
-    if (userProfile?.data) {
-      updateTravelData("limitMinAge", calculateAge(userProfile?.data.birth));
-      updateTravelData("limitSex", userProfile?.data.gender);
-      updateTravelData("limitSmoke", userProfile?.data.smoking);
+    if (userProfile) {
+      updateTravelData("limitMinAge", calculateAge(userProfile.birth));
+      updateTravelData("limitSex", userProfile.gender);
+      updateTravelData("limitSmoke", userProfile.smoking);
     }
   }, [updateTravelData, userProfile]);
 
