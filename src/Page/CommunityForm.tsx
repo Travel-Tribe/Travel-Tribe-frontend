@@ -1,4 +1,4 @@
-import CommunityInput from "../components/CommunityWrite/CommunityInput";
+import CommunityInput from "../Components/CommunityWrite/CommunityInput";
 
 export default function CommunityForm(): JSX.Element {
   return (

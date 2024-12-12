@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import SignInForm from "../components/SignInForm";
+import SignInForm from "../Components/SignInForm";
 
 const SignIn = (): JSX.Element => {
   return (
