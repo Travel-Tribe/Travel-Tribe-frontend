@@ -2,26 +2,18 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fetchCall from "../../Utils/apiFetch";
 import { mappingCountry } from "../../Utils/mappingCountry";
+import { TravelPlanType } from "../../type/types";
+import { createVoting } from "../../apis/user";
 
-interface TravelPlan {
-  postId: string;
-  id: string;
-  title: string;
-  travelStartDate: string;
-  travelEndDate: string;
-  maxParticipants: number;
-  travelCountry: string;
-  continent: string;
-  deadline: string;
+interface ExtendedTravelPlanType extends TravelPlanType {
   participantsCount: number;
-  userId: string;
   status: string;
 }
 
 interface TravelPlanResponse {
   data: {
     data: {
-      content: TravelPlan;
+      content: TravelPlanType;
     };
   };
 }
@@ -30,6 +22,8 @@ interface participantion {
   participationId: number;
   postId: number;
   userId: string;
+  ParticipationStatus: string;
+  ratingStatus: string;
 }
 
 const MyRecruitment = (): JSX.Element => {
@@ -37,7 +31,9 @@ const MyRecruitment = (): JSX.Element => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const userId = localStorage.getItem("USER_ID");
 
-  const [recruitDataList, setRecruitDataList] = useState<TravelPlan[]>([]);
+  const [recruitDataList, setRecruitDataList] = useState<
+    ExtendedTravelPlanType[]
+  >([]);
 
   const statusStyles = {
     모집중: "bg-custom-green",
@@ -63,20 +59,22 @@ const MyRecruitment = (): JSX.Element => {
           `/api/v1/posts`,
           "get",
         );
+        console.log(response);
         const participationResponse = await fetchCall<participantion[]>(
           "/api/v1/posts/participations/by-join-joinready",
           "get",
         );
-
+        console.log(participationResponse.data);
         const today = new Date();
         today.setHours(0, 0, 0, 0); // 현재 날짜의 시간 부분을 초기화
 
         const participatingPostIds = participationResponse.data.data.map(
           (item: { postId: number }) => item.postId,
         );
+        console.log(participatingPostIds);
         // travelStartDate가 현재보다 미래이고, userId가 동일한 여행 계획만 필터링
         const filteredPlans = response.data.data.content.filter(
-          (plan: TravelPlan) => {
+          (plan: TravelPlanType) => {
             const travelStartDate = new Date(plan.travelStartDate);
 
             // 날짜 유효성 검증 및 필터링
@@ -95,13 +93,13 @@ const MyRecruitment = (): JSX.Element => {
 
         // 필터링된 계획에 참여자 수 추가
         const plansWithParticipants = await Promise.all(
-          filteredPlans.map(async (plan: TravelPlan) => {
+          filteredPlans.map(async (plan: TravelPlanType) => {
             try {
               const participants = await fetchCall<participantion[]>(
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
-
+                console.log(participants);
               return {
                 ...plan,
                 participantsCount: participants.data.data.length, // 참여 인원 수 추가
@@ -118,7 +116,7 @@ const MyRecruitment = (): JSX.Element => {
             }
           }),
         );
-
+          console.log(plansWithParticipants);
         // 최종 데이터를 상태에 저장
         setRecruitDataList(plansWithParticipants);
       } catch (error) {
@@ -131,7 +129,7 @@ const MyRecruitment = (): JSX.Element => {
 
   const voting = async (postId: string) => {
     try {
-      await fetchCall(`/api/v1/posts/${postId}/voting-starts`, "post");
+      createVoting(postId);
       alert("투표가 등록되었습니다.");
     } catch (error) {
       console.error(`Error voting`, error);
@@ -141,7 +139,7 @@ const MyRecruitment = (): JSX.Element => {
   const clickRecruitForm = () => {
     navigate("/recruitment/write");
   };
-
+  console.log(recruitDataList);
   return (
     <>
       <section>
@@ -160,9 +158,7 @@ const MyRecruitment = (): JSX.Element => {
         <ul className="mt-5 space-y-6">
           {recruitDataList.map(plan => {
             const today: any = new Date();
-            console.log(today);
             const deadlineDate: any = new Date(plan.deadline);
-            console.log(deadlineDate);
             const deadlineWith21Hours = new Date(
               deadlineDate.getTime() + 21 * 60 * 60 * 1000,
             ); // 마감 시간 + 21시간 (마감 날짜 기준 다음날 00시)
@@ -170,7 +166,6 @@ const MyRecruitment = (): JSX.Element => {
               (deadlineDate.getTime() - today.getTime()) /
                 (1000 * 60 * 60 * 24),
             );
-            console.log(remainingDays);
             const startDayOfWeek =
               week[new Date(plan.travelStartDate).getDay()];
             const endDayOfWeek = week[new Date(plan.travelEndDate).getDay()];
@@ -210,11 +205,13 @@ const MyRecruitment = (): JSX.Element => {
                       </span>
                     </div>
                     <div className="flex space-x-2.5 items-center m-2.5">
-                      {statusStyles[plan.status] ? (
+                      {statusStyles[
+                        plan.status as keyof typeof statusStyles
+                      ] ? (
                         <div
-                          className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${statusStyles[plan.status]}`}
+                          className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${statusStyles[plan.status as keyof typeof statusStyles]}`}
                         >
-                          {statusText[plan.status]}
+                          {statusText[plan.status as keyof typeof statusText]}
                         </div>
                       ) : null}
                       {plan.status === "모집완료" ? (
@@ -223,7 +220,7 @@ const MyRecruitment = (): JSX.Element => {
                           onClick={e => {
                             e.stopPropagation();
                             // fetchDeleteParticipation(plan.postId);
-                            voting(plan.postId);
+                            voting(String(plan.postId));
                           }}
                         >
                           취소하기

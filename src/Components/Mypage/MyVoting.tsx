@@ -3,43 +3,50 @@ import fetchCall from "../../Utils/apiFetch";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { mappingCountry } from "../../Utils/mappingCountry";
 import Voting from "./SideComponents/Voting";
+import {
+  TravelPlanType,
+  ParticipationType,
+  ApiResponse,
+} from "../../type/types";
 
-interface TravelInfo {
-  postId: number;
-  reviewId: string;
-  continent: string;
-  travelCountry: string;
-  region: string;
-  title: string;
-  contents: string;
-  fileAddress: string | null;
-  travelStartDate?: string;
-  travelEndDate?: string;
+// interface TravelInfo {
+//   postId: number;
+//   continent: string;
+//   travelCountry: string;
+//   region: string;
+//   title: string;
+//   fileAddress: string | null;
+//   travelStartDate?: string;
+//   travelEndDate?: string;
+//   votingStatus: string;
+//   votingStartsId: number;
+// }
+
+interface ExtendedTravelPlanType extends TravelPlanType {
+  votingStartsId: number;
   votingStatus: string;
-  votingStartsId: number;
 }
 
-interface VotingInfo extends TravelInfo {
-  votingStartsId: number;
-}
-
-interface TravelPlanResponse {
-  data: {
-    data: {
-      content: TravelPlan;
-    };
-  };
-}
+export interface TravelPlanResponse extends ApiResponse<TravelPlanType[]> {}
+export interface ParticipationResponse extends ApiResponse<ParticipationType[]>{}
 
 interface Participation {
   participationId: number;
   postId: number;
   ParticipationStatus: string;
 }
+
+export interface VotingResponse extends ApiResponse<{
+  postId: number;
+  votingStartsId: number;
+  votingStatus: string;
+}> {}
+
+
 const MyVoting = (): JSX.Element => {
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const week = ["일", "월", "화", "수", "목", "금", "토"];
-  const [travelInfos, setTravelInfos] = useState<TravelInfo[]>([]);
+  const [travelInfos, setTravelInfos] = useState<ExtendedTravelPlanType[]>([]);
   const [openVotingId, setOpenVotingId] = useState<number | null>(null); // 현재 열려 있는 Voting ID
 
   const fetchVoting = async (postId: number): Promise<any> => {
@@ -52,7 +59,7 @@ const MyVoting = (): JSX.Element => {
       return response?.data;
     } catch (error) {
       console.error("Fetching voting data failed:", error);
-      alert('투표가 시작되지 않았습니다.')
+      alert("투표가 시작되지 않았습니다.");
       return null;
     }
   };
@@ -78,10 +85,10 @@ const MyVoting = (): JSX.Element => {
           `/api/v1/posts`,
           "get",
         );
-        const allPosts: TravelInfo[] = allPostsResponse.data.content;
-        
+        const allPosts = allPostsResponse.data.content;
+
         // Step 2: 참여 데이터 조회
-        const participationResponse = await fetchCall<Participation[]>(
+        const participationResponse = await fetchCall<ParticipationResponse>(
           "/api/v1/posts/participations/by-join-joinready",
           "get",
         );
@@ -95,13 +102,14 @@ const MyVoting = (): JSX.Element => {
         const participatingPosts = allPosts.filter(post =>
           participatingPostIds.includes(post.postId),
         );
-        
-          const votingPosts = participatingPosts.filter(post => post.status === "투표중");
-       
+
+        const votingPosts = participatingPosts.filter(
+          post => post.status === "투표중",
+        );
+
         // Step 4: 투표가 생성된 post만 필터링
-        const validPosts: VotingInfo[] = [];
+        const validPosts: ExtendedTravelPlanType[] = [];
         for (const post of votingPosts) {
-          
           const votingData = await fetchVoting(post.postId);
           if (votingData?.data.votingStartsId) {
             validPosts.push({
@@ -171,7 +179,7 @@ const MyVoting = (): JSX.Element => {
                 className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg cursor-pointer"
                 onClick={() => {
                   if (info.votingStatus === "STARTING") {
-                    handleOpenVoting(info.postId); // 현재 투표 ID 설정
+                    handleOpenVoting(info.postId ?? 0); // 현재 투표 ID 설정
                   } else {
                     alert("투표를 시작할 수 없습니다."); // 실패 시 메시지 표시
                   }
