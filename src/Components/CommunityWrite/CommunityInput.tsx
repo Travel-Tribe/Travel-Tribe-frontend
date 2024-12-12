@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
-import fetchCall from "../../Utils/apiFetch";
+import { postImgUrl, previewImg } from "../../utils/postImgUrl";
+import fetchCall from "../../apis/fetchCall";
 import { useNavigate } from "react-router-dom";
 import { useCommunityPostStore } from "../../store/communityPostStore";
 import { useQueryClient } from "react-query";

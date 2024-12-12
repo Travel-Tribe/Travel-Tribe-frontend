@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { TravelPlan } from "../../../mocks/mockData";
-import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
+import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 interface ButtonProps {

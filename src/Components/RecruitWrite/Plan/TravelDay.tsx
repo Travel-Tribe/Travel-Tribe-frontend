@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getDiffDate } from "../../../Utils/getDiffDate";
+import { getDiffDate } from "../../../utils/getDiffDate";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 import DayDetail from "./DayDetail";
 import { DayType } from "../../../type/types";

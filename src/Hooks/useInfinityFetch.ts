@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from "react-query";
 import { useRef, useCallback } from "react";
-import fetchCall from "../Utils/apiFetch";
+import fetchCall from "../apis/fetchCall";
 import { CommunityType, TravelPlanType, ReviewType } from "../type/types";
 
 interface FetchType {

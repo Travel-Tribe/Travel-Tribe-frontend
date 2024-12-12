@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useRecruitPostStore } from "../store/recruitPostStore";
-import { getFilterParams } from "../Utils/getFilterParams";
-import { ItemType, useInfiniteFetch } from "../Hooks/useInfinityFetch";
+import { getFilterParams } from "../utils/getFilterParams";
+import { ItemType, useInfiniteFetch } from "../hooks/useInfinityFetch";
 import { ErrorType, TravelPlanType } from "../type/types";
 import { AxiosError } from "axios";
-import { RecruitmentPost } from "../Components/Post/RecruitmentPost";
+import { RecruitmentPost } from "../components/Post/RecruitmentPost";
 
 interface RecruitmentProps {
   selectedContinent?: string;

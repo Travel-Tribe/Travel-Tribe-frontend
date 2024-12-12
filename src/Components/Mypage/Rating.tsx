@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import fetchCall from "../../Utils/apiFetch";
+import fetchCall from "../../apis/fetchCall";
 import profileImg from "../../assets/profile-img.webp";
 import { FaStar } from "react-icons/fa";
-import { useParticipantsProfiles } from "../../Hooks/userQueries";
+import { useParticipantsProfiles } from "../../hooks/userQueries";
 
 interface RatingModalProps {
   isOpen: boolean;

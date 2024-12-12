@@ -2,12 +2,12 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import SearchBar from "../Common/SearchBar";
 import SelectBox from "../Common/SelectBox";
-import { COUNTRY_DATA } from "../../Constants/COUNTRY_DATA";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
-import { MBTI } from "../../Constants/MBTI";
-import Recruitment from "../../Page/Recruitment";
-import Review from "../../Page/Review";
-import Community from "../../Page/Community";
+import { COUNTRY_DATA } from "../../constants/COUNTRY_DATA";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
+import { MBTI } from "../../constants/MBTI";
+import Recruitment from "../../page/Recruitment";
+import Review from "../../page/Review";
+import Community from "../../page/Community";
 
 const HomeLayout = () => {
   const [selectedTab, setSelectedTab] = useState<"모집" | "후기" | "커뮤니티">(

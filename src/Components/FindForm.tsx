@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useNavigate } from "react-router-dom";
-import { ERROR, VALIDATION } from "../Constants/message";
+import { ERROR, VALIDATION } from "../constants/MESSAGE";
 import { authApi } from "../apis/auth";
 import { z } from "zod";
 

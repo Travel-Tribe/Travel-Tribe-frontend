@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import fetchCall from "../../../Utils/apiFetch";
+import fetchCall from "../../../apis/fetchCall";
 import { useNavigate } from "react-router-dom";
-import useLocalStorage from "../../../Hooks/useLocalStorage";
-import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
+import useLocalStorage from "../../../hooks/useLocalStorage";
+import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
 import { checkDuplicate } from "../../../apis/user";
 
 interface EmailChangeModalProps {

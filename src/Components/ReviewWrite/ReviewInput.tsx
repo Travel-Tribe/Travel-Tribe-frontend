@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useReviewPostStore } from "../../store/reviewPostStore";
-import fetchCall from "../../Utils/apiFetch";
+import fetchCall from "../../apis/fetchCall";
 import RecruitInfo from "./RecruitInfo";
-import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
+import { postImgUrl, previewImg } from "../../utils/postImgUrl";
 import { FileType } from "../../type/types";
 
 const ReviewInput = () => {

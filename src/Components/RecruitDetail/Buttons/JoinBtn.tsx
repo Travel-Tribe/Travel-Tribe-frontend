@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
+import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
 import { useState } from "react";
 import Modal from "../../Common/Modal";
 

@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 import { DayDetailType, DayType } from "../../../type/types";
 import SpecificLocationSearch from "./SpecificLocationSearch";
-import { postImgUrl } from "../../../Utils/postImgUrl";
+import { postImgUrl } from "../../../utils/postImgUrl";
 
 interface DayDetailProps {
   day: DayType;

@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import fetchCall from "../Utils/apiFetch";
-import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
+import fetchCall from "../apis/fetchCall";
+import { STORAGE_KEYS } from "../constants/STORAGE_KEYS";
 import { jwtDecode } from "jwt-decode"; // Ensure this is correctly imported
 
 interface DecodedToken {

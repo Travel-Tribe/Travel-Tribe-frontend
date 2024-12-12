@@ -3,7 +3,7 @@ import {
   AuthorProfileType,
   ParticipationType,
 } from "../type/types";
-import fetchCall from "../Utils/apiFetch";
+import fetchCall from "./fetchCall";
 
 // 참여자수 가져오기
 export const getParticipations = async (

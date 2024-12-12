@@ -1,9 +1,9 @@
-import fetchCall from "../../Utils/apiFetch";
+import fetchCall from "../../apis/fetchCall";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { mappingCountry } from "../../Utils/mappingCountry";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
-import {TravelPlanType, ApiResponse} from '../../type/types';
+import { TravelPlanType, ApiResponse } from "../../type/types";
 
 interface TravelPlan extends TravelPlanType {
   participantsCount: number;
@@ -56,13 +56,13 @@ const MyTravelJoin = () => {
           "get",
         );
         const allPosts = allPostsResponse.data.content;
-          
+
         // 참여 데이터 조회
         const participationResponse = await fetchCall<Participation[]>(
           "/api/v1/posts/participations/by-join-joinready",
           "get",
         );
-          
+
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -88,7 +88,7 @@ const MyTravelJoin = () => {
             String(plan.userId) !== userId
           );
         });
-        
+
         const plansWithParticipants = await Promise.all(
           filteredPlans.map(async (plan: TravelPlan) => {
             try {

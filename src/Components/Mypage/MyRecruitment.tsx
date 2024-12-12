@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import fetchCall from "../../Utils/apiFetch";
+import fetchCall from "../../apis/fetchCall";
 import { mappingCountry } from "../../Utils/mappingCountry";
-import { TravelPlanType, ApiResponse,ParticipationType } from "../../type/types";
+import {
+  TravelPlanType,
+  ApiResponse,
+  ParticipationType,
+} from "../../type/types";
+
 import { createVoting } from "../../apis/user";
 
 interface ExtendedTravelPlanType extends TravelPlanType {
@@ -88,7 +93,6 @@ const MyRecruitment = (): JSX.Element => {
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
-
               return {
                 ...plan,
                 participantsCount: participants.data.data.length, // 참여 인원 수 추가
@@ -105,7 +109,6 @@ const MyRecruitment = (): JSX.Element => {
             }
           }),
         );
-
         // 최종 데이터를 상태에 저장
         setRecruitDataList(plansWithParticipants);
       } catch (error) {

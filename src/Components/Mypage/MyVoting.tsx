@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fetchCall from "../../Utils/apiFetch";
+import fetchCall from "../../apis/fetchCall";
 import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
 import { mappingCountry } from "../../Utils/mappingCountry";
 import Voting from "./SideComponents/Voting";
@@ -14,15 +14,16 @@ interface ExtendedTravelPlanType extends TravelPlanType {
   votingStatus: string;
 }
 
-export interface TravelPlanResponse extends ApiResponse<TravelPlanType[]> {}
-export interface ParticipationResponse extends ApiResponse<ParticipationType[]>{}
+interface TravelPlanResponse extends ApiResponse<TravelPlanType[]> {}
+interface ParticipationResponse
+  extends ApiResponse<ParticipationType[]> {}
 
-export interface VotingResponse extends ApiResponse<{
-  postId: number;
-  votingStartsId: number;
-  votingStatus: string;
-}> {}
-
+interface VotingResponse
+  extends ApiResponse<{
+    postId: number;
+    votingStartsId: number;
+    votingStatus: string;
+  }> {}
 
 const MyVoting = (): JSX.Element => {
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
@@ -32,27 +33,17 @@ const MyVoting = (): JSX.Element => {
 
   const fetchVoting = async (postId: number): Promise<any> => {
     try {
-      const response = await fetchCall(
+      const response = await fetchCall<VotingResponse>(
         `/api/v1/posts/${postId}/voting-starts`,
         "get",
       );
-      console.log(response);
+
       return response?.data;
     } catch (error) {
       console.error("Fetching voting data failed:", error);
       alert("투표가 시작되지 않았습니다.");
       return null;
     }
-  };
-
-  const fetchParticipation = async () => {
-    try {
-      const participationResponse = await fetchCall(
-        `api/v1/posts/participations`,
-        "get",
-      );
-      console.log(participationResponse);
-    } catch (error) {}
   };
 
   useEffect(() => {
@@ -62,11 +53,10 @@ const MyVoting = (): JSX.Element => {
         today.setHours(0, 0, 0, 0);
 
         // Step 1: 전체 모집글 조회
-        const { data: allPostsResponse } = await fetchCall<TravelPlanResponse>(
+        const  allPosts  = await fetchCall<TravelPlanResponse>(
           `/api/v1/posts`,
           "get",
         );
-        const allPosts = allPostsResponse.data.content;
 
         // Step 2: 참여 데이터 조회
         const participationResponse = await fetchCall<ParticipationResponse>(
@@ -80,12 +70,12 @@ const MyVoting = (): JSX.Element => {
         );
 
         // Step 3: 내가 참여한 post만 필터링
-        const participatingPosts = allPosts.filter(post =>
+        const participatingPosts = allPosts.filter((post: { postId: number }) =>
           participatingPostIds.includes(post.postId),
         );
 
         const votingPosts = participatingPosts.filter(
-          post => post.status === "투표중",
+          (post: { status: string }) => post.status === "투표중",
         );
 
         // Step 4: 투표가 생성된 post만 필터링

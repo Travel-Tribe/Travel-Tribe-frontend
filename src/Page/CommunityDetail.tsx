@@ -1,6 +1,6 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
-import fetchCall from "../Utils/apiFetch";
+import { STORAGE_KEYS } from "../constants/STORAGE_KEYS";
+import fetchCall from "../apis/fetchCall";
 import { useQuery, useQueryClient } from "react-query";
 import { CommunityType, ErrorType } from "../type/types";
 import { AxiosError } from "axios";

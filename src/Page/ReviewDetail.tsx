@@ -1,13 +1,13 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { FaRegUser, FaRegCalendarAlt } from "react-icons/fa";
 import { MdOutlinePinDrop } from "react-icons/md";
-import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
-import fetchCall from "../Utils/apiFetch";
+import { STORAGE_KEYS } from "../constants/STORAGE_KEYS";
+import fetchCall from "../apis/fetchCall";
 import { useQuery, useQueryClient } from "react-query";
 import { ErrorType, ReviewType } from "../type/types";
 import { AxiosError } from "axios";
 import { useState } from "react";
-import Modal from "../Components/Common/Modal";
+import Modal from "../components/Common/Modal";
 
 const ReviewDetail = (): JSX.Element => {
   const { reviewId, postId } = useParams<{

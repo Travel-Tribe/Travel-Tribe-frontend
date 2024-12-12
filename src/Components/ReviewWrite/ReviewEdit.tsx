@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useReviewPostStore } from "../../store/reviewPostStore";
-import fetchCall from "../../Utils/apiFetch";
+import fetchCall from "../../apis/fetchCall";
 import RecruitInfo from "./RecruitInfo";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { postImgUrl, previewImg } from "../../Utils/postImgUrl";
+import { postImgUrl, previewImg } from "../../utils/postImgUrl";
 import Modal from "../Common/Modal";
 import { FileType, ReviewType } from "../../type/types";
-import { ERROR, SUCCESS, VALIDATION } from "../../Constants/MESSAGE";
+import { ERROR, SUCCESS, VALIDATION } from "../../constants/MESSAGE";
 
 type ReviewData = Pick<
   ReviewType,

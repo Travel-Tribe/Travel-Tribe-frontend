@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import Age from "./CrewCondition/Age";
 import Gender from "./CrewCondition/Gender";
 import Smoke from "./CrewCondition/Smoke";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
-import { useUserProfile } from "../../Hooks/userQueries";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
+import { useUserProfile } from "../../hooks/userQueries";
 import { AxiosError } from "axios";
 import { ErrorType } from "../../type/types";
 import { useRecruitPostStore } from "../../store/recruitPostStore";
-import { calculateAge } from "../../Utils/calculateAge";
+import { calculateAge } from "../../utils/calculateAge";
 
 const CrewCondition = React.memo((): JSX.Element => {
   const updateTravelData = useRecruitPostStore(state => state.updateTravelData);

@@ -1,5 +1,5 @@
-import Preview from "../Components/RecruitWrite/Preview";
-import RecruitForm from "../Components/RecruitWrite/RecruitForm";
+import Preview from "../components/RecruitWrite/Preview";
+import RecruitForm from "../components/RecruitWrite/RecruitForm";
 
 const RecruitWrite = (): JSX.Element => {
   return (
