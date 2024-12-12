@@ -9,19 +9,6 @@ import {
   ApiResponse,
 } from "../../type/types";
 
-// interface TravelInfo {
-//   postId: number;
-//   continent: string;
-//   travelCountry: string;
-//   region: string;
-//   title: string;
-//   fileAddress: string | null;
-//   travelStartDate?: string;
-//   travelEndDate?: string;
-//   votingStatus: string;
-//   votingStartsId: number;
-// }
-
 interface ExtendedTravelPlanType extends TravelPlanType {
   votingStartsId: number;
   votingStatus: string;
@@ -29,12 +16,6 @@ interface ExtendedTravelPlanType extends TravelPlanType {
 
 export interface TravelPlanResponse extends ApiResponse<TravelPlanType[]> {}
 export interface ParticipationResponse extends ApiResponse<ParticipationType[]>{}
-
-interface Participation {
-  participationId: number;
-  postId: number;
-  ParticipationStatus: string;
-}
 
 export interface VotingResponse extends ApiResponse<{
   postId: number;
