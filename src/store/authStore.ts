@@ -61,7 +61,7 @@ export const useAuthStore = create<AuthState>(set => ({
     }
   },
   startTokenRefresh: () => {
-    const TOKEN_REFRESH_INTERVAL = 9 * 60 * 1000; // 29분
+    const TOKEN_REFRESH_INTERVAL = 29 * 60 * 1000; // 29분
     if (intervalId !== null) {
       clearInterval(intervalId);
     }
@@ -81,20 +81,12 @@ export const useAuthStore = create<AuthState>(set => ({
             STORAGE_KEYS.TOKEN_EXPIRATION,
             expiration.toString(),
           );
-          console.log(
-            "토큰 갱신 성공:",
-            newAccessToken,
-            "만료 시간:",
-            expiration,
-          );
         } else {
-          console.error("토큰이 응답에 포함되지 않았습니다.");
           set({ accessToken: null, expiration: null });
           localStorage.removeItem(STORAGE_KEYS.TOKEN);
           localStorage.removeItem(STORAGE_KEYS.TOKEN_EXPIRATION);
         }
       } catch (error) {
-        console.error("토큰 재발급 실패:", error);
         localStorage.clear();
         window.location.href = "/signIn";
       }
@@ -104,7 +96,6 @@ export const useAuthStore = create<AuthState>(set => ({
     if (intervalId !== null) {
       clearInterval(intervalId);
       intervalId = null;
-      console.log("토큰 갱신 Interval 정리됨");
     }
   },
 }));
