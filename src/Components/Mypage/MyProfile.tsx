@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import { useProfileStore } from "../../store/profileStore";
-import { useUserProfile, useUserBasicInfo } from "../../Hooks/userQueries";
+import { useUserProfile, useUserBasicInfo } from "../../hooks/userQueries";
 
 import MyRecruitment from "./MyRecruitment";
 import MyTravelJoin from "./MyTravelJoin";

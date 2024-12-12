@@ -1,4 +1,4 @@
-import fetchCall from "../Utils/apiFetch";
+import fetchCall from "./fetchCall";
 import { UserProfileType } from "../type/types";
 
 // 단일 사용자 프로필 가져오기

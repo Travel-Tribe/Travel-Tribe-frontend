@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
+import { STORAGE_KEYS } from "../constants/STORAGE_KEYS";
 import { useAuthStore } from "../store/authStore";
 import { LuEye, LuEyeOff } from "react-icons/lu";
-import { ERROR, VALIDATION } from "../Constants/message";
+import { ERROR, VALIDATION } from "../constants/MESSAGE";
 import { ApiErrorResponse } from "../type/types";
 import { authApi } from "../apis/auth";
 

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect } from "react";
-import { COUNTRY_DATA } from "../../../Constants/COUNTRY_DATA";
+import { COUNTRY_DATA } from "../../../constants/COUNTRY_DATA";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const DestinationSelect = React.memo(() => {

@@ -1,6 +1,6 @@
 import { http, HttpResponse } from "msw";
 import { UserProfileData, UserMockData } from "./mockData";
-import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
+import { STORAGE_KEYS } from "../constants/STORAGE_KEYS";
 
 const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 export const profileHandlers = [

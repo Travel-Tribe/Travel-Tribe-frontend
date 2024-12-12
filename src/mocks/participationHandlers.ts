@@ -1,6 +1,6 @@
 import { http, HttpResponse } from "msw";
 import { ParticipationData } from "./mockData";
-import { STORAGE_KEYS } from "../Constants/STORAGE_KEYS";
+import { STORAGE_KEYS } from "../constants/STORAGE_KEYS";
 
 export const participationHandlers = [
   // 참여 조회

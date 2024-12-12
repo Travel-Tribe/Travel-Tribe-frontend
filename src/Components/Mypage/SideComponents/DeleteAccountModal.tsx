@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useLocalStorage from "../../../Hooks/useLocalStorage";
-import { STORAGE_KEYS } from "../../../Constants/STORAGE_KEYS";
+import useLocalStorage from "../../../hooks/useLocalStorage";
+import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
 import { deleteAccount } from "../../../apis/user";
 
 interface DeleteAccountModalProps {

@@ -1,6 +1,6 @@
 import { GoogleMap } from "@react-google-maps/api";
-import { useCountryCenter } from "../../../Hooks/useCountyCenter";
-import { useGoogleMaps } from "../../../Hooks/useGoogleMaps";
+import { useCountryCenter } from "../../../hooks/useCountyCenter";
+import { useGoogleMaps } from "../../../hooks/useGoogleMaps";
 
 interface CountryMapProps {
   country: string;

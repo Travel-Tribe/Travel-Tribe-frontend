@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import fetchCall from "../../Utils/apiFetch";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
-import { mappingCountry } from "../../Utils/mappingCountry";
+import fetchCall from "../../apis/fetchCall";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
+import { mappingCountry } from "../../utils/mappingCountry";
 import Voting from "./SideComponents/Voting";
 import {
   TravelPlanType,
@@ -28,7 +28,8 @@ interface ExtendedTravelPlanType extends TravelPlanType {
 }
 
 export interface TravelPlanResponse extends ApiResponse<TravelPlanType[]> {}
-export interface ParticipationResponse extends ApiResponse<ParticipationType[]>{}
+export interface ParticipationResponse
+  extends ApiResponse<ParticipationType[]> {}
 
 interface Participation {
   participationId: number;
@@ -36,12 +37,12 @@ interface Participation {
   ParticipationStatus: string;
 }
 
-export interface VotingResponse extends ApiResponse<{
-  postId: number;
-  votingStartsId: number;
-  votingStatus: string;
-}> {}
-
+export interface VotingResponse
+  extends ApiResponse<{
+    postId: number;
+    votingStartsId: number;
+    votingStatus: string;
+  }> {}
 
 const MyVoting = (): JSX.Element => {
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ReviewType } from "../../type/types";
 import { Link } from "react-router-dom";
-import { mappingCountry } from "../../Utils/mappingCountry";
+import { mappingCountry } from "../../utils/mappingCountry";
 
 export const ReviewPost = React.memo(
   ({ review }: { review: ReviewType }): JSX.Element => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { mappingCountry } from "../../../Utils/mappingCountry";
-import fetchCall from "../../../Utils/apiFetch";
+import { mappingCountry } from "../../../utils/mappingCountry";
+import fetchCall from "../../../apis/fetchCall";
 
 interface VotingProps {
   isOpen: boolean;

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import FindForm from "../Components/FindForm";
+import FindForm from "../components/FindForm";
 
 const Find = (): JSX.Element => {
   return (

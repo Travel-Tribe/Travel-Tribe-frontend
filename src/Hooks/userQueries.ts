@@ -4,7 +4,7 @@ import {
   fetchUserBasicInfo,
   fetchParticipantsProfiles,
 } from "../apis/user";
-import fetchCall from "../Utils/apiFetch";
+import fetchCall from "../apis/fetchCall";
 import { useProfileStore } from "../store/profileStore";
 
 // 사용자 프로필 조회
@@ -16,10 +16,12 @@ export const useUserProfile = (userId: string) => {
 
 // 사용자 기본 정보 조회
 export const useUserBasicInfo = () => {
-  const initializeBasicInfo = useProfileStore((state) => state.initializeBasicInfo);
+  const initializeBasicInfo = useProfileStore(
+    state => state.initializeBasicInfo,
+  );
 
   return useQuery("userBasicInfo", fetchUserBasicInfo, {
-    onSuccess: (data) => {
+    onSuccess: data => {
       initializeBasicInfo(data);
     },
   });

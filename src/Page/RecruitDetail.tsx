@@ -6,13 +6,13 @@ import {
   TripRules,
   TripCost,
   TripItinerary,
-} from "../Components/RecruitDetail";
+} from "../components/RecruitDetail";
 import { useQuery } from "react-query";
-import fetchCall from "../Utils/apiFetch";
-import EditBtn from "../Components/RecruitDetail/Buttons/EditBtn";
-import JoinBtn from "../Components/RecruitDetail/Buttons/JoinBtn";
+import fetchCall from "../apis/fetchCall";
+import EditBtn from "../components/RecruitDetail/Buttons/EditBtn";
+import JoinBtn from "../components/RecruitDetail/Buttons/JoinBtn";
 import { TravelPlanType } from "../type/types";
-import { ERROR } from "../Constants/MESSAGE";
+import { ERROR } from "../constants/MESSAGE";
 
 interface postProps {
   data: TravelPlanType;

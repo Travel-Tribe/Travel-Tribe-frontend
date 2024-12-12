@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useReviewPostStore } from "../store/reviewPostStore";
-import { getFilterParams } from "../Utils/getFilterParams";
-import { ItemType, useInfiniteFetch } from "../Hooks/useInfinityFetch";
+import { getFilterParams } from "../utils/getFilterParams";
+import { ItemType, useInfiniteFetch } from "../hooks/useInfinityFetch";
 import { ErrorType, ReviewType } from "../type/types";
 import { AxiosError } from "axios";
-import { ReviewPost } from "../Components/Post/ReviewPost";
+import { ReviewPost } from "../components/Post/ReviewPost";
 
 interface ReviewProps {
   selectedContinent?: string;

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
-import { useGoogleMaps } from "../../../Hooks/useGoogleMaps";
+import { useGoogleMaps } from "../../../hooks/useGoogleMaps";
 
 interface SpecificLocationSearchProps {
   placeName: string;

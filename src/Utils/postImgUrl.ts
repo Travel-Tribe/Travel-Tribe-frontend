@@ -1,4 +1,4 @@
-import fetchCall from "./apiFetch";
+import fetchCall from "../apis/fetchCall";
 
 export const postImgUrl = async (file: File) => {
   const formData = new FormData();

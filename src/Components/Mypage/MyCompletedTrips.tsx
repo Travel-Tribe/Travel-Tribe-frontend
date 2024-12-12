@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import fetchCall from "../../Utils/apiFetch";
+import fetchCall from "../../apis/fetchCall";
 import Rating from "./Rating";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
-import { mappingCountry } from "../../Utils/mappingCountry";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
+import { mappingCountry } from "../../utils/mappingCountry";
 import { useNavigate } from "react-router-dom";
 
 interface TravelPlan {
@@ -60,16 +60,14 @@ const MyCompletedTrips = (): JSX.Element => {
       const myParticipationPostIds = await fetchMyParticipation();
       console.log(myParticipationPostIds);
       const myReviews = await fetchMyReview();
-      
+
       const completedTrips = response.data.data.content
         .filter((info: TravelPlan) => {
           const travelEndDate = new Date(info.travelEndDate);
 
-          return (
-            myParticipationPostIds.some(
-              (participation: { postId: number }) =>
-                participation.postId === Number(info.postId),
-            )
+          return myParticipationPostIds.some(
+            (participation: { postId: number }) =>
+              participation.postId === Number(info.postId),
           );
         })
         .map((info: TravelPlan) => ({
@@ -84,12 +82,12 @@ const MyCompletedTrips = (): JSX.Element => {
           (participation: { postId: number }) =>
             participation.postId === Number(trip.postId),
         );
-        
+
         const reviewStatus = myReviews.reviews.find(
           (participation: { userId: string | number }) =>
             String(participation.userId) === userId, // 타입 일치
         );
-        
+
         filteredTrips.push({
           ...trip,
           participantsCount: await fetchParticipation(trip.postId),
@@ -112,7 +110,7 @@ const MyCompletedTrips = (): JSX.Element => {
         `/api/v1/posts/participations/by-travelfinished`,
         "get",
       );
-        console.log(response.data);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching participation data:", error);
@@ -128,11 +126,11 @@ const MyCompletedTrips = (): JSX.Element => {
         `/api/v1/posts/${postId}/participations`,
         "get",
       );
-        console.log(response);
+      console.log(response);
       const userIds = response.data.data.map(
         (participation: { userId: string }) => participation.userId,
       );
-      
+
       const otherUserIds = userIds.filter((id: string | null) => id !== userId);
 
       setParticipationUserId(otherUserIds);
@@ -234,8 +232,9 @@ const MyCompletedTrips = (): JSX.Element => {
                       >
                         평점 주기
                       </button>
-                    ) : (info.ratingStatus === "평가완료" && !info.reviewStatus) || 
-                    (info.maxParticipants === 1 && !info.reviewStatus) ? (
+                    ) : (info.ratingStatus === "평가완료" &&
+                        !info.reviewStatus) ||
+                      (info.maxParticipants === 1 && !info.reviewStatus) ? (
                       <button
                         className={`btn btn-sm rounded-md ${
                           info.participationStatus === "JOIN"

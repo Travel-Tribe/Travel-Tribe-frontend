@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from "react";
-import fetchCall from "../../Utils/apiFetch";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
-import { mappingCountry } from "../../Utils/mappingCountry";
+import fetchCall from "../../apis/fetchCall";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
+import { mappingCountry } from "../../utils/mappingCountry";
 import { useNavigate } from "react-router-dom";
 
 interface TravelInfo {
@@ -62,9 +62,9 @@ const MyTravelHistory: FC = () => {
             `/api/v1/posts/${review.postId}`,
             "get",
           );
-            
+
           const travelData = travelResponse.data.data;
-          
+
           return {
             ...review,
             travelStartDate: travelData?.travelStartDate,
@@ -104,8 +104,13 @@ const MyTravelHistory: FC = () => {
 
           return (
             <li key={info.reviewId} className="list-none">
-              <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg cursor-pointer"
-              onClick={() => navigate(`/recruitment/${info.postId}/review/${info.reviewId}`)}
+              <div
+                className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg cursor-pointer"
+                onClick={() =>
+                  navigate(
+                    `/recruitment/${info.postId}/review/${info.reviewId}`,
+                  )
+                }
               >
                 <h3 className="text-xl pt-2.5 pl-2.5">{info.title}</h3>
                 <div className="flex items-center m-2.5 space-x-8 justify-between">

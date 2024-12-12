@@ -3,11 +3,11 @@ import profileImg from "../../assets/profile-img.webp";
 import { useNavigate } from "react-router-dom";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import SelectBox from "../Common/SelectBox";
-import { MBTI } from "../../Constants/MBTI";
+import { MBTI } from "../../constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
-import { postImgUrl } from "../../Utils/postImgUrl";
+import { postImgUrl } from "../../utils/postImgUrl";
 import { createProfileData } from "../../apis/user";
 
 const ProfileCreate = (): JSX.Element | null => {
