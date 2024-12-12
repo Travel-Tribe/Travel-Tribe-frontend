@@ -128,6 +128,9 @@ export interface ParticipationType {
   userId: string;
   ParticipationStatus: string;
   RatingStatus: string;
+  nickname: string;
+  mbti: string;
+  profileFile: string;
 }
 
 /** */
