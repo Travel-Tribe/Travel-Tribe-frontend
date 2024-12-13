@@ -33,8 +33,13 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
                 <img
                   src={
                     import.meta.env.VITE_API_BASE_URL +
-                    `/api/v1/file/preview?fileUrl=${userData.fileAddress}`
+                      `/api/v1/file/preview?fileUrl=${userData.fileAddress}` ||
+                    "/src/assets/profile-img.webp"
                   }
+                  onError={e => {
+                    e.currentTarget.src = "/src/assets/profile-img.webp";
+                    e.currentTarget.onerror = null;
+                  }}
                   alt={`${userData.nickname}의 프로필`}
                   className="w-full h-full object-cover rounded-full"
                 />

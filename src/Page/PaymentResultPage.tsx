@@ -1,7 +1,8 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { usePayment } from "../hooks/usePayment";
+
 import { ERROR, SUCCESS } from "../constants/MESSAGE";
+import { usePayment } from "../Hooks/usePayment";
 
 type PaymentStatus = {
   isSuccess: boolean;

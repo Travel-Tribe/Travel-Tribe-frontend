@@ -1,4 +1,4 @@
-import JoinAndPay from "../components/RecruitDetail/JoinAndPay";
+import JoinAndPay from "../Components/RecruitDetail/JoinAndPay";
 
 export default function PaymentPage() {
   return (
