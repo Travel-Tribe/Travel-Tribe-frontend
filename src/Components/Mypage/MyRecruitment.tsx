@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import fetchCall from "../../apis/fetchCall";
-import { mappingCountry } from "../../Utils/mappingCountry";
+import { mappingCountry } from "../../utils/mappingCountry";
 import {
   TravelPlanType,
   ApiResponse,

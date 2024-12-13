@@ -1,8 +1,8 @@
 import fetchCall from "../../apis/fetchCall";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { mappingCountry } from "../../Utils/mappingCountry";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
+import { mappingCountry } from "../../utils/mappingCountry";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import { TravelPlanType, ApiResponse } from "../../type/types";
 
 interface TravelPlan extends TravelPlanType {

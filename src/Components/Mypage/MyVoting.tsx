@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import fetchCall from "../../apis/fetchCall";
-import { STORAGE_KEYS } from "../../Constants/STORAGE_KEYS";
-import { mappingCountry } from "../../Utils/mappingCountry";
+import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
+import { mappingCountry } from "../../utils/mappingCountry";
 import Voting from "./SideComponents/Voting";
 import {
   TravelPlanType,
