@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { TravelPlanType } from "../type/types";
 
-interface RecruitPostType {
+interface RecruitStoreType {
   postData: TravelPlanType;
   updateTravelData: (
     key: keyof TravelPlanType,
@@ -11,7 +11,7 @@ interface RecruitPostType {
   clearTravelData: () => void;
 }
 
-export const useRecruitPostStore = create<RecruitPostType>(set => ({
+export const useRecruitPostStore = create<RecruitStoreType>(set => ({
   postData: {
     title: "",
     travelStartDate: `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}-${String(new Date().getDate()).padStart(2, "0")}`,
@@ -43,7 +43,7 @@ export const useRecruitPostStore = create<RecruitPostType>(set => ({
         [key]: value,
       },
     })),
-  setTravelData: data => set({ postData: data }),
+  setTravelData: data => set({ postData: { ...data } }),
   clearTravelData: () =>
     set({
       postData: {

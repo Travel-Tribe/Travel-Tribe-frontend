@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { TravelPlan } from "../../../mocks/mockData";
 import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
+import { TravelPlanType } from "../../../type/types";
+import { useCallback } from "react";
 
 interface ButtonProps {
   postId?: number;
   userId?: number;
-  travelPlan?: TravelPlan;
+  travelPlan?: TravelPlanType;
 }
 
 export default function EditBtn({ postId, userId, travelPlan }: ButtonProps) {
@@ -14,12 +15,13 @@ export default function EditBtn({ postId, userId, travelPlan }: ButtonProps) {
   const currentUserId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const { setTravelData } = useRecruitPostStore();
 
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     if (travelPlan) {
+      console.log("TravelPlan", travelPlan);
       setTravelData(travelPlan);
       navigate(`/recruitment/edit/${postId}`);
     }
-  };
+  }, []);
 
   if (currentUserId?.toString() !== userId?.toString()) {
     return (

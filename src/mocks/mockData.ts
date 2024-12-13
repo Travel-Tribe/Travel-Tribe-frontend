@@ -121,7 +121,7 @@ export const RecruitMockData: TravelPlanType[] = [
     nickname: "tester",
     status: "모집중",
     title: "도쿄 미식 여행",
-    travelStartDate: "2025-01-01",
+    travelStartDate: "2025-04-01",
     travelEndDate: "2025-04-03",
     maxParticipants: 6,
     travelCountry: "일본",
@@ -260,7 +260,7 @@ export const RecruitMockData: TravelPlanType[] = [
 
 export const ReviewData: ReviewType[] = [
   {
-    userId: 3,
+    userId: 1,
     postId: 1,
     reviewId: 1,
     continent: "ASIA",

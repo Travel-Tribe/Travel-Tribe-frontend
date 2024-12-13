@@ -5,7 +5,7 @@ import { mappingCountry } from "../../utils/mappingCountry";
 
 export const ReviewPost = React.memo(
   ({ review }: { review: ReviewType }): JSX.Element => {
-    const [imgSrc, setImgSrc] = useState(
+    const [img, setImg] = useState(
       import.meta.env.VITE_API_BASE_URL +
         `/api/v1/file/preview?fileUrl=${review?.files[0]?.fileAddress}`,
     );
@@ -16,7 +16,7 @@ export const ReviewPost = React.memo(
     );
 
     const handleDefaultImageError = () => {
-      setImgSrc("/../src/assets/default-image.jpeg"); // 기본 이미지로 변경
+      setImg("/../src/assets/default-image.jpeg"); // 기본 이미지로 변경
     };
 
     const handleUserImageError = () => {
@@ -31,7 +31,7 @@ export const ReviewPost = React.memo(
           className="w-[300px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0 bg-white"
         >
           <img
-            src={imgSrc}
+            src={img}
             alt={review?.title || "기본 이미지"}
             className="w-[300px] h-[150px] object-cover"
             onError={handleDefaultImageError}

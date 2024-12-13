@@ -38,7 +38,6 @@ const DayDetail = ({
         dayDetails: newDayDetails,
         itineraryVisits: newItineraryVisits,
       };
-
       setDays(newDays);
       updateTravelData("days", newDays);
     },
@@ -137,4 +136,5 @@ const DayDetail = ({
     </>
   );
 };
+
 export default DayDetail;

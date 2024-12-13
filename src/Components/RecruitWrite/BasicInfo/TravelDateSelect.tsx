@@ -37,22 +37,29 @@ const TravelDateSelect = React.memo(() => {
     [currentYear],
   );
 
-  const getDaysInMonth = useCallback((year: number, month: number) => {
-    const days = [];
-    const date = new Date(year, month, 0);
-    const totalDays = date.getDate();
-    for (let day = 1; day <= totalDays; day++) {
-      const dayOfWeek = new Date(year, month - 1, day).toLocaleString("ko-KR", {
-        weekday: "short",
-      });
-      days.push({ day, dayOfWeek });
-    }
-    return days.map(day => (
-      <option key={day.day} value={day.day}>
-        {day.day}({day.dayOfWeek})
-      </option>
-    ));
-  }, []);
+  const getDaysInMonth = useCallback(
+    (year: number, month: number, min?: number) => {
+      const days = [];
+      const date = new Date(year, month, 0);
+      const totalDays = date.getDate();
+      let day = min || 1;
+      for (day; day <= totalDays; day++) {
+        const dayOfWeek = new Date(year, month - 1, day).toLocaleString(
+          "ko-KR",
+          {
+            weekday: "short",
+          },
+        );
+        days.push({ day, dayOfWeek });
+      }
+      return days.map(day => (
+        <option key={day.day} value={day.day}>
+          {day.day}({day.dayOfWeek})
+        </option>
+      ));
+    },
+    [],
+  );
 
   const formatDateToYMD = (inputDate: Date | string | number): string => {
     const date = new Date(inputDate);
@@ -181,6 +188,7 @@ const TravelDateSelect = React.memo(() => {
           {getDaysInMonth(
             Number(travelEndDate.split("-")[0]),
             Number(travelEndDate.split("-")[1]),
+            Number(travelStartDate.split("-")[2]),
           )}
         </select>
         일

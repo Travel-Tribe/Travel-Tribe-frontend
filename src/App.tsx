@@ -16,15 +16,15 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const { startTokenRefresh, stopTokenRefresh } = useAuthStore();
+  // const { startTokenRefresh, stopTokenRefresh } = useAuthStore();
 
-  useEffect(() => {
-    startTokenRefresh(); // 앱 시작 시 토큰 갱신 주기 시작
+  // useEffect(() => {
+  //   startTokenRefresh(); // 앱 시작 시 토큰 갱신 주기 시작
 
-    return () => {
-      stopTokenRefresh(); // 앱 언마운트 시 Interval 제거
-    };
-  }, [startTokenRefresh, stopTokenRefresh]);
+  //   return () => {
+  //     stopTokenRefresh(); // 앱 언마운트 시 Interval 제거
+  //   };
+  // }, [startTokenRefresh, stopTokenRefresh]);
 
   return (
     <>

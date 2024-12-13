@@ -6,12 +6,7 @@ import { DayType } from "../../../type/types";
 
 const TravelDay = React.memo((): JSX.Element => {
   const { postData, updateTravelData } = useRecruitPostStore();
-  const [days, setDays] = useState([
-    {
-      dayDetails: [{ title: "", description: "", fileAddress: "" }],
-      itineraryVisits: [{ latitude: 0, longitude: 0, orderNumber: 1 }],
-    },
-  ]);
+  const [days, setDays] = useState(postData.days);
 
   useEffect(() => {
     const numberOfDays = getDiffDate(
@@ -22,7 +17,6 @@ const TravelDay = React.memo((): JSX.Element => {
     setDays(prevDays => {
       if (numberOfDays < prevDays.length) {
         const truncatedDays = prevDays.slice(0, numberOfDays);
-        updateTravelData("days", truncatedDays);
         return truncatedDays;
       }
 
@@ -35,7 +29,6 @@ const TravelDay = React.memo((): JSX.Element => {
           }),
         );
         const updatedDays = [...prevDays, ...newDays];
-        updateTravelData("days", updatedDays);
         return updatedDays;
       }
 
@@ -68,4 +61,5 @@ const TravelDay = React.memo((): JSX.Element => {
     </>
   );
 });
+
 export default TravelDay;

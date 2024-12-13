@@ -12,7 +12,7 @@ import { calculateAge } from "../../utils/calculateAge";
 const CrewCondition = React.memo((): JSX.Element => {
   const updateTravelData = useRecruitPostStore(state => state.updateTravelData);
 
-  const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
+  const userId: string | null = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
   const {
     data: userProfile,
@@ -21,7 +21,6 @@ const CrewCondition = React.memo((): JSX.Element => {
   } = useUserProfile(userId!);
 
   useEffect(() => {
-    console.log(userProfile);
     if (userProfile) {
       updateTravelData("limitMinAge", calculateAge(userProfile.birth));
       updateTravelData("limitSex", userProfile.gender);
