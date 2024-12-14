@@ -4,6 +4,7 @@ import { CommunityType, ErrorType } from "../type/types";
 import { ItemType, useInfiniteFetch } from "../hooks/useInfinityFetch";
 import { AxiosError } from "axios";
 import { CommunityPost } from "../components/Post/CommunityPost";
+import { ERROR } from "../constants/MESSAGE";
 
 interface CommunityProps {
   selectedContinent?: string;
@@ -44,6 +45,7 @@ const Community = React.memo(
       );
       return (
         <>
+          {ERROR.LOAD_POST_LIST} :
           {
             (error as AxiosError<ErrorType>).response?.data?.errors[0]
               ?.errorMessage

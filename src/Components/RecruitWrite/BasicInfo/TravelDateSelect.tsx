@@ -38,11 +38,11 @@ const TravelDateSelect = React.memo(() => {
   );
 
   const getDaysInMonth = useCallback(
-    (year: number, month: number, min?: number) => {
+    (year: number, month: number, isSameMonth?: boolean) => {
       const days = [];
       const date = new Date(year, month, 0);
       const totalDays = date.getDate();
-      let day = min || 1;
+      let day = isSameMonth ? Number(travelStartDate.split("-")[2]) : 1;
       for (day; day <= totalDays; day++) {
         const dayOfWeek = new Date(year, month - 1, day).toLocaleString(
           "ko-KR",
@@ -188,7 +188,10 @@ const TravelDateSelect = React.memo(() => {
           {getDaysInMonth(
             Number(travelEndDate.split("-")[0]),
             Number(travelEndDate.split("-")[1]),
-            Number(travelStartDate.split("-")[2]),
+            Number(travelStartDate.split("-")[0]) ===
+              Number(travelEndDate.split("-")[0]) &&
+              Number(travelStartDate.split("-")[1]) ===
+                Number(travelEndDate.split("-")[1]),
           )}
         </select>
         일

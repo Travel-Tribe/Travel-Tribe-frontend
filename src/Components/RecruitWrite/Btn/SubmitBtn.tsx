@@ -8,12 +8,15 @@ import { CREW_CONDITION } from "../../../constants/CREW_CONDITION";
 import { getContinentName } from "../../../utils/getContinentName";
 import { mappingCountry } from "../../../utils/mappingCountry";
 import { ErrorType } from "../../../type/types";
-import { ERROR } from "../../../constants/MESSAGE";
+import { ERROR, SUCCESS } from "../../../constants/MESSAGE";
+import Modal from "../../Common/Modal";
 
 const SubmitBtn = React.memo(() => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
   const { id: postId } = useParams();
   const postData = useRecruitPostStore(state => state.postData);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -48,12 +51,13 @@ const SubmitBtn = React.memo(() => {
         response.data.data.participationId
       ) {
         // 결제 페이지로 이동
+        alert(SUCCESS.CREATE_POST);
         navigate(
           `/recruitment/${response.data.data.postId}/pay/${response.data.data.participationId}`,
         );
       }
     } catch (error) {
-      alert(
+      setModalMessage(
         `${ERROR.POST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
       );
       throw new Error(
@@ -80,12 +84,10 @@ const SubmitBtn = React.memo(() => {
           travelCountry: mappingCountry(postData.travelCountry, "ko"),
         }),
       );
-
-      alert("글을 수정했습니다.");
-      queryClient.invalidateQueries(["travelPlan", postId]);
-      navigate(`/recruitment`);
+      setShowModal(true);
+      setModalMessage(`${SUCCESS.EDIT_POST}`);
     } catch (error) {
-      alert(
+      setModalMessage(
         `${ERROR.POST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
       );
       throw new Error(
@@ -99,13 +101,28 @@ const SubmitBtn = React.memo(() => {
   };
 
   return (
-    <button
-      className="btn w-[130px] h-[35px] btn-success text-white"
-      onClick={postId ? handelEditPost : handlePost}
-      disabled={isLoading}
-    >
-      {isLoading ? "처리 중..." : postId ? "수정하기" : "등록하기"}
-    </button>
+    <>
+      <button
+        className="btn w-[130px] h-[35px] btn-success text-white"
+        onClick={postId ? handelEditPost : handlePost}
+        disabled={isLoading}
+      >
+        {isLoading ? "처리 중..." : postId ? "수정하기" : "등록하기"}
+      </button>
+      <Modal
+        isOpen={showModal}
+        onClose={
+          modalMessage === SUCCESS.EDIT_POST
+            ? () => {
+                setShowModal(false);
+                queryClient.invalidateQueries(["travelPlan", postId]);
+                navigate(`/recruitment`);
+              }
+            : () => setShowModal(false)
+        }
+        message={modalMessage}
+      />
+    </>
   );
 });
 

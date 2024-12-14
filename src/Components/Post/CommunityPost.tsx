@@ -32,7 +32,7 @@ export const CommunityPost = React.memo(
           <img
             src={img}
             alt={community.title}
-            className="w-[200px] h-[100px] object-cover absolute top-0 right-0"
+            className="w-[200px] max-w-[40%] h-[100px] object-cover absolute top-0 right-0"
             onError={handleDefaultImageError}
           />
         </Link>

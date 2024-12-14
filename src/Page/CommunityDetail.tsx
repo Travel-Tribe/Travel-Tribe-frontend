@@ -4,8 +4,13 @@ import fetchCall from "../apis/fetchCall";
 import { useQuery, useQueryClient } from "react-query";
 import { CommunityType, ErrorType } from "../type/types";
 import { AxiosError } from "axios";
+import { ERROR, SUCCESS } from "../constants/MESSAGE";
+import { useState } from "react";
+import Modal from "../components/Common/Modal";
 
 const ReviewDetail = (): JSX.Element => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>("");
   const { id } = useParams<{
     id: string;
   }>();
@@ -28,9 +33,8 @@ const ReviewDetail = (): JSX.Element => {
       "delete",
     );
     if (response.state === 200) {
-      alert(`${data?.title}이 삭제되었습니다.`);
-      queryClient.invalidateQueries("communityData");
-      navigate(`/community`);
+      setModalMessage(SUCCESS.DELETE_POST);
+      setShowModal(true);
     }
   };
 
@@ -43,6 +47,8 @@ const ReviewDetail = (): JSX.Element => {
       "에러",
       (error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage,
     );
+    setModalMessage(ERROR.LOAD_POST);
+    setShowModal(true);
     return (
       <>
         {
@@ -98,6 +104,25 @@ const ReviewDetail = (): JSX.Element => {
           목록으로
         </Link>
       </div>
+
+      <Modal
+        isOpen={showModal}
+        onClose={
+          modalMessage === ERROR.LOAD_POST
+            ? () => {
+                setShowModal(false);
+                navigate("/community");
+              }
+            : modalMessage === ERROR.LOAD_POST
+              ? () => {
+                  setShowModal(false);
+                  queryClient.invalidateQueries("communityData");
+                  navigate(`/community`);
+                }
+              : () => setShowModal(false)
+        }
+        message={modalMessage}
+      />
     </div>
   );
 };
