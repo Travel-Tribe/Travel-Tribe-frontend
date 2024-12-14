@@ -20,22 +20,22 @@ const Rating: React.FC<RatingModalProps> = ({
   onRatingComplete,
 }): JSX.Element | null => {
   const [ratings, setRatings] = useState<number[]>([]);
-  const { data: userProfiles } = useParticipantsProfiles(participants);
-  console.log(userProfiles);
+  const { data: userProfiles } =
+    useParticipantsProfiles(participants);
+
   const handleRatingSubmit = async () => {
     try {
       // 각 userId와 평점을 서버로 전송
       await Promise.all(
         participants.map((userId, index) => {
           const rating = ratings[index];
-          console.log("postId", postId);
+
           return fetchCall(`api/v1/posts/${postId}/rating`, "post", {
             receiverId: Number(userId),
             score: rating,
           });
         }),
       );
-      console.log("평점이 서버에 전송되었습니다:", ratings);
       alert("평점이 저장되었습니다.");
       onClose();
       onRatingComplete();
@@ -63,15 +63,9 @@ const Rating: React.FC<RatingModalProps> = ({
     const clickPosition = event.clientX - left;
     const isHalf = clickPosition < width / 2; // 클릭 위치가 별의 왼쪽인지 확인
     const newRating = starIndex + (isHalf ? 0.5 : 1);
-    console.log(
-      `Clicked star ${starIndex + 1}, position: ${
-        isHalf ? "left (half)" : "right (full)"
-      }`,
-    );
     handleRatingChange(index, newRating);
   };
   const renderStars = (rating: number, index: number) => {
-    console.log(rating);
     const stars = [];
     for (let i = 0; i < 5; i++) {
       const isFull = i + 1 <= rating;
@@ -194,7 +188,6 @@ const Rating: React.FC<RatingModalProps> = ({
         <button
           className="mt-6 btn border border-custom-green bg-white w-full hover:bg-custom-green hover:text-white"
           onClick={() => {
-            console.log("평점이 저장되었습니다:", ratings);
             alert("평점이 저장되었습니다.");
             onClose();
             handleRatingSubmit();

@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import fetchCall from "../apis/fetchCall";
 import Modal from "./Common/Modal";
-import { ERROR, SUCCESS, VALIDATION } from "../constants/MESSAGE";
+import { DUPLICATION, ERROR, SUCCESS, VALIDATION } from "../constants/MESSAGE";
 import { authApi } from "../apis/auth";
 
 const schema = z
@@ -31,7 +31,7 @@ const schema = z
       }),
   })
   .refine(data => data.password === data.passwordConfirm, {
-    message: ERROR.NOT_SAME_PASSWORD,
+    message: VALIDATION.NOT_SAME_PASSWORD,
     path: ["passwordConfirm"],
   });
 
@@ -161,7 +161,7 @@ const SignUp = (): JSX.Element => {
     // 모든 필수 검증이 완료되었는지 확인
     const { email, nickname } = validationStatus;
     if (!email.isAvailable || !nickname.isAvailable) {
-      setModalMessage(ERROR.NOT);
+      setModalMessage(DUPLICATION.NOT);
       setShowModal(true);
       return;
     }
