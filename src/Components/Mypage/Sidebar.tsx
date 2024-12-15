@@ -5,6 +5,7 @@ import fetchCall from "../../apis/fetchCall";
 import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import profileImg from "../../assets/profile-img.webp";
 import { useProfileStore } from "../../store/profileStore";
+import { useUserProfile } from "../../hooks/userQueries";
 
 interface ApiResponse {
   result: "SUCCESS" | "FAIL";
@@ -18,20 +19,31 @@ interface AxiosResponse {
 }
 
 const Sidebar = (): JSX.Element => {
-  const { profileData, setNickname, nickname, resetProfileData } =
-    useProfileStore();
+  const {
+    profileData,
+    setNickname,
+    nickname,
+    resetProfileData,
+    setProfileData,
+  } = useProfileStore();
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID) || "";
   const [setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
   const [selected, setSelected] = useState("내 프로필");
   const location = useLocation();
 
+  const {
+    data: userProfile,
+  } = useUserProfile(userId!);
+
   const loadProfileData = async () => {
     if (!userId) return;
 
     try {
       // 프로필 데이터 가져오기
-      // await fetchProfileData(userId);
+      if (userProfile) {
+        setProfileData(userProfile);
+      }
       setNickname(nickname);
     } catch (error) {
       console.error("Error loading profile data:", error);
