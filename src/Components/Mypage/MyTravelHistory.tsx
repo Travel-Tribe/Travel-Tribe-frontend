@@ -3,35 +3,23 @@ import fetchCall from "../../apis/fetchCall";
 import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import { mappingCountry } from "../../utils/mappingCountry";
 import { useNavigate } from "react-router-dom";
+import {
+  TravelPlanType,
+  ApiResponse,
+  ReviewType,
+  ErrorType,
+} from "../../type/types";
 
-interface TravelInfo {
-  postId: string;
-  reviewId: string;
-  continent: string;
-  country: string;
-  region: string;
-  title: string;
-  contents: string;
-  fileAddress: string | null;
-  travelStartDate?: string;
-  travelEndDate?: string;
-}
+import Modal from "../Common/Modal";
+import { ERROR } from "../../constants/message";
+import { AxiosError } from "axios";
 
-interface ReviewResponse {
-  data: {
-    reviews: TravelInfo[];
-  };
-}
-
-interface TravelDatesResponse {
-  data: Array<{
-    travelStartDate: string;
-    travelEndDate: string;
-  }>;
-}
+interface TravelPlanResponse extends ApiResponse<TravelPlanType> {}
+interface ReviewResponse extends ApiResponse<ReviewType[]> {}
 
 const MyTravelHistory: FC = () => {
-  const [travelInfos, setTravelInfos] = useState<TravelInfo[]>([]);
+  const [travelInfos, setTravelInfos] = useState<ReviewType[]>([]);
+  const [modalState, setModalState] = useState({ isOpen: false, message: "" });
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const navigate = useNavigate();
@@ -55,10 +43,10 @@ const MyTravelHistory: FC = () => {
         `/api/v1/reviews?${params.toString()}`,
         "get",
       );
-      const reviews = reviewResponse.data.data.reviews;
+      const reviews = reviewResponse.data.data;
       const travelInfosWithDates = await Promise.all(
         reviews.map(async review => {
-          const travelResponse = await fetchCall<TravelDatesResponse>(
+          const travelResponse = await fetchCall<TravelPlanResponse>(
             `/api/v1/posts/${review.postId}`,
             "get",
           );
@@ -75,6 +63,10 @@ const MyTravelHistory: FC = () => {
       setTravelInfos(travelInfosWithDates);
     } catch (error) {
       console.error("Error fetching user review data:", error);
+      setModalState({
+        isOpen: true,
+        message: `${ERROR.LOAD_REVIEW} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      });
     }
   };
 
@@ -129,6 +121,11 @@ const MyTravelHistory: FC = () => {
           );
         })}
       </ul>
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        message={modalState.message}
+      />
     </main>
   );
 };

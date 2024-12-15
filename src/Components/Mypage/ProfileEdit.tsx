@@ -14,6 +14,8 @@ import {
   updateProfileData,
   updateUserInfo,
 } from "../../apis/user";
+import Modal from "../Common/Modal";
+import { SUCCESS, ERROR } from "../../constants/message";
 
 const ProfileEdit = (): JSX.Element => {
   const {
@@ -34,6 +36,7 @@ const ProfileEdit = (): JSX.Element => {
     isChecking: false,
     isAvailable: false,
   });
+  const [modalState, setModalState] = useState({ isOpen: false, message: "" });
 
   const navigate = useNavigate();
   const animatedComponents = makeAnimated();
@@ -45,7 +48,11 @@ const ProfileEdit = (): JSX.Element => {
     if (!userId || isLoading) return;
 
     if (userProfile) {
-      setProfileData(userProfile);
+      try {
+        setProfileData(userProfile);
+      } catch (error) {
+        setModalState({ isOpen: true, message: `${ERROR.LOAD_USER_PROFILE}` });
+      }
       if (userProfile.birth) {
         setAge(userProfile.birth);
       }
@@ -90,9 +97,13 @@ const ProfileEdit = (): JSX.Element => {
     const value = event.target.value;
     setNickname(value);
     setError(
-      /[!@#$%^&*(),.?":{}|<>]/.test(value)
-        ? "특수문자를 사용할 수 없습니다."
-        : "",
+      value.length < 2
+        ? "닉네임은 2자 이상이어야 합니다."
+        : value.length > 10
+          ? "닉네임은 10자 이하여야 합니다."
+          : /[^가-힣a-zA-Z0-9]/.test(value)
+            ? "닉네임은 한글, 영문, 숫자만 사용할 수 있습니다."
+            : "",
     );
   };
 
@@ -114,7 +125,6 @@ const ProfileEdit = (): JSX.Element => {
         setValidationStatus({ isChecking: false, isAvailable: true });
       }
     } catch (error) {
-      console.error("Error checking nickname:", error);
       setError("닉네임 확인 중 오류가 발생했습니다.");
       setValidationStatus({ isChecking: false, isAvailable: false });
     }
@@ -143,8 +153,6 @@ const ProfileEdit = (): JSX.Element => {
     updateProfileField("mbti", event.target.value);
   };
 
-  // const { ratingAvg, ...filteredProfileData } = profileData;
-
   const handleUpdateProfile = async () => {
     try {
       profileData.gender = profileData.gender === "남자" ? "MALE" : "FEMALE";
@@ -153,12 +161,12 @@ const ProfileEdit = (): JSX.Element => {
       await updateProfileData(profileData);
       await updateUserInfo({ nickname, phone });
       setProfileData(profileData);
+      setModalState({ isOpen: true, message: `${SUCCESS.EDIT_PROFILE}` });
       navigate("/mypage", { replace: true });
-
       // 새 데이터를 강제로 리패칭
       window.location.reload();
     } catch (error) {
-      console.error("Error updating profile:", error);
+      setModalState({ isOpen: true, message: `${ERROR.EDIT_PROFILE}` });
     }
   };
 
@@ -394,6 +402,11 @@ const ProfileEdit = (): JSX.Element => {
       >
         저장
       </button>
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        message={modalState.message}
+      />
     </main>
   );
 };

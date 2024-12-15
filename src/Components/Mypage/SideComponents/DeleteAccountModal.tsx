@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
 import { deleteAccount } from "../../../apis/user";
+import Modal from "../../Common/Modal";
+import { SUCCESS, ERROR } from "../../../constants/message";
 
 interface DeleteAccountModalProps {
   isOpen: boolean;
@@ -13,20 +15,22 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const [modalState, setModalState] = useState({ isOpen: false, message: "" });
   const [setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
 
   const clickDeleteAccount = async () => {
     try {
       deleteAccount();
-      alert("탈퇴되었습니다.");
+      // alert("탈퇴되었습니다.");
+      setModalState({ isOpen: true, message: `${SUCCESS.CANCEL_MEMBERSHIP}` });
       if (typeof setToken === "function") {
         setToken(null);
       }
       localStorage.removeItem(STORAGE_KEYS.TOKEN);
       navigate("/");
     } catch (error) {
-      console.error("delete 요청에 실패했습니다:", error);
+      setModalState({ isOpen: true, message: `${ERROR.CANCEL_MEMBERSHIP}` });
     }
   };
 
@@ -58,6 +62,11 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
           </button>
         </div>
       </div>
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        message={modalState.message}
+      />
     </div>
   );
 };

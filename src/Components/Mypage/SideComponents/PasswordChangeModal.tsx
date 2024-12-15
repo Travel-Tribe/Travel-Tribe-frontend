@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { changePassword } from "../../../apis/user";
+import Modal from "../../Common/Modal";
+import { SUCCESS, ERROR } from "../../../constants/message";
 
 interface PasswordChangeModalProps {
   isOpen: boolean;
@@ -18,6 +20,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
     new: false,
     confirm: false,
   });
+  const [modalState, setModalState] = useState({ isOpen: false, message: "" });
 
   const passwordCriteria =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
@@ -41,11 +44,12 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
     if (!userId) return;
     try {
       changePassword(currentPassword, newPassword);
-      alert("비밀번호가 성공적으로 변경되었습니다.");
+      // alert("비밀번호가 성공적으로 변경되었습니다.");
+      setModalState({ isOpen: true, message: `${SUCCESS.CHANGE_PASSWORD}` });
       onClose();
     } catch (error) {
-      console.error("Error updating password:", error);
-      alert("비밀번호 변경에 실패했습니다.");
+      // alert("비밀번호 변경에 실패했습니다.");
+      setModalState({ isOpen: true, message: `${ERROR.CHANGE_PASSWORD}` });
     }
   };
 
@@ -158,6 +162,11 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
           </div>
         </form>
       </div>
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        message={modalState.message}
+      />
     </div>
   );
 };

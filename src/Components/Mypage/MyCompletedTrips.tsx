@@ -3,7 +3,15 @@ import fetchCall from "../../apis/fetchCall";
 import Rating from "./Rating";
 import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import { useNavigate } from "react-router-dom";
-import {TravelPlanType,ApiResponse,ParticipationType} from '../../type/types';
+import {
+  TravelPlanType,
+  ApiResponse,
+  ParticipationType,
+  ErrorType,
+} from "../../type/types";
+import Modal from "../Common/Modal";
+import { ERROR } from "../../constants/message";
+import { AxiosError } from "axios";
 
 interface TravelPlan extends TravelPlanType {
   participantsCount: number;
@@ -12,15 +20,9 @@ interface TravelPlan extends TravelPlanType {
   ratingStatus: string;
 }
 
-type TravelPlanResponse = ApiResponse<TravelPlan[]>;
+interface TravelPlanResponse extends ApiResponse<TravelPlan[]> {}
 
-// interface Participantion {
-//   participationId: number;
-//   postId: number;
-//   userId: string;
-// }
-
-type ParticipantionResponse = ApiResponse<ParticipationType[]>;
+interface ParticipantionResponse extends ApiResponse<ParticipationType[]> {}
 
 interface Review {
   userId: string;
@@ -30,12 +32,15 @@ type ReviewResponse = ApiResponse<Review[]>;
 
 const MyCompletedTrips = (): JSX.Element => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
-  const today = new Date();
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
   const [filteredTravelInfos, setFilteredTravelInfos] = useState<TravelPlan[]>(
     [],
   );
   const [participationUserId, setParticipationUserId] = useState<string[]>([]);
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    message: "",
+  });
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const navigate = useNavigate();
 
@@ -82,7 +87,15 @@ const MyCompletedTrips = (): JSX.Element => {
       setFilteredTravelInfos(filteredTrips);
     } catch (error) {
       console.error("Error fetching participation data:", error);
-      alert(error.response?.data?.errors[0]?.errorMessage); // 백엔드가 보낸 메시지 출력
+      setModalState({
+        isOpen: true,
+        message: `${ERROR.LOAD_POST_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      });
+      throw new Error(
+        (
+          error as AxiosError<ErrorType>
+        ).response?.data?.errors[0]?.errorMessage,
+      );
     }
   };
 
@@ -94,9 +107,15 @@ const MyCompletedTrips = (): JSX.Element => {
       );
       return response.data.data;
     } catch (error) {
-      console.error("Error fetching participation data:", error);
-      alert(error.response?.data?.errors[0]?.errorMessage);
-      throw new Error(error.response?.data?.errors[0]?.errorMessage);
+      setModalState({
+        isOpen: true,
+        message: `${ERROR.LOAD_MY_PARTICIPATION_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      });
+      throw new Error(
+        (
+          error as AxiosError<ErrorType>
+        ).response?.data?.errors[0]?.errorMessage,
+      );
     }
   };
 
@@ -124,7 +143,10 @@ const MyCompletedTrips = (): JSX.Element => {
 
   const fetchMyReview = async (): Promise<Review[]> => {
     try {
-      const response = await fetchCall<ReviewResponse>("/api/v1/reviews", "get");
+      const response = await fetchCall<ReviewResponse>(
+        "/api/v1/reviews",
+        "get",
+      );
       return response.data.data;
     } catch (error) {
       console.error("Error fetching reviews:", error);
@@ -132,7 +154,7 @@ const MyCompletedTrips = (): JSX.Element => {
     }
   };
 
-  const handleRatingComplete = (postId: string) => {
+  const handleRatingComplete = () => {
     setActiveModalIndex(null); // 모달 닫기
   };
 
@@ -227,7 +249,7 @@ const MyCompletedTrips = (): JSX.Element => {
                     onClose={() => setActiveModalIndex(null)}
                     participants={participationUserId}
                     postId={String(info.postId)}
-                    onRatingComplete={() => handleRatingComplete(String(info.postId))}
+                    onRatingComplete={() => handleRatingComplete()}
                   />
                 )}
               </li>
@@ -235,6 +257,11 @@ const MyCompletedTrips = (): JSX.Element => {
           })}
         </ul>
       </div>
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        message={modalState.message}
+      />
     </main>
   );
 };
