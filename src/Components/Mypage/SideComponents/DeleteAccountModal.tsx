@@ -4,7 +4,7 @@ import useLocalStorage from "../../../hooks/useLocalStorage";
 import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
 import { deleteAccount } from "../../../apis/user";
 import Modal from "../../Common/Modal";
-import { SUCCESS, ERROR } from "../../../constants/message";
+import { SUCCESS, ERROR } from "../../../constants/MESSAGE";
 
 interface DeleteAccountModalProps {
   isOpen: boolean;
