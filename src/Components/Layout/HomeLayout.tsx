@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import SearchBar from "../Common/SearchBar";
-import SelectBox from "../Common/SelectBox";
+import SearchBar from "../common/SearchBar";
+import SelectBox from "../common/SelectBox";
 import { COUNTRY_DATA } from "../../constants/COUNTRY_DATA";
 import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import { MBTI } from "../../constants/MBTI";

@@ -4,7 +4,7 @@ import {
   TripDetails,
   TripItinerary,
   TripRules,
-} from "../RecruitDetail";
+} from "../recruitDetail";
 import { useRecruitPostStore } from "../../store/recruitPostStore";
 
 const Preview = React.memo((): JSX.Element => {

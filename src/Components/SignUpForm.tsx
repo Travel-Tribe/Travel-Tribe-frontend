@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import fetchCall from "../apis/fetchCall";
-import Modal from "./Common/Modal";
+import Modal from "./common/Modal";
 import { DUPLICATION, ERROR, SUCCESS, VALIDATION } from "../constants/MESSAGE";
 import { authApi } from "../apis/auth";
 
