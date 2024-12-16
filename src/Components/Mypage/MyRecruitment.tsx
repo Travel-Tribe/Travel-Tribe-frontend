@@ -7,8 +7,9 @@ import {
   ApiResponse,
   ParticipationType,
 } from "../../type/types";
-
 import { createVoting } from "../../apis/user";
+import Modal from "../Common/Modal";
+import { ERROR, SUCCESS } from "../../constants/message";
 
 interface ExtendedTravelPlanType extends TravelPlanType {
   participantsCount: number;
@@ -28,6 +29,7 @@ const MyRecruitment = (): JSX.Element => {
   const [recruitDataList, setRecruitDataList] = useState<
     ExtendedTravelPlanType[]
   >([]);
+  const [modalState, setModalState] = useState({ isOpen: false, message: "" });
 
   const statusStyles = {
     모집중: "bg-custom-green",
@@ -122,9 +124,9 @@ const MyRecruitment = (): JSX.Element => {
   const voting = async (postId: string) => {
     try {
       createVoting(postId);
-      alert("투표가 등록되었습니다.");
+      setModalState({ isOpen: true, message: `${SUCCESS.CREATE_VOTING}` });
     } catch (error) {
-      console.error(`Error voting`, error);
+      setModalState({ isOpen: true, message: `${ERROR.CREATE_VOTING}` });
     }
   };
 
@@ -227,6 +229,11 @@ const MyRecruitment = (): JSX.Element => {
             );
           })}
         </ul>
+        <Modal
+          isOpen={modalState.isOpen}
+          onClose={() => setModalState({ ...modalState, isOpen: false })}
+          message={modalState.message}
+        />
       </section>
     </>
   );
