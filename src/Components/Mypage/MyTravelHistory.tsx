@@ -9,9 +9,9 @@ import {
   ReviewType,
   ErrorType,
 } from "../../type/types";
-
 import Modal from "../common/Modal";
 import { ERROR } from "../../constants/message";
+
 import { AxiosError } from "axios";
 
 interface TravelPlanResponse extends ApiResponse<TravelPlanType> {}

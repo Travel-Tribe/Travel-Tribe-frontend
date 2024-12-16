@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import fetchCall from "../../apis/fetchCall";
 import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import { mappingCountry } from "../../utils/mappingCountry";
-import Voting from "./SideComponents/Voting";
+import Voting from "./sideComponents/Voting";
 import {
   TravelPlanType,
   ParticipationType,
