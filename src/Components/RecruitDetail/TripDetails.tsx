@@ -1,5 +1,5 @@
 import { LuMapPin } from "react-icons/lu";
-import CountryMap from "./TripMap/CountryMap";
+import CountryMap from "./tripMap/CountryMap";
 import { TravelPlanType } from "../../type/types";
 
 export default function TripDetails({

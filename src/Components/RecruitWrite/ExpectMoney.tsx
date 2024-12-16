@@ -1,8 +1,8 @@
 import React from "react";
-import AccommodationFee from "./ExpectMoney/AccommodationFee";
-import AirplaneFee from "./ExpectMoney/AirplaneFee";
+import AccommodationFee from "./expectMoney/AccommodationFee";
+import AirplaneFee from "./expectMoney/AirplaneFee";
 import { useRecruitPostStore } from "../../store/recruitPostStore";
-import OtherExpenses from "./ExpectMoney/OtherExpenses";
+import OtherExpenses from "./expectMoney/OtherExpenses";
 
 const ExpectMoney = React.memo((): JSX.Element => {
   const { postData } = useRecruitPostStore();

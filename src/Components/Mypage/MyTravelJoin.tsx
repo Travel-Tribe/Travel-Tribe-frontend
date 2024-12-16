@@ -9,7 +9,7 @@ import {
   ParticipationType,
 } from "../../type/types";
 import Modal from "../Common/Modal";
-import { SUCCESS } from "../../constants/message";
+import { SUCCESS } from "../../constants/MESSAGE";
 
 interface TravelPlan extends TravelPlanType {
   participantsCount: number;

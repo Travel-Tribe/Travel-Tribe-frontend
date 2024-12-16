@@ -1,5 +1,5 @@
 import React from "react";
-import TravelDay from "./Plan/TravelDay";
+import TravelDay from "./plan/TravelDay";
 
 const TravelPlan = React.memo((): JSX.Element => {
   return (

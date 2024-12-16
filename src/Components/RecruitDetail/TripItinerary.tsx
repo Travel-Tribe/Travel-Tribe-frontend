@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DayDetailType, TravelPlanType } from "../../type/types";
 import { IoTimeOutline } from "react-icons/io5";
 import defaultImage from "../../assets/default-image.jpeg";
-import DayMap from "./TripMap/DayMap";
+import DayMap from "./tripMap/DayMap";
 
 interface TripItineraryProps {
   travelPlan?: TravelPlanType;
