@@ -7,8 +7,8 @@ import { useUserProfile, useUserBasicInfo } from "../../hooks/userQueries";
 import MyRecruitment from "./MyRecruitment";
 import MyTravelJoin from "./MyTravelJoin";
 import profileImg from "../../assets/profile-img.webp";
-import CountryName from "./SideComponents/CountryName";
-import MyLang from "./SideComponents/MyLang";
+import CountryName from "./sideComponents/CountryName";
+import MyLang from "./sideComponents/MyLang";
 
 const MyProfile = (): JSX.Element => {
   const {

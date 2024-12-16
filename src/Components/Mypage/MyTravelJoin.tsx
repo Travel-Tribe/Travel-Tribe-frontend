@@ -8,8 +8,8 @@ import {
   ApiResponse,
   ParticipationType,
 } from "../../type/types";
-import Modal from "../Common/Modal";
-import { SUCCESS } from "../../constants/message";
+import Modal from "../common/Modal";
+import { SUCCESS } from "../../constants/MESSAGE";
 
 interface TravelPlan extends TravelPlanType {
   participantsCount: number;

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { mappingCountry } from "../../../utils/mappingCountry";
 import fetchCall from "../../../apis/fetchCall";
-import Modal from "../../Common/Modal";
-import { ERROR, SUCCESS } from "../../../constants/message";
+import Modal from "../../common/Modal";
+import { ERROR, SUCCESS } from "../../../constants/MESSAGE";
 
 interface VotingProps {
   isOpen: boolean;

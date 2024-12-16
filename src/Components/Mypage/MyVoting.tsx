@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import fetchCall from "../../apis/fetchCall";
 import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import { mappingCountry } from "../../utils/mappingCountry";
-import Voting from "./SideComponents/Voting";
+import Voting from "./sideComponents/Voting";
 import {
   TravelPlanType,
   ParticipationType,
   ApiResponse,
   ErrorType,
 } from "../../type/types";
-import Modal from "../Common/Modal";
-import { ERROR } from "../../constants/message";
+import Modal from "../common/Modal";
+import { ERROR } from "../../constants/MESSAGE";
 import { AxiosError } from "axios";
 
 interface ExtendedTravelPlanType extends TravelPlanType {

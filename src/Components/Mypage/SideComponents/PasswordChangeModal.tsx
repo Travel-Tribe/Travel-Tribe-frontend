@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { changePassword } from "../../../apis/user";
-import Modal from "../../Common/Modal";
-import { SUCCESS, ERROR } from "../../../constants/message";
+import Modal from "../../common/Modal";
+import { SUCCESS, ERROR } from "../../../constants/MESSAGE";
 
 interface PasswordChangeModalProps {
   isOpen: boolean;

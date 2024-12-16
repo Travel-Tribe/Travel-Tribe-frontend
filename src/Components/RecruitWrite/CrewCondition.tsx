@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import Age from "./CrewCondition/Age";
-import Gender from "./CrewCondition/Gender";
-import Smoke from "./CrewCondition/Smoke";
+import Age from "./crewCondition/Age";
+import Gender from "./crewCondition/Gender";
+import Smoke from "./crewCondition/Smoke";
 import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
 import { useUserProfile } from "../../hooks/userQueries";
 import { AxiosError } from "axios";

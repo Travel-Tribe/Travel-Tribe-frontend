@@ -1,7 +1,7 @@
 import { useState } from "react";
-import EmailChangeModal from "./SideComponents/EmailChangeModal";
-import PasswordChangeModal from "./SideComponents/PasswordChangeModal";
-import DeleteAccountModal from "./SideComponents/DeleteAccountModal";
+import EmailChangeModal from "./sideComponents/EmailChangeModal";
+import PasswordChangeModal from "./sideComponents/PasswordChangeModal";
+import DeleteAccountModal from "./sideComponents/DeleteAccountModal";
 
 const MyAccountSettings = (): JSX.Element => {
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);

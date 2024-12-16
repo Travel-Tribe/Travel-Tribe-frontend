@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
 import { checkDuplicate } from "../../../apis/user";
-import Modal from "../../Common/Modal";
-import { VALIDATION, SUCCESS, ERROR } from "../../../constants/message";
+import Modal from "../../common/Modal";
+import { VALIDATION, SUCCESS, ERROR } from "../../../constants/MESSAGE";
 
 interface EmailChangeModalProps {
   isOpen: boolean;

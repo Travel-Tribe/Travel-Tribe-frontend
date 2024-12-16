@@ -9,8 +9,8 @@ import {
 } from "../components/recruitDetail";
 import { useQuery } from "react-query";
 import fetchCall from "../apis/fetchCall";
-import EditBtn from "../components/recruitDetail/Buttons/EditBtn";
-import JoinBtn from "../components/recruitDetail/Buttons/JoinBtn";
+import EditBtn from "../components/recruitDetail/buttons/EditBtn";
+import JoinBtn from "../components/recruitDetail/buttons/JoinBtn";
 import { TravelPlanType } from "../type/types";
 import { ERROR } from "../constants/MESSAGE";
 

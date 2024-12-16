@@ -14,8 +14,8 @@ import {
   updateProfileData,
   updateUserInfo,
 } from "../../apis/user";
-import Modal from "../Common/Modal";
-import { SUCCESS, ERROR } from "../../constants/message";
+import Modal from "../common/Modal";
+import { SUCCESS, ERROR } from "../../constants/MESSAGE";
 
 const ProfileEdit = (): JSX.Element => {
   const {

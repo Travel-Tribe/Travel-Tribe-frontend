@@ -8,8 +8,8 @@ import {
   ParticipationType,
 } from "../../type/types";
 import { createVoting } from "../../apis/user";
-import Modal from "../Common/Modal";
-import { ERROR, SUCCESS } from "../../constants/message";
+import Modal from "../common/Modal";
+import { ERROR, SUCCESS } from "../../constants/MESSAGE";
 
 interface ExtendedTravelPlanType extends TravelPlanType {
   participantsCount: number;

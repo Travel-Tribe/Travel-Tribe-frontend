@@ -3,9 +3,9 @@ import BasicInfo from "./BasicInfo";
 import CrewCondition from "./CrewCondition";
 import ExpectMoney from "./ExpectMoney";
 import TravelPlan from "./TravelPlan";
-import ResetBtn from "./Btn/ResetBtn";
-import CancelBtn from "./Btn/CancelBtn";
-import SubmitBtn from "./Btn/SubmitBtn";
+import ResetBtn from "./btn/ResetBtn";
+import CancelBtn from "./btn/CancelBtn";
+import SubmitBtn from "./btn/SubmitBtn";
 
 const RecruitForm = React.memo((): JSX.Element => {
   return (

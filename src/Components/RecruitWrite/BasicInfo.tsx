@@ -1,9 +1,9 @@
 import React from "react";
-import TitleInput from "./BasicInfo/TitleInput";
-import ParticipantsInput from "./BasicInfo/ParticipantsInput";
-import TravelDateSelect from "./BasicInfo/TravelDateSelect";
-import DestinationSelect from "./BasicInfo/DestinationSelect";
-import RegionInput from "./BasicInfo/RegionInput";
+import TitleInput from "./basicInfo/TitleInput";
+import ParticipantsInput from "./basicInfo/ParticipantsInput";
+import TravelDateSelect from "./basicInfo/TravelDateSelect";
+import DestinationSelect from "./basicInfo/DestinationSelect";
+import RegionInput from "./basicInfo/RegionInput";
 
 const BasicInfo = React.memo(() => {
   return (
