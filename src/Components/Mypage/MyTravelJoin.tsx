@@ -3,35 +3,21 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { mappingCountry } from "../../utils/mappingCountry";
 import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
+import {
+  TravelPlanType,
+  ApiResponse,
+  ParticipationType,
+} from "../../type/types";
+import Modal from "../Common/Modal";
+import { SUCCESS } from "../../constants/message";
 
-interface TravelPlan {
-  postId: number;
-  id: string;
-  title: string;
-  travelStartDate: string;
-  travelEndDate: string;
-  maxParticipants: number;
-  travelCountry: string;
-  continent: string;
-  deadline: string;
+interface TravelPlan extends TravelPlanType {
   participantsCount: number;
-  userId: string;
-  status: string;
 }
 
-interface TravelPlanResponse {
-  data: {
-    data: {
-      content: TravelPlan[];
-    };
-  };
-}
+interface TravelPlanResponse extends ApiResponse<TravelPlan[]> {}
 
-interface Participation {
-  participationId: number;
-  postId: number;
-  ParticipationStatus: string;
-}
+interface ParticipantionResponse extends ApiResponse<ParticipationType[]> {}
 
 const MyTravelJoin = () => {
   const navigate = useNavigate();
@@ -39,6 +25,7 @@ const MyTravelJoin = () => {
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
 
   const [filteredPlans, setFilteredPlans] = useState<TravelPlan[]>([]);
+  const [modalState, setModalState] = useState({ isOpen: false, message: "" });
 
   const statusStyles = {
     모집중: "bg-custom-green",
@@ -61,14 +48,14 @@ const MyTravelJoin = () => {
         }
 
         // 전체 모집글 조회
-        const { data: allPostsResponse } = await fetchCall<TravelPlanResponse>(
+        const allPostsResponse = await fetchCall<TravelPlanResponse>(
           `/api/v1/posts`,
           "get",
         );
-        const allPosts = allPostsResponse.data.content;
+        const allPosts = allPostsResponse.data.data;
 
         // 참여 데이터 조회
-        const participationResponse = await fetchCall<Participation[]>(
+        const participationResponse = await fetchCall<ParticipantionResponse>(
           "/api/v1/posts/participations/by-join-joinready",
           "get",
         );
@@ -94,7 +81,7 @@ const MyTravelJoin = () => {
           // 조건: travelStartDate가 오늘 이후 && userId가 일치 && 참여 중인 postId에 포함
           return (
             travelStartDate >= today &&
-            participatingPostIds.includes(plan.postId) &&
+            participatingPostIds.includes(plan.postId ?? 0) &&
             String(plan.userId) !== userId
           );
         });
@@ -103,7 +90,7 @@ const MyTravelJoin = () => {
           filteredPlans.map(async (plan: TravelPlan) => {
             try {
               // 모집글별 참여자 데이터 조회
-              const participants = await fetchCall<Participation[]>(
+              const participants = await fetchCall<ParticipantionResponse>(
                 `/api/v1/posts/${plan.postId}/participations`,
                 "get",
               );
@@ -113,10 +100,6 @@ const MyTravelJoin = () => {
                 participantsCount: participants.data.data.length, // 참여 인원 수 추가
               };
             } catch (error) {
-              console.error(
-                `Error fetching participants for postId ${plan.postId}:`,
-                error,
-              );
               return {
                 ...plan,
                 participantsCount: 0, // 에러 발생 시 기본값 설정
@@ -137,13 +120,13 @@ const MyTravelJoin = () => {
 
   const deleteParticipation = async (postId: number) => {
     try {
-      const response = await fetchCall(
-        `api/v1/posts/${postId}/participations`,
-        "delete",
-      );
+      await fetchCall(`/api/v1/posts/${postId}/participations`, "delete");
       setFilteredPlans(prev => prev.filter(plan => plan.postId !== postId));
-      alert("참여가 취소되었습니다.");
-      console.log(response);
+      // alert("참여가 취소되었습니다.");
+      setModalState({
+        isOpen: true,
+        message: `${SUCCESS.CANCLE_PARTICIPATION}`,
+      });
     } catch (error) {
       console.error("참여 취소 중 오류 발생:", error);
     }
@@ -213,11 +196,13 @@ const MyTravelJoin = () => {
                       </span>
                     </div>
                     <div className="flex space-x-2.5 items-center">
-                      {statusStyles[plan.status] ? (
+                      {statusStyles[
+                        plan.status as keyof typeof statusStyles
+                      ] ? (
                         <div
-                          className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${statusStyles[plan.status]}`}
+                          className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${statusStyles[plan.status as keyof typeof statusStyles]}`}
                         >
-                          {statusText[plan.status]}
+                          {statusText[plan.status as keyof typeof statusText]}
                         </div>
                       ) : null}
                       {plan.status === "투표중" ? (
@@ -227,7 +212,7 @@ const MyTravelJoin = () => {
                           className="btn btn-xs btn-error text-white rounded-md text-center "
                           onClick={e => {
                             e.stopPropagation();
-                            deleteParticipation(plan.postId);
+                            deleteParticipation(plan.postId ?? 0);
                           }}
                         >
                           취소하기
@@ -240,6 +225,11 @@ const MyTravelJoin = () => {
             );
           })}
         </ul>
+        <Modal
+          isOpen={modalState.isOpen}
+          onClose={() => setModalState({ ...modalState, isOpen: false })}
+          message={modalState.message}
+        />
       </section>
     </>
   );

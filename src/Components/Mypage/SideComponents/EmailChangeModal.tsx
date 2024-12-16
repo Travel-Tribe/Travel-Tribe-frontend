@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
 import { checkDuplicate } from "../../../apis/user";
+import Modal from "../../Common/Modal";
+import { VALIDATION, SUCCESS, ERROR } from "../../../constants/message";
 
 interface EmailChangeModalProps {
   isOpen: boolean;
@@ -24,6 +26,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     isChecking: false,
     isAvailable: false,
   });
+  const [modalState, setModalState] = useState({ isOpen: false, message: "" });
   const [setToken] = useLocalStorage(STORAGE_KEYS.TOKEN);
   const navigate = useNavigate();
   const resetFields = () => {
@@ -50,7 +53,7 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
     const emailRegex =
       /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     if (!emailRegex.test(e.target.value)) {
-      setError("유효하지 않은 이메일 형식입니다.");
+      setError(VALIDATION.INVALID_EMAIL);
       setValidationStatus({ isChecking: false, isAvailable: false });
     }
   };
@@ -70,14 +73,14 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
       const isDuplicate = checkDuplicate("email", emailInput);
 
       if (!isDuplicate) {
-        setError("이미 사용 중인 이메일입니다");
+        setSuccess("이미 사용중인 이메일입니다");
         setValidationStatus({ isChecking: false, isAvailable: false });
       } else {
         setSuccess("사용 가능한 이메일입니다");
         setValidationStatus({ isChecking: false, isAvailable: true });
       }
     } catch (error) {
-      setError("이미 사용 중인 이메일입니다");
+      setSuccess("이미 사용중인 이메일입니다");
       setValidationStatus({ isChecking: false, isAvailable: false });
     }
   };
@@ -91,12 +94,13 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
       await fetchCall(`/api/v1/users/change-email/request`, "post", data);
       setIsCodeSent(true);
       setIsCooldown(true);
-      alert("인증 코드가 전송되었습니다.");
+      // alert("인증 코드가 전송되었습니다.");
+      setModalState({ isOpen: true, message: `${SUCCESS.SEND_CODE}` });
 
       setTimeout(() => setIsCooldown(false), 60000);
     } catch (error) {
-      console.error("인증 코드 전송 중 에러 발생:", error);
-      alert("인증 코드 전송에 실패했습니다.");
+      // alert("인증 코드 전송에 실패했습니다.");
+      setModalState({ isOpen: true, message: `${ERROR.SEND_CODE}` });
     }
   };
 
@@ -107,7 +111,8 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
         email: emailInput,
         code: inputCode,
       });
-      alert("이메일이 성공적으로 변경되었습니다.");
+      // alert("이메일이 성공적으로 변경되었습니다.");
+      setModalState({ isOpen: true, message: `${SUCCESS.CHANGE_EMAIL}` });
       if (typeof setToken === "function") {
         setToken(null);
       }
@@ -115,8 +120,8 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
       navigate("/signIn");
       onClose();
     } catch (error) {
-      console.error("이메일 변경 중 에러 발생:", error);
-      alert("이메일 변경에 실패했습니다.");
+      // alert("이메일 변경에 실패했습니다.");
+      setModalState({ isOpen: true, message: `${ERROR.CHANGE_EMAIL}` });
     }
   };
 
@@ -196,6 +201,11 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
           </button>
         </div>
       </div>
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        message={modalState.message}
+      />
     </div>
   );
 };

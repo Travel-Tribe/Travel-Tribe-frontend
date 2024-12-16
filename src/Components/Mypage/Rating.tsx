@@ -3,6 +3,8 @@ import fetchCall from "../../apis/fetchCall";
 import profileImg from "../../assets/profile-img.webp";
 import { FaStar } from "react-icons/fa";
 import { useParticipantsProfiles } from "../../hooks/userQueries";
+import { SUCCESS } from "../../constants/message";
+import Modal from "../Common/Modal";
 
 interface RatingModalProps {
   isOpen: boolean;
@@ -20,23 +22,30 @@ const Rating: React.FC<RatingModalProps> = ({
   onRatingComplete,
 }): JSX.Element | null => {
   const [ratings, setRatings] = useState<number[]>([]);
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    message: "",
+  });
   const { data: userProfiles } = useParticipantsProfiles(participants);
-  console.log(userProfiles);
+
   const handleRatingSubmit = async () => {
     try {
       // 각 userId와 평점을 서버로 전송
       await Promise.all(
         participants.map((userId, index) => {
           const rating = ratings[index];
-          console.log("postId", postId);
+
           return fetchCall(`api/v1/posts/${postId}/rating`, "post", {
             receiverId: Number(userId),
             score: rating,
           });
         }),
       );
-      console.log("평점이 서버에 전송되었습니다:", ratings);
-      alert("평점이 저장되었습니다.");
+      setModalState({
+        isOpen: true,
+        message: `${SUCCESS.RATING_SUBMIT}`,
+      });
+      // alert(SUCCESS.RATING_SUBMIT);
       onClose();
       onRatingComplete();
     } catch (error) {
@@ -63,15 +72,9 @@ const Rating: React.FC<RatingModalProps> = ({
     const clickPosition = event.clientX - left;
     const isHalf = clickPosition < width / 2; // 클릭 위치가 별의 왼쪽인지 확인
     const newRating = starIndex + (isHalf ? 0.5 : 1);
-    console.log(
-      `Clicked star ${starIndex + 1}, position: ${
-        isHalf ? "left (half)" : "right (full)"
-      }`,
-    );
     handleRatingChange(index, newRating);
   };
   const renderStars = (rating: number, index: number) => {
-    console.log(rating);
     const stars = [];
     for (let i = 0; i < 5; i++) {
       const isFull = i + 1 <= rating;
@@ -174,17 +177,6 @@ const Rating: React.FC<RatingModalProps> = ({
                 </div>
                 <div className="flex items-center">
                   <span className="text-gray-700 mr-2.5">평점</span>
-                  {/* <input
-                    type="number"
-                    value={rating}
-                    min={0}
-                    max={5}
-                    step={0.5}
-                    onChange={e =>
-                      handleRatingChange(index, parseFloat(e.target.value))
-                    }
-                    className="w-16 border border-gray-300 rounded p-1 text-center"
-                  /> */}
                   {renderStars(rating, index)}
                 </div>
               </div>
@@ -194,14 +186,16 @@ const Rating: React.FC<RatingModalProps> = ({
         <button
           className="mt-6 btn border border-custom-green bg-white w-full hover:bg-custom-green hover:text-white"
           onClick={() => {
-            console.log("평점이 저장되었습니다:", ratings);
-            alert("평점이 저장되었습니다.");
-            onClose();
             handleRatingSubmit();
           }}
         >
           평점 주기
         </button>
+        <Modal
+          isOpen={modalState.isOpen}
+          onClose={() => setModalState({ ...modalState, isOpen: false })}
+          message={modalState.message}
+        />
       </div>
     </div>
   );

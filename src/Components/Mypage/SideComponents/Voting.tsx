@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { mappingCountry } from "../../../utils/mappingCountry";
 import fetchCall from "../../../apis/fetchCall";
+import Modal from "../../Common/Modal";
+import { ERROR, SUCCESS } from "../../../constants/message";
 
 interface VotingProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
   travelCountry: string;
-  travelStartDate?: string;
-  travelEndDate?: string;
+  travelStartDate: string;
+  travelEndDate: string;
   votingStartsId: number;
   postId: number;
 }
@@ -26,6 +28,10 @@ const Voting: React.FC<VotingProps> = ({
   const [selectedOption, setSelectedOption] = useState<true | false | null>(
     null,
   );
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    message: "",
+  });
 
   const hasLogged = useRef(false);
 
@@ -33,11 +39,11 @@ const Voting: React.FC<VotingProps> = ({
     if (isOpen && !hasLogged.current) {
       console.log(`Title: ${title}`);
       console.log(`Voting ID: ${votingStartsId}`);
-      hasLogged.current = true; // Ensure log happens only once per opening
+      hasLogged.current = true;
     }
 
     if (!isOpen) {
-      hasLogged.current = false; // Reset when component is closed
+      hasLogged.current = false;
     }
   }, [isOpen, title, votingStartsId]);
 
@@ -60,10 +66,11 @@ const Voting: React.FC<VotingProps> = ({
         "post",
         { approval: selectedOption },
       );
-      alert("투표 완료");
+      setModalState({ isOpen: true, message: `${SUCCESS.SEND_VOTING}` });
       onClose();
     } catch (error) {
       console.error("Error submitting votting:", error);
+      setModalState({ isOpen: true, message: `${ERROR.SEND_VOTING}` });
     }
   };
 
@@ -126,6 +133,11 @@ const Voting: React.FC<VotingProps> = ({
           </button>
         </div>
       </div>
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        message={modalState.message}
+      />
     </>
   );
 };

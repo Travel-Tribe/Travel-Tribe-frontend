@@ -2,71 +2,61 @@ import { useState, useEffect } from "react";
 import fetchCall from "../../apis/fetchCall";
 import Rating from "./Rating";
 import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
-import { mappingCountry } from "../../utils/mappingCountry";
 import { useNavigate } from "react-router-dom";
+import {
+  TravelPlanType,
+  ApiResponse,
+  ParticipationType,
+  ErrorType,
+} from "../../type/types";
+import Modal from "../Common/Modal";
+import { ERROR } from "../../constants/message";
+import { AxiosError } from "axios";
 
-interface TravelPlan {
-  postId: string;
-  title: string;
-  travelStartDate: string;
-  travelEndDate: string;
-  maxParticipants: number;
-  travelCountry: string;
-  deadline: string;
-  participationStatus: string;
+interface TravelPlan extends TravelPlanType {
+  participantsCount: number;
+  reviewStatus: boolean;
   isRatingAllowed: boolean;
   ratingStatus: string;
-  participantsCount: number;
-  status: string;
-  reviewStatus: boolean;
 }
 
-interface TravelPlanData {
-  data: TravelPlan;
-}
+interface TravelPlanResponse extends ApiResponse<TravelPlan[]> {}
 
-interface TravelPlanDataData {
-  data: TravelPlanData;
-}
+interface ParticipantionResponse extends ApiResponse<ParticipationType[]> {}
 
-interface participantion {
-  participationId: number;
-  postId: number;
+interface Review {
   userId: string;
 }
 
-interface Participation {
-  participationId: number;
-  postId: number;
-  ParticipationStatus: string;
-  ratingStatus: string;
-  userId: string;
-}
+type ReviewResponse = ApiResponse<Review[]>;
 
 const MyCompletedTrips = (): JSX.Element => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
-  const today = new Date();
   const [activeModalIndex, setActiveModalIndex] = useState<number | null>(null);
   const [filteredTravelInfos, setFilteredTravelInfos] = useState<TravelPlan[]>(
     [],
   );
   const [participationUserId, setParticipationUserId] = useState<string[]>([]);
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    message: "",
+  });
   const userId = localStorage.getItem(STORAGE_KEYS.USER_ID);
   const navigate = useNavigate();
 
   const fetchCompletedTrips = async () => {
     try {
-      const response = await fetchCall<TravelPlan[]>("/api/v1/posts", "get");
+      const response = await fetchCall<TravelPlanResponse>(
+        "/api/v1/posts",
+        "get",
+      );
       const myParticipationPostIds = await fetchMyParticipation();
-      console.log(myParticipationPostIds);
       const myReviews = await fetchMyReview();
 
-      const completedTrips = response.data.data.content
+      const completedTrips = response.data.data
         .filter((info: TravelPlan) => {
-          const travelEndDate = new Date(info.travelEndDate);
-
           return myParticipationPostIds.some(
-            (participation: { postId: number }) =>
+            (participation: ParticipationType) =>
               participation.postId === Number(info.postId),
           );
         })
@@ -75,87 +65,96 @@ const MyCompletedTrips = (): JSX.Element => {
           isRatingAllowed: true, // 기본값 설정
         }));
 
-      // 참여 중인 여행만 필터링
       const filteredTrips: TravelPlan[] = [];
       for (const trip of completedTrips) {
         const participationInfo = myParticipationPostIds.find(
-          (participation: { postId: number }) =>
+          (participation: ParticipationType) =>
             participation.postId === Number(trip.postId),
         );
 
-        const reviewStatus = myReviews.reviews.find(
-          (participation: { userId: string | number }) =>
-            String(participation.userId) === userId, // 타입 일치
+        const reviewStatus = myReviews.find(
+          (review: Review) => String(review.userId) === userId,
         );
 
         filteredTrips.push({
           ...trip,
-          participantsCount: await fetchParticipation(trip.postId),
-          ratingStatus: participationInfo?.ratingStatus || "UNKNOWN",
-          reviewStatus: reviewStatus ? true : false, // true 또는 false
+          participantsCount: await fetchParticipation(String(trip.postId)),
+          ratingStatus: participationInfo?.RatingStatus || "UNKNOWN",
+          reviewStatus: !!reviewStatus,
         });
       }
 
       setFilteredTravelInfos(filteredTrips);
     } catch (error) {
       console.error("Error fetching participation data:", error);
-      alert(error.response?.data?.errors[0]?.errorMessage); // 백엔드가 보낸 메시지 출력
-      throw new Error(error.response?.data?.errors[0]?.errorMessage);
+      setModalState({
+        isOpen: true,
+        message: `${ERROR.LOAD_POST_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      });
+      throw new Error(
+        (
+          error as AxiosError<ErrorType>
+        ).response?.data?.errors[0]?.errorMessage,
+      );
     }
   };
 
-  const fetchMyParticipation = async () => {
+  const fetchMyParticipation = async (): Promise<ParticipationType[]> => {
     try {
-      const response = await fetchCall<Participation[]>(
+      const response = await fetchCall<ParticipantionResponse>(
         `/api/v1/posts/participations/by-travelfinished`,
         "get",
       );
-      console.log(response.data);
-      return response.data;
+      return response.data.data;
     } catch (error) {
-      console.error("Error fetching participation data:", error);
-      alert(error.response?.data?.errors[0]?.errorMessage); // 백엔드가 보낸 메시지 출력
-      throw new Error(error.response?.data?.errors[0]?.errorMessage);
+      setModalState({
+        isOpen: true,
+        message: `${ERROR.LOAD_MY_PARTICIPATION_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      });
+      throw new Error(
+        (
+          error as AxiosError<ErrorType>
+        ).response?.data?.errors[0]?.errorMessage,
+      );
     }
   };
 
-  // 참여한 유저 목록 조회
-  const fetchParticipation = async (postId: string): Promise<boolean> => {
+  const fetchParticipation = async (postId: string): Promise<number> => {
     try {
-      const response = await fetchCall<participantion[]>(
+      const response = await fetchCall<ParticipantionResponse>(
         `/api/v1/posts/${postId}/participations`,
         "get",
       );
-      console.log(response);
+
       const userIds = response.data.data.map(
-        (participation: { userId: string }) => participation.userId,
+        (participation: ParticipationType) => participation.userId,
       );
 
-      const otherUserIds = userIds.filter((id: string | null) => id !== userId);
+      const otherUserIds = userIds.filter((id: string) => id !== userId);
 
       setParticipationUserId(otherUserIds);
 
       return userIds.length;
     } catch (error) {
       console.error("Error fetching profile data:", error);
-      return false;
+      return 0;
     }
   };
 
-  const fetchMyReview = async () => {
+  const fetchMyReview = async (): Promise<Review[]> => {
     try {
-      const response = await fetchCall<Participation[]>(
-        `/api/v1/reviews`,
+      const response = await fetchCall<ReviewResponse>(
+        "/api/v1/reviews",
         "get",
       );
-
       return response.data.data;
     } catch (error) {
-      console.error("Error fetching participation data:", error);
+      console.error("Error fetching reviews:", error);
+      return [];
     }
   };
 
-  const handleRatingComplete = (postId: string) => {
+  const handleRatingComplete = () => {
     setActiveModalIndex(null); // 모달 닫기
   };
 
@@ -169,8 +168,8 @@ const MyCompletedTrips = (): JSX.Element => {
     };
 
     fetchData();
-  }, []); // 빈 배열로 설정하여 한 번만 실행
-  console.log(filteredTravelInfos);
+  }, []);
+
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -190,8 +189,6 @@ const MyCompletedTrips = (): JSX.Element => {
           {filteredTravelInfos.map((info, index) => {
             const travelStartDay = new Date(info.travelStartDate).getDay();
             const travelEndDay = new Date(info.travelEndDate).getDay();
-            // const travelCountry =
-            //   mappingCountry(info.travelCountry, "en") || info.travelCountry;
 
             return (
               <li key={info.postId} className="list-none">
@@ -202,7 +199,7 @@ const MyCompletedTrips = (): JSX.Element => {
                   <div className="flex items-center m-2.5 space-x-8 justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
-                        {/* <span className="truncate">{travelCountry}</span> */}
+                        {/* 국가 정보를 추가하려면 이곳 사용 */}
                       </div>
                       <span className="">
                         참여인원 {info.participantsCount}/{info.maxParticipants}
@@ -223,7 +220,7 @@ const MyCompletedTrips = (): JSX.Element => {
                         disabled={!info.isRatingAllowed}
                         onClick={async () => {
                           const isParticipant = await fetchParticipation(
-                            info.postId,
+                            String(info.postId),
                           );
                           if (isParticipant) {
                             setActiveModalIndex(index);
@@ -236,20 +233,14 @@ const MyCompletedTrips = (): JSX.Element => {
                         !info.reviewStatus) ||
                       (info.maxParticipants === 1 && !info.reviewStatus) ? (
                       <button
-                        className={`btn btn-sm rounded-md ${
-                          info.participationStatus === "JOIN"
-                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            : ""
-                        }`}
+                        className="btn btn-sm rounded-md"
                         onClick={() =>
                           navigate(`/recruitment/${info.postId}/review/write`)
                         }
                       >
                         후기 작성
                       </button>
-                    ) : (
-                      ""
-                    )}
+                    ) : null}
                   </div>
                 </div>
                 {activeModalIndex === index && (
@@ -257,8 +248,8 @@ const MyCompletedTrips = (): JSX.Element => {
                     isOpen={activeModalIndex === index}
                     onClose={() => setActiveModalIndex(null)}
                     participants={participationUserId}
-                    postId={info.postId}
-                    onRatingComplete={() => handleRatingComplete(info.postId)}
+                    postId={String(info.postId)}
+                    onRatingComplete={() => handleRatingComplete()}
                   />
                 )}
               </li>
@@ -266,6 +257,11 @@ const MyCompletedTrips = (): JSX.Element => {
           })}
         </ul>
       </div>
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        message={modalState.message}
+      />
     </main>
   );
 };

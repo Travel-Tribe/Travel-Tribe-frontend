@@ -9,12 +9,15 @@ import { MBTI } from "../../constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
 import { postImgUrl } from "../../utils/postImgUrl";
 import { createProfileData } from "../../apis/user";
+import Modal from "../Common/Modal";
+import { SUCCESS, ERROR } from "../../constants/message";
 
 const ProfileCreate = (): JSX.Element | null => {
   const { profileData, setProfileData, updateProfileField } = useProfileStore();
   const profileCheck =
     localStorage.getItem(STORAGE_KEYS.PROFILE_CHECK) == "true";
   const [formValid, setFormValid] = useState(false);
+  const [modalState, setModalState] = useState({ isOpen: false, message: "" });
   const navigate = useNavigate();
   const animatedComponents = makeAnimated();
 
@@ -80,14 +83,22 @@ const ProfileCreate = (): JSX.Element | null => {
   // 프로필 저장
   const handleUpdateProfile = async () => {
     try {
+      profileData.langAbilities === undefined
+        ? (profileData.langAbilities = [])
+        : "";
+      profileData.visitedCountries === undefined
+        ? (profileData.visitedCountries = [])
+        : "";
       const bool = createProfileData(profileData);
       if (await bool) {
         localStorage.setItem("ProfileCheck", "true");
-        alert("프로필 생성 완료");
+        // alert("프로필 생성 완료");
+        setModalState({ isOpen: true, message: `${SUCCESS.CREATE_PROFILE}` });
         navigate("/mypage");
       }
     } catch (error) {
       console.error("Error updating profile:", error);
+      setModalState({ isOpen: true, message: `${ERROR.CREATE_PROFILE}` });
     }
   };
 
@@ -100,7 +111,7 @@ const ProfileCreate = (): JSX.Element | null => {
         profileData.mbti?.trim() !== "",
     );
   }, [profileData]);
-  console.log(profileData);
+
   return (
     <main className="flex flex-col w-[660px] ml-[60px] py-5">
       <div className="border-b border-gray-300 flex justify-between items-center mt-10 pb-1">
@@ -295,6 +306,11 @@ const ProfileCreate = (): JSX.Element | null => {
       >
         저장
       </button>
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        message={modalState.message}
+      />
     </main>
   );
 };

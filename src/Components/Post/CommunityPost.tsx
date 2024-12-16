@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 
 export const CommunityPost = React.memo(
   ({ community }: { community: CommunityType }): JSX.Element => {
-    const [imgSrc, setImgSrc] = useState(
+    const [img, setImg] = useState(
       import.meta.env.VITE_API_BASE_URL +
         `/api/v1/file/preview?fileUrl=${community.files[0]?.fileName}`,
     );
 
     const handleDefaultImageError = () => {
-      setImgSrc("/../src/assets/default-image.jpeg"); // 기본 이미지로 변경
+      setImg("/../src/assets/default-image.jpeg"); // 기본 이미지로 변경
     };
 
     return (
@@ -30,9 +30,9 @@ export const CommunityPost = React.memo(
             <p className="text-[12px] truncate">작성자: {community.nickname}</p>
           </div>
           <img
-            src={imgSrc}
+            src={img}
             alt={community.title}
-            className="w-[200px] h-[100px] object-cover absolute top-0 right-0"
+            className="w-[200px] max-w-[40%] h-[100px] object-cover absolute top-0 right-0"
             onError={handleDefaultImageError}
           />
         </Link>

@@ -7,8 +7,8 @@ interface SearchProps {
 
 const SearchBar = React.memo(
   ({ value, setValue }: SearchProps): JSX.Element => {
-    const options = ["제목", "내용"];
-    const [selectedOptions, setSelectedOptions] = useState(options[0]);
+    const options: string[] = ["제목", "내용"];
+    const [selectedOptions, setSelectedOptions] = useState<string>(options[0]);
 
     const handleSelect = (value: string) => {
       setSelectedOptions(value);

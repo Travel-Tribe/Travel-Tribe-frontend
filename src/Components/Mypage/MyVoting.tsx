@@ -7,37 +7,21 @@ import {
   TravelPlanType,
   ParticipationType,
   ApiResponse,
+  ErrorType,
 } from "../../type/types";
-
-// interface TravelInfo {
-//   postId: number;
-//   continent: string;
-//   travelCountry: string;
-//   region: string;
-//   title: string;
-//   fileAddress: string | null;
-//   travelStartDate?: string;
-//   travelEndDate?: string;
-//   votingStatus: string;
-//   votingStartsId: number;
-// }
+import Modal from "../Common/Modal";
+import { ERROR } from "../../constants/message";
+import { AxiosError } from "axios";
 
 interface ExtendedTravelPlanType extends TravelPlanType {
   votingStartsId: number;
   votingStatus: string;
 }
 
-export interface TravelPlanResponse extends ApiResponse<TravelPlanType[]> {}
-export interface ParticipationResponse
-  extends ApiResponse<ParticipationType[]> {}
+interface TravelPlanResponse extends ApiResponse<TravelPlanType[]> {}
+interface ParticipationResponse extends ApiResponse<ParticipationType[]> {}
 
-interface Participation {
-  participationId: number;
-  postId: number;
-  ParticipationStatus: string;
-}
-
-export interface VotingResponse
+interface VotingResponse
   extends ApiResponse<{
     postId: number;
     votingStartsId: number;
@@ -49,30 +33,27 @@ const MyVoting = (): JSX.Element => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
   const [travelInfos, setTravelInfos] = useState<ExtendedTravelPlanType[]>([]);
   const [openVotingId, setOpenVotingId] = useState<number | null>(null); // 현재 열려 있는 Voting ID
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    message: "",
+  });
 
   const fetchVoting = async (postId: number): Promise<any> => {
     try {
-      const response = await fetchCall(
+      const response = await fetchCall<VotingResponse>(
         `/api/v1/posts/${postId}/voting-starts`,
         "get",
       );
-      console.log(response);
-      return response?.data;
+
+      return response?.data.data;
     } catch (error) {
-      console.error("Fetching voting data failed:", error);
-      alert("투표가 시작되지 않았습니다.");
+      setModalState({
+        isOpen: true,
+        message: `${ERROR.LOAD_VOTING} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      });
+
       return null;
     }
-  };
-
-  const fetchParticipation = async () => {
-    try {
-      const participationResponse = await fetchCall(
-        `api/v1/posts/participations`,
-        "get",
-      );
-      console.log(participationResponse);
-    } catch (error) {}
   };
 
   useEffect(() => {
@@ -82,11 +63,10 @@ const MyVoting = (): JSX.Element => {
         today.setHours(0, 0, 0, 0);
 
         // Step 1: 전체 모집글 조회
-        const { data: allPostsResponse } = await fetchCall<TravelPlanResponse>(
+        const allPosts = await fetchCall<TravelPlanResponse>(
           `/api/v1/posts`,
           "get",
         );
-        const allPosts = allPostsResponse.data.content;
 
         // Step 2: 참여 데이터 조회
         const participationResponse = await fetchCall<ParticipationResponse>(
@@ -100,8 +80,8 @@ const MyVoting = (): JSX.Element => {
         );
 
         // Step 3: 내가 참여한 post만 필터링
-        const participatingPosts = allPosts.filter(post =>
-          participatingPostIds.includes(post.postId),
+        const participatingPosts = allPosts.data.data.filter(post =>
+          participatingPostIds.includes(post.postId ?? 0),
         );
 
         const votingPosts = participatingPosts.filter(
@@ -111,12 +91,12 @@ const MyVoting = (): JSX.Element => {
         // Step 4: 투표가 생성된 post만 필터링
         const validPosts: ExtendedTravelPlanType[] = [];
         for (const post of votingPosts) {
-          const votingData = await fetchVoting(post.postId);
-          if (votingData?.data.votingStartsId) {
+          const votingData = await fetchVoting(post.postId ?? 0);
+          if (votingData?.votingStartsId) {
             validPosts.push({
               ...post,
-              votingStatus: votingData?.data.votingStatus,
-              votingStartsId: votingData?.data.votingStartsId,
+              votingStatus: votingData?.votingStatus,
+              votingStartsId: votingData?.votingStartsId,
             });
           }
         }
@@ -216,6 +196,11 @@ const MyVoting = (): JSX.Element => {
           );
         })}
       </ul>
+      <Modal
+        isOpen={modalState.isOpen}
+        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        message={modalState.message}
+      />
     </main>
   );
 };

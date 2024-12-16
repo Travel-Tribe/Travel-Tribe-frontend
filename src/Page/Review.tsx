@@ -4,7 +4,8 @@ import { getFilterParams } from "../utils/getFilterParams";
 import { ItemType, useInfiniteFetch } from "../hooks/useInfinityFetch";
 import { ErrorType, ReviewType } from "../type/types";
 import { AxiosError } from "axios";
-import { ReviewPost } from "../components/post/ReviewPost";
+import { ReviewPost } from "../components/Post/ReviewPost";
+import { ERROR } from "../constants/MESSAGE";
 
 interface ReviewProps {
   selectedContinent?: string;
@@ -48,6 +49,7 @@ const Review = React.memo(
       );
       return (
         <>
+          {ERROR.LOAD_POST_LIST} :
           {
             (error as AxiosError<ErrorType>).response?.data?.errors[0]
               ?.errorMessage

@@ -31,15 +31,17 @@ export const ERROR: { [key: string]: string } = Object.freeze({
   SIGNUP: "회원가입 처리 중 문제가 발생했습니다.", // 회원가입 에러
   REQUIRED_PROFILE: "프로필 작성이 필요한 서비스입니다.",
   POST: "글 등록에 실패했습니다.", // 글 등록 에러
-  EDIT_PROFILE: "", // 프로필 수정 에러
+  EDIT_PROFILE: "프로필 변경에 실패했습니다.", // 프로필 수정 에러
   ACCESS_TOKEN: "", // 토큰 에러
+  CREATE_PROFILE: "프로필 생성에 실패했습니다.",
 
   LOAD_POST_LIST: "Post를 불러오는데 실패했습니다.", // 글 목록 불러오기 에러
   LOAD_POST: "게시글을 찾을 수 없습니다.", // 포스트 불러오기 에러
   LOAD_MY_POST: "", // 내가 작성한 글 불러오기 에러
   LOAD_MY_PARTICIPATION_LIST: "", // 내 참여 목록 불러오기 에러
   LOAD_USER_INFO: "", // 유저 정보 불러오기 에러
-  LOAD_USER_PROFILE: "", // 유저 프로필 불러오기 에러
+  LOAD_USER_PROFILE: "프로필을 불러오는데 실패했습니다.", // 유저 프로필 불러오기 에러
+  LOAD_REVIEW: "후기를 불러오는데 실패했습니다.",
 
   PARTICIPATION: "참여 신청 처리 중 오류가 발생했습니다.", // 참가 에러
   PAY_APPROVE_FAIL: "결제 승인에 실패했습니다.",
@@ -48,21 +50,27 @@ export const ERROR: { [key: string]: string } = Object.freeze({
 
   WRITING: "", // 글 작성 에러
 
-  CANCEL_MEMBERSHIP: "", // 회원 탈퇴 에러
+  CANCEL_MEMBERSHIP: "회원 탈퇴에 실패했습니다.", // 회원 탈퇴 에러
 
-  CHANGE_PASSWORD: "", // 비밀번호 변경 에러
-  CHANGE_EMAIL: "", // 이메일 변경 에러
+  CHANGE_PASSWORD: "비밀번호 변경에 실패했습니다.", // 비밀번호 변경 에러
+  CHANGE_EMAIL: "이메일 변경에 실패했습니다.", // 이메일 변경 에러
   EMAIL_VERIFICATION: "", // 이메일 인증 에러
 
   FIND_EMAIL: "", // 아이디 찾기 에러
   FIND_PASSWORD: "입력하신 정보와 일치하는 계정을 찾을 수 없습니다.", // 비밀번호 찾기 에러
   GOOGLE_MAP: "", // 구글 맵 에러
+
+  SEND_CODE: "인증 코드 전송에 실패했습니다.",
+  LOAD_VOTING: "시작된 투표가 없습니다.",
+  SEND_VOTING: "투표에 실패했습니다. 다시 시도해주세요.",
+  CREATE_VOTING: "투표가 등록되지 않았습니다.",
 });
 
 export const SUCCESS: { [key: string]: string } = Object.freeze({
   SIGNIN: "", // 로그인 성공
   SIGNUP: "회원가입이 완료되었습니다.", // 회원가입 성공
-  EDIT_PROFILE: "", // 프로필 수정 성공
+  EDIT_PROFILE: "프로필이 변경되었습니다.", // 프로필 수정 성공
+  CREATE_PROFILE: "프로필이 생성되었습니다.",
 
   CREATE_POST: "게시글이 등록되었습니다.",
   EDIT_POST: "게시글이 수정되었습니다.",
@@ -74,8 +82,14 @@ export const SUCCESS: { [key: string]: string } = Object.freeze({
 
   PAY_APPROVE_SUCCESS: "결제가 성공적으로 완료되었습니다!",
 
-  CANCEL_MEMBERSHIP: "", // 회원 탈퇴 성공
-  CHANGE_EMAIL: "", // 이메일 변경 성공
-  CHANGE_PASSWORD: "", // 비밀번호 변경 성공
+  CANCEL_MEMBERSHIP: "탈퇴되었습니다.", // 회원 탈퇴 성공
+  CHANGE_EMAIL: "이메일이 성공적으로 변경되었습니다.", // 이메일 변경 성공
+  CHANGE_PASSWORD: "비밀번호가 성공적으로 변경되었습니다.", // 비밀번호 변경 성공
   FIND_EMAIL: "", // 아이디 찾기 성공
+  SEND_CODE: "인증 코드가 전송되었습니다.",
+
+  RATING_SUBMIT: "평점이 저장되었습니다.",
+  CANCLE_PARTICIPATION: "참여가 취소되었습니다.",
+  SEND_VOTING: "투표되었습니다.",
+  CREATE_VOTING: "투표가 등록되었습니다.",
 });

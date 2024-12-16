@@ -18,7 +18,6 @@ const HomeLayout = () => {
   const [city, setCity] = useState<string>("");
   const [mbti, setMbti] = useState<string>("선택");
   const [search, setSearch] = useState<string>("");
-  // 검색 시 디바운스 적용
   const location = useLocation();
 
   useEffect(() => {
