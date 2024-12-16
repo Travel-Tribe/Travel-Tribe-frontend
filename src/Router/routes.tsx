@@ -80,12 +80,12 @@ const Router = (): JSX.Element => {
             {/* 프로필 불필요 라우트 */}
             <Route path="/mypage" element={<MyPage />}>
               <Route index element={<MyProfile />} />
-              <Route path="myProfileEdit" element={<ProfileEdit />} />
-              <Route path="completedTrips" element={<MyCompletedTrips />} />
-              <Route path="travelHistory" element={<MyTravelHistory />} />
-              <Route path="accountSettings" element={<MyAccountSettings />} />
-              <Route path="profileCreate" element={<ProfileCreate />} />
-              <Route path="voting" element={<MyVoting />} />
+              <Route path="/profile-edit" element={<ProfileEdit />} />
+              <Route path="/completed-trips" element={<MyCompletedTrips />} />
+              <Route path="/review" element={<MyTravelHistory />} />
+              <Route path="/account-settings" element={<MyAccountSettings />} />
+              <Route path="/profile-create" element={<ProfileCreate />} />
+              <Route path="/voting" element={<MyVoting />} />
             </Route>
           </Route>
 
