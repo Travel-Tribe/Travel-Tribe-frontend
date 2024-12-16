@@ -8,7 +8,7 @@ import {
   ApiResponse,
   ParticipationType,
 } from "../../type/types";
-import Modal from "../Common/Modal";
+import Modal from "../common/Modal";
 import { SUCCESS } from "../../constants/message";
 
 interface TravelPlan extends TravelPlanType {

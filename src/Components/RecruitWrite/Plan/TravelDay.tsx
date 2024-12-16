@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getDiffDate } from "../../../utils/getDiffDate";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
-import DayDetail from "./DayDetail";
 import { DayType } from "../../../type/types";
+import DayDetail from "./DayDetail";
 
 const TravelDay = React.memo((): JSX.Element => {
   const { postData, updateTravelData } = useRecruitPostStore();
@@ -36,6 +36,12 @@ const TravelDay = React.memo((): JSX.Element => {
     });
   }, [postData.travelStartDate, postData.travelEndDate, updateTravelData]);
 
+  const getCalculatedDate = (startDate: string, dayIndex: number): string => {
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + dayIndex);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+  };
+
   return (
     <>
       {days.map((day: DayType, dayIndex: number) => (
@@ -46,7 +52,7 @@ const TravelDay = React.memo((): JSX.Element => {
         >
           <input type="checkbox" />
           <p className="collapse-title text-[18px] mb-[10px]">
-            {`${postData.travelStartDate.split("-")[0]}-${postData.travelStartDate.split("-")[1].padStart(2, "0")}-${String(Number(postData.travelStartDate.split("-")[2]) + dayIndex).padStart(2, "0")} (DAY-${dayIndex + 1})`}
+            {`${getCalculatedDate(postData.travelStartDate, dayIndex)} (DAY-${dayIndex + 1})`}
           </p>
           <div className="collapse-content w-[400px] border">
             <DayDetail

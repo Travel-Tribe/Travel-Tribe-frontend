@@ -9,7 +9,7 @@ import {
   ParticipationType,
   ErrorType,
 } from "../../type/types";
-import Modal from "../Common/Modal";
+import Modal from "../common/Modal";
 import { ERROR } from "../../constants/message";
 import { AxiosError } from "axios";
 

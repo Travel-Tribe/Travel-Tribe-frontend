@@ -9,7 +9,7 @@ import { getContinentName } from "../../../utils/getContinentName";
 import { mappingCountry } from "../../../utils/mappingCountry";
 import { ErrorType } from "../../../type/types";
 import { ERROR, SUCCESS } from "../../../constants/MESSAGE";
-import Modal from "../../Common/Modal";
+import Modal from "../../common/Modal";
 
 const SubmitBtn = React.memo(() => {
   const [isLoading, setIsLoading] = useState<boolean>(false);

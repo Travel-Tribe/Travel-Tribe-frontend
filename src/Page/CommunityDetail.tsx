@@ -6,7 +6,7 @@ import { CommunityType, ErrorType } from "../type/types";
 import { AxiosError } from "axios";
 import { ERROR, SUCCESS } from "../constants/MESSAGE";
 import { useState } from "react";
-import Modal from "../components/Common/Modal";
+import Modal from "../components/common/Modal";
 
 const ReviewDetail = (): JSX.Element => {
   const [showModal, setShowModal] = useState<boolean>(false);

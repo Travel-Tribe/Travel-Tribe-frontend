@@ -7,7 +7,7 @@ import { useQuery, useQueryClient } from "react-query";
 import { ErrorType, ReviewType } from "../type/types";
 import { AxiosError } from "axios";
 import { useState } from "react";
-import Modal from "../components/Common/Modal";
+import Modal from "../components/common/Modal";
 import { ERROR, SUCCESS } from "../constants/MESSAGE";
 
 const ReviewDetail = (): JSX.Element => {

@@ -9,7 +9,7 @@ import { MBTI } from "../../constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
 import { postImgUrl } from "../../utils/postImgUrl";
 import { createProfileData } from "../../apis/user";
-import Modal from "../Common/Modal";
+import Modal from "../common/Modal";
 import { SUCCESS, ERROR } from "../../constants/message";
 
 const ProfileCreate = (): JSX.Element | null => {

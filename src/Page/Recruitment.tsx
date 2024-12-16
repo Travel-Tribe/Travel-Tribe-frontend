@@ -4,7 +4,7 @@ import { getFilterParams } from "../utils/getFilterParams";
 import { ItemType, useInfiniteFetch } from "../hooks/useInfinityFetch";
 import { ErrorType, TravelPlanType } from "../type/types";
 import { AxiosError } from "axios";
-import { RecruitmentPost } from "../Components/Post/RecruitmentPost";
+import { RecruitmentPost } from "../components/post/RecruitmentPost";
 import { ERROR } from "../constants/MESSAGE";
 
 interface RecruitmentProps {

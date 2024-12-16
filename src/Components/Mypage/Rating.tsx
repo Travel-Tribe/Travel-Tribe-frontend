@@ -4,7 +4,7 @@ import profileImg from "../../assets/profile-img.webp";
 import { FaStar } from "react-icons/fa";
 import { useParticipantsProfiles } from "../../hooks/userQueries";
 import { SUCCESS } from "../../constants/message";
-import Modal from "../Common/Modal";
+import Modal from "../common/Modal";
 
 interface RatingModalProps {
   isOpen: boolean;
