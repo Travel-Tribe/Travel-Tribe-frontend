@@ -10,7 +10,7 @@ import { useProfileStore } from "../../store/profileStore";
 import { postImgUrl } from "../../utils/postImgUrl";
 import { createProfileData } from "../../apis/user";
 import Modal from "../common/Modal";
-import { SUCCESS, ERROR } from "../../constants/message";
+import { SUCCESS, ERROR } from "../../constants/MESSAGE";
 
 const ProfileCreate = (): JSX.Element | null => {
   const { profileData, setProfileData, updateProfileField } = useProfileStore();

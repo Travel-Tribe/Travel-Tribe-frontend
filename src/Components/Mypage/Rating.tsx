@@ -3,7 +3,7 @@ import fetchCall from "../../apis/fetchCall";
 import profileImg from "../../assets/profile-img.webp";
 import { FaStar } from "react-icons/fa";
 import { useParticipantsProfiles } from "../../hooks/userQueries";
-import { SUCCESS } from "../../constants/message";
+import { SUCCESS } from "../../constants/MESSAGE";
 import Modal from "../common/Modal";
 
 interface RatingModalProps {

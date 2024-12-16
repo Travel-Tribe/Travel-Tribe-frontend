@@ -9,7 +9,7 @@ import {
 } from "../../type/types";
 import { createVoting } from "../../apis/user";
 import Modal from "../common/Modal";
-import { ERROR, SUCCESS } from "../../constants/message";
+import { ERROR, SUCCESS } from "../../constants/MESSAGE";
 
 interface ExtendedTravelPlanType extends TravelPlanType {
   participantsCount: number;

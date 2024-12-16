@@ -77,7 +77,7 @@ const Sidebar = (): JSX.Element => {
     const pathMap: { [key: string]: string } = {
       "/mypage": "내 프로필",
       "/mypage/completedTrips": "다녀온 여행들",
-      "/mypage/travelHistory": "내 후기 글",
+      "/mypage/review": "내 후기 글",
       "/mypage/accountSettings": "계정 설정",
       "/mypage/voting": "투표 확인",
     };

@@ -56,9 +56,7 @@ export const ERROR: { [key: string]: string } = Object.freeze({
   CHANGE_EMAIL: "이메일 변경에 실패했습니다.", // 이메일 변경 에러
   EMAIL_VERIFICATION: "", // 이메일 인증 에러
 
-  FIND_EMAIL: "", // 아이디 찾기 에러
   FIND_PASSWORD: "입력하신 정보와 일치하는 계정을 찾을 수 없습니다.", // 비밀번호 찾기 에러
-  GOOGLE_MAP: "", // 구글 맵 에러
 
   SEND_CODE: "인증 코드 전송에 실패했습니다.",
   LOAD_VOTING: "시작된 투표가 없습니다.",
@@ -85,7 +83,7 @@ export const SUCCESS: { [key: string]: string } = Object.freeze({
   CANCEL_MEMBERSHIP: "탈퇴되었습니다.", // 회원 탈퇴 성공
   CHANGE_EMAIL: "이메일이 성공적으로 변경되었습니다.", // 이메일 변경 성공
   CHANGE_PASSWORD: "비밀번호가 성공적으로 변경되었습니다.", // 비밀번호 변경 성공
-  FIND_EMAIL: "", // 아이디 찾기 성공
+
   SEND_CODE: "인증 코드가 전송되었습니다.",
 
   RATING_SUBMIT: "평점이 저장되었습니다.",
