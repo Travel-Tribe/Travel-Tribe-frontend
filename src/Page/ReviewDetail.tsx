@@ -8,6 +8,7 @@ import { ErrorType, ReviewType } from "../type/types";
 import { AxiosError } from "axios";
 import { useState } from "react";
 import Modal from "../components/Common/Modal";
+import { ERROR, SUCCESS } from "../constants/MESSAGE";
 
 const ReviewDetail = (): JSX.Element => {
   const { reviewId, postId } = useParams<{
@@ -41,10 +42,10 @@ const ReviewDetail = (): JSX.Element => {
 
     if (response.data.result === "SUCCESS") {
       queryClient.invalidateQueries("reviewData");
-      setModalMessage(`삭제되었습니다.`);
+      setModalMessage(SUCCESS.DELETE_REVIEW);
       setShowModal(true);
     } else {
-      setModalMessage("오류가 발생했습니다.");
+      setModalMessage(ERROR.LOAD_POST);
       setShowModal(true);
     }
   };
@@ -58,6 +59,8 @@ const ReviewDetail = (): JSX.Element => {
       "에러",
       (error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage,
     );
+    setModalMessage(ERROR.LOAD_POST);
+    setShowModal(true);
     return (
       <>
         {
@@ -129,15 +132,22 @@ const ReviewDetail = (): JSX.Element => {
           목록으로
         </Link>
       </div>
+
       <Modal
         isOpen={showModal}
         onClose={
-          modalMessage === "삭제되었습니다."
+          modalMessage === ERROR.LOAD_POST
             ? () => {
                 setShowModal(false);
                 navigate("/review");
               }
-            : () => setShowModal(false)
+            : modalMessage === ERROR.DELETE_REVIEW
+              ? () => {
+                  setShowModal(false);
+                  queryClient.invalidateQueries("reviewData");
+                  navigate(`/review`);
+                }
+              : () => setShowModal(false)
         }
         message={modalMessage}
       />

@@ -4,7 +4,7 @@ import { TravelPlanType } from "../../type/types";
 
 export const RecruitmentPost = React.memo(
   ({ plan }: { plan: TravelPlanType }): JSX.Element => {
-    const [imgSrc, setImgSrc] = useState(
+    const [img, setImg] = useState(
       import.meta.env.VITE_API_BASE_URL +
         `/api/v1/file/preview?fileUrl=${plan.days[0]?.dayDetails[0]?.fileAddress}`,
     );
@@ -15,7 +15,7 @@ export const RecruitmentPost = React.memo(
     );
 
     const handleDefaultImageError = () => {
-      setImgSrc("/../src/assets/default-image.jpeg"); // 기본 이미지로 변경
+      setImg("/../src/assets/default-image.jpeg"); // 기본 이미지로 변경
     };
 
     const handleUserImageError = () => {
@@ -30,7 +30,7 @@ export const RecruitmentPost = React.memo(
           className="w-[300px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0 bg-white"
         >
           <img
-            src={imgSrc}
+            src={img}
             alt={plan.title}
             className="w-[300px] h-[150px] object-cover"
             onError={handleDefaultImageError}

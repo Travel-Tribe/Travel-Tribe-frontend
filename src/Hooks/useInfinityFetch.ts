@@ -11,7 +11,7 @@ interface FetchType {
 export type ItemType = CommunityType | TravelPlanType | ReviewType;
 
 export const useInfiniteFetch = ({ endpoint, filters }: FetchType) => {
-  const fetchPostList = async ({ pageParam = 0 }) => {
+  const getPostList = async ({ pageParam = 0 }) => {
     const params = new URLSearchParams(filters).toString();
     const response = await fetchCall<{
       data: {
@@ -38,7 +38,7 @@ export const useInfiniteFetch = ({ endpoint, filters }: FetchType) => {
     error,
   } = useInfiniteQuery({
     queryKey: [endpoint, filters],
-    queryFn: fetchPostList,
+    queryFn: getPostList,
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = allPages.length;
       return nextPage < lastPage.totalPages ? nextPage : undefined;

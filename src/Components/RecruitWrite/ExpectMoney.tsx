@@ -17,7 +17,7 @@ const ExpectMoney = React.memo((): JSX.Element => {
         <OtherExpenses />
       </ul>
       <p className="text-[18px] mr-2">
-        비용:{" "}
+        총 비용:{" "}
         {(
           postData.accommodationFee +
           postData.airplaneFee +

@@ -5,6 +5,8 @@ import { ItemType, useInfiniteFetch } from "../Hooks/useInfinityFetch";
 import { ErrorType, TravelPlanType } from "../type/types";
 import { AxiosError } from "axios";
 import { RecruitmentPost } from "../Components/Post/RecruitmentPost";
+import { ERROR } from "../constants/MESSAGE";
+
 
 interface RecruitmentProps {
   selectedContinent?: string;
@@ -50,6 +52,7 @@ const Recruitment = React.memo(
       );
       return (
         <>
+          {ERROR.LOAD_POST_LIST} :
           {
             (error as AxiosError<ErrorType>).response?.data?.errors[0]
               ?.errorMessage
