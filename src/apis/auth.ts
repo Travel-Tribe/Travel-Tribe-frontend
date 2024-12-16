@@ -1,8 +1,8 @@
 import fetchCall from "./fetchCall";
 import { ApiResponse, LoginData } from "../type/types";
-import { SignInInputs } from "../Components/SignInForm";
-import { UserEmailValues } from "../Components/FindForm";
-import { DuplicateResponse, SignUpInputs } from "../Components/SignUpForm";
+import { SignInInputs } from "../components/SignInForm";
+import { UserEmailValues } from "../components/FindForm";
+import { DuplicateResponse, SignUpInputs } from "../components/SignUpForm";
 
 // singIn
 interface LoginResponse {

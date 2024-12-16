@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
-import Header from "../Common/Header";
-import Footer from "../Common/Footer";
+import Header from "../common/Header";
+import Footer from "../common/Footer";
 
 const Layout = () => {
   const location = useLocation();

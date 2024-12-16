@@ -5,7 +5,7 @@ import fetchCall from "../../apis/fetchCall";
 import RecruitInfo from "./RecruitInfo";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { postImgUrl, previewImg } from "../../utils/postImgUrl";
-import Modal from "../Common/Modal";
+import Modal from "../common/Modal";
 import { FileType, ReviewType } from "../../type/types";
 import { ERROR, SUCCESS, VALIDATION } from "../../constants/MESSAGE";
 

@@ -1,4 +1,4 @@
-import { usePaymentFlow } from "../../Hooks/usePaymentFlow";
+import { usePaymentFlow } from "../../hooks/usePaymentFlow";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   FaArrowLeft,

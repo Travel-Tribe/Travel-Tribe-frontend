@@ -1,20 +1,7 @@
 import { GoogleMap, Polyline, InfoWindow } from "@react-google-maps/api";
 import { useState, useEffect, useRef } from "react";
 import { useGoogleMaps } from "../../../hooks/useGoogleMaps";
-
-interface ItineraryVisit {
-  latitude: number;
-  longitude: number;
-  orderNumber: number;
-}
-
-interface DayMapProps {
-  visits: ItineraryVisit[];
-  dayDetails: Array<{
-    title: string;
-    description: string;
-  }>;
-}
+import { DayMapType } from "../../../type/types";
 
 const containerStyle = {
   width: "100%",
@@ -46,7 +33,7 @@ const createMarkerElement = (orderNumber: number, onClick: () => void) => {
   return div;
 };
 
-const DayMap = ({ visits, dayDetails }: DayMapProps) => {
+const DayMap = ({ visits, dayDetails }: DayMapType) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);

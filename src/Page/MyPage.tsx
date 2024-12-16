@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Sidebar from "../components/Mypage/Sidebar";
+import Sidebar from "../components/mypage/Sidebar";
 
 const MyPage = (): JSX.Element => {
   return (

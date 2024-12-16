@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import makeAnimated from "react-select/animated";
 import CreatableSelect from "react-select/creatable";
 import { STORAGE_KEYS } from "../../constants/STORAGE_KEYS";
-import SelectBox from "../Common/SelectBox";
+import SelectBox from "../common/SelectBox";
 import { MBTI } from "../../constants/MBTI";
 import { useProfileStore } from "../../store/profileStore";
 import { postImgUrl } from "../../utils/postImgUrl";

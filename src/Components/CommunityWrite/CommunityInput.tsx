@@ -4,7 +4,7 @@ import fetchCall from "../../apis/fetchCall";
 import { useNavigate } from "react-router-dom";
 import { useCommunityPostStore } from "../../store/communityPostStore";
 import { useQueryClient } from "react-query";
-import Modal from "../Common/Modal";
+import Modal from "../common/Modal";
 
 const CommunityInput = () => {
   const navigate = useNavigate();
