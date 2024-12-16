@@ -32,9 +32,7 @@ const Sidebar = (): JSX.Element => {
   const [selected, setSelected] = useState("내 프로필");
   const location = useLocation();
 
-  const {
-    data: userProfile,
-  } = useUserProfile(userId!);
+  const { data: userProfile } = useUserProfile(userId!);
 
   const loadProfileData = async () => {
     if (!userId) return;
@@ -76,9 +74,9 @@ const Sidebar = (): JSX.Element => {
   useEffect(() => {
     const pathMap: { [key: string]: string } = {
       "/mypage": "내 프로필",
-      "/mypage/completedTrips": "다녀온 여행들",
+      "/mypage/completed-trips": "다녀온 여행들",
       "/mypage/review": "내 후기 글",
-      "/mypage/accountSettings": "계정 설정",
+      "/mypage/account-settings": "계정 설정",
       "/mypage/voting": "투표 확인",
     };
     setSelected(pathMap[location.pathname] || "내 프로필");
@@ -112,8 +110,8 @@ const Sidebar = (): JSX.Element => {
                   menu === "내 프로필"
                     ? ""
                     : menu === "내 후기 글"
-                      ? "travelHistory"
-                      : "completedTrips"
+                      ? "review"
+                      : "completed-trips"
                 }`}
                 className={`text-xl font-normal ${
                   selected === menu
@@ -132,7 +130,7 @@ const Sidebar = (): JSX.Element => {
             <Link to="/mypage/voting">투표 확인</Link>
           </li>
           <li className="text-sm">
-            <Link to="/mypage/accountSettings">계정 설정</Link>
+            <Link to="/mypage/account-settings">계정 설정</Link>
           </li>
           <li className="text-sm cursor-pointer" onClick={onClickLogout}>
             로그아웃
