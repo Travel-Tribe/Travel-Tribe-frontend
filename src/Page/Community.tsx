@@ -3,7 +3,7 @@ import { getFilterParams } from "../utils/getFilterParams";
 import { CommunityType, ErrorType } from "../type/types";
 import { ItemType, useInfiniteFetch } from "../hooks/useInfinityFetch";
 import { AxiosError } from "axios";
-import { CommunityPost } from "../components/Post/CommunityPost";
+import { CommunityPost } from "../components/post/CommunityPost";
 import { ERROR } from "../constants/MESSAGE";
 
 interface CommunityProps {

@@ -9,8 +9,8 @@ import {
   ParticipationType,
   ErrorType,
 } from "../../type/types";
-import Modal from "../Common/Modal";
-import { ERROR } from "../../constants/MESSAGE";
+import Modal from "../common/Modal";
+import { ERROR } from "../../constants/message";
 import { AxiosError } from "axios";
 
 interface TravelPlan extends TravelPlanType {

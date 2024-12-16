@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import useLocalStorage from "../../../hooks/useLocalStorage";
 import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
 import { deleteAccount } from "../../../apis/user";
-import Modal from "../../Common/Modal";
-import { SUCCESS, ERROR } from "../../../constants/MESSAGE";
+import Modal from "../../common/Modal";
+import { SUCCESS, ERROR } from "../../../constants/message";
 
 interface DeleteAccountModalProps {
   isOpen: boolean;
