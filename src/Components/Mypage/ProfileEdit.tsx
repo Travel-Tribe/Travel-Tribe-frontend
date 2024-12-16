@@ -16,6 +16,8 @@ import {
 } from "../../apis/user";
 import Modal from "../common/Modal";
 import { SUCCESS, ERROR } from "../../constants/MESSAGE";
+import { AxiosError } from "axios";
+import { ErrorType } from "../../type/types";
 
 const ProfileEdit = (): JSX.Element => {
   const {
@@ -51,7 +53,10 @@ const ProfileEdit = (): JSX.Element => {
       try {
         setProfileData(userProfile);
       } catch (error) {
-        setModalState({ isOpen: true, message: `${ERROR.LOAD_USER_PROFILE}` });
+        console.error(
+          "Error loading profile data:",
+          `${ERROR.LOAD_USER_PROFILE} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+        );
       }
       if (userProfile.birth) {
         setAge(userProfile.birth);
@@ -162,9 +167,6 @@ const ProfileEdit = (): JSX.Element => {
       await updateUserInfo({ nickname, phone });
       setProfileData(profileData);
       setModalState({ isOpen: true, message: `${SUCCESS.EDIT_PROFILE}` });
-      navigate("/mypage", { replace: true });
-      // 새 데이터를 강제로 리패칭
-      window.location.reload();
     } catch (error) {
       setModalState({ isOpen: true, message: `${ERROR.EDIT_PROFILE}` });
     }
@@ -404,7 +406,12 @@ const ProfileEdit = (): JSX.Element => {
       </button>
       <Modal
         isOpen={modalState.isOpen}
-        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        onClose={() => {
+          setModalState({ ...modalState, isOpen: false });
+          if (modalState.message === SUCCESS.EDIT_PROFILE) {
+            navigate("/mypage", { replace: true });
+          }
+        }}
         message={modalState.message}
       />
     </main>

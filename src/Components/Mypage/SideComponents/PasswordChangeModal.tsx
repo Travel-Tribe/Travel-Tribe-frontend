@@ -5,12 +5,12 @@ import { SUCCESS, ERROR } from "../../../constants/MESSAGE";
 
 interface PasswordChangeModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClosed: () => void;
 }
 
 const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
   isOpen,
-  onClose,
+  onClosed,
 }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -46,9 +46,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
       changePassword(currentPassword, newPassword);
       // alert("비밀번호가 성공적으로 변경되었습니다.");
       setModalState({ isOpen: true, message: `${SUCCESS.CHANGE_PASSWORD}` });
-      onClose();
     } catch (error) {
-      // alert("비밀번호 변경에 실패했습니다.");
       setModalState({ isOpen: true, message: `${ERROR.CHANGE_PASSWORD}` });
     }
   };
@@ -62,7 +60,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-      onClick={onClose}
+      onClick={onClosed}
     >
       <div
         className="bg-white p-8 rounded-lg shadow-lg w-[504px]"
@@ -142,7 +140,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
               type="button"
               className={`px-4 py-2 rounded ${
                 isValidNewPassword && !isSameAsCurrent && isMatchingPasswords
-                  ? "btn bg-custom-teal-green text-white"
+                  ? "bg-custom-teal-green text-white"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
               }`}
               disabled={
@@ -154,7 +152,7 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
             </button>
             <button
               type="button"
-              onClick={onClose}
+              onClick={onClosed}
               className="bg-gray-200 text-gray-600 px-4 py-2 rounded"
             >
               취소
@@ -164,7 +162,12 @@ const PasswordChangeModal: React.FC<PasswordChangeModalProps> = ({
       </div>
       <Modal
         isOpen={modalState.isOpen}
-        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        onClose={() => {
+          setModalState({ ...modalState, isOpen: false });
+          if (modalState.message === SUCCESS.CHANGE_PASSWORD) {
+            onClosed();
+          }
+        }}
         message={modalState.message}
       />
     </div>

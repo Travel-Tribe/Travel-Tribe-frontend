@@ -86,7 +86,12 @@ export const participationHandlers = [
     }));
 
     console.log("Participations found:", response);
-    return HttpResponse.json(response, { status: 200 });
+    return HttpResponse.json(
+      {
+        data: response,
+      },
+      { status: 200 },
+    );
   }),
 
   http.get("/api/v1/posts/participations/by-join-joinready", async () => {

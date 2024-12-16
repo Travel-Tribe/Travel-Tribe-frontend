@@ -7,9 +7,11 @@ import {
   TravelPlanType,
   ApiResponse,
   ParticipationType,
+  ErrorType,
 } from "../../type/types";
 import Modal from "../common/Modal";
-import { SUCCESS } from "../../constants/MESSAGE";
+import { ERROR, SUCCESS } from "../../constants/MESSAGE";
+import { AxiosError } from "axios";
 
 interface TravelPlan extends TravelPlanType {
   participantsCount: number;
@@ -100,6 +102,7 @@ const MyTravelJoin = () => {
                 participantsCount: participants.data.data.length, // 참여 인원 수 추가
               };
             } catch (error) {
+              console.error("Error fetching participation data:", `${ERROR.LOAD_PARTICIPATION_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`);
               return {
                 ...plan,
                 participantsCount: 0, // 에러 발생 시 기본값 설정
@@ -128,7 +131,7 @@ const MyTravelJoin = () => {
         message: `${SUCCESS.CANCLE_PARTICIPATION}`,
       });
     } catch (error) {
-      console.error("참여 취소 중 오류 발생:", error);
+      console.error("참여 취소 중 오류 발생:", `${ERROR.CANCLE_PARTICIPATION} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`);
     }
   };
 

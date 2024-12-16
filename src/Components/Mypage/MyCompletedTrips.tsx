@@ -28,7 +28,7 @@ interface Review {
   userId: string;
 }
 
-type ReviewResponse = ApiResponse<Review[]>;
+interface ReviewResponse extends ApiResponse<Review[]> {}
 
 const MyCompletedTrips = (): JSX.Element => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -50,9 +50,9 @@ const MyCompletedTrips = (): JSX.Element => {
         "/api/v1/posts",
         "get",
       );
+
       const myParticipationPostIds = await fetchMyParticipation();
       const myReviews = await fetchMyReview();
-
       const completedTrips = response.data.data
         .filter((info: TravelPlan) => {
           return myParticipationPostIds.some(
@@ -83,14 +83,13 @@ const MyCompletedTrips = (): JSX.Element => {
           reviewStatus: !!reviewStatus,
         });
       }
-
+      
       setFilteredTravelInfos(filteredTrips);
     } catch (error) {
-      console.error("Error fetching participation data:", error);
-      setModalState({
-        isOpen: true,
-        message: `${ERROR.LOAD_POST_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
-      });
+      console.error(
+        "Error fetching participation data:",
+        `${ERROR.LOAD_POST_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      );
       throw new Error(
         (
           error as AxiosError<ErrorType>
@@ -107,10 +106,10 @@ const MyCompletedTrips = (): JSX.Element => {
       );
       return response.data.data;
     } catch (error) {
-      setModalState({
-        isOpen: true,
-        message: `${ERROR.LOAD_MY_PARTICIPATION_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
-      });
+      console.log(
+        "participation error",
+        `${ERROR.LOAD_MY_PARTICIPATION_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      );
       throw new Error(
         (
           error as AxiosError<ErrorType>
@@ -136,7 +135,10 @@ const MyCompletedTrips = (): JSX.Element => {
 
       return userIds.length;
     } catch (error) {
-      console.error("Error fetching profile data:", error);
+      console.error(
+        "Error fetching participation data:",
+        `${ERROR.LOAD_PARTICIPATION_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      );
       return 0;
     }
   };
@@ -149,7 +151,10 @@ const MyCompletedTrips = (): JSX.Element => {
       );
       return response.data.data;
     } catch (error) {
-      console.error("Error fetching reviews:", error);
+      console.error(
+        "Error fetching reviews:",
+        `${ERROR.LOAD_REVIEW} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      );
       return [];
     }
   };
