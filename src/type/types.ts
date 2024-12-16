@@ -100,6 +100,20 @@ export interface FileType {
   previewAddress?: string;
 }
 
+export interface ItineraryVisitType {
+  latitude: number;
+  longitude: number;
+  orderNumber: number;
+}
+
+export interface DayMapType {
+  visits: ItineraryVisitType[];
+  dayDetails: Array<{
+    title: string;
+    description: string;
+  }>;
+}
+
 export interface ReviewType {
   userId?: number;
   postId?: number;
