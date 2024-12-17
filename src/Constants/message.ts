@@ -32,7 +32,7 @@ export const ERROR: { [key: string]: string } = Object.freeze({
   REQUIRED_PROFILE: "프로필 작성이 필요한 서비스입니다.",
   POST: "글 등록에 실패했습니다.", // 글 등록 에러
   EDIT_PROFILE: "프로필 변경에 실패했습니다.", // 프로필 수정 에러
-  ACCESS_TOKEN: "", // 토큰 에러
+  ACCESS_TOKEN: "토큰에 문제가 발생했습니다.", // 토큰 에러
   CREATE_PROFILE: "프로필 생성에 실패했습니다.",
 
   LOAD_POST_LIST: "Post를 불러오는데 실패했습니다.", // 글 목록 불러오기 에러
@@ -53,7 +53,6 @@ export const ERROR: { [key: string]: string } = Object.freeze({
 
   CHANGE_PASSWORD: "비밀번호 변경에 실패했습니다.", // 비밀번호 변경 에러
   CHANGE_EMAIL: "이메일 변경에 실패했습니다.", // 이메일 변경 에러
-  EMAIL_VERIFICATION: "", // 이메일 인증 에러
 
   FIND_PASSWORD: "입력하신 정보와 일치하는 계정을 찾을 수 없습니다.", // 비밀번호 찾기 에러
 
