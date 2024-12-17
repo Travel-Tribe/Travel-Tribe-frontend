@@ -1,40 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { getDiffDate } from "../../../utils/getDiffDate";
+import React from "react";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
-import { DayType } from "../../../type/types";
 import DayDetail from "./DayDetail";
 
 const TravelDay = React.memo((): JSX.Element => {
-  const { postData, updateTravelData } = useRecruitPostStore();
-  const [days, setDays] = useState(postData.days);
-
-  useEffect(() => {
-    const numberOfDays = getDiffDate(
-      postData.travelStartDate,
-      postData.travelEndDate,
-    );
-
-    setDays(prevDays => {
-      if (numberOfDays < prevDays.length) {
-        const truncatedDays = prevDays.slice(0, numberOfDays);
-        return truncatedDays;
-      }
-
-      if (numberOfDays > prevDays.length) {
-        const newDays = Array.from(
-          { length: numberOfDays - prevDays.length },
-          () => ({
-            dayDetails: [{ title: "", description: "", fileAddress: "" }],
-            itineraryVisits: [{ latitude: 0, longitude: 0, orderNumber: 1 }],
-          }),
-        );
-        const updatedDays = [...prevDays, ...newDays];
-        return updatedDays;
-      }
-
-      return prevDays;
-    });
-  }, [postData.travelStartDate, postData.travelEndDate, updateTravelData]);
+  const { postData } = useRecruitPostStore();
 
   const getCalculatedDate = (startDate: string, dayIndex: number): string => {
     const date = new Date(startDate);
@@ -44,7 +13,7 @@ const TravelDay = React.memo((): JSX.Element => {
 
   return (
     <>
-      {days.map((day: DayType, dayIndex: number) => (
+      {postData.days.map((_, dayIndex: number) => (
         <div
           key={dayIndex}
           tabIndex={dayIndex}
@@ -55,12 +24,7 @@ const TravelDay = React.memo((): JSX.Element => {
             {`${getCalculatedDate(postData.travelStartDate, dayIndex)} (DAY-${dayIndex + 1})`}
           </p>
           <div className="collapse-content w-[400px] border">
-            <DayDetail
-              day={day}
-              dayIndex={dayIndex}
-              days={days}
-              setDays={setDays}
-            />
+            <DayDetail dayIndex={dayIndex} days={postData.days} />
           </div>
         </div>
       ))}

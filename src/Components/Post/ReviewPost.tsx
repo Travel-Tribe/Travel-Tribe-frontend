@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ReviewType } from "../../type/types";
 import { Link } from "react-router-dom";
 import { mappingCountry } from "../../utils/mappingCountry";
+import { convertContinentName } from "../../utils/convertContinentName";
 
 export const ReviewPost = React.memo(
   ({ review }: { review: ReviewType }): JSX.Element => {
@@ -40,7 +41,9 @@ export const ReviewPost = React.memo(
             <p className="text-[16px] truncate mb-[10px] mt-[10px]">
               {review.title}
             </p>
-            <p className="text-[12px] truncate">대륙: {review.continent}</p>
+            <p className="text-[12px] truncate">
+              대륙: {convertContinentName(review.continent)}
+            </p>
             <p className="text-[12px] truncate">
               여행 국가: {mappingCountry(review.country, "en")}
             </p>

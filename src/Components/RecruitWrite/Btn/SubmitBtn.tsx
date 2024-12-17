@@ -5,11 +5,11 @@ import { AxiosError } from "axios";
 import fetchCall from "../../../apis/fetchCall";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 import { CREW_CONDITION } from "../../../constants/CREW_CONDITION";
-import { getContinentName } from "../../../utils/getContinentName";
 import { mappingCountry } from "../../../utils/mappingCountry";
 import { ErrorType } from "../../../type/types";
 import { ERROR, SUCCESS } from "../../../constants/MESSAGE";
 import Modal from "../../common/Modal";
+import { convertContinentName } from "../../../utils/convertContinentName";
 
 const SubmitBtn = React.memo(() => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -38,7 +38,7 @@ const SubmitBtn = React.memo(() => {
           ...postData,
           limitSex: CREW_CONDITION[postData.limitSex],
           limitSmoke: CREW_CONDITION[postData.limitSmoke],
-          continent: getContinentName(postData.continent),
+          continent: convertContinentName(postData.continent),
           travelCountry: mappingCountry(postData.travelCountry, "ko"),
         }),
       );
@@ -60,6 +60,8 @@ const SubmitBtn = React.memo(() => {
       setModalMessage(
         `${ERROR.POST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
       );
+      setShowModal(true);
+
       throw new Error(
         (
           error as AxiosError<ErrorType>
@@ -80,7 +82,7 @@ const SubmitBtn = React.memo(() => {
           ...postData,
           limitSex: CREW_CONDITION[postData.limitSex],
           limitSmoke: CREW_CONDITION[postData.limitSmoke],
-          continent: getContinentName(postData.continent),
+          continent: convertContinentName(postData.continent),
           travelCountry: mappingCountry(postData.travelCountry, "ko"),
         }),
       );

@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
+import { getDiffDate } from "../../../utils/getDiffDate";
 
 const TravelDateSelect = React.memo(() => {
   const updateTravelData = useRecruitPostStore(state => state.updateTravelData);
@@ -9,8 +10,8 @@ const TravelDateSelect = React.memo(() => {
   const travelEndDate = useRecruitPostStore(
     state => state.postData.travelEndDate,
   );
+  const updateDays = useRecruitPostStore(state => state.updateDays);
   const deadline = useRecruitPostStore(state => state.postData.deadline);
-
   const startYear = useMemo(() => travelStartDate.split("-")[0], []);
   const currentYear = new Date().getFullYear();
   const years = Array.from({
@@ -82,12 +83,18 @@ const TravelDateSelect = React.memo(() => {
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mr-1 px-2"
           value={travelStartDate.split("-")[0]}
-          onChange={e =>
+          onChange={e => {
             updateTravelData(
               "travelStartDate",
               `${e.target.value}-${travelStartDate.split("-")[1]}-${travelStartDate.split("-")[2]}`,
-            )
-          }
+            );
+            updateDays(
+              getDiffDate(
+                travelStartDate,
+                `${e.target.value}-${travelStartDate.split("-")[1]}-${travelStartDate.split("-")[2]}`,
+              ),
+            );
+          }}
         >
           {years.map(year => {
             return (
@@ -101,14 +108,22 @@ const TravelDateSelect = React.memo(() => {
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mx-1 px-2"
           value={Number(travelStartDate.split("-")[1])}
-          onChange={e =>
+          onChange={e => {
             updateTravelData(
               "travelStartDate",
               formatDateToYMD(
                 `${travelStartDate.split("-")[0]}-${e.target.value}-${travelStartDate.split("-")[2]}`,
               ),
-            )
-          }
+            );
+            updateDays(
+              getDiffDate(
+                travelStartDate,
+                formatDateToYMD(
+                  `${travelStartDate.split("-")[0]}-${e.target.value}-${travelStartDate.split("-")[2]}`,
+                ),
+              ),
+            );
+          }}
         >
           {setMonth(Number(travelStartDate.split("-")[0]))}
         </select>
@@ -116,14 +131,22 @@ const TravelDateSelect = React.memo(() => {
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mx-1 px-2"
           value={Number(travelStartDate.split("-")[2])}
-          onChange={e =>
+          onChange={e => {
             updateTravelData(
               "travelStartDate",
               formatDateToYMD(
                 `${travelStartDate.split("-")[0]}-${travelStartDate.split("-")[1]}-${e.target.value}`,
               ),
-            )
-          }
+            );
+            updateDays(
+              getDiffDate(
+                travelStartDate,
+                formatDateToYMD(
+                  `${travelStartDate.split("-")[0]}-${travelStartDate.split("-")[1]}-${e.target.value}`,
+                ),
+              ),
+            );
+          }}
         >
           {getDaysInMonth(
             Number(travelStartDate.split("-")[0]),
@@ -138,12 +161,18 @@ const TravelDateSelect = React.memo(() => {
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mr-1 px-2"
           value={travelEndDate.split("-")[0]}
-          onChange={e =>
+          onChange={e => {
             updateTravelData(
               "travelEndDate",
               `${e.target.value}-${travelEndDate.split("-")[1]}-${travelEndDate.split("-")[2]}`,
-            )
-          }
+            );
+            updateDays(
+              getDiffDate(
+                travelStartDate,
+                `${e.target.value}-${travelEndDate.split("-")[1]}-${travelEndDate.split("-")[2]}`,
+              ),
+            );
+          }}
         >
           {years.map(year => {
             return (
@@ -157,14 +186,22 @@ const TravelDateSelect = React.memo(() => {
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mx-1 px-2"
           value={Number(travelEndDate.split("-")[1])}
-          onChange={e =>
+          onChange={e => {
             updateTravelData(
               "travelEndDate",
               formatDateToYMD(
                 `${travelEndDate.split("-")[0]}-${e.target.value}-${travelEndDate.split("-")[2]}`,
               ),
-            )
-          }
+            );
+            updateDays(
+              getDiffDate(
+                travelStartDate,
+                formatDateToYMD(
+                  `${travelEndDate.split("-")[0]}-${e.target.value}-${travelEndDate.split("-")[2]}`,
+                ),
+              ),
+            );
+          }}
         >
           {[...Array(12).keys()].map(month => (
             <option key={month + 1} value={month + 1}>
@@ -176,14 +213,22 @@ const TravelDateSelect = React.memo(() => {
         <select
           className="select select-sm focus:outline-custom-green w-[80px] text-[16px] border border-gray-300 mx-1 px-2"
           value={Number(travelEndDate.split("-")[2])}
-          onChange={e =>
+          onChange={e => {
             updateTravelData(
               "travelEndDate",
               formatDateToYMD(
                 `${travelEndDate.split("-")[0]}-${travelEndDate.split("-")[1]}-${e.target.value}`,
               ),
-            )
-          }
+            );
+            updateDays(
+              getDiffDate(
+                travelStartDate,
+                formatDateToYMD(
+                  `${travelEndDate.split("-")[0]}-${travelEndDate.split("-")[1]}-${e.target.value}`,
+                ),
+              ),
+            );
+          }}
         >
           {getDaysInMonth(
             Number(travelEndDate.split("-")[0]),
