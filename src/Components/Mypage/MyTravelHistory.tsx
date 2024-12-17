@@ -61,11 +61,10 @@ const MyTravelHistory: FC = () => {
       );
       setTravelInfos(travelInfosWithDates);
     } catch (error) {
-      console.error("Error fetching user review data:", error);
-      setModalState({
-        isOpen: true,
-        message: `${ERROR.LOAD_REVIEW} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
-      });
+      console.error(
+        "Error fetching user review data:",
+        `${ERROR.LOAD_REVIEW} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      );
     }
   };
 

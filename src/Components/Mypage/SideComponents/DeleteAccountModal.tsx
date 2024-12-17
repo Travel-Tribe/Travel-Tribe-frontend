@@ -22,13 +22,7 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
   const clickDeleteAccount = async () => {
     try {
       deleteAccount();
-      // alert("탈퇴되었습니다.");
       setModalState({ isOpen: true, message: `${SUCCESS.CANCEL_MEMBERSHIP}` });
-      if (typeof setToken === "function") {
-        setToken(null);
-      }
-      localStorage.removeItem(STORAGE_KEYS.TOKEN);
-      navigate("/");
     } catch (error) {
       setModalState({ isOpen: true, message: `${ERROR.CANCEL_MEMBERSHIP}` });
     }
@@ -64,7 +58,18 @@ const DeleteAccountModal: React.FC<DeleteAccountModalProps> = ({
       </div>
       <Modal
         isOpen={modalState.isOpen}
-        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        onClose={() =>{
+          setModalState({ ...modalState, isOpen: false });
+          if (modalState.message === SUCCESS.CANCEL_MEMBERSHIP) {
+            if (typeof setToken === "function") {
+              setToken(null);
+            }
+            localStorage.removeItem(STORAGE_KEYS.TOKEN);
+            navigate("/");
+          }
+        }
+
+        } 
         message={modalState.message}
       />
     </div>

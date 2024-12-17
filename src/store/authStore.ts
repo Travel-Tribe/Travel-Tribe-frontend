@@ -2,6 +2,9 @@ import { create } from "zustand";
 import fetchCall from "../apis/fetchCall";
 import { STORAGE_KEYS } from "../constants/STORAGE_KEYS";
 import { jwtDecode } from "jwt-decode"; // Ensure this is correctly imported
+import { AxiosError } from "axios";
+import { ERROR } from "../constants/MESSAGE";
+import { ErrorType } from "../type/types";
 
 interface DecodedToken {
   exp: number; // 만료 시간
@@ -89,6 +92,7 @@ export const useAuthStore = create<AuthState>(set => ({
       } catch (error) {
         localStorage.clear();
         window.location.href = "/signIn";
+        console.log("token error : ", `${ERROR.ACCESS_TOKEN} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`);
       }
     }, TOKEN_REFRESH_INTERVAL);
   },

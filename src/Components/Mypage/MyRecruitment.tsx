@@ -6,10 +6,12 @@ import {
   TravelPlanType,
   ApiResponse,
   ParticipationType,
+  ErrorType,
 } from "../../type/types";
 import { createVoting } from "../../apis/user";
 import Modal from "../common/Modal";
 import { ERROR, SUCCESS } from "../../constants/MESSAGE";
+import { AxiosError } from "axios";
 
 interface ExtendedTravelPlanType extends TravelPlanType {
   participantsCount: number;
@@ -114,7 +116,10 @@ const MyRecruitment = (): JSX.Element => {
         // 최종 데이터를 상태에 저장
         setRecruitDataList(plansWithParticipants);
       } catch (error) {
-        console.error("Error fetching recruitment data:", error);
+        console.error(
+          "Error fetching recruitment data:",
+          `${ERROR.LOAD_POST_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+        );
       }
     };
 

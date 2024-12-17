@@ -32,14 +32,13 @@ export const ERROR: { [key: string]: string } = Object.freeze({
   REQUIRED_PROFILE: "프로필 작성이 필요한 서비스입니다.",
   POST: "글 등록에 실패했습니다.", // 글 등록 에러
   EDIT_PROFILE: "프로필 변경에 실패했습니다.", // 프로필 수정 에러
-  ACCESS_TOKEN: "", // 토큰 에러
+  ACCESS_TOKEN: "토큰에 문제가 발생했습니다.", // 토큰 에러
   CREATE_PROFILE: "프로필 생성에 실패했습니다.",
 
   LOAD_POST_LIST: "Post를 불러오는데 실패했습니다.", // 글 목록 불러오기 에러
   LOAD_POST: "게시글을 찾을 수 없습니다.", // 포스트 불러오기 에러
-  LOAD_MY_POST: "", // 내가 작성한 글 불러오기 에러
-  LOAD_MY_PARTICIPATION_LIST: "", // 내 참여 목록 불러오기 에러
-  LOAD_USER_INFO: "", // 유저 정보 불러오기 에러
+  LOAD_MY_PARTICIPATION_LIST: "내가 참여하고 있는 목록을 불러오는데 실패했습니다.", // 내 참여 목록 불러오기 에러
+  LOAD_PARTICIPATION_LIST: "참여자 목록을 불러오는데 실패했습니다.",
   LOAD_USER_PROFILE: "프로필을 불러오는데 실패했습니다.", // 유저 프로필 불러오기 에러
   LOAD_REVIEW: "후기를 불러오는데 실패했습니다.",
 
@@ -54,7 +53,6 @@ export const ERROR: { [key: string]: string } = Object.freeze({
 
   CHANGE_PASSWORD: "비밀번호 변경에 실패했습니다.", // 비밀번호 변경 에러
   CHANGE_EMAIL: "이메일 변경에 실패했습니다.", // 이메일 변경 에러
-  EMAIL_VERIFICATION: "", // 이메일 인증 에러
 
   FIND_PASSWORD: "입력하신 정보와 일치하는 계정을 찾을 수 없습니다.", // 비밀번호 찾기 에러
 
@@ -62,6 +60,7 @@ export const ERROR: { [key: string]: string } = Object.freeze({
   LOAD_VOTING: "시작된 투표가 없습니다.",
   SEND_VOTING: "투표에 실패했습니다. 다시 시도해주세요.",
   CREATE_VOTING: "투표가 등록되지 않았습니다.",
+  CANCLE_PARTICIPATION: "참여가 취소되지 않았습니다.",
 });
 
 export const SUCCESS: { [key: string]: string } = Object.freeze({

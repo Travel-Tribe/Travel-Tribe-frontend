@@ -92,7 +92,6 @@ const ProfileCreate = (): JSX.Element | null => {
       const bool = createProfileData(profileData);
       if (await bool) {
         localStorage.setItem("ProfileCheck", "true");
-        // alert("프로필 생성 완료");
         setModalState({ isOpen: true, message: `${SUCCESS.CREATE_PROFILE}` });
         navigate("/mypage");
       }
@@ -308,7 +307,12 @@ const ProfileCreate = (): JSX.Element | null => {
       </button>
       <Modal
         isOpen={modalState.isOpen}
-        onClose={() => setModalState({ ...modalState, isOpen: false })}
+        onClose={() => {
+          setModalState({ ...modalState, isOpen: false });
+          if (modalState.message === SUCCESS.CREATE_PROFILE) {
+            navigate("/mypage", { replace: true });
+          }
+        }}
         message={modalState.message}
       />
     </main>

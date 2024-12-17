@@ -56,7 +56,7 @@ const MyProfile = (): JSX.Element => {
 
   useEffect(() => {
     if (profileCheck === "false") {
-      navigate("/mypage/profileCreate");
+      navigate("/mypage/profile-create");
     } else if (userProfile) {
       setProfileData(userProfile);
 
@@ -147,7 +147,7 @@ const MyProfile = (): JSX.Element => {
         <CountryName countries={profileData.visitedCountries} />
         <button
           className="w-full btn btn-outline btn-success hover:!text-white"
-          onClick={() => navigate("/mypage/myProfileEdit")}
+          onClick={() => navigate("/mypage/profile-edit")}
         >
           프로필 수정
         </button>

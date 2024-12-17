@@ -51,11 +51,11 @@ const MyAccountSettings = (): JSX.Element => {
       </div>
       <EmailChangeModal
         isOpen={isEmailModalOpen}
-        onClose={() => setIsEmailModalOpen(false)}
+        onClosed={() => setIsEmailModalOpen(false)}
       />
       <PasswordChangeModal
         isOpen={isPasswordModalOpen}
-        onClose={() => setIsPasswordModalOpen(false)}
+        onClosed={() => setIsPasswordModalOpen(false)}
       />
       <DeleteAccountModal
         isOpen={isDeleteAccountModalOpen}
