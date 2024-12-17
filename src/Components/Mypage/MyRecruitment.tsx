@@ -62,7 +62,7 @@ const MyRecruitment = (): JSX.Element => {
           "/api/v1/posts/participations/by-join-joinready",
           "get",
         );
-
+          
         const today = new Date();
         today.setHours(0, 0, 0, 0); // 현재 날짜의 시간 부분을 초기화
 

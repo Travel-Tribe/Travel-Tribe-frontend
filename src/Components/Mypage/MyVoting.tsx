@@ -18,7 +18,8 @@ interface ExtendedTravelPlanType extends TravelPlanType {
   votingStatus: string;
 }
 
-interface TravelPlanResponse extends ApiResponse<TravelPlanType[]> {}
+interface TravelPlanResponse
+  extends ApiResponse<{ content: TravelPlanType[] }> {}
 interface ParticipationResponse extends ApiResponse<ParticipationType[]> {}
 
 interface VotingResponse
@@ -80,9 +81,9 @@ const MyVoting = (): JSX.Element => {
         );
 
         // Step 3: 내가 참여한 post만 필터링
-        const participatingPosts = allPosts.data.data.filter(post =>
-          participatingPostIds.includes(post.postId ?? 0),
-        );
+        const participatingPosts = (
+          allPosts.data.data.content as TravelPlanType[]
+        ).filter(post => participatingPostIds.includes(post.postId ?? 0));
 
         const votingPosts = participatingPosts.filter(
           post => post.status === "투표중",
