@@ -165,7 +165,6 @@ const ProfileEdit = (): JSX.Element => {
 
       await updateProfileData(profileData);
       await updateUserInfo({ nickname, phone });
-      setProfileData(profileData);
       setModalState({ isOpen: true, message: `${SUCCESS.EDIT_PROFILE}` });
     } catch (error) {
       setModalState({ isOpen: true, message: `${ERROR.EDIT_PROFILE}` });
@@ -409,6 +408,7 @@ const ProfileEdit = (): JSX.Element => {
         onClose={() => {
           setModalState({ ...modalState, isOpen: false });
           if (modalState.message === SUCCESS.EDIT_PROFILE) {
+            setProfileData(profileData);
             navigate("/mypage", { replace: true });
           }
         }}
