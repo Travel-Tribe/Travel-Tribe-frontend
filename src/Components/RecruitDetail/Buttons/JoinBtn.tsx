@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { STORAGE_KEYS } from "../../../constants/STORAGE_KEYS";
-import { useState } from "react";
 import Modal from "../../common/Modal";
+import { useParticipation } from "../../../hooks/usePayment";
 
 interface JoinBtnProps {
   postId: number | undefined;
@@ -9,18 +8,22 @@ interface JoinBtnProps {
   userId: number | undefined;
 }
 
-export default function JoinBtn({ postId, status, userId }: JoinBtnProps) {
+export default function JoinBtn({ postId, status }: JoinBtnProps) {
   const navigate = useNavigate();
-  const currentUserId = localStorage.getItem(STORAGE_KEYS.USER_ID);
-  const [showModal, setShowModal] = useState(false);
+  const { handleParticipation, modalState, closeModal } = useParticipation();
 
-  const handleJoin = () => {
-    if (userId?.toString() === currentUserId?.toString()) {
-      setShowModal(true);
-      return;
+  const handleJoin = async () => {
+    if (!postId) return;
+
+    try {
+      const participationId = await handleParticipation(postId);
+      if (participationId) {
+        navigate(`/recruitment/${postId}/pay`);
+      }
+    } catch (error) {
+      // 에러는 useParticipation 훅 내부에서 모달로 처리됨
+      console.error("Participation failed:", error);
     }
-
-    navigate(`/recruitment/${postId}/pay`);
   };
 
   return (
@@ -34,9 +37,9 @@ export default function JoinBtn({ postId, status, userId }: JoinBtnProps) {
       </button>
 
       <Modal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        message="작성자는 이미 참여중입니다."
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        message={modalState.message}
       />
     </>
   );
