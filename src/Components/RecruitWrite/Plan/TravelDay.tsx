@@ -25,7 +25,7 @@ const TravelDay = React.memo((): JSX.Element => {
           { length: numberOfDays - prevDays.length },
           () => ({
             dayDetails: [{ title: "", description: "", fileAddress: "" }],
-            itineraryVisits: [{ latitude: 0, longitude: 0, orderNumber: 1 }],
+            itineraryVisits: [{ latitude: 0, longitude: 0, orderNumber: 0 }],
           }),
         );
         const updatedDays = [...prevDays, ...newDays];
