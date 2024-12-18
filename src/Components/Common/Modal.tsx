@@ -1,3 +1,5 @@
+import ReactDOM from "react-dom";
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -17,7 +19,7 @@ export default function Modal({
 }: ModalProps) {
   if (!isOpen) return null;
 
-  return (
+  return ReactDOM.createPortal(
     <div className="modal modal-open">
       <div className="modal-box relative">
         <h3 className="font-bold text-lg">{title}</h3>
@@ -28,6 +30,7 @@ export default function Modal({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
