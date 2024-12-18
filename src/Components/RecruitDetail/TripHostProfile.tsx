@@ -54,7 +54,7 @@ export default function TripHostProfile({ travelPlan }: TripHostProfileProps) {
             <div>
               <span className="text-sm text-center">{userData?.nickname}</span>
               <span className="text-sm text-center ml-3">
-                성별 {userData?.gender === "MALE" ? "남" : "여"}
+                성별 {userData?.gender}
               </span>
               <span className="text-sm text-center ml-3">{userData?.mbti}</span>
             </div>
