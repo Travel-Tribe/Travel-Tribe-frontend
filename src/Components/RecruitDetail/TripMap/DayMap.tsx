@@ -1,5 +1,5 @@
 import { GoogleMap, Polyline, InfoWindow } from "@react-google-maps/api";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useGoogleMaps } from "../../../hooks/useGoogleMaps";
 import { DayMapType } from "../../../type/types";
 
@@ -28,7 +28,7 @@ const createMarkerElement = (orderNumber: number, onClick: () => void) => {
   div.className =
     "w-6 h-6 rounded-full bg-primary flex items-center justify-center cursor-pointer";
   div.style.border = "2px solid white";
-  div.innerHTML = `<span class="text-white text-sm font-bold">${orderNumber}</span>`;
+  div.innerHTML = `<span class="text-white text-sm font-bold">${orderNumber + 1}</span>`;
   div.addEventListener("click", onClick);
   return div;
 };
@@ -45,42 +45,47 @@ const DayMap = ({ visits, dayDetails }: DayMapType) => {
     lng: point.longitude,
   }));
 
+  const coordinatesKey = JSON.stringify(
+    visits.map(v => [v.latitude, v.longitude]),
+  );
+
   // 마커 생성 및 관리
-  useEffect(() => {
+  const updateMarkers = useCallback(() => {
     if (!map || !visits.length) return;
 
-    // 기존 마커 해제
-    markersRef.current.forEach(marker => {
-      marker.map = null;
-    });
+    // 기존 마커 제거
+    markersRef.current.forEach(marker => marker?.map && (marker.map = null));
     markersRef.current = [];
 
     // 새 마커 생성
     visits.forEach((point, index) => {
       const marker = new google.maps.marker.AdvancedMarkerElement({
+        map,
         position: { lat: point.latitude, lng: point.longitude },
         content: createMarkerElement(point.orderNumber, () =>
           setSelectedIndex(index),
         ),
-        map: map,
       });
-
       markersRef.current.push(marker);
     });
 
+    // 지도 범위 조정
     const bounds = new window.google.maps.LatLngBounds();
     visits.forEach(point => {
       bounds.extend({ lat: point.latitude, lng: point.longitude });
     });
     map.fitBounds(bounds);
-
-    // cleanup
-    return () => {
-      markersRef.current.forEach(marker => {
-        marker.map = null;
-      });
-    };
   }, [map, visits]);
+
+  // 마커 업데이트 효과
+  useEffect(() => {
+    updateMarkers();
+
+    return () => {
+      markersRef.current.forEach(marker => marker?.map && (marker.map = null));
+      markersRef.current = [];
+    };
+  }, [updateMarkers, coordinatesKey]); // coordinatesKey를 의존성에 추가
 
   // 로딩 및 에러 상태 처리
   if (loadError || !isLoaded || !visits.length) {
