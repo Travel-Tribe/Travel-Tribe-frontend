@@ -14,7 +14,7 @@ import { ERROR } from "../../constants/MESSAGE";
 import { AxiosError } from "axios";
 
 interface TravelPlanResponse extends ApiResponse<TravelPlanType> {}
-interface ReviewResponse extends ApiResponse<ReviewType[]> {}
+interface ReviewResponse extends ApiResponse<{ reviews: ReviewType[] }> {}
 
 const MyTravelHistory: FC = () => {
   const [travelInfos, setTravelInfos] = useState<ReviewType[]>([]);
@@ -42,7 +42,8 @@ const MyTravelHistory: FC = () => {
         `/api/v1/reviews?${params.toString()}`,
         "get",
       );
-      const reviews = reviewResponse.data.data;
+
+      const reviews = reviewResponse.data.data.reviews;
       const travelInfosWithDates = await Promise.all(
         reviews.map(async review => {
           const travelResponse = await fetchCall<TravelPlanResponse>(

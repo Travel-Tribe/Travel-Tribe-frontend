@@ -141,7 +141,7 @@ export interface ParticipationType {
   postId: number;
   userId: string;
   ParticipationStatus: string;
-  RatingStatus: string;
+  ratingStatus: string;
   nickname: string;
   mbti: string;
   profileFile: string;

@@ -17,7 +17,7 @@ interface TravelPlan extends TravelPlanType {
   participantsCount: number;
 }
 
-interface TravelPlanResponse extends ApiResponse<TravelPlan[]> {}
+interface TravelPlanResponse extends ApiResponse<{ content: TravelPlan[] }> {}
 
 interface ParticipantionResponse extends ApiResponse<ParticipationType[]> {}
 
@@ -54,8 +54,7 @@ const MyTravelJoin = () => {
           `/api/v1/posts`,
           "get",
         );
-        const allPosts = allPostsResponse.data.data;
-
+        const allPosts = allPostsResponse.data.data.content;
         // 참여 데이터 조회
         const participationResponse = await fetchCall<ParticipantionResponse>(
           "/api/v1/posts/participations/by-join-joinready",
@@ -102,7 +101,10 @@ const MyTravelJoin = () => {
                 participantsCount: participants.data.data.length, // 참여 인원 수 추가
               };
             } catch (error) {
-              console.error("Error fetching participation data:", `${ERROR.LOAD_PARTICIPATION_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`);
+              console.error(
+                "Error fetching participation data:",
+                `${ERROR.LOAD_PARTICIPATION_LIST} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+              );
               return {
                 ...plan,
                 participantsCount: 0, // 에러 발생 시 기본값 설정
@@ -131,7 +133,10 @@ const MyTravelJoin = () => {
         message: `${SUCCESS.CANCLE_PARTICIPATION}`,
       });
     } catch (error) {
-      console.error("참여 취소 중 오류 발생:", `${ERROR.CANCLE_PARTICIPATION} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`);
+      console.error(
+        "참여 취소 중 오류 발생:",
+        `${ERROR.CANCLE_PARTICIPATION} ${(error as AxiosError<ErrorType>).response?.data?.errors[0]?.errorMessage}`,
+      );
     }
   };
 

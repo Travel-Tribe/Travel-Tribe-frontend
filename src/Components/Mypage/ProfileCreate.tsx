@@ -90,10 +90,9 @@ const ProfileCreate = (): JSX.Element | null => {
         ? (profileData.visitedCountries = [])
         : "";
       const bool = createProfileData(profileData);
+      setModalState({ isOpen: true, message: `${SUCCESS.CREATE_PROFILE}` });
       if (await bool) {
         localStorage.setItem("ProfileCheck", "true");
-        setModalState({ isOpen: true, message: `${SUCCESS.CREATE_PROFILE}` });
-        navigate("/mypage");
       }
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -310,7 +309,8 @@ const ProfileCreate = (): JSX.Element | null => {
         onClose={() => {
           setModalState({ ...modalState, isOpen: false });
           if (modalState.message === SUCCESS.CREATE_PROFILE) {
-            navigate("/mypage", { replace: true });
+            console.log("object");
+            navigate("/", { replace: true });
           }
         }}
         message={modalState.message}

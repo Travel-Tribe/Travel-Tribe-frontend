@@ -20,7 +20,7 @@ interface TravelPlan extends TravelPlanType {
   ratingStatus: string;
 }
 
-interface TravelPlanResponse extends ApiResponse<TravelPlan[]> {}
+interface TravelPlanResponse extends ApiResponse<{ content: TravelPlan[] }> {}
 
 interface ParticipantionResponse extends ApiResponse<ParticipationType[]> {}
 
@@ -28,7 +28,7 @@ interface Review {
   userId: string;
 }
 
-interface ReviewResponse extends ApiResponse<Review[]> {}
+interface ReviewResponse extends ApiResponse<{ reviews: Review[] }> {}
 
 const MyCompletedTrips = (): JSX.Element => {
   const week = ["일", "월", "화", "수", "목", "금", "토"];
@@ -53,7 +53,7 @@ const MyCompletedTrips = (): JSX.Element => {
 
       const myParticipationPostIds = await fetchMyParticipation();
       const myReviews = await fetchMyReview();
-      const completedTrips = response.data.data
+      const completedTrips = response.data.data.content
         .filter((info: TravelPlan) => {
           return myParticipationPostIds.some(
             (participation: ParticipationType) =>
@@ -79,11 +79,11 @@ const MyCompletedTrips = (): JSX.Element => {
         filteredTrips.push({
           ...trip,
           participantsCount: await fetchParticipation(String(trip.postId)),
-          ratingStatus: participationInfo?.RatingStatus || "UNKNOWN",
+          ratingStatus: participationInfo?.ratingStatus || "UNKNOWN",
           reviewStatus: !!reviewStatus,
         });
       }
-      
+
       setFilteredTravelInfos(filteredTrips);
     } catch (error) {
       console.error(
@@ -104,6 +104,7 @@ const MyCompletedTrips = (): JSX.Element => {
         `/api/v1/posts/participations/by-travelfinished`,
         "get",
       );
+
       return response.data.data;
     } catch (error) {
       console.log(
@@ -149,7 +150,7 @@ const MyCompletedTrips = (): JSX.Element => {
         "/api/v1/reviews",
         "get",
       );
-      return response.data.data;
+      return response.data.data.reviews;
     } catch (error) {
       console.error(
         "Error fetching reviews:",
