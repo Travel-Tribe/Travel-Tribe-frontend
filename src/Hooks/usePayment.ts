@@ -32,6 +32,10 @@ interface PaymentParams {
 // 참여 로직을 처리하는 훅
 export const useParticipation = () => {
   const [loading, setLoading] = useState(false);
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    message: "",
+  });
 
   const handleParticipation = async (postId: number) => {
     setLoading(true);
@@ -48,19 +52,31 @@ export const useParticipation = () => {
       return participationData.data.data.participationId;
     } catch (error: any) {
       const errorMessage = error.response?.data?.errors?.[0]?.errorMessage;
-      alert(errorMessage);
+      setModalState({
+        isOpen: true,
+        message: errorMessage,
+      });
       throw error;
     } finally {
       setLoading(false);
     }
   };
 
-  return { handleParticipation, loading };
+  return {
+    handleParticipation,
+    loading,
+    modalState,
+    closeModal: () => setModalState({ isOpen: false, message: "" }),
+  };
 };
 
 // 결제 관련 모든 로직을 처리하는 통합된 훅
 export const usePayment = () => {
   const [loading, setLoading] = useState(false);
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    message: "",
+  });
 
   // 결제 요청
   const requestPayment = async ({ postId, participationId }: PaymentParams) => {
@@ -84,7 +100,10 @@ export const usePayment = () => {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : ERROR.DEFAULT;
-      alert(errorMessage);
+      setModalState({
+        isOpen: true,
+        message: errorMessage,
+      });
       throw error;
     } finally {
       setLoading(false);
@@ -134,5 +153,11 @@ export const usePayment = () => {
     [],
   );
 
-  return { requestPayment, approvePayment, loading };
+  return {
+    requestPayment,
+    approvePayment,
+    loading,
+    modalState,
+    closeModal: () => setModalState({ isOpen: false, message: "" }),
+  };
 };
