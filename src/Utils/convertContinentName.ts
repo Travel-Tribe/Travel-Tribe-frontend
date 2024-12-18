@@ -1,5 +1,5 @@
 // 초기 매핑 정의
-const continentToEnglish = {
+const continentMap = {
   아프리카: "AFRICA",
   아시아: "ASIA",
   유럽: "EUROPE",
@@ -9,12 +9,11 @@ const continentToEnglish = {
 } as const;
 
 const englishToContinent = Object.fromEntries(
-  Object.entries(continentToEnglish).map(([key, value]) => [value, key]),
+  Object.entries(continentMap).map(([key, value]) => [value, key]),
 );
 
-export const getContinentName = (key: string): string | undefined => {
+export const convertContinentName = (key: string): string | undefined => {
   return (
-    continentToEnglish[key as keyof typeof continentToEnglish] ||
-    englishToContinent[key]
+    continentMap[key as keyof typeof continentMap] || englishToContinent[key]
   );
 };

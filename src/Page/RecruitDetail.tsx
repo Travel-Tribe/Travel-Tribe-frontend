@@ -24,7 +24,6 @@ interface postResponse {
 
 const RecruitDetail = (): JSX.Element => {
   const navigate = useNavigate();
-
   const { id } = useParams<{ id: string }>();
   const postId = parseInt(id ?? "0");
   console.log("POST_ID:", postId);

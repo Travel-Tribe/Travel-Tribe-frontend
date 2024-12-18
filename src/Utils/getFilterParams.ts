@@ -1,4 +1,4 @@
-import { getContinentName } from "./getContinentName";
+import { convertContinentName } from "./convertContinentName";
 import { mappingCountry } from "./mappingCountry";
 
 export const getFilterParams = (
@@ -19,7 +19,7 @@ export const getFilterParams = (
     content: city || "",
     continent:
       selectedContinent && selectedContinent !== "선택"
-        ? getContinentName(selectedContinent)
+        ? convertContinentName(selectedContinent)
         : "",
     country:
       selectedCountry !== "선택" && selectedContinent !== "기타"

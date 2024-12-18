@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CreatableSelect from "react-select/creatable";
 import { MultiValue } from "react-select";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
@@ -9,18 +9,12 @@ interface CityOption {
 }
 
 const RegionInput = React.memo((): JSX.Element => {
-  const [cities, setCities] = useState<string[]>([]);
   const { updateTravelData, postData } = useRecruitPostStore();
-
-  useEffect(() => {
-    if (postData.region) setCities(postData.region.split(" "));
-  }, []);
 
   const handleOnItemAdded = (newValue: MultiValue<CityOption>) => {
     if (!newValue) return;
     const newCity = newValue.map(item => item.value);
-    setCities(newCity);
-    updateTravelData("region", newCity.join(" "));
+    updateTravelData("region", newCity.join(" ").trim());
   };
 
   return (
@@ -28,7 +22,7 @@ const RegionInput = React.memo((): JSX.Element => {
       <p className="text-[18px] mr-2">도시:</p>
       <CreatableSelect
         isMulti
-        value={cities.map(city => ({
+        value={postData.region.split(" ").map(city => ({
           label: city,
           value: city,
         }))}
