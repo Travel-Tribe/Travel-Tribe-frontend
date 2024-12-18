@@ -91,11 +91,10 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
       });
       setIsCodeSent(true);
       setIsCooldown(true);
-      // setModalMessage(SUCCESS.SEND_CODE);
-
+      alert(`${SUCCESS.SEND_CODE}`);
       setTimeout(() => setIsCooldown(false), 60000);
     } catch (error) {
-      setModalMessage(ERROR.SEND_CODE);
+      alert(`${ERROR.SEND_CODE}`);
     }
   };
 
@@ -128,14 +127,14 @@ const EmailChangeModal: React.FC<EmailChangeModalProps> = ({
   return (
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-      onClick={(e) => {
+      onClick={e => {
         e.stopPropagation(); // 이벤트 전파 차단
         onClosed(); // 외부 클릭 시 EmailChangeModal 닫기
       }}
     >
       <div
         className="bg-white p-8 rounded-lg shadow-lg w-[504px]"
-        onClick={(e) => e.stopPropagation()} // 내부 클릭 시 이벤트 전파 차단
+        onClick={e => e.stopPropagation()} // 내부 클릭 시 이벤트 전파 차단
       >
         <h3 className="text-center text-base mb-5 text-gray-500">
           이메일 변경
