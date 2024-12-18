@@ -12,6 +12,7 @@ import {
 import Modal from "../common/Modal";
 import { ERROR } from "../../constants/MESSAGE";
 import { AxiosError } from "axios";
+import { mappingCountry } from "../../utils/mappingCountry";
 
 interface TravelPlan extends TravelPlanType {
   participantsCount: number;
@@ -195,6 +196,7 @@ const MyCompletedTrips = (): JSX.Element => {
           {filteredTravelInfos.map((info, index) => {
             const travelStartDay = new Date(info.travelStartDate).getDay();
             const travelEndDay = new Date(info.travelEndDate).getDay();
+            const travelCountry = info.travelCountry;
 
             return (
               <li key={info.postId} className="list-none">
@@ -204,8 +206,10 @@ const MyCompletedTrips = (): JSX.Element => {
                   </div>
                   <div className="flex items-center m-2.5 space-x-8 justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
-                        {/* 국가 정보를 추가하려면 이곳 사용 */}
+                      <div className="bg-custom-red text-white px-[4px] rounded-lg flex items-center justify-center">
+                        <span className="text-base truncate">
+                          {travelCountry}
+                        </span>
                       </div>
                       <span className="">
                         참여인원 {info.participantsCount}/{info.maxParticipants}

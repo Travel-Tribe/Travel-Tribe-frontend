@@ -106,7 +106,7 @@ const MyTravelHistory: FC = () => {
                 <h3 className="text-xl pt-2.5 pl-2.5">{info.title}</h3>
                 <div className="flex items-center m-2.5 space-x-8 justify-between">
                   <div className="flex items-center space-x-4">
-                    <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
+                    <div className="bg-custom-red text-white px-[4px] rounded-lg flex items-center justify-center">
                       <span className="truncate">{travelCountry}</span>
                     </div>
                     <span>

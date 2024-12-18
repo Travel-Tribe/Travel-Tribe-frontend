@@ -190,7 +190,7 @@ const MyTravelJoin = () => {
                   </div>
                   <div className="flex justify-between m-2.5">
                     <div className="flex items-center space-x-3">
-                      <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center">
+                      <div className="bg-custom-red text-white px-[4px] rounded-lg flex items-center">
                         <span className="text-base truncate">
                           {travelCountry}
                         </span>
