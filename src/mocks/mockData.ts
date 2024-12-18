@@ -161,17 +161,17 @@ export const RecruitMockData: TravelPlanType[] = [
           {
             latitude: 35.7147,
             longitude: 139.7967,
-            orderNumber: 1,
+            orderNumber: 0,
           },
           {
             latitude: 35.71,
             longitude: 139.8107,
-            orderNumber: 2,
+            orderNumber: 1,
           },
           {
             latitude: 35.6892,
             longitude: 139.7028,
-            orderNumber: 3,
+            orderNumber: 2,
           },
         ],
       },
@@ -200,17 +200,17 @@ export const RecruitMockData: TravelPlanType[] = [
           {
             latitude: 35.6654,
             longitude: 139.7707,
-            orderNumber: 1,
+            orderNumber: 0,
           },
           {
             latitude: 35.6715,
             longitude: 139.7031,
-            orderNumber: 2,
+            orderNumber: 1,
           },
           {
             latitude: 35.6591,
             longitude: 139.7005,
-            orderNumber: 3,
+            orderNumber: 2,
           },
         ],
       },
@@ -240,17 +240,17 @@ export const RecruitMockData: TravelPlanType[] = [
           {
             latitude: 35.6763,
             longitude: 139.6993,
-            orderNumber: 1,
+            orderNumber: 0,
           },
           {
             latitude: 35.6586,
             longitude: 139.7454,
-            orderNumber: 2,
+            orderNumber: 1,
           },
           {
             latitude: 35.6722,
             longitude: 139.7649,
-            orderNumber: 3,
+            orderNumber: 2,
           },
         ],
       },
@@ -294,6 +294,9 @@ export const ParticipationData: ParticipationType[] = [
     userId: "1",
     ParticipationStatus: "TRAVEL_FINISHED",
     RatingStatus: "평가미완료",
+    nickname: "사용자1",
+    mbti: "ENFJ",
+    profileFile: "",
   },
   {
     participationId: 2,
@@ -301,6 +304,9 @@ export const ParticipationData: ParticipationType[] = [
     userId: "2",
     ParticipationStatus: "TRAVEL_FINISHED",
     RatingStatus: "평가미완료",
+    nickname: "사용자2",
+    mbti: "INFJ",
+    profileFile: "",
   },
   {
     participationId: 3,
@@ -308,6 +314,9 @@ export const ParticipationData: ParticipationType[] = [
     userId: "3",
     ParticipationStatus: "TRAVEL_FINISHED",
     RatingStatus: "평가미완료",
+    nickname: "사용자3",
+    mbti: "INTJ",
+    profileFile: "",
   },
 ];
 

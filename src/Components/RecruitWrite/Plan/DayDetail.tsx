@@ -31,7 +31,7 @@ const DayDetail = ({
         {
           latitude: 0,
           longitude: 0,
-          orderNumber: newDays[dayIndex].itineraryVisits.length + 1,
+          orderNumber: newDays[dayIndex].itineraryVisits.length,
         },
       ];
       newDays[dayIndex] = {
