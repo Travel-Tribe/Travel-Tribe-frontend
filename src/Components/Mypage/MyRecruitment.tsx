@@ -192,7 +192,7 @@ const MyRecruitment = (): JSX.Element => {
                   </div>
                   <div className="flex justify-between ">
                     <div className="flex items-center m-2.5 space-x-8">
-                      <div className="bg-custom-red text-white max-w-[72px] px-[4px] rounded-lg flex items-center justify-center">
+                      <div className="bg-custom-red text-white px-[4px] rounded-lg flex items-center justify-center">
                         <span className="truncate">{travelCountry}</span>
                       </div>
                       <span>
