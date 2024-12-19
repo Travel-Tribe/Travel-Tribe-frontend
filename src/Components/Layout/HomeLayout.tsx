@@ -36,6 +36,31 @@ const HomeLayout = () => {
     setSearch("");
   }, [location]);
 
+  const isTokenAvailable = localStorage.getItem(STORAGE_KEYS.TOKEN);
+
+  const renderTabLink = (path, label) => (
+    <Link
+      to={path}
+      onClick={() => setSelectedTab(label)}
+      className={`cursor-pointer text-[24px] pb-2 ${
+        selectedTab === label
+          ? "text-black border-b border-black"
+          : "text-black opacity-40"
+      }`}
+    >
+      {label}
+    </Link>
+  );
+
+  const renderWriteButton = (path, label) => (
+    <Link
+      to={path}
+      className="btn btn-sm !h-[32px] btn-success text-white ml-2"
+    >
+      {label}
+    </Link>
+  );
+
   const handleContinentChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
@@ -66,92 +91,55 @@ const HomeLayout = () => {
   return (
     <div className="container mx-auto px-4 pb-8">
       <div className="flex space-x-4 mb-[30px]">
-        <Link
-          to={"/recruitment"}
-          onClick={() => setSelectedTab("모집")}
-          className={`cursor-pointer text-[24px] ${
-            selectedTab === "모집"
-              ? "text-black border-b border-black"
-              : "text-black opacity-40"
-          } pb-2`}
-        >
-          모집
-        </Link>
-
-        <Link
-          to={"/review"}
-          onClick={() => setSelectedTab("후기")}
-          className={`cursor-pointer text-[24px] ${
-            selectedTab === "후기"
-              ? "text-black border-b border-black"
-              : "text-black opacity-40"
-          } pb-2`}
-        >
-          후기
-        </Link>
-
-        <Link
-          to={"/community"}
-          onClick={() => setSelectedTab("커뮤니티")}
-          className={`cursor-pointer text-[24px] ${
-            selectedTab === "커뮤니티"
-              ? "text-black border-b border-black"
-              : "text-black opacity-40"
-          } pb-2`}
-        >
-          커뮤니티
-        </Link>
+        {renderTabLink("/recruitment", "모집")}
+        {renderTabLink("/review", "후기")}
+        {renderTabLink("/community", "커뮤니티")}
       </div>
-      <div className="flex gap-[30px]">
-        <SelectBox
-          options={Object.keys(COUNTRY_DATA)}
-          selectedValue={selectedContinent}
-          initialText="대륙"
-          onSelect={e => handleContinentChange(e)}
-        />
-        <SelectBox
-          options={COUNTRY_DATA[selectedContinent]}
-          selectedValue={selectedCountry}
-          initialText="국가"
-          onSelect={e => handleCountryChange(e)}
-        />
-        <input
-          className="input w-[140px] !h-[32px] select-bordered border-custom-green focus:border-custom-green focus:outline-none focus:ring-custom-green focus:ring-1"
-          type="text"
-          onChange={handleCityChange}
-          value={city}
-          placeholder="도시 입력"
-        />
-        {selectedTab === "모집" && (
+      {location.pathname !== "/community" && (
+        <div className="flex gap-[30px]">
           <SelectBox
-            options={[...MBTI]}
-            selectedValue={mbti}
-            initialText="MBTI"
-            onSelect={e => handleMbti(e)}
+            options={Object.keys(COUNTRY_DATA)}
+            selectedValue={selectedContinent}
+            initialText="대륙"
+            onSelect={e => handleContinentChange(e)}
           />
-        )}
-
-        <button
-          className="btn btn-sm !h-[32px] btn-success text-white"
-          onClick={handleClickReset}
-        >
-          초기화
-        </button>
-      </div>
-      <div className="flex justify-between items-center">
-        <SearchBar value={search} setValue={setSearch} />
-        {localStorage.getItem(STORAGE_KEYS.TOKEN) &&
-          location.pathname === "/recruitment" && (
-            <Link
-              to={`/recruitment/write`}
-              className="btn btn-sm !h-[32px] btn-success text-white"
-            >
-              모집 글 작성
-            </Link>
+          <SelectBox
+            options={COUNTRY_DATA[selectedContinent]}
+            selectedValue={selectedCountry}
+            initialText="국가"
+            onSelect={e => handleCountryChange(e)}
+          />
+          <input
+            className="input w-[140px] !h-[32px] select-bordered border-custom-green focus:border-custom-green focus:outline-none focus:ring-custom-green focus:ring-1"
+            type="text"
+            onChange={handleCityChange}
+            value={city}
+            placeholder="도시 입력"
+          />
+          {selectedTab === "모집" && (
+            <SelectBox
+              options={[...MBTI]}
+              selectedValue={mbti}
+              initialText="MBTI"
+              onSelect={e => handleMbti(e)}
+            />
           )}
 
-        {localStorage.getItem(STORAGE_KEYS.TOKEN) &&
-          location.pathname === "/community" && (
+          <button
+            className="btn btn-sm !h-[32px] btn-success text-white"
+            onClick={handleClickReset}
+          >
+            초기화
+          </button>
+        </div>
+      )}
+      <div className="flex justify-between items-center">
+        {location.pathname !== "/community" && (
+          <SearchBar value={search} setValue={setSearch} />
+        )}
+
+        <div className="ml-auto flex items-center">
+          {isTokenAvailable && location.pathname === "/community" && (
             <Link
               to={`/community/write`}
               className="btn btn-sm !h-[32px] btn-success text-white"
@@ -159,6 +147,16 @@ const HomeLayout = () => {
               게시글 작성
             </Link>
           )}
+
+          {isTokenAvailable && location.pathname === "/recruitment" && (
+            <Link
+              to={`/recruitment/write`}
+              className="btn btn-sm !h-[32px] btn-success text-white ml-2"
+            >
+              모집 글 작성
+            </Link>
+          )}
+        </div>
       </div>
       {location.pathname === "/recruitment" && (
         <Recruitment

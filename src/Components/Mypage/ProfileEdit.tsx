@@ -42,7 +42,6 @@ const ProfileEdit = (): JSX.Element => {
 
   const navigate = useNavigate();
   const animatedComponents = makeAnimated();
-
   // react-query hooks
   const { data: userProfile, isLoading } = useUserProfile(userId!);
 
@@ -405,11 +404,13 @@ const ProfileEdit = (): JSX.Element => {
       </button>
       <Modal
         isOpen={modalState.isOpen}
-        onClose={() => {
+        onClose={ () => {
           setModalState({ ...modalState, isOpen: false });
           if (modalState.message === SUCCESS.EDIT_PROFILE) {
             setProfileData(profileData);
-            navigate("/mypage", { replace: true });
+
+            navigate("/mypage", { replace: true }); // URL 변경
+            window.location.reload();
           }
         }}
         message={modalState.message}
