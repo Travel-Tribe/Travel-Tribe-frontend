@@ -70,7 +70,7 @@ const CommunityDetail = (): JSX.Element => {
                 `/api/v1/file/preview?fileUrl=${file.fileName}`
               }
               alt=""
-              className="w-[150px] h-[200px]"
+              className="max-w-[400px] max-h-[200px]"
             />
           ))}
         </div>

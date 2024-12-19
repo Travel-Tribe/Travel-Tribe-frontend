@@ -100,7 +100,7 @@ const ReviewDetail = (): JSX.Element => {
                 `/api/v1/file/preview?fileUrl=${file.fileAddress}`
               }
               alt=""
-              className="w-[150px] h-[200px]"
+              className="max-w-[400px] max-h-[200px]"
             />
           ))}
         </div>
