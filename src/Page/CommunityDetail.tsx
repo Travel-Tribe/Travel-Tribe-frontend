@@ -28,11 +28,11 @@ const CommunityDetail = (): JSX.Element => {
   });
 
   const deleteCommunities = async () => {
-    const response = await fetchCall<{ state: number }>(
+    const response = await fetchCall<{ status: number }>(
       `/api/v1/communities/${id}`,
       "delete",
     );
-    if (response.state === 200) {
+    if (response.status === 200) {
       setModalMessage(SUCCESS.DELETE_POST);
       setShowModal(true);
     }
@@ -113,14 +113,10 @@ const CommunityDetail = (): JSX.Element => {
                 setShowModal(false);
                 navigate("/community");
               }
-            : modalMessage === ERROR.DELETE_POST
+            : modalMessage === SUCCESS.DELETE_POST
               ? () => {
-                  queryClient
-                    .invalidateQueries(["communityData", id])
-                    .then(() => {
-                      setShowModal(false);
-                      navigate("/community");
-                    });
+                  queryClient.invalidateQueries(["communityData", id]);
+                  navigate("/community");
                 }
               : () => setShowModal(false)
         }
