@@ -25,22 +25,19 @@ export const ReviewPost = React.memo(
     };
 
     return (
-      <div className="mb-[20px]">
         <Link
           to={`/recruitment/${review.postId}/review/${review.reviewId}`}
           key={review.postId}
-          className="w-[300px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0 bg-white"
+          className="w-full max-w-[300px] border rounded-lg overflow-hidden flex flex-col items-start bg-white"
         >
           <img
             src={img}
             alt={review?.title || "기본 이미지"}
-            className="w-[300px] h-[150px] object-cover"
+            className="w-full aspect-[2/1] object-cover"
             onError={handleDefaultImageError}
           />
-          <div className="pl-[25px] max-w-[250px] mb-[20px]">
-            <p className="text-[16px] truncate mb-[10px] mt-[10px]">
-              {review.title}
-            </p>
+          <div className="px-4 py-3">
+            <p className="text-[16px] truncate mb-2">{review.title}</p>
             <p className="text-[12px] truncate">
               대륙: {convertContinentName(review.continent)}
             </p>
@@ -50,18 +47,17 @@ export const ReviewPost = React.memo(
             <p className="text-[12px] truncate">여행 지역: {review.region}</p>
             <p className="text-[12px] truncate">MBTI: {review.mbti}</p>
           </div>
-          <div className="w-full border-t bc-[#DEDEDE]" />
+          <div className="w-full border-t border-gray-300" />
+          <div className="w-full h-[30px] flex items-center bg-white pl-[25px] border rounded-bl-lg rounded-br-lg border-t-0">
+            <img
+              className="w-[14px] h-[14px] mr-[5px] radius-full"
+              src={userImg}
+              alt="프로필 이미지"
+              onError={handleUserImageError}
+            />
+            <div className="text-[12px]">{review.nickname}</div>
+          </div>
         </Link>
-        <div className="w-full h-[30px] flex items-center bg-white pl-[25px] border rounded-bl-lg rounded-br-lg border-t-0">
-          <img
-            className="w-[14px] h-[14px] mr-[5px] radius-full"
-            src={userImg}
-            alt="프로필 이미지"
-            onError={handleUserImageError}
-          />
-          <div className="text-[12px]">{review.nickname}</div>
-        </div>
-      </div>
     );
   },
 );

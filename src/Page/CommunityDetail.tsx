@@ -8,7 +8,7 @@ import { ERROR, SUCCESS } from "../constants/MESSAGE";
 import { useState } from "react";
 import Modal from "../components/common/Modal";
 
-const ReviewDetail = (): JSX.Element => {
+const CommunityDetail = (): JSX.Element => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>("");
   const { id } = useParams<{
@@ -113,11 +113,14 @@ const ReviewDetail = (): JSX.Element => {
                 setShowModal(false);
                 navigate("/community");
               }
-            : modalMessage === ERROR.LOAD_POST
+            : modalMessage === ERROR.DELETE_POST
               ? () => {
-                  setShowModal(false);
-                  queryClient.invalidateQueries("communityData");
-                  navigate(`/community`);
+                  queryClient
+                    .invalidateQueries(["communityData", id])
+                    .then(() => {
+                      setShowModal(false);
+                      navigate("/community");
+                    });
                 }
               : () => setShowModal(false)
         }
@@ -127,4 +130,4 @@ const ReviewDetail = (): JSX.Element => {
   );
 };
 
-export default ReviewDetail;
+export default CommunityDetail;

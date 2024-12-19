@@ -257,6 +257,7 @@ export const mappingCountry = (
   str: string | undefined = undefined,
   language: string = "ko",
 ): string => {
+  if (str === "기타") return "else";
   if (language === "en") {
     return list[str][0];
   }
