@@ -263,7 +263,9 @@ const ReviewEdit = () => {
                 <button
                   type="button"
                   className="btn btn-outline"
-                  onClick={() => navigate(`/review/${id}`)}
+                  onClick={() =>
+                    navigate(`/recruitment/${postId}/review/${id}`)
+                  }
                   disabled={updateReviewMutation.isLoading}
                 >
                   취소
