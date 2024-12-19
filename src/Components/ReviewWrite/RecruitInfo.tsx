@@ -45,7 +45,7 @@ const PostInfo = ({ postId }: PostInfoProps) => {
         region: data.region,
         travelStartDate: data.travelStartDate,
         travelEndDate: data.travelEndDate,
-        participants: data.maxParticipants,
+        participants: data.maxParticipants.toString(),
         title: formData.title || "",
         contents: formData.contents || "", // 기존 값 유지
         files: formData.files || [],

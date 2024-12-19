@@ -79,7 +79,6 @@ const ReviewEdit = () => {
       onSuccess: () => {
         // 캐시 무효화
         queryClient.invalidateQueries(["reviewData", postId]);
-        // queryClient.invalidateQueries(["reviews"]); // 리뷰 목록도 함께 업데이트
         setModalMessage(SUCCESS.EDIT_REVIEW);
         setShowModal(true);
       },
