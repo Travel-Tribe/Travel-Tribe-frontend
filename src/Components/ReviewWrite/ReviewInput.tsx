@@ -97,6 +97,8 @@ const ReviewInput = () => {
         reviewData,
       );
 
+      console.log("서버 응답:", response);
+
       if (response) {
         resetForm();
         navigate(`/review`);
@@ -111,7 +113,7 @@ const ReviewInput = () => {
 
   const handleReset = () => {
     // URL 객체들 해제
-    formData.files.forEach((file: { previewAddress: string }) => {
+    formData.files.forEach((file: FileType) => {
       if (file.previewAddress) {
         URL.revokeObjectURL(file.previewAddress);
       }

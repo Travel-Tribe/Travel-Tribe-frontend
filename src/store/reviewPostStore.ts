@@ -23,6 +23,7 @@ const initialState: ReviewFormData = {
   contents: "",
   travelStartDate: "",
   travelEndDate: "",
+  participants: "",
   files: [],
 };
 
