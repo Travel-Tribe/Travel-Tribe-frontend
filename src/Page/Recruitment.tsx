@@ -6,6 +6,9 @@ import { ErrorType, TravelPlanType } from "../type/types";
 import { AxiosError } from "axios";
 import { RecruitmentPost } from "../components/post/RecruitmentPost";
 import { ERROR } from "../constants/MESSAGE";
+import { STORAGE_KEYS } from "../constants/STORAGE_KEYS";
+import { useUserProfile } from "../hooks/userQueries";
+import { calculateAge } from "../store/profileStore";
 
 interface RecruitmentProps {
   selectedContinent?: string;
@@ -23,7 +26,7 @@ const Recruitment = React.memo(
     search,
     mbti,
   }: RecruitmentProps): JSX.Element => {
-    const { clearTravelData } = useRecruitPostStore();
+    const { clearTravelData, updateTravelData } = useRecruitPostStore();
     const filters = getFilterParams(
       search,
       city,
@@ -31,6 +34,14 @@ const Recruitment = React.memo(
       selectedCountry,
       mbti,
     );
+
+    const userId: string | null = localStorage.getItem(STORAGE_KEYS.USER_ID);
+
+    const {
+      data: userProfile,
+      isError: isProfileError,
+      error: profileError,
+    } = useUserProfile(userId!);
 
     const { data, isError, error, lastElementRef, isFetchingNextPage } =
       useInfiniteFetch({
@@ -40,8 +51,28 @@ const Recruitment = React.memo(
 
     useEffect(() => {
       clearTravelData();
+      if (userProfile) {
+        updateTravelData("limitMinAge", calculateAge(userProfile.birth));
+        updateTravelData("limitMaxAge", calculateAge(userProfile.birth));
+      }
       window.scrollTo(0, 0);
-    }, [clearTravelData]);
+    }, [clearTravelData, updateTravelData, userProfile]);
+
+    if (isProfileError) {
+      console.error(
+        "에러",
+        (profileError as AxiosError<ErrorType>).response?.data?.errors[0]
+          ?.errorMessage,
+      );
+      return (
+        <>
+          {
+            (profileError as AxiosError<ErrorType>).response?.data?.errors[0]
+              ?.errorMessage
+          }
+        </>
+      );
+    }
 
     if (isError) {
       console.error(
@@ -80,6 +111,7 @@ const Recruitment = React.memo(
                 <div
                   ref={isLastElement ? lastElementRef : null}
                   key={plan.postId}
+                  className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(25%-1rem)]"
                 >
                   <RecruitmentPost plan={plan} />
                 </div>

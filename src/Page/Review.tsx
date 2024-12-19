@@ -71,6 +71,7 @@ const Review = React.memo(
             <div
               ref={isLastElement ? lastElementRef : null}
               key={review.reviewId}
+              className="w-full sm:w-[calc(50%-1rem)] lg:w-[calc(25%-1rem)]"
             >
               <ReviewPost review={review} />
             </div>

@@ -132,8 +132,8 @@ export const RecruitMockData: TravelPlanType[] = [
     airplaneFee: 400000,
     limitMaxAge: 60,
     limitMinAge: 20,
-    limitSex: "무관",
-    limitSmoke: "무관",
+    limitSex: "남자",
+    limitSmoke: "비흡연자",
     deadline: "2024-12-30",
     days: [
       {

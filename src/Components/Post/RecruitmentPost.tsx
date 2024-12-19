@@ -23,41 +23,32 @@ export const RecruitmentPost = React.memo(
     };
 
     return (
-      <div className="mb-[20px]">
-        <Link
-          to={`/recruitment/${plan.postId}`}
-          key={plan.userId}
-          className="w-[300px] border rounded-tl-lg rounded-tr-lg overflow-hidden flex flex-col items-start border-b-0 bg-white"
-        >
-          <img
-            src={img}
-            alt={plan.title}
-            className="w-[300px] h-[150px] object-cover"
-            onError={handleDefaultImageError}
-          />
-          <div className="pl-[25px] max-w-[250px] mb-[20px]">
-            <p className="text-[16px] truncate mb-[10px] mt-[10px]">
-              {plan.title}
-            </p>
-            <p className="text-[12px] truncate">
-              여헹 날짜: {plan.travelStartDate} ~ {plan.travelEndDate}
-            </p>
-
-            <p className="text-[12px] truncate">
-              모집 인원: {plan.maxParticipants}명
-            </p>
-
-            <p className="text-[12px] truncate">여행 지역: {plan.region}</p>
-
-            <p className="text-[12px] truncate">마감 일자: {plan.deadline}</p>
-          </div>
-
-          <div className="w-full border-t bc-[#DEDEDE]" />
-        </Link>
-        <div className="w-full h-[30px] bg-white flex justify-between items-center pl-[25px] pr-[10px] border rounded-bl-lg rounded-br-lg border-t-0">
+      <Link
+        to={`/recruitment/${plan.postId}`}
+        className="w-full max-w-[300px] border rounded-lg overflow-hidden flex flex-col items-start bg-white"
+      >
+        <img
+          src={img}
+          alt={plan.title}
+          className="w-full aspect-[2/1] object-cover"
+          onError={handleDefaultImageError}
+        />
+        <div className="px-4 py-2">
+          <p className="text-[16px] truncate mb-2">{plan.title}</p>
+          <p className="text-[12px] truncate">
+            여행 날짜: {plan.travelStartDate} ~ {plan.travelEndDate}
+          </p>
+          <p className="text-[12px] truncate">
+            모집 인원: {plan.maxParticipants}명
+          </p>
+          <p className="text-[12px] truncate">여행 지역: {plan.region}</p>
+          <p className="text-[12px] truncate">마감 일자: {plan.deadline}</p>
+        </div>
+        <div className="w-full border-t border-gray-300" />
+        <div className="w-full h-[30px] bg-white flex justify-between items-center px-4">
           <div className="flex items-center">
             <img
-              className="w-[14px] h-[14px] mr-[5px] radius-full"
+              className="w-[14px] h-[14px] rounded-full mr-2"
               src={userImg}
               alt="프로필 이미지"
               onError={handleUserImageError}
@@ -65,7 +56,7 @@ export const RecruitmentPost = React.memo(
             <div className="text-[12px]">{plan.nickname}</div>
           </div>
           <div
-            className={`px-[8px] py-[3px] text-[12px] rounded-[8px] text-white ${
+            className={`px-2 py-1 text-[12px] rounded-md text-white ${
               plan.status === "모집완료"
                 ? "bg-btn-closed"
                 : plan.status !== "투표중"
@@ -76,7 +67,7 @@ export const RecruitmentPost = React.memo(
             {plan.status}
           </div>
         </div>
-      </div>
+      </Link>
     );
   },
 );

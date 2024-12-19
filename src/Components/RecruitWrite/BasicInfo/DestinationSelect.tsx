@@ -1,20 +1,15 @@
-import React, { useState, useMemo, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { COUNTRY_DATA } from "../../../constants/COUNTRY_DATA";
 import { useRecruitPostStore } from "../../../store/recruitPostStore";
 
 const DestinationSelect = React.memo(() => {
   const { postData, updateTravelData } = useRecruitPostStore();
-  const [continent, setContinent] = useState<string>("선택");
-  const [country, setCountry] = useState<string>("선택");
+  const [continent, setContinent] = useState<string>(postData.continent);
+  const [country, setCountry] = useState<string>(postData.travelCountry);
 
   const availableCountries = useMemo(() => {
     if (continent !== "선택") return COUNTRY_DATA[continent];
   }, [continent]);
-
-  useEffect(() => {
-    if (postData.continent) setContinent(postData.continent);
-    if (postData.travelCountry) setCountry(postData.travelCountry);
-  }, [postData.continent, postData.travelCountry]);
 
   const handleContinentChange = useCallback(
     (selectedContinent: string) => {

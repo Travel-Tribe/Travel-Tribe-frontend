@@ -1,7 +1,6 @@
 import { useQuery } from "react-query";
 import { useReviewPostStore } from "../../store/reviewPostStore";
 import fetchCall from "../../apis/fetchCall";
-import { mappingCountry } from "../../utils/mappingCountry";
 import { TravelPlanType } from "../../type/types";
 
 type TravelPlan = Pick<
@@ -89,7 +88,7 @@ const PostInfo = ({ postId }: PostInfoProps) => {
           </label>
           <input
             type="text"
-            value={mappingCountry(formData.country, "en")}
+            value={formData.country}
             className="input input-bordered w-full"
             disabled
           />

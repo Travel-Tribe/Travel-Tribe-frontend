@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .post-flex-container {
-	@apply flex flex-wrap gap-[35px];
+	@apply flex flex-wrap justify-start gap-4
 }
 
 .post-grid-container {

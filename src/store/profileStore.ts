@@ -61,7 +61,7 @@ export const useProfileStore = create<LocalProfileState>(set => ({
 }));
 
 // 유틸리티 함수: 생년월일로 나이 계산
-const calculateAge = (birthDateString: string): number => {
+export const calculateAge = (birthDateString: string): number => {
   const today = new Date();
   const birthDate = new Date(birthDateString);
   let age = today.getFullYear() - birthDate.getFullYear();

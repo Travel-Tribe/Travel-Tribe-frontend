@@ -143,9 +143,12 @@ const ReviewDetail = (): JSX.Element => {
               }
             : modalMessage === ERROR.DELETE_REVIEW
               ? () => {
-                  setShowModal(false);
-                  queryClient.invalidateQueries("reviewData");
-                  navigate(`/review`);
+                  queryClient
+                    .invalidateQueries(["reviewData", postId])
+                    .then(() => {
+                      setShowModal(false);
+                      navigate("/review");
+                    });
                 }
               : () => setShowModal(false)
         }
