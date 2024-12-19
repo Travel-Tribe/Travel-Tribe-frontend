@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useReviewPostStore } from "../../store/reviewPostStore";
 import fetchCall from "../../apis/fetchCall";
-import RecruitInfo from "./RecruitInfo";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { postImgUrl, previewImg } from "../../utils/postImgUrl";
 import Modal from "../common/Modal";
@@ -12,6 +11,18 @@ import { convertContinentName } from "../../utils/convertContinentName";
 import { mappingCountry } from "../../utils/mappingCountry";
 
 type ReviewData = Pick<
+  ReviewType,
+  | "title"
+  | "contents"
+  | "files"
+  | "continent"
+  | "country"
+  | "region"
+  | "travelStartDate"
+  | "travelEndDate"
+>;
+
+type ReviewUpdateData = Pick<
   ReviewType,
   "title" | "contents" | "files" | "continent" | "country" | "region"
 >;
@@ -54,9 +65,11 @@ const ReviewEdit = () => {
           title: reviewData.title,
           contents: reviewData.contents,
           files: reviewData.files || [],
-          continent: reviewData.continent,
-          country: reviewData.country,
+          continent: convertContinentName(reviewData.continent),
+          country: mappingCountry(reviewData.country, "en"),
           region: reviewData.region,
+          travelStartDate: reviewData.travelStartDate,
+          travelEndDate: reviewData.travelEndDate,
         });
       },
       onError: error => {
@@ -65,12 +78,15 @@ const ReviewEdit = () => {
         setShowModal(true);
         navigate("/review");
       },
+
+      staleTime: 5 * 60 * 1000, // 5분
+      cacheTime: 30 * 60 * 1000, // 30분
     },
   );
 
   // 리뷰 수정 mutation
   const updateReviewMutation = useMutation(
-    async (reviewData: ReviewData) => {
+    async (reviewData: ReviewUpdateData) => {
       return await fetchCall(
         `/api/v1/posts/${postId}/reviews/${id}`,
         "put",
@@ -161,7 +177,7 @@ const ReviewEdit = () => {
     setIsSubmitting(true);
 
     const reviewData = {
-      continent: convertContinentName(formData.continent) || "",
+      continent: convertContinentName(formData.continent),
       country: mappingCountry(formData.country, "ko"),
       region: formData.region,
       title: formData.title,
@@ -200,7 +216,71 @@ const ReviewEdit = () => {
                 />
               </div>
 
-              {postId && <RecruitInfo postId={postId} />}
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text">대륙</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.continent}
+                      className="input input-bordered w-full"
+                      disabled
+                    />
+                  </div>
+
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text">국가</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.country}
+                      className="input input-bordered w-full"
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                <div className="form-control w-full">
+                  <label className="label">
+                    <span className="label-text">도시</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.region}
+                    className="input input-bordered w-full"
+                    disabled
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text">여행 시작일</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.travelStartDate}
+                      className="input input-bordered w-full"
+                      disabled
+                    />
+                  </div>
+
+                  <div className="form-control w-full">
+                    <label className="label">
+                      <span className="label-text">여행 종료일</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.travelEndDate}
+                      className="input input-bordered w-full"
+                      disabled
+                    />
+                  </div>
+                </div>
+              </div>
 
               <div className="form-control w-full">
                 <label className="label">
