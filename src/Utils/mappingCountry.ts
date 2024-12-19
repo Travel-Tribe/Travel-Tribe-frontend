@@ -11,7 +11,7 @@ const list = Object.freeze({
   AR: ["아르헨티나", "Argentina"],
   AS: ["미국령 사모아", "Samoa (American)"],
   AT: ["오스트리아", "Austria"],
-  AU: ["오스트레일리아", "Australia"],
+  AU: ["호주", "Australia"],
   AW: ["아루바", "Aruba"],
   AX: ["올란드 제도", "Åland Islands"],
   AZ: ["아제르바이잔", "Azerbaijan"],
