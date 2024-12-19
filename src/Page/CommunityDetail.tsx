@@ -27,7 +27,7 @@ const CommunityDetail = (): JSX.Element => {
     },
   });
 
-  const deleteCommunities = async () => {
+  const deleteCommunity = async () => {
     const response = await fetchCall<{ status: number }>(
       `/api/v1/communities/${id}`,
       "delete",
@@ -92,7 +92,7 @@ const CommunityDetail = (): JSX.Element => {
             </button>
             <button
               className="btn btn-sm btn-error text-white"
-              onClick={deleteCommunities}
+              onClick={deleteCommunity}
             >
               삭제하기
             </button>
@@ -107,19 +107,21 @@ const CommunityDetail = (): JSX.Element => {
 
       <Modal
         isOpen={showModal}
-        onClose={
-          modalMessage === ERROR.LOAD_POST
-            ? () => {
-                setShowModal(false);
-                navigate("/community");
-              }
-            : modalMessage === SUCCESS.DELETE_POST
-              ? () => {
-                  queryClient.invalidateQueries(["communityData", id]);
-                  navigate("/community");
-                }
-              : () => setShowModal(false)
-        }
+        onClose={async () => {
+          if (modalMessage === ERROR.LOAD_POST) {
+            setShowModal(false);
+            navigate("/community");
+          } else if (modalMessage === SUCCESS.DELETE_POST) {
+            await queryClient.invalidateQueries({
+              queryKey: ["communityData"],
+              refetchActive: true,
+            });
+            navigate("/community");
+            setShowModal(false);
+          } else {
+            setShowModal(false);
+          }
+        }}
         message={modalMessage}
       />
     </div>

@@ -7,11 +7,13 @@ import { postImgUrl, previewImg } from "../../utils/postImgUrl";
 import { FileType } from "../../type/types";
 import { convertContinentName } from "../../utils/convertContinentName";
 import { mappingCountry } from "../../utils/mappingCountry";
+import { useQueryClient } from "react-query";
 
 const ReviewInput = () => {
   // TODO: 실제 구현 시 useParams()로 변경
   const params = useParams<{ postId: string }>();
   const postId = params.postId;
+  const queryClient = useQueryClient();
   console.log("URL postId:", postId);
   const navigate = useNavigate();
   const { formData, setFormData, resetForm, isSubmitting, setIsSubmitting } =
@@ -103,6 +105,10 @@ const ReviewInput = () => {
 
       if (response) {
         resetForm();
+        queryClient.invalidateQueries({
+          queryKey: ["reviewData"],
+          refetchActive: true,
+        });
         navigate(`/review`);
       }
     } catch (err) {

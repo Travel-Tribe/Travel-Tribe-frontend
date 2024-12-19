@@ -59,7 +59,7 @@ export const communityHandlers = [
       ({ communityId }) => communityId === Number(params.id),
     );
 
-    return new HttpResponse(null, { status: 204 }); // No Content
+    return new HttpResponse(null, { status: 200 }); // No Content
   }),
 
   http.put("/api/v1/communities/:id", async ({ request, params }) => {
