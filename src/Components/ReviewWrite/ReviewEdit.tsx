@@ -59,6 +59,8 @@ const ReviewEdit = () => {
       return response;
     },
     {
+      retry: 1,
+      refetchOnMount: true,
       onSuccess: response => {
         const reviewData = response.data.data;
         setFormData({
@@ -76,7 +78,6 @@ const ReviewEdit = () => {
         console.error("Error fetching review:", error);
         setModalMessage(ERROR.DEFAULT);
         setShowModal(true);
-        navigate("/review");
       },
 
       staleTime: 5 * 60 * 1000, // 5분
