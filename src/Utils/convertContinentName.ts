@@ -12,7 +12,7 @@ const englishToContinent = Object.fromEntries(
   Object.entries(continentMap).map(([key, value]) => [value, key]),
 );
 
-export const convertContinentName = (key: string): string | undefined => {
+export const convertContinentName = (key: string): string => {
   return (
     continentMap[key as keyof typeof continentMap] || englishToContinent[key]
   );

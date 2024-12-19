@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useReviewPostStore } from "../../store/reviewPostStore";
 import fetchCall from "../../apis/fetchCall";
-import RecruitInfo from "./RecruitInfo";
 import { postImgUrl, previewImg } from "../../utils/postImgUrl";
 import { FileType } from "../../type/types";
 import { convertContinentName } from "../../utils/convertContinentName";
 import { mappingCountry } from "../../utils/mappingCountry";
 import { useQueryClient } from "react-query";
+import RecruitInfo from "./RecruitInfo";
 
 const ReviewInput = () => {
   // TODO: 실제 구현 시 useParams()로 변경
