@@ -8,6 +8,8 @@ import { postImgUrl, previewImg } from "../../utils/postImgUrl";
 import Modal from "../common/Modal";
 import { FileType, ReviewType } from "../../type/types";
 import { ERROR, SUCCESS, VALIDATION } from "../../constants/MESSAGE";
+import { convertContinentName } from "../../utils/convertContinentName";
+import { mappingCountry } from "../../utils/mappingCountry";
 
 type ReviewData = Pick<
   ReviewType,
@@ -159,8 +161,8 @@ const ReviewEdit = () => {
     setIsSubmitting(true);
 
     const reviewData = {
-      continent: formData.continent,
-      country: formData.country,
+      continent: convertContinentName(formData.continent) || "",
+      country: mappingCountry(formData.country, "ko"),
       region: formData.region,
       title: formData.title,
       contents: formData.contents,
