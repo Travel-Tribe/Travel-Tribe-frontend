@@ -18,9 +18,9 @@ export const CommunityPost = React.memo(
         <Link
           to={`/community/${community.communityId}`}
           key={community.communityId}
-          className="bg-white border rounded-lg h-[100px] flex"
+          className="bg-white border rounded-lg h-[100px] flex justify-between"
         >
-          <div className="pl-[25px]">
+          <div className="pl-[25px] flex-1 min-w-0">
             <p className="text-[16px] truncate mb-[10px] mt-[10px]">
               {community.title}
             </p>
@@ -32,7 +32,7 @@ export const CommunityPost = React.memo(
           <img
             src={img}
             alt={community.title}
-            className="w-[200px] max-w-[40%] h-[100px] object-cover absolute top-0 right-0"
+            className="w-[200px] object-cover rounded-r-lg"
             onError={handleDefaultImageError}
           />
         </Link>

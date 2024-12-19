@@ -142,7 +142,7 @@ const HomeLayout = () => {
           {isTokenAvailable && location.pathname === "/community" && (
             <Link
               to={`/community/write`}
-              className="btn btn-sm !h-[32px] btn-success text-white"
+              className="btn btn-sm !h-[32px] btn-success text-white mb-7"
             >
               게시글 작성
             </Link>
