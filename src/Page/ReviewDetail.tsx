@@ -41,7 +41,6 @@ const ReviewDetail = (): JSX.Element => {
     }>(`/api/v1/posts/${postId}/reviews/${reviewId}`, "delete");
 
     if (response.data.result === "SUCCESS") {
-      queryClient.invalidateQueries("reviewData");
       setModalMessage(SUCCESS.DELETE_REVIEW);
       setShowModal(true);
     } else {
@@ -70,7 +69,7 @@ const ReviewDetail = (): JSX.Element => {
       </>
     );
   }
-
+  console.log(queryClient);
   return (
     <div className="container mx-auto px-4 pb-8">
       <div className="mb-[10px]">
@@ -135,23 +134,21 @@ const ReviewDetail = (): JSX.Element => {
 
       <Modal
         isOpen={showModal}
-        onClose={
-          modalMessage === ERROR.LOAD_POST
-            ? () => {
-                setShowModal(false);
-                navigate("/review");
-              }
-            : modalMessage === ERROR.DELETE_REVIEW
-              ? () => {
-                  queryClient
-                    .invalidateQueries(["reviewData", postId])
-                    .then(() => {
-                      setShowModal(false);
-                      navigate("/review");
-                    });
-                }
-              : () => setShowModal(false)
-        }
+        onClose={async () => {
+          if (modalMessage === ERROR.LOAD_POST) {
+            setShowModal(false);
+            navigate("/review");
+          } else if (modalMessage === SUCCESS.DELETE_REVIEW) {
+            await queryClient.invalidateQueries({
+              queryKey: ["reviewData"],
+              refetchActive: true,
+            });
+            navigate("/review");
+            setShowModal(false);
+          } else {
+            setShowModal(false);
+          }
+        }}
         message={modalMessage}
       />
     </div>

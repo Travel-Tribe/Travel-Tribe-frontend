@@ -10,13 +10,15 @@ export const getFilterParams = (
 ) => {
   const filters: {
     title: string;
+    region: string;
     content: string;
     continent: string | undefined;
     country: string | undefined;
     mbti: string | undefined;
   } = {
     title: search || "",
-    content: city || "",
+    content: search || "",
+    region: city || "",
     continent:
       selectedContinent && selectedContinent !== "선택"
         ? convertContinentName(selectedContinent)

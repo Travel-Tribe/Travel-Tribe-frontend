@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "react-query";
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useMemo } from "react";
 import fetchCall from "../apis/fetchCall";
 import { CommunityType, TravelPlanType, ReviewType } from "../type/types";
 
@@ -28,6 +28,12 @@ export const useInfiniteFetch = ({ endpoint, filters }: FetchType) => {
     };
   };
 
+  const key = useMemo(() => {
+    if (endpoint === "/api/v1/communities") return "communityData";
+    if (endpoint === "/api/v1/posts") return "travelPlan";
+    if (endpoint === "/api/v1/reviews") return "reviewData";
+  }, [endpoint]);
+
   const {
     data,
     fetchNextPage,
@@ -37,7 +43,7 @@ export const useInfiniteFetch = ({ endpoint, filters }: FetchType) => {
     isError,
     error,
   } = useInfiniteQuery({
-    queryKey: [endpoint, filters],
+    queryKey: [key, filters],
     queryFn: getPostList,
     getNextPageParam: (lastPage, allPages) => {
       const nextPage = allPages.length;

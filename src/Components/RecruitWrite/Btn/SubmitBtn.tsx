@@ -117,7 +117,10 @@ const SubmitBtn = React.memo(() => {
           modalMessage === SUCCESS.EDIT_POST
             ? () => {
                 setShowModal(false);
-                queryClient.invalidateQueries(["travelPlan", postId]);
+                queryClient.invalidateQueries({
+                  queryKey: ["travelPlan", postId],
+                  refetchActive: true,
+                });
                 navigate(`/recruitment`);
               }
             : () => setShowModal(false)
