@@ -45,7 +45,6 @@ const PostInfo = ({ postId }: PostInfoProps) => {
         region: data.region,
         travelStartDate: data.travelStartDate,
         travelEndDate: data.travelEndDate,
-        participants: data.maxParticipants.toString(),
         title: formData.title || "",
         contents: formData.contents || "", // 기존 값 유지
         files: formData.files || [],
@@ -131,18 +130,6 @@ const PostInfo = ({ postId }: PostInfoProps) => {
             disabled
           />
         </div>
-      </div>
-
-      <div className="form-control w-full">
-        <label className="label">
-          <span className="label-text">동행인원</span>
-        </label>
-        <input
-          type="number"
-          value={formData.participants}
-          className="input input-bordered w-full"
-          disabled
-        />
       </div>
     </div>
   );

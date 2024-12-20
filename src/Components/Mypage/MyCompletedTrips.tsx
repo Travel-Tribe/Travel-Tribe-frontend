@@ -197,8 +197,8 @@ const MyCompletedTrips = (): JSX.Element => {
             const travelStartDay = new Date(info.travelStartDate).getDay();
             const travelEndDay = new Date(info.travelEndDate).getDay();
             const travelCountry =
-            mappingCountry(info.travelCountry, "en") || info.travelCountry;
-            
+              mappingCountry(info.travelCountry, "en") || info.travelCountry;
+
             return (
               <li key={info.postId} className="list-none">
                 <div className="bg-white rounded-lg w-[660px] h-[86px] mx-auto drop-shadow-lg">

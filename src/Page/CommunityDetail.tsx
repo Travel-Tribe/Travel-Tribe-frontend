@@ -7,7 +7,6 @@ import { AxiosError } from "axios";
 import { ERROR, SUCCESS } from "../constants/MESSAGE";
 import { useState } from "react";
 import Modal from "../components/common/Modal";
-
 const CommunityDetail = (): JSX.Element => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>("");
@@ -16,7 +15,6 @@ const CommunityDetail = (): JSX.Element => {
   }>();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["communityData", id],
     queryFn: async () => {
@@ -37,11 +35,9 @@ const CommunityDetail = (): JSX.Element => {
       setShowModal(true);
     }
   };
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
   if (isError) {
     console.error(
       "에러",
@@ -58,7 +54,6 @@ const CommunityDetail = (): JSX.Element => {
       </>
     );
   }
-
   return (
     <div className="container mx-auto px-4 pb-8">
       <div className="mb-[10px]">
@@ -75,7 +70,7 @@ const CommunityDetail = (): JSX.Element => {
                 `/api/v1/file/preview?fileUrl=${file.fileName}`
               }
               alt=""
-              className="w-[150px] h-[200px]"
+              className="max-w-[400px] max-h-[200px]"
             />
           ))}
         </div>
@@ -127,5 +122,4 @@ const CommunityDetail = (): JSX.Element => {
     </div>
   );
 };
-
 export default CommunityDetail;

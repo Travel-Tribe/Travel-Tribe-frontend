@@ -129,7 +129,6 @@ export interface ReviewType {
   travelEndDate: string;
   createDate: string;
   mbti?: string;
-  participants: string;
   profileFileAddress?: string;
 }
 
